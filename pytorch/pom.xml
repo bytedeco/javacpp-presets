@@ -35,82 +35,58 @@
       <version>13.3-9.24-${project.parent.version}</version>
       <optional>true</optional>
     </dependency>
-    <!-- Parquet I/O: local InputFile/OutputFile path (no Hadoop runtime required).
-         hadoop-common is only on the compile classpath because parquet-hadoop
-         types still reference Configuration / Path in signatures. -->
+    <!-- Parquet I/O: pure Java (column/common/encoding/format only).
+         NO parquet-hadoop, NO Hadoop/Hive. File format handled by our
+         ParquetInputFormat / ParquetOutputFormat in data.parquet. -->
     <dependency>
       <groupId>org.apache.parquet</groupId>
-      <artifactId>parquet-avro</artifactId>
+      <artifactId>parquet-column</artifactId>
       <version>1.17.1</version>
       <exclusions>
         <exclusion>
           <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-client</artifactId>
+          <artifactId>*</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-mapreduce-client-core</artifactId>
+          <groupId>org.apache.parquet</groupId>
+          <artifactId>parquet-hadoop</artifactId>
         </exclusion>
-        <exclusion>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-common</artifactId>
-        </exclusion>
+        <!-- jts-core CANNOT be excluded: PrimitiveStringifier.<clinit> creates WKB_STRINGIFIER
+             whose exception table references org.locationtech.jts.io.ParseException. -->
       </exclusions>
     </dependency>
-    <!-- Hadoop common: needed at runtime for ORC local FS; parquet itself uses pure-Java I/O. -->
     <dependency>
-      <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-common</artifactId>
-      <version>3.4.1</version>
+      <groupId>org.apache.parquet</groupId>
+      <artifactId>parquet-common</artifactId>
+      <version>1.17.1</version>
       <exclusions>
         <exclusion>
           <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-yarn-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-yarn-client</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.hadoop.thirdparty</groupId>
-          <artifactId>hadoop-shaded-protobuf_3_25</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.eclipse.jetty</groupId>
           <artifactId>*</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>javax.servlet</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.kerby</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.zookeeper</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.google.protobuf</groupId>
-          <artifactId>protobuf-java</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-mapreduce-client-core</artifactId>
-      <version>3.4.1</version>
+      <groupId>org.apache.parquet</groupId>
+      <artifactId>parquet-encoding</artifactId>
+      <version>1.17.1</version>
+    </dependency>
+    <!-- Thrift FileMetaData / PageHeader (shaded thrift inside). -->
+    <!-- javax.annotation-api is compile-only thrift noise; no runtime class refs in the jar. -->
+    <dependency>
+      <groupId>org.apache.parquet</groupId>
+      <artifactId>parquet-format-structures</artifactId>
+      <version>1.17.1</version>
       <exclusions>
         <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
+          <groupId>javax.annotation</groupId>
+          <artifactId>javax.annotation-api</artifactId>
         </exclusion>
       </exclusions>
-      <!-- compile-only stubs sometimes referenced by orc; runtime not required for local FS -->
-      <scope>provided</scope>
     </dependency>
-    <!-- Codecs used by parquet (ZSTD/snappy) -->
+    <!-- parquet-jackson: shaded Jackson for parquet-hadoop JSON metadata only.
+         We exclude parquet-hadoop and never touch shaded parquet jackson — drop it. -->
+    <!-- Codecs used by parquet (ZSTD/snappy) via ZstdCodecFactory -->
     <dependency>
       <groupId>org.xerial.snappy</groupId>
       <artifactId>snappy-java</artifactId>
@@ -122,14 +98,27 @@
       <version>1.5.7-3</version>
     </dependency>
     <!-- Arrow IPC / Feather v2 I/O (pure Java); 18.3.0 aligned with org.lance:lance-core -->
+    <!--
+      arrow-vector needs Jackson core/databind/annotations/jsr310: Schema's <clinit>
+      creates ObjectMapper — excluding those 4 packages breaks Arrow/Lance.
+      Only the 4 jaxrs/openapi Jackson packages (from lance-namespace) are safe to drop.
+    -->
     <dependency>
       <groupId>org.apache.arrow</groupId>
       <artifactId>arrow-vector</artifactId>
       <version>18.3.0</version>
+      <exclusions>
+        <!-- Only JsonFileReader/Writer hex helpers; we use binary IPC, not Arrow JSON -->
+        <exclusion>
+          <groupId>commons-codec</groupId>
+          <artifactId>commons-codec</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
+    <!-- Unsafe allocator: no io.netty (was arrow-memory-netty → netty-buffer/common) -->
     <dependency>
       <groupId>org.apache.arrow</groupId>
-      <artifactId>arrow-memory-netty</artifactId>
+      <artifactId>arrow-memory-unsafe</artifactId>
       <version>18.3.0</version>
     </dependency>
     <dependency>
@@ -142,62 +131,32 @@
       <artifactId>arrow-dataset</artifactId>
       <version>18.3.0</version>
     </dependency>
-    <!-- Excel (.xlsx/.xls) via Apache POI -->
-    <dependency>
-      <groupId>org.apache.poi</groupId>
-      <artifactId>poi-ooxml</artifactId>
-      <version>5.4.1</version>
-    </dependency>
+    <!-- Excel (.xlsx/.xls): pure OOXML + minimal BIFF8 in dataframe.excel.internal (no POI) -->
     <!-- Embedded SQLite for DataFrame SQL I/O; other DBs via caller-provided JDBC -->
     <dependency>
       <groupId>org.xerial</groupId>
       <artifactId>sqlite-jdbc</artifactId>
       <version>3.49.1.0</version>
     </dependency>
-    <!-- Pure-Java HDF5 reader/writer (pandas/h5py interop layouts) -->
-    <dependency>
-      <groupId>io.jhdf</groupId>
-      <artifactId>jhdf</artifactId>
-      <version>0.9.0</version>
-    </dependency>
+    <!-- HDF5: pure-Java minimal columnar/matrix codec in dataframe.hdf5.internal (no jhdf) -->
     <!-- Avro data files (parquet-avro may already transitively pull this) -->
+    <!-- Avro: we only use null/deflate/snappy codecs (JDK zip + snappy-java).
+         commons-compress is only for bzip2/xz/zstd avro codecs — unused. -->
     <dependency>
       <groupId>org.apache.avro</groupId>
       <artifactId>avro</artifactId>
       <version>1.12.0</version>
-    </dependency>
-    <!-- ORC columnar files (local FS) -->
-    <dependency>
-      <groupId>org.apache.orc</groupId>
-      <artifactId>orc-core</artifactId>
-      <version>2.1.2</version>
       <exclusions>
         <exclusion>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-client</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-common</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-mapreduce-client-core</artifactId>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-compress</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
-    <!-- VectorizedRowBatch used by ORC reader/writer -->
-    <dependency>
-      <groupId>org.apache.hive</groupId>
-      <artifactId>hive-storage-api</artifactId>
-      <version>2.8.1</version>
-    </dependency>
-    <!-- ORC footer / PhysicalFsWriter protobuf messages -->
-    <dependency>
-      <groupId>com.google.protobuf</groupId>
-      <artifactId>protobuf-java</artifactId>
-      <version>3.25.5</version>
-    </dependency>
+    <!-- ORC dual backend:
+         - legacy: DuckDB read_orc / COPY ORC (LocalOrcReader/Writer, DataFrame.readOrc/toOrc)
+         - pure-Java: orc-format protobuf only (LocalOrcFormat*, DataFrame.readOrcFormat/toOrcFormat)
+         Intentionally NO orc-core / hive-storage-api / Hadoop. -->
     <!-- Official DuckDB JDBC (embedded OLAP; reads parquet/csv/json/orc natively) -->
     <dependency>
       <groupId>org.duckdb</groupId>
@@ -205,10 +164,59 @@
       <version>1.5.5.0</version>
     </dependency>
     <!-- Official Lance format Java API (multimodal vector lakehouse; Arrow IPC interop) -->
+    <!-- Drop Lance Namespace REST client (unused): removes httpclient5 + 4 Jackson jaxrs/openapi pkgs.
+         Drop arrow-memory-netty (we use arrow-memory-unsafe above instead of netty).
+         Drop guava: lance-core already shades it as org.lance.shaded.guava (createDependencyReducedPom=false
+         still exposes the unshaded coordinates transitively; no external com.google.common refs remain).
+         Drop commons-lang3: zero refs in lance-core classes (dead transitive).
+         Keep org.questdb:jar-jni — JniLoader.<clinit> calls JarJniLoader.loadLib (required for Dataset). -->
     <dependency>
       <groupId>org.lance</groupId>
       <artifactId>lance-core</artifactId>
       <version>10.0.0-beta.5</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.lance</groupId>
+          <artifactId>lance-namespace-apache-client</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.lance</groupId>
+          <artifactId>lance-namespace-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.arrow</groupId>
+          <artifactId>arrow-memory-netty</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.google.guava</groupId>
+          <artifactId>guava</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-lang3</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!-- ORC protobuf definitions only (OrcProto); pure-Java codec in data.orc.*Format* -->
+    <!-- Source: https://mvnrepository.com/artifact/org.apache.orc/orc-format -->
+    <dependency>
+      <groupId>org.apache.orc</groupId>
+      <artifactId>orc-format</artifactId>
+      <version>1.1.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <!-- orc-format ships OrcProto against unshaded com.google.protobuf (main jar is not
+         the shaded-protobuf classifier). Required for GeneratedMessageV3 / toByteArray(). -->
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+      <version>3.25.5</version>
+    </dependency>
+    <!-- StructureSpec JSON (model structure dump / round-trip). -->
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.12.1</version>
     </dependency>
     <!-- FFmpeg JavaCPP: video / audio decode-encode via libav -->
     <dependency>
@@ -218,14 +226,23 @@
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
-      <artifactId>ffmpeg-platform</artifactId>
+      <artifactId>ffmpeg</artifactId>
       <version>8.1.1-${project.parent.version}</version>
+      <classifier>macosx-arm64</classifier>
+      <optional>true</optional>
     </dependency>
     <!-- OpenCV JavaCPP: image I/O, transforms, computer vision -->
     <dependency>
       <groupId>org.bytedeco</groupId>
-      <artifactId>opencv-platform</artifactId>
+      <artifactId>opencv</artifactId>
       <version>4.13.0-${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>opencv</artifactId>
+      <version>4.13.0-${project.parent.version}</version>
+      <classifier>macosx-arm64</classifier>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 
@@ -241,13 +258,12 @@
           <source>17</source>
           <target>17</target>
           <release>17</release>
-          <!-- Demo *Test classes under main use JUnit without a compile dependency; keep them out of main compile. -->
+          <!-- Demo / ad-hoc *Test* and *Benchmark* under main use JUnit or are not part of the library surface. -->
           <excludes>
             <exclude>**/geometric/demo/**/*Test.java</exclude>
             <exclude>**/geometric/demo/**/*Benchmark*.java</exclude>
-            <exclude>**/rl/*Test.java</exclude>
-            <!-- FFmpeg glue currently targets an older JavaCPP FFmpeg API surface; keep out of main compile until rewritten. -->
-            <exclude>**/utils/ffmpeg/**/*.java</exclude>
+            <exclude>**/rl/**/*Test.java</exclude>
+            <exclude>**/utils/**/demo/**/*.java</exclude>
           </excludes>
         </configuration>
       </plugin>
@@ -310,6 +326,11 @@
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/torch/csrc/api/include/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
             <includePath>${basedir}/target/classes/org/bytedeco/${javacpp.packageName}/include/</includePath>
+            <!-- OpenMPI / MPICH for jnitorch_mpi (ProcessGroupMPI). -->
+            <includePath>/opt/homebrew/opt/open-mpi/include/</includePath>
+            <includePath>/usr/local/opt/open-mpi/include/</includePath>
+            <includePath>/usr/include/openmpi/</includePath>
+            <includePath>/usr/lib/x86_64-linux-gnu/openmpi/include/</includePath>
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/lib/</linkPath>
@@ -318,6 +339,9 @@
             <linkPath>${basedir}/../ffmpeg/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
+            <linkPath>/opt/homebrew/opt/open-mpi/lib/</linkPath>
+            <linkPath>/usr/local/opt/open-mpi/lib/</linkPath>
+            <linkPath>/usr/lib/x86_64-linux-gnu/openmpi/lib/</linkPath>
           </linkPaths>
           <preloadPaths>
             <preloadPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/bin/</preloadPath>
@@ -444,6 +468,32 @@
               </arguments>
             </configuration>
           </execution>
+          <!-- After compile, target/classes still holds empty directory skeletons from
+               previous package layouts (data/dataframe, utils/transformers, kvcache, …).
+               maven-jar-plugin ships every directory entry, so prune them here right
+               before package. Idempotent; also cleans vacated trees under src/. -->
+          <execution>
+            <id>prune-stale-package-dirs</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <skip>${pytorch.relocate.skip}</skip>
+              <executable>python3</executable>
+              <workingDirectory>${project.basedir}</workingDirectory>
+              <arguments>
+                <argument>${project.basedir}/scripts/relocate_packages.py</argument>
+                <argument>--prune-only</argument>
+                <argument>--gen-dir</argument>
+                <argument>${project.basedir}/src/gen/java</argument>
+                <argument>--main-dir</argument>
+                <argument>${project.basedir}/src/main/java</argument>
+                <argument>--classes-dir</argument>
+                <argument>${project.build.outputDirectory}</argument>
+              </arguments>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -466,6 +516,16 @@
                   <Specification-Vendor>Bytedeco</Specification-Vendor>
                   <Specification-Version>${project.version}</Specification-Version>
                   <Multi-Release>true</Multi-Release>
+                  <!-- JDK launcher (java -jar THIS.jar only) applies these; format is
+                       module/package, not CLI add-opens=...=ALL-UNNAMED. Dependency
+                       jars are ignored — users on -cp should pass CLI flags or
+                       -javaagent:pytorch.jar (Premain-Class below). -->
+                  <Add-Opens>java.base/java.nio</Add-Opens>
+                  <Enable-Native-Access>ALL-UNNAMED</Enable-Native-Access>
+                  <Premain-Class>org.bytedeco.pytorch.JvmModuleSupport</Premain-Class>
+                  <Agent-Class>org.bytedeco.pytorch.JvmModuleSupport</Agent-Class>
+                  <Can-Redefine-Classes>true</Can-Redefine-Classes>
+                  <Can-Retransform-Classes>true</Can-Retransform-Classes>
                 </manifestEntries>
               </archive>
               <includes>

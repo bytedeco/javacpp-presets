@@ -26,6 +26,65 @@ export USE_NUMPY=0
 export USE_OPENMP=1
 export USE_SYSTEM_NCCL=1
 export USE_DISTRIBUTED=1
+# Optional distributed backends (auto-detect).
+# Force off:  USE_MPI=0 USE_UCC=0 bash cppbuild.sh ...
+# Force on:   USE_MPI=1 MPI_HOME=...  /  USE_UCC=1 UCC_HOME=...
+# If unset, auto-enable when the dependency is found on the machine.
+_MPI_USER_SET=${USE_MPI+x}
+_UCC_USER_SET=${USE_UCC+x}
+export USE_MPI="${USE_MPI:-0}"
+export USE_UCC="${USE_UCC:-0}"
+export USE_SYSTEM_UCC="${USE_SYSTEM_UCC:-0}"
+
+# OpenMPI / MPICH → ProcessGroupMPI (c10d). Prefer Homebrew on macOS.
+if [[ -z "${_MPI_USER_SET}" ]] || [[ "${USE_MPI}" == "1" ]]; then
+    if [[ -z "${MPI_HOME:-}" ]]; then
+        for d in /opt/homebrew/opt/open-mpi /usr/local/opt/open-mpi /usr/lib64/openmpi /usr; do
+            if [[ -f "$d/include/mpi.h" ]] || [[ -f "$d/bin/mpicc" ]]; then
+                export MPI_HOME="$d"
+                break
+            fi
+        done
+    fi
+    if { [[ -n "${MPI_HOME:-}" && -f "${MPI_HOME}/include/mpi.h" ]]; } \
+       || command -v mpicc >/dev/null 2>&1; then
+        export USE_MPI=1
+        # Ensure mpicc is visible to CMake FindMPI
+        if [[ -n "${MPI_HOME:-}" && -d "${MPI_HOME}/bin" ]]; then
+            export PATH="${MPI_HOME}/bin:${PATH}"
+        fi
+        echo "cppbuild: enabling USE_MPI=1 (MPI_HOME=${MPI_HOME:-system})"
+    else
+        export USE_MPI=0
+    fi
+fi
+
+# UCC → ProcessGroupUCC. Needs a real UCC+UCX install (Linux). Headers-only under
+# cppbuild/deps/install is enough for JavaCPP parse, NOT for linking libtorch.
+if [[ -z "${_UCC_USER_SET}" ]] || [[ "${USE_UCC}" == "1" ]]; then
+    if [[ -z "${UCC_HOME:-}" ]]; then
+        for d in /opt/ucc /usr/local /usr \
+                 "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/cppbuild/deps/install"; do
+            if [[ -f "$d/include/ucc/api/ucc.h" ]] \
+               && { [[ -e "$d/lib/libucc.dylib" ]] || [[ -e "$d/lib/libucc.so" ]]; }; then
+                export UCC_HOME="$d"
+                break
+            fi
+        done
+    fi
+    if [[ -n "${UCC_HOME:-}" && -f "${UCC_HOME}/include/ucc/api/ucc.h" ]] \
+       && { [[ -e "${UCC_HOME}/lib/libucc.so" ]] || [[ -e "${UCC_HOME}/lib/libucc.dylib" ]]; }; then
+        export USE_UCC=1
+        export USE_SYSTEM_UCC=1
+        echo "cppbuild: enabling USE_UCC=1 (UCC_HOME=${UCC_HOME})"
+    else
+        if [[ -n "${_UCC_USER_SET}" && "${USE_UCC}" == "1" ]]; then
+            echo "cppbuild: WARNING USE_UCC=1 requested but libucc not found; forcing OFF"
+        fi
+        export USE_UCC=0
+    fi
+fi
+unset _MPI_USER_SET _UCC_USER_SET
 
 if [[ "$EXTENSION" == *gpu ]]; then
     export USE_CUDA=1
@@ -294,16 +353,31 @@ rm -Rf ../lib
 if [[ ! -e torch/include/gloo ]]; then
     ln -sf ../../third_party/gloo/gloo torch/include
 fi
-ln -sf pytorch/torch/include ../include
+# Always (re)point platform include/lib/bin at this build's torch install.
+# A stale absolute symlink (e.g. /Users/.../Downloads/libtorch/include) breaks
+# jnitorch_mpi / jnitorch rebuilds against the wrong headers.
+rm -f ../include ../lib ../bin
+ln -sfn pytorch/torch/include ../include
 # Re-apply patches on the installed include tree (symlinked above).
 if [[ -x ../../../scripts/patch_module_headers.sh ]]; then
     # resolve symlink target
     INC_REAL=$(cd ../include && pwd -P)
     bash ../../../scripts/patch_module_headers.sh "$INC_REAL"
 fi
-ln -sf pytorch/torch/lib ../lib
-ln -sf pytorch/torch/bin ../bin
+ln -sfn pytorch/torch/lib ../lib
+ln -sfn pytorch/torch/bin ../bin
 rm -f ../lib/libomp.dylib
+
+# When USE_MPI=1, verify ProcessGroupMPI landed in libtorch_cpu so jnitorch_mpi can link.
+if [[ "${USE_MPI}" == "1" ]]; then
+    _CPU_LIB="../lib/libtorch_cpu.dylib"
+    [[ -f "$_CPU_LIB" ]] || _CPU_LIB="../lib/libtorch_cpu.so"
+    if [[ -f "$_CPU_LIB" ]] && nm -gU "$_CPU_LIB" 2>/dev/null | grep -q createProcessGroupMPI; then
+        echo "cppbuild: libtorch_cpu exports createProcessGroupMPI (USE_MPI=1 OK)"
+    else
+        echo "cppbuild: WARNING USE_MPI=1 but createProcessGroupMPI not found in $_CPU_LIB"
+    fi
+fi
 
 case $PLATFORM in
     macosx-arm64)
