@@ -23,7 +23,7 @@ package org.bytedeco.pytorch.utils.vision.utils;
 
 import org.bytedeco.javacpp.FloatPointer;
 import org.bytedeco.pytorch.Tensor;
-import org.bytedeco.pytorch.data.dataframe.dtype.ImageData;
+import org.bytedeco.pytorch.dataframe.dtype.ImageData;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.global.torch.ScalarType;
 
@@ -163,14 +163,25 @@ public final class ImageTensors {
         return new ImageData(toBufferedImage(t));
     }
 
-    /** Pack a batch of CHW images already as float array layout N*C*H*W. */
+    /**
+     * Pack a batch of CHW images already laid out as float arrays of length {@code C*H*W}.
+     * {@code chwFlat[i]} is one image in channel-first order; result shape {@code [N,C,H,W]}.
+     */
     public static Tensor stackCHW(float[][] chwFlat, int c, int h, int w) {
         Objects.requireNonNull(chwFlat, "batch");
+        if (c <= 0 || h <= 0 || w <= 0) {
+            throw new IllegalArgumentException("c,h,w must be > 0, got " + c + "," + h + "," + w);
+        }
         int n = chwFlat.length;
-        float[] all = new float[n * c * h * w];
         int plane = c * h * w;
+        float[] all = new float[n * plane];
         for (int i = 0; i < n; i++) {
-            System.arraycopy(chwFlat[i], 0, all, i * plane, plane);
+            float[] src = Objects.requireNonNull(chwFlat[i], "chwFlat[" + i + "]");
+            if (src.length != plane) {
+                throw new IllegalArgumentException(
+                        "chwFlat[" + i + "] length " + src.length + " != C*H*W=" + plane);
+            }
+            System.arraycopy(src, 0, all, i * plane, plane);
         }
         return torch.tensor(all).reshape(n, c, h, w);
     }

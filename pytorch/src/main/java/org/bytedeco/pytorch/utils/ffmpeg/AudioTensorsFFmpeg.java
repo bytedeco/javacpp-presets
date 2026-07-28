@@ -118,30 +118,182 @@ public class AudioTensorsFFmpeg implements AutoCloseable {
     /**
      * Convert one decoded audio frame to a float32 waveform tensor.
      *
+     * <p>Handles common sample formats (FLTP/FLT/S16/S16P/S32/S32P/U8/U8P). Values are
+     * normalized to roughly {@code [-1, 1]} for integer source formats.
+     *
      * @param frame native AVFrame (e.g. from avcodec_receive_frame)
      * @return Tensor {@code [channels, time]}, dtype float32
      */
-        public Tensor frameToTensor(org.bytedeco.ffmpeg.avutil.AVFrame frame) {
+    public Tensor frameToTensor(org.bytedeco.ffmpeg.avutil.AVFrame frame) {
         Objects.requireNonNull(frame, "frame");
         int nSamples = frame.nb_samples();
-        int frameCh = frame.ch_layout().nb_channels();
-        if (frameCh <= 0) frameCh = channels;
-        // Prefer direct planar float copy; swr path is best-effort and optional.
-        return copyPlanarFrame(frame, frameCh, nSamples);
+        if (nSamples <= 0) {
+            return torch.empty(new long[]{Math.max(1, channels), 0},
+                    new TensorOptions(ScalarType.Float), null);
+        }
+        int frameCh = 0;
+        try {
+            frameCh = frame.ch_layout().nb_channels();
+        } catch (Throwable ignored) {
+            // older layouts may not expose ch_layout cleanly
+        }
+        if (frameCh <= 0) frameCh = Math.max(1, channels);
+
+        int fmt = frame.format();
+        float[] planar = decodeFrameToPlanarFloat(frame, frameCh, nSamples, fmt);
+        Tensor t = torch.empty(new long[]{frameCh, nSamples},
+                new TensorOptions(ScalarType.Float), null);
+        t.copy_(torch.tensor(planar).reshape(frameCh, nSamples));
+        return t;
     }
 
-    private Tensor copyPlanarFrame(org.bytedeco.ffmpeg.avutil.AVFrame frame, int ch, int nSamples) {
+    /**
+     * Decode AVFrame samples into channel-first planar float {@code [C*T]} layout.
+     * Supports planar and interleaved integer/float formats commonly produced by decoders.
+     */
+    private static float[] decodeFrameToPlanarFloat(org.bytedeco.ffmpeg.avutil.AVFrame frame,
+                                                    int ch, int nSamples, int fmt) {
         float[] planar = new float[ch * nSamples];
-        for (int c = 0; c < ch; c++) {
-            FloatPointer plane = new FloatPointer(frame.data(c)).capacity(nSamples * 4L);
-            for (int s = 0; s < nSamples; s++) {
-                planar[c * nSamples + s] = plane.get(s);
+        // FFmpeg sample format constants (avutil)
+        final int AV_SAMPLE_FMT_U8 = 0;
+        final int AV_SAMPLE_FMT_S16 = 1;
+        final int AV_SAMPLE_FMT_S32 = 2;
+        final int AV_SAMPLE_FMT_FLT = 3;
+        final int AV_SAMPLE_FMT_DBL = 4;
+        final int AV_SAMPLE_FMT_U8P = 5;
+        final int AV_SAMPLE_FMT_S16P = 6;
+        final int AV_SAMPLE_FMT_S32P = 7;
+        final int AV_SAMPLE_FMT_FLTP = 8;
+        final int AV_SAMPLE_FMT_DBLP = 9;
+
+        switch (fmt) {
+            case AV_SAMPLE_FMT_FLTP: {
+                for (int c = 0; c < ch; c++) {
+                    FloatPointer plane = new FloatPointer(frame.data(c));
+                    for (int s = 0; s < nSamples; s++) {
+                        planar[c * nSamples + s] = plane.get(s);
+                    }
+                }
+                break;
+            }
+            case AV_SAMPLE_FMT_FLT: {
+                FloatPointer interleaved = new FloatPointer(frame.data(0));
+                for (int s = 0; s < nSamples; s++) {
+                    for (int c = 0; c < ch; c++) {
+                        planar[c * nSamples + s] = interleaved.get((long) s * ch + c);
+                    }
+                }
+                break;
+            }
+            case AV_SAMPLE_FMT_S16P: {
+                for (int c = 0; c < ch; c++) {
+                    org.bytedeco.javacpp.ShortPointer plane =
+                            new org.bytedeco.javacpp.ShortPointer(frame.data(c));
+                    for (int s = 0; s < nSamples; s++) {
+                        planar[c * nSamples + s] = plane.get(s) / 32768.0f;
+                    }
+                }
+                break;
+            }
+            case AV_SAMPLE_FMT_S16: {
+                org.bytedeco.javacpp.ShortPointer interleaved =
+                        new org.bytedeco.javacpp.ShortPointer(frame.data(0));
+                for (int s = 0; s < nSamples; s++) {
+                    for (int c = 0; c < ch; c++) {
+                        planar[c * nSamples + s] = interleaved.get((long) s * ch + c) / 32768.0f;
+                    }
+                }
+                break;
+            }
+            case AV_SAMPLE_FMT_S32P: {
+                for (int c = 0; c < ch; c++) {
+                    org.bytedeco.javacpp.IntPointer plane =
+                            new org.bytedeco.javacpp.IntPointer(frame.data(c));
+                    for (int s = 0; s < nSamples; s++) {
+                        planar[c * nSamples + s] = plane.get(s) / 2147483648.0f;
+                    }
+                }
+                break;
+            }
+            case AV_SAMPLE_FMT_S32: {
+                org.bytedeco.javacpp.IntPointer interleaved =
+                        new org.bytedeco.javacpp.IntPointer(frame.data(0));
+                for (int s = 0; s < nSamples; s++) {
+                    for (int c = 0; c < ch; c++) {
+                        planar[c * nSamples + s] = interleaved.get((long) s * ch + c) / 2147483648.0f;
+                    }
+                }
+                break;
+            }
+            case AV_SAMPLE_FMT_U8P: {
+                for (int c = 0; c < ch; c++) {
+                    org.bytedeco.javacpp.BytePointer plane =
+                            new org.bytedeco.javacpp.BytePointer(frame.data(c));
+                    for (int s = 0; s < nSamples; s++) {
+                        planar[c * nSamples + s] = ((plane.get(s) & 0xFF) - 128) / 128.0f;
+                    }
+                }
+                break;
+            }
+            case AV_SAMPLE_FMT_U8: {
+                org.bytedeco.javacpp.BytePointer interleaved =
+                        new org.bytedeco.javacpp.BytePointer(frame.data(0));
+                for (int s = 0; s < nSamples; s++) {
+                    for (int c = 0; c < ch; c++) {
+                        planar[c * nSamples + s] =
+                                ((interleaved.get((long) s * ch + c) & 0xFF) - 128) / 128.0f;
+                    }
+                }
+                break;
+            }
+            case AV_SAMPLE_FMT_DBLP: {
+                for (int c = 0; c < ch; c++) {
+                    org.bytedeco.javacpp.DoublePointer plane =
+                            new org.bytedeco.javacpp.DoublePointer(frame.data(c));
+                    for (int s = 0; s < nSamples; s++) {
+                        planar[c * nSamples + s] = (float) plane.get(s);
+                    }
+                }
+                break;
+            }
+            case AV_SAMPLE_FMT_DBL: {
+                org.bytedeco.javacpp.DoublePointer interleaved =
+                        new org.bytedeco.javacpp.DoublePointer(frame.data(0));
+                for (int s = 0; s < nSamples; s++) {
+                    for (int c = 0; c < ch; c++) {
+                        planar[c * nSamples + s] = (float) interleaved.get((long) s * ch + c);
+                    }
+                }
+                break;
+            }
+            default: {
+                // Best-effort: try planar float, then interleaved s16
+                try {
+                    for (int c = 0; c < ch; c++) {
+                        if (frame.data(c) == null || frame.data(c).isNull()) {
+                            throw new IllegalStateException("null plane");
+                        }
+                        FloatPointer plane = new FloatPointer(frame.data(c));
+                        for (int s = 0; s < nSamples; s++) {
+                            float v = plane.get(s);
+                            if (!Float.isFinite(v)) throw new IllegalStateException("non-finite");
+                            planar[c * nSamples + s] = v;
+                        }
+                    }
+                } catch (Throwable t) {
+                    org.bytedeco.javacpp.ShortPointer interleaved =
+                            new org.bytedeco.javacpp.ShortPointer(frame.data(0));
+                    for (int s = 0; s < nSamples; s++) {
+                        for (int c = 0; c < ch; c++) {
+                            planar[c * nSamples + s] =
+                                    interleaved.get((long) s * ch + c) / 32768.0f;
+                        }
+                    }
+                }
+                break;
             }
         }
-        Tensor t = torch.empty(new long[]{ch, nSamples},
-                new TensorOptions(ScalarType.Float), null);
-        t.copy_(torch.tensor(planar).reshape(ch, nSamples));
-        return t;
+        return planar;
     }
 
     /**

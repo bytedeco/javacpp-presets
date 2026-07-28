@@ -3,10 +3,12 @@ package org.bytedeco.pytorch.geometric.nn.kge;
 import org.bytedeco.pytorch.ScalarTypeOptional;
 import org.bytedeco.pytorch.Tensor;
 
+/**
+ * DistMult (Yang et al.): {@code score = ⟨h, r, t⟩ = Σ_i h_i r_i t_i}.
+ */
 public class DistMult extends KGEModel {
 
     public DistMult(long numNodes, long numRels, long hiddenChannels) {
-
         super(numNodes, numRels, hiddenChannels);
     }
 
@@ -15,8 +17,6 @@ public class DistMult extends KGEModel {
         Tensor h = nodeEmb.forward(head);
         Tensor r = relEmb.forward(relation);
         Tensor t = nodeEmb.forward(tail);
-
-        // h * r * t sum over dim 1
-        return h.mul(r).mul(t).sum(new long[]{1}, false,new ScalarTypeOptional());
+        return h.mul(r).mul(t).sum(new long[]{1}, false, new ScalarTypeOptional());
     }
 }

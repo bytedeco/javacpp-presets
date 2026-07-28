@@ -1,6 +1,7 @@
 package org.bytedeco.pytorch.data.orc;
 
 import org.apache.orc.OrcProto;
+import org.bytedeco.pytorch.dataframe.Column;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -254,7 +255,7 @@ public final class OrcInputFormat implements Closeable {
                                       OrcProto.ColumnEncoding.Kind enc,
                                       List<StreamSlice> slices,
                                       int nRows,
-                                      org.bytedeco.pytorch.data.dataframe.Column.DType preferDtype)
+                                      Column.DType preferDtype)
             throws IOException {
         boolean[] present = readPresent(slices, nRows);
         int nonNull = 0;
@@ -291,7 +292,7 @@ public final class OrcInputFormat implements Closeable {
                     if (kind == OrcProto.Type.Kind.DATE) {
                         out[r] = LocalDate.ofEpochDay(v);
                     } else if (kind == OrcProto.Type.Kind.LONG
-                        || preferDtype == org.bytedeco.pytorch.data.dataframe.Column.DType.INT64) {
+                        || preferDtype == Column.DType.INT64) {
                         out[r] = v;
                     } else {
                         out[r] = (int) v;

@@ -1,62 +1,60 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
-import org.bytedeco.pytorch.jit.*;
-import org.bytedeco.pytorch.nn.modules.*;
 
-import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.Scalar;
+import org.bytedeco.pytorch.ScalarTypeOptional;
+import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.TensorOptions;
+import org.bytedeco.pytorch.nn.Parameter;
 import org.bytedeco.pytorch.global.torch;
-import org.bytedeco.pytorch.geometric.nn.Parameter;
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 
 /**
- * 动态邻居聚合卷积层（DNAConv）
- * 核心逻辑：跨层注意力机制 + 图拓扑平滑，输入维度 [N, L, C]
- * N: 节点数, L: 层数, C: 通道数
+ * Dynamic Neighborhood Aggregation (DNAConv, Fey et al.).
+ *
+ * <p>Input is a multi-layer node tensor {@code x ∈ R^{N×L×C}}. For each historical
+ * layer, keys/values are graph-smoothed via MessagePassing; attention over layers
+ * then produces a single {@code [N, C]} output.
+ *
+ * <pre>
+ *   Q,K,V = Linear(x)                         // per-layer projections
+ *   K̂,V̂ = MP(K), MP(V)                       // topology smoothing per layer
+ *   α = softmax_L( (Q_L · K̂) / √d )
+ *   y = Σ_L α_L ⊙ V̂_L
+ * </pre>
  */
 public class DNAConv extends MessagePassing {
-    private long channels;          // 输入/输出通道数
-    private int heads;              // 注意力头数
-    private int groups;             // 分组数
-    public LinearImpl linQ;
-    public LinearImpl linK;
-    private LinearImpl linV; // Q/K/V 投影层
-    private Parameter bias;         // 偏置参数（使用Parameter封装，支持训练）
-    private long d_k;               // 每个注意力头的维度 = channels / heads
 
-    /**
-     * 构造方法：初始化DNAConv层
-     * @param channels 输入/输出通道数（必须能被 heads 整除）
-     * @param heads 注意力头数
-     * @param groups 分组数
-     * @param hasBias 是否使用偏置
-     */
+    private final long channels;
+    private final int heads;
+    private final int groups;
+    private final long d_k;
+    private final LinearImpl linQ;
+    private final LinearImpl linK;
+    private final LinearImpl linV;
+    private final Parameter bias;
+
     public DNAConv(long channels, int heads, int groups, boolean hasBias) {
-        super("add"); // 初始化MessagePassing基类，聚合方式为add
-        // 输入校验
+        super("sum");
+        if (channels <= 0 || heads <= 0 || groups <= 0) {
+            throw new IllegalArgumentException("channels/heads/groups must be > 0");
+        }
         if (channels % heads != 0) {
-            throw new IllegalArgumentException("channels 必须能被 heads 整除：channels=" + channels + ", heads=" + heads);
+            throw new IllegalArgumentException(
+                    "channels must be divisible by heads: " + channels + "/" + heads);
         }
-        if (heads <= 0 || groups <= 0) {
-            throw new IllegalArgumentException("heads 和 groups 必须大于0：heads=" + heads + ", groups=" + groups);
-        }
-
         this.channels = channels;
         this.heads = heads;
         this.groups = groups;
-        this.d_k = channels / heads; // 每个注意力头的维度
+        this.d_k = channels / heads;
 
-        // 初始化Q/K/V线性层：组投影，输出维度=heads*d_k=channels
-        this.linQ = new LinearImpl(channels, heads * this.d_k);
-        this.linK = new LinearImpl(channels, heads * this.d_k);
-        this.linV = new LinearImpl(channels, heads * this.d_k);
+        this.linQ = register_module("lin_q", new LinearImpl(channels, heads * d_k));
+        this.linK = register_module("lin_k", new LinearImpl(channels, heads * d_k));
+        this.linV = register_module("lin_v", new LinearImpl(channels, heads * d_k));
 
-        // 注册模块到基类（支持参数优化）
-        register_module("lin_q", linQ);
-        register_module("lin_k", linK);
-        register_module("lin_v", linV);
-
-        // 初始化并注册偏置参数
         if (hasBias) {
-            Tensor biasTensor = torch.zeros(new long[]{channels}).to(torch.kFloat());
-            this.bias = new Parameter(biasTensor); // 用Parameter封装，支持梯度更新
+            Tensor b = torch.zeros(new long[]{channels},
+                    new TensorOptions().dtype(new ScalarTypeOptional(torch.ScalarType.Float)));
+            this.bias = new Parameter(b, true);
             register_parameter("bias", this.bias);
         } else {
             this.bias = null;
@@ -64,274 +62,111 @@ public class DNAConv extends MessagePassing {
     }
 
     /**
-     * 前向传播（核心逻辑）
-     * @param x [N, L, C] - 节点数N，层数L，通道数C
-     * @param edge_index [2, E] - 边索引
-     * @param edge_weight 边权重 [E]（可选，用于GCN式归一化）
-     * @return 聚合后特征 [N, C]
-     */
-    public Tensor forward(Tensor x, Tensor edge_index, Tensor edge_weight) {
-        // ========== 输入校验 ==========
-        if (x.dim() != 3) {
-            throw new IllegalArgumentException("x 必须是3维张量 [N, L, C]，当前维度：" + x.dim());
-        }
-        if (edge_index.dim() != 2 || edge_index.size(0) != 2) {
-            throw new IllegalArgumentException("edge_index 必须是 [2, E] 张量，当前维度：" + edge_index.dim());
-        }
-        long N = x.size(0); // 节点数
-        long L = x.size(1); // 层数
-        long C = x.size(2); // 通道数
-        if (C != this.channels) {
-            throw new IllegalArgumentException("x 通道数不匹配：期望 " + this.channels + "，实际 " + C);
-        }
-
-        // ========== 设备/类型对齐 ==========
-        this.linQ.to(x.device(), x.scalar_type(),false);
-        this.linK.to(x.device(), x.scalar_type(),false);
-        this.linV.to(x.device(), x.scalar_type(),false);
-        if (this.bias != null) {
-            this.bias.to(x.device(), x.scalar_type());
-        }
-
-        // ========== 1. Q/K/V投影 ==========
-        // 展平 [N, L, C] → [N*L, C]，投影后还原维度
-        Tensor x_flat = x.view(-1, C);
-        Tensor Q_flat = linQ.forward(x_flat);
-        Tensor K_flat = linK.forward(x_flat);
-        Tensor V_flat = linV.forward(x_flat);
-
-        // 重塑为 [N, L, heads, d_k]
-        Tensor Q = Q_flat.view(N, L, heads, this.d_k);
-        Tensor K = K_flat.view(N, L, heads, this.d_k);
-        Tensor V = V_flat.view(N, L, heads, this.d_k);
-
-        // ========== 2. 图拓扑平滑（跨层聚合） ==========
-        Tensor K_hat = torch.zeros_like(K);
-        Tensor V_hat = torch.zeros_like(V);
-        // 对每一层特征分别进行传播
-        for (int l = 0; l < L; l++) {
-            Tensor K_l = K.select(1, l); // [N, heads, d_k]
-            Tensor V_l = V.select(1, l); // [N, heads, d_k]
-            // 调用propagate进行邻居聚合（补全numNodes参数）
-            Tensor K_hat_l = propagate(edge_index, K_l, K_l, edge_weight, N);
-            Tensor V_hat_l = propagate(edge_index, V_l, V_l, edge_weight, N);
-            // 将聚合结果赋值到对应层
-            K_hat.select(1, l).copy_(K_hat_l);
-            V_hat.select(1, l).copy_(V_hat_l);
-            // 释放临时张量
-            K_l.close();
-            V_l.close();
-            K_hat_l.close();
-            V_hat_l.close();
-        }
-
-        // ========== 3. 动态跨层注意力计算 ==========
-        // Query取最后一层特征：[N, heads, d_k] → [N, 1, heads, d_k]
-        Tensor query = Q.select(1, (int) (L - 1)).unsqueeze(1);
-        // 点积注意力得分：[N,1,H,d] * [N,L,H,d] → sum(d) → [N,L,H]
-        Tensor attn = query.mul(K_hat).sum(-1);
-        // 缩放注意力得分（除以√d_k）
-        attn = attn.div(new Scalar(Math.sqrt(this.d_k)));
-        // 对层维度（dim=1）做softmax归一化
-        attn = torch.softmax(attn, 1);
-
-        // ========== 4. 加权聚合Value ==========
-        // [N,L,H] → [N,L,H,1] * [N,L,H,d] → sum(L) → [N,H,d]
-        Tensor out = attn.unsqueeze(-1).mul(V_hat).sum(1);
-        // 重塑为 [N, H*d] = [N, C]
-        Tensor res = out.view(N, this.channels);
-
-        // ========== 5. 加偏置 ==========
-        if (this.bias != null) {
-            res = res.add(this.bias.data());
-        }
-
-        // ========== 释放所有临时张量 ==========
-        x_flat.close();
-        Q_flat.close();
-        K_flat.close();
-        V_flat.close();
-        Q.close();
-        K.close();
-        V.close();
-        K_hat.close();
-        V_hat.close();
-        query.close();
-        attn.close();
-        out.close();
-
-        return res;
-    }
-
-    /**
-     * 简化forward调用（无edge_weight）
+     * DNA expects multi-layer features. For API compatibility with
+     * {@link MessagePassing#forward(Tensor, Tensor)}, a rank-2 input is treated
+     * as a single layer {@code [N,1,C]}.
      */
     @Override
     public Tensor forward(Tensor x, Tensor edge_index) {
-        return ((DNAConv)this).forward(x, edge_index, (Tensor)null);
+        if (x.dim() == 2) {
+            // [N,C] → [N,1,C]
+            return forward(x.unsqueeze(1), edge_index, (Tensor) null);
+        }
+        return forward(x, edge_index, (Tensor) null);
     }
 
     /**
-     * MessagePassing的message方法：处理边权重
+     * @param x           [N, L, C] multi-layer node features (or [N,C] via 2-arg)
+     * @param edge_index  [2, E]
+     * @param edge_weight optional [E] edge weights for topology smoothing
+     * @return [N, C]
      */
     @Override
+    public Tensor forward(Tensor x, Tensor edge_index, Tensor edge_weight) {
+        if (x == null || edge_index == null) {
+            throw new NullPointerException("x and edge_index must not be null");
+        }
+        if (x.dim() == 2) {
+            x = x.unsqueeze(1);
+        }
+        if (x.dim() != 3) {
+            throw new IllegalArgumentException("x must be [N,L,C], dim=" + x.dim());
+        }
+        if (edge_index.dim() != 2 || edge_index.size(0) != 2) {
+            throw new IllegalArgumentException("edge_index must be [2,E]");
+        }
+        long N = x.size(0);
+        long L = x.size(1);
+        long C = x.size(2);
+        if (C != channels) {
+            throw new IllegalArgumentException(
+                    "x channels " + C + " != DNAConv.channels " + channels);
+        }
+
+        // Q/K/V projections on flattened layers
+        Tensor xFlat = x.reshape(N * L, C);
+        Tensor Q = linQ.forward(xFlat).view(N, L, heads, d_k);
+        Tensor K = linK.forward(xFlat).view(N, L, heads, d_k);
+        Tensor V = linV.forward(xFlat).view(N, L, heads, d_k);
+
+        // Topology-smooth each layer's K and V via MessagePassing
+        Tensor Khat = torch.zeros_like(K);
+        Tensor Vhat = torch.zeros_like(V);
+        for (long l = 0; l < L; l++) {
+            Tensor Kl = K.select(1, l); // [N, H, d]
+            Tensor Vl = V.select(1, l);
+            // Homogeneous + edge_weight: use (edge, x, edgeAttr) overload
+            Tensor Kh = super.propagate(edge_index, Kl, edge_weight);
+            Tensor Vh = super.propagate(edge_index, Vl, edge_weight);
+            Khat.select(1, l).copy_(Kh);
+            Vhat.select(1, l).copy_(Vh);
+        }
+
+        // Cross-layer attention with query = last layer
+        Tensor query = Q.select(1, L - 1).unsqueeze(1); // [N,1,H,d]
+        Tensor attn = query.mul(Khat).sum(-1);          // [N,L,H]
+        attn = attn.div(new Scalar(Math.sqrt(d_k)));
+        attn = torch.softmax(attn, 1);
+
+        Tensor out = attn.unsqueeze(-1).mul(Vhat).sum(1); // [N,H,d]
+        Tensor res = out.reshape(N, channels);
+        if (bias != null) {
+            res = res.add(bias);
+        }
+        return res;
+    }
+
+    @Override
     public Tensor message(Tensor x_j, Tensor x_i, Tensor edge_index, Tensor edge_attr, long numNodes) {
-        // x_j: [E, heads, d_k]，edge_attr: [E]（边权重）
+        // x_j: [E, H, d] (or higher); edge_attr: [E] weights
         if (edge_attr != null) {
-            // 边权重广播到 [E,1,1]，与x_j相乘
-            return x_j.mul(edge_attr.view(-1, 1, 1));
+            Tensor w = edge_attr;
+            while (w.dim() < x_j.dim()) {
+                w = w.unsqueeze(-1);
+            }
+            return x_j.mul(w);
         }
         return x_j;
     }
 
-    /**
-     * 重载propagate方法：补全numNodes参数
-     */
-    public Tensor propagate(Tensor edge_index, Tensor x, Tensor edge_weight, long numNodes) {
-        return super.propagate(edge_index, x, edge_weight, numNodes);
-    }
-
-    /**
-     * 重置参数（支持训练初始化）
-     */
-//    @Override
     public void reset_parameters() {
-        if (linQ != null) linQ.reset_parameters();
-        if (linK != null) linK.reset_parameters();
-        if (linV != null) linV.reset_parameters();
+        linQ.reset_parameters();
+        linK.reset_parameters();
+        linV.reset_parameters();
         if (bias != null) {
-            torch.zeros_(bias.data());
+            bias.fill_(new Scalar(0));
         }
     }
 
-    /**
-     * 资源释放：避免JNI内存泄漏
-     */
-    @Override
-    public void close() {
-        if (linQ != null) {
-            linQ.close();
-            linQ = null;
-        }
-        if (linK != null) {
-            linK.close();
-            linK = null;
-        }
-        if (linV != null) {
-            linV.close();
-            linV = null;
-        }
-        if (bias != null) {
-//            bias.close();
-            bias = null;
-        }
-        super.close();
+    public long getChannels() {
+        return channels;
     }
 
-    // 辅助方法（测试用）
-    public long getChannels() { return channels; }
-    public int getHeads() { return heads; }
-    public long getDk() { return d_k; }
+    public int getHeads() {
+        return heads;
+    }
+
+    public int getGroups() {
+        return groups;
+    }
 }
-
-//package org.bytedeco.pytorch.geometric.nn.conv;
-//
-//import org.bytedeco.pytorch.*;
-//import org.bytedeco.pytorch.global.torch;
-//
-///**
-// * 实现 torch_geometric.nn.conv.DNAConv
-// * 动态邻居聚合算子，支持跨层注意力机制。
-// * 输入维度预期为 [numNodes, numLayers, channels]
-// */
-//public class DNAConv extends MessagePassing {
-//    private long channels;
-//    private int heads;
-//    private int groups;
-//    private LinearImpl linQ, linK, linV;
-//    private Tensor bias;
-//
-//    public DNAConv(long channels, int heads, int groups, boolean hasBias) {
-//        super("add");
-//        this.channels = channels;
-//        this.heads = heads;
-//        this.groups = groups;
-//
-//        // DNA 使用组投影 (Grouped Projections)
-//        // 实际上是处理 [N, L, C] 的注意力
-//        this.linQ = new LinearImpl(channels, heads * (channels / heads));
-//        this.linK = new LinearImpl(channels, heads * (channels / heads));
-//        this.linV = new LinearImpl(channels, heads * (channels / heads));
-//
-//        register_module("lin_q", linQ);
-//        register_module("lin_k", linK);
-//        register_module("lin_v", linV);
-//
-//        if (hasBias) {
-//            this.bias = torch.zeros(new long[]{channels});
-//            register_parameter("bias", bias);
-//        }
-//    }
-//
-//    @Override
-//    public Tensor forward(Tensor x, Tensor edge_index) {
-//        return forward(x, edge_index, null);
-//    }
-//    /**
-//     * @param x [N, L, C] - N个节点，L层特征，每层C个通道
-//     * @param edge_index [2, E]
-//     * @param edge_weight 归一化系数 (类似于 GCN)
-//     */
-//    public Tensor forward(Tensor x, Tensor edge_index, Tensor edge_weight) {
-//        long N = x.size(0);
-//        long L = x.size(1);
-//        long C = x.size(2);
-//
-//        // 1. 投影 Query, Key, Value
-//        // 将 [N, L, C] 展平处理再还原
-//        Tensor x_flat = x.view(-1, C);
-//        Tensor Q = linQ.forward(x_flat).view(N, L, heads, -1);
-//        Tensor K = linK.forward(x_flat).view(N, L, heads, -1);
-//        Tensor V = linV.forward(x_flat).view(N, L, heads, -1);
-//
-//        // 2. 邻居特征聚合 (使用类似 GCN 的非参数化传播)
-//        // 这里的 K_hat 和 V_hat 是经过图拓扑平滑后的信息
-//        // 我们需要对每一层特征分别进行 propagate
-//        Tensor K_hat = torch.zeros_like(K);
-//        Tensor V_hat = torch.zeros_like(V);
-//
-//        for (int l = 0; l < L; l++) {
-//            K_hat.select(1, l).copy_(propagate(edge_index, K.select(1, l), edge_weight));
-//            V_hat.select(1, l).copy_(propagate(edge_index, V.select(1, l), edge_weight));
-//        }
-//
-//        // 3. 计算动态注意力 (Dynamic Attention)
-//        // Query 取自当前层（通常是最后一层 L-1）
-//        Tensor query = Q.select(1, L - 1).unsqueeze(1); // [N, 1, heads, d]
-//
-//        // 计算点积得分: [N, 1, heads, d] * [N, L, heads, d] -> [N, L, heads]
-//        Tensor attn = (query.mul(K_hat)).sum(-1);
-//        attn = attn.div(new Scalar(Math.sqrt(channels / (double)heads)));
-//        attn = torch.softmax(attn, 1); // 对层维度 L 做归一化
-//
-//        // 4. 加权聚合 Value: [N, L, heads, 1] * [N, L, heads, d] -> [N, heads, d]
-//        Tensor out = (attn.unsqueeze(-1).mul(V_hat)).sum(1);
-//
-//        // 5. 还原维度
-//        Tensor res = out.view(N, channels);
-//
-//        if (bias != null) {
-//            res = res.add(bias);
-//        }
-//
-//        return res;
-//    }
-//
-//    @Override
-//    public Tensor message(Tensor x_j, Tensor x_i, Tensor edge_index, Tensor edge_attr, long numNodes) {
-//        if (edge_attr != null) {
-//            return x_j.mul(edge_attr.view(-1, 1, 1));
-//        }
-//        return x_j;
-//    }
-//}

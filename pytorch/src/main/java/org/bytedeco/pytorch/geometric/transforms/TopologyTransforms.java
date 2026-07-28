@@ -1,103 +1,102 @@
+/*
+ * Copyright (C) 2026 bytedeco.org and pytorch JavaCPP presets contributors
+ * PyG peers: RemoveSelfLoops / AddRemainingSelfLoops / KNNGraph / RadiusGraph
+ */
 package org.bytedeco.pytorch.geometric.transforms;
 
-
-import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.LongOptional;
+import org.bytedeco.pytorch.Scalar;
+import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.geometric.data.GraphData;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-public class TopologyTransforms {
+/** Topology construction / cleanup transforms. */
+public final class TopologyTransforms {
+    private TopologyTransforms() {}
 
-    /**
-     * RemoveSelfLoops: 移除所有自环 (i == j)
-     */
+    /** Drop edges where {@code src == dst}. */
     public static class RemoveSelfLoops implements BaseTransform {
         @Override
         public GraphData apply(GraphData data) {
-            Tensor row = data.edge_index.index(new TensorIndexVector(new TensorIndex(tensor(0))));
-            Tensor col = data.edge_index.index(new TensorIndexVector(new TensorIndex(tensor(1))));
-            // 找到非自环的掩码
-            Tensor mask = row.ne(col);
-            data.edge_index = data.edge_index.index_select(1, mask.nonzero().contiguous().view(-1));
+            Tensor ei = TransformUtils.requireEdgeIndex(data);
+            Tensor[] pair = TransformUtils.removeSelfLoops(ei, data.edge_attr);
+            data.edge_index = pair[0];
+            if (pair[1] != null) data.edge_attr = pair[1];
+            if (data.edge_weight != null && data.edge_weight.defined()) {
+                Tensor[] wp = TransformUtils.removeSelfLoops(ei, data.edge_weight);
+                data.edge_weight = wp[1];
+            }
             return data;
         }
     }
 
-    /**
-     * AddRemainingSelfLoops: 补全缺失的自环
-     * 只为那些还没有自环的节点添加自环，避免重复
-     */
+    /** Ensure every node has exactly one self-loop (remove then re-add). */
     public static class AddRemainingSelfLoops implements BaseTransform {
         @Override
         public GraphData apply(GraphData data) {
-            // 1. 先移除现有的，再添加全部，这是最稳健的补全方式
-            data = new RemoveSelfLoops().apply(data);
-            long numNodes = data.x.size(0);
-            Tensor loop = arange(new Scalar(0), new Scalar(numNodes), data.edge_index.options());
-            Tensor edgeLoop = cat(new TensorVector(loop.view(1, -1), loop.view(1, -1)), 0);
-            data.edge_index = cat(new TensorVector(data.edge_index, edgeLoop), 1);
+            long n = TransformUtils.numNodes(data);
+            if (data.edge_index == null || !data.edge_index.defined()) {
+                data.edge_index = TransformUtils.addSelfLoops(
+                        zeros(new long[]{2, 0}, TransformUtils.longOpts(
+                                data.x != null ? data.x.device()
+                                        : new org.bytedeco.pytorch.Device(
+                                                org.bytedeco.pytorch.global.torch.DeviceType.CPU))), n);
+                return data;
+            }
+            data.edge_index = TransformUtils.removeSelfLoops(data.edge_index);
+            data.edge_index = TransformUtils.addSelfLoops(data.edge_index, n);
             return data;
         }
     }
 
-    /**
-     * RemoveIsolatedNodes: 移除孤立节点
-     * 孤立节点既没有入边也没有出边。注意这会改变节点的索引。
-     */
-    public static class RemoveIsolatedNodes implements BaseTransform {
-        @Override
-        public GraphData apply(GraphData data) {
-            long numNodes = data.x.size(0);
-            // 1. 统计出现在 edge_index 中的所有节点
-            Tensor outNodes = unique_consecutive( data.edge_index.view(-1)).get0(); //.unique();
-
-            // 2. 映射旧索引到新索引，并过滤特征矩阵 x
-            data.x = data.x.index_select(0, outNodes);
-
-            // 3. 重新映射 edge_index (略，通常需要使用 torch.searchsorted 或重索引映射表)
-            return data;
-        }
-    }
-
-    /**
-     * KNNGraph: 基于节点坐标 pos 构建 K-近邻图
-     */
+    /** Build a k-NN graph from {@code pos} (excludes self). */
     public static class KNNGraph implements BaseTransform {
-        private int k;
-        public KNNGraph(int k) { this.k = k; }
+        private final int k;
+        public KNNGraph(int k) {
+            if (k <= 0) throw new IllegalArgumentException("k must be > 0");
+            this.k = k;
+        }
 
         @Override
         public GraphData apply(GraphData data) {
-            // data.pos: [N, D]
-            Tensor pos = data.pos;
-            // 计算欧氏距离矩阵 [N, N]
+            Tensor pos = TransformUtils.requirePos(data);
+            long n = pos.size(0);
+            int actualK = (int) Math.min(k, Math.max(0, n - 1));
+            if (actualK == 0) {
+                data.edge_index = zeros(new long[]{2, 0}, TransformUtils.longOptsLike(pos));
+                return data;
+            }
             Tensor dist = cdist(pos, pos, 2.0, new LongOptional());
-            // 对每一行取 topk (取最近的 k+1 个，排除掉自己)
-            Tensor topKIndices = topk(dist, k + 1, 1, false, true).get1();
-
-            // 构造新的 edge_index
-            Tensor row = arange(new Scalar(0), new Scalar(pos.size(0)), pos.options()).view(-1, 1).expand_as(topKIndices).reshape(-1);
-            Tensor col = topKIndices.reshape(-1);
-
+            // smallest distances → topk on negated dist, largest=true
+            Tensor idx = topk(dist.neg(), actualK + 1, 1, true, true).get1();
+            // drop self (col 0 is usually self); take next actualK
+            idx = idx.slice(1, new LongOptional(1), new LongOptional(actualK + 1), 1);
+            Tensor row = arange(new Scalar(0), new Scalar(n), TransformUtils.longOptsLike(pos))
+                    .view(-1, 1).expand(new long[]{n, actualK}).reshape(-1);
+            Tensor col = idx.reshape(-1).to(kLong());
             data.edge_index = stack(new TensorVector(row, col), 0);
-            // 移除产生的自环
-            return new RemoveSelfLoops().apply(data);
+            // safety: drop any residual self-loops
+            data.edge_index = TransformUtils.removeSelfLoops(data.edge_index);
+            return data;
         }
     }
 
-    /**
-     * RadiusGraph: 基于距离半径构建边
-     */
+    /** Connect all pairs with distance ≤ r (no self-loops). */
     public static class RadiusGraph implements BaseTransform {
-        private double r;
-        public RadiusGraph(double r) { this.r = r; }
+        private final double r;
+        public RadiusGraph(double r) {
+            if (r <= 0) throw new IllegalArgumentException("r must be > 0");
+            this.r = r;
+        }
 
         @Override
         public GraphData apply(GraphData data) {
-            Tensor dist = cdist(data.pos, data.pos, 2.0, null);
-            // 找到距离小于 r 的所有点对
-            Tensor mask = dist.le(new Scalar(r)).logical_and(dist.gt(new Scalar(0))); // 排除自己
-            data.edge_index = mask.nonzero().t();
+            Tensor pos = TransformUtils.requirePos(data);
+            Tensor dist = cdist(pos, pos, 2.0, new LongOptional());
+            Tensor mask = dist.le(new Scalar(r)).logical_and(dist.gt(new Scalar(0)));
+            data.edge_index = mask.nonzero().t().to(kLong());
             return data;
         }
     }

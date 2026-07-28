@@ -1,58 +1,54 @@
+/*
+ * Copyright (C) 2026 bytedeco.org and pytorch JavaCPP presets contributors
+ * PyG peer: torch_geometric.transforms.OneHotDegree
+ */
 package org.bytedeco.pytorch.geometric.transforms;
 
-import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.Scalar;
+import org.bytedeco.pytorch.ScalarOptional;
+import org.bytedeco.pytorch.ScalarTypeOptional;
+import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.geometric.data.GraphData;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
 /**
- * OneHotDegree: 将节点度数作为 One-hot 编码追加到特征中
+ * Append a one-hot encoding of in-degree (clamped to {@code [0, maxDegree]})
+ * to node features (PyG {@code OneHotDegree}).
  */
-public  class OneHotDegree implements BaseTransform {
-    private int maxDegree;
-    public OneHotDegree(int maxDegree) { this.maxDegree = maxDegree; }
+public class OneHotDegree implements BaseTransform {
 
-//    @Override
-    public GraphData call2(GraphData data) {
-        long numNodes = data.x.size(0);
-        // 计算入度 (对 edge_index 的第二行计数)
-        Tensor degree = zeros(new long[]{numNodes}, data.x.options().dtype(new ScalarTypeOptional(kLong())));
-        Tensor ones = ones(new long[]{data.edge_index.size(1)}, data.x.options().dtype(new ScalarTypeOptional(kLong())));
-        degree.scatter_add_(0, data.edge_index.index(new TensorIndexVector(new TensorIndex(tensor(1)))), ones);
+    private final int maxDegree;
 
-        // 限制最大度数并转为 One-hot
-        degree = degree.clamp(new ScalarOptional(new Scalar(0)),new ScalarOptional(new Scalar( maxDegree)) );
-        Tensor oneHot = one_hot(degree, maxDegree + 1).to(data.x.dtype());
-
-        data.x = cat(new TensorVector(data.x, oneHot), 1);
-        return data;
+    public OneHotDegree(int maxDegree) {
+        if (maxDegree < 0) {
+            throw new IllegalArgumentException("maxDegree must be >= 0");
+        }
+        this.maxDegree = maxDegree;
     }
 
     @Override
     public GraphData apply(GraphData data) {
-        long numNodes = data.numNodes(); // 使用我们重写的 numNodes 方法更安全
+        Tensor x = TransformUtils.requireX(data);
+        Tensor ei = TransformUtils.requireEdgeIndex(data);
+        long numNodes = x.size(0);
 
-        // 1. 初始化 degree 为 1D: [numNodes]
-        Tensor degree = zeros(new long[]{numNodes}, data.x.options().dtype(new ScalarTypeOptional(kLong())));
-
-        // 2. 获取入度索引 (edge_index 的第二行)
-        // 使用 select(0, 1) 明确获取第 0 维的第 1 个切片，结果是 1D: [num_edges]
-        Tensor col = data.edge_index.select(0, 1);
-
-        // 3. 创建 ones，确保也是 1D 且长度与 col 一致
-        Tensor values = ones(col.sizes(), data.x.options().dtype(new ScalarTypeOptional(kLong())));
-
-        // 4. 执行 scatter_add_ (此时 self, index, src 全是 1D)
+        Tensor degree = zeros(new long[]{numNodes},
+                x.options().dtype(new ScalarTypeOptional(kLong())));
+        Tensor col = ei.select(0, 1).to(kLong());
+        Tensor values = ones(new long[]{col.size(0)},
+                x.options().dtype(new ScalarTypeOptional(kLong())));
         degree.scatter_add_(0, col, values);
 
-        // 5. 限制最大度数并转为 One-hot
-        // 注意：degree 需要是 Long 类型才能传给 one_hot
-        degree = degree.clamp(new ScalarOptional(new Scalar(0)), new ScalarOptional(new Scalar(maxDegree)));
-        Tensor oneHot = one_hot(degree, maxDegree + 1).to(data.x.dtype());
-
-        // 6. 拼接特征
-        data.x = cat(new TensorVector(data.x, oneHot), 1);
-
+        degree = degree.clamp(new ScalarOptional(new Scalar(0)),
+                new ScalarOptional(new Scalar(maxDegree)));
+        Tensor oneHot = one_hot(degree, maxDegree + 1).to(x.dtype());
+        data.x = cat(new TensorVector(x, oneHot), 1);
         return data;
+    }
+
+    public int getMaxDegree() {
+        return maxDegree;
     }
 }

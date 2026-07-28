@@ -1,7 +1,7 @@
 package org.bytedeco.pytorch.data.orc;
 
-import org.bytedeco.pytorch.data.dataframe.Column;
-import org.bytedeco.pytorch.data.dataframe.DataFrame;
+import org.bytedeco.pytorch.dataframe.Column;
+import org.bytedeco.pytorch.dataframe.DataFrame;
 
 /**
  * Pure-Java ORC reader ({@code orc-format}) → {@link DataFrame}.

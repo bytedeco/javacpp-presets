@@ -1,46 +1,74 @@
 package org.bytedeco.pytorch.geometric.aggr;
-import org.bytedeco.pytorch.jit.*;
 
-import org.bytedeco.pytorch.*;
-import org.bytedeco.pytorch.global.torch;
+import org.bytedeco.pytorch.ScalarTypeOptional;
+import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.TensorOptions;
+import org.bytedeco.pytorch.nn.Parameter;
 import org.bytedeco.pytorch.geometric.utils.AggrUtils;
-//import org.gnn.framework.utils.org.bytedeco.pytorch.geometric.utils.AggrUtils;
+import org.bytedeco.pytorch.global.torch;
 
 /**
- * Softmax org.bytedeco.pytorch.geometric.aggr.Aggregation
- * Learnable temperature t.
- * Out = Sum( Softmax(x/t) * x )
+ * Softmax aggregation (Li et al. / PyG).
+ *
+ * <pre>
+ *   α_j = softmax_j( t ⊙ x_j )
+ *   y_i = Σ_{j ∈ N(i)} α_j ⊙ x_j
+ * </pre>
+ * Learnable per-channel temperature {@code t} (or fixed ones).
  */
 public class SoftmaxAggregation extends Aggregation {
-    private Tensor t; // Temperature inverse (beta)
-    private boolean learnT;
+
+    private final Parameter t;       // [1, C] learnable
+    private final Tensor tFixed;     // [1, C] buffer when not learning
+    private final boolean learnT;
+    private final long channels;
+
+    public SoftmaxAggregation(long channels) {
+        this(channels, true);
+    }
 
     public SoftmaxAggregation(long channels, boolean learnT) {
-        this.learnT = learnT;
-        // 初始化 t=1.0
-        Tensor initT = torch.ones(new long[]{1, channels}, new TensorOptions());
-
-        if (learnT) {
-            this.t = new Tensor(initT);
-            register_parameter("t", t);
-        } else {
-            // 如果不学习，注册为 buffer (不会被 optimizer 更新，但会被 state_dict 保存)
-            this.t = new Tensor(initT); // JavaCPP 简化处理，逻辑上应当是 buffer
-            register_buffer("t", initT);
+        super();
+        if (channels <= 0) {
+            throw new IllegalArgumentException("channels must be > 0");
         }
+        this.channels = channels;
+        this.learnT = learnT;
+        TensorOptions fOpt = new TensorOptions()
+                .dtype(new ScalarTypeOptional(torch.ScalarType.Float));
+        Tensor init = torch.ones(new long[]{1, channels}, fOpt).clone();
+        if (learnT) {
+            init.requires_grad_(true);
+            this.t = new Parameter(init, true);
+            register_parameter("t", this.t);
+            this.tFixed = null;
+        } else {
+            this.t = null;
+            this.tFixed = init;
+            register_buffer("t", this.tFixed);
+        }
+    }
+
+    private Tensor temperature() {
+        return learnT ? t : tFixed;
     }
 
     @Override
     public Tensor forward(Tensor x, Tensor index, long dimSize) {
-        // 1. Apply Temperature: x * t (or x / (1/t))
-        // 注意 t 的形状是 [1, C]，广播到 [N, C]
-        Tensor score = x.mul(t);
-
-        // 2. Calculate Spatial Softmax based on index
+        if (x == null || index == null) {
+            throw new NullPointerException("x and index must not be null");
+        }
+        // t: [1,C] broadcasts over [E,C]
+        Tensor score = x.mul(temperature());
         Tensor alpha = AggrUtils.scatter_softmax(score, index, dimSize);
+        return AggrUtils.scatter(x.mul(alpha), index, dimSize, "sum");
+    }
 
-        // 3. Weighted Sum
-        Tensor weighted = x.mul(alpha);
-        return AggrUtils.scatter(weighted, index, dimSize, "sum");
+    public boolean isLearnT() {
+        return learnT;
+    }
+
+    public long getChannels() {
+        return channels;
     }
 }

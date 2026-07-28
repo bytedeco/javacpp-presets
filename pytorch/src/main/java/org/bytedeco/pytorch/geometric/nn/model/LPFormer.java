@@ -4,7 +4,7 @@ import org.bytedeco.pytorch.ScalarTypeOptional;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.global.torch;
-import org.bytedeco.pytorch.geometric.nn.Parameter;
+import org.bytedeco.pytorch.nn.Parameter;
 import org.bytedeco.pytorch.geometric.attention.PerformerAttention;
 
 // 简略实现框架

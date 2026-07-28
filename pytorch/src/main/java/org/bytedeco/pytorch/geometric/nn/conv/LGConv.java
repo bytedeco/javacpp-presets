@@ -1,72 +1,81 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
 
-import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.geometric.utils.GraphUtils;
 import org.bytedeco.pytorch.global.torch;
 
 /**
- * 实现 torch_geometric.nn.conv.LGConv
- * 轻量化图卷积算子：去除线性变换和激活函数，仅保留传播。
+ * LightGCN convolution (He et al., SIGIR 2020) — pure neighborhood aggregation
+ * without feature transformation or nonlinearities.
+ *
+ * <pre>
+ *   x'_i = Σ_{j ∈ N(i)} (d_i d_j)^{-1/2} x_j     (when normalize=true)
+ * </pre>
  */
 public class LGConv extends MessagePassing {
-    private boolean normalize;
+
+    private final boolean normalize;
+    private final boolean addSelfLoops;
+
+    public LGConv() {
+        this(true, false);
+    }
 
     public LGConv(boolean normalize) {
-        super("add");
+        this(normalize, false);
+    }
+
+    public LGConv(boolean normalize, boolean addSelfLoops) {
+        super("sum");
         this.normalize = normalize;
+        this.addSelfLoops = addSelfLoops;
     }
 
     @Override
     public Tensor forward(Tensor x, Tensor edge_index) {
-        return forward(x, edge_index, (Tensor)null);
+        return forward(x, edge_index, (Tensor) null);
     }
-    /**
-     * @param x          节点特征 [N, channels]
-     * @param edge_index 边索引 [2, E]
-     * @param edge_weight 边权重 (可选)
-     */
+
+    @Override
     public Tensor forward(Tensor x, Tensor edge_index, Tensor edge_weight) {
+        if (x == null || edge_index == null) {
+            throw new NullPointerException("x and edge_index must not be null");
+        }
         long N = x.size(0);
+        Tensor ei = edge_index;
+        Tensor ew = edge_weight;
 
-        // 1. 计算对称归一化因子: D^-0.5 * A * D^-0.5
-        Tensor norm = null;
         if (normalize) {
-            norm = compute_normalization(edge_index, edge_weight, N);
+            torch.ScalarType dtype = x.scalar_type().intern();
+            // LightGCN typically does NOT add self-loops; honor flag if set
+            Tensor[] normed = GraphUtils.gcn_norm(ei, ew, N, addSelfLoops, dtype);
+            ei = normed[0];
+            ew = normed[1];
+        } else if (addSelfLoops) {
+            if (ew == null) {
+                ei = GraphUtils.add_self_loops(ei, N);
+            } else {
+                Tensor[] pair = GraphUtils.add_self_loops(ei, ew, N, 1.0);
+                ei = pair[0];
+                ew = pair[1];
+            }
         }
 
-        // 2. 消息传递：直接聚合邻居特征，没有任何 W 矩阵
-        return propagate(edge_index, x, norm);
-    }
-
-    private Tensor compute_normalization(Tensor edge_index, Tensor edge_weight, long numNodes) {
-        if (edge_weight == null) {
-            edge_weight = torch.ones(new long[]{edge_index.size(1)}, edge_index.options());
-        }
-
-        Tensor row = edge_index.select(0, 0);
-        Tensor col = edge_index.select(0, 1);
-
-        // 计算度 Degree
-        Tensor deg = torch.zeros(new long[]{numNodes}, edge_weight.options());
-        deg.scatter_add_(0, row, edge_weight);
-
-        // D^-0.5
-        Tensor degInvSqrt = deg.pow(new Scalar(-0.5));
-        degInvSqrt.masked_fill_(degInvSqrt.isinf(), new Scalar(0));
-
-        // 归一化系数: d_i^-0.5 * w_ij * d_j^-0.5
-        return degInvSqrt.index_select(0, row)
-                .mul(edge_weight)
-                .mul(degInvSqrt.index_select(0, col));
+        return propagate(ei, x, ew);
     }
 
     @Override
     public Tensor message(Tensor x_j, Tensor x_i, Tensor edge_index, Tensor edge_attr, long numNodes) {
-        // 直接返回邻居特征乘以归一化系数
-        return x_j.mul(edge_attr.view(-1, 1));
+        if (edge_attr != null) {
+            if (edge_attr.dim() == 1) {
+                return x_j.mul(edge_attr.view(new long[]{-1, 1}));
+            }
+            return x_j.mul(edge_attr);
+        }
+        return x_j;
     }
 
-//    @Override
-    public void reset_parameters() {
-        // 无参算子，无需重置
+    public boolean isNormalize() {
+        return normalize;
     }
 }

@@ -21,7 +21,7 @@
  */
 package org.bytedeco.pytorch.utils.librosa;
 
-import org.bytedeco.pytorch.data.dataframe.dtype.AudioData;
+import org.bytedeco.pytorch.dataframe.dtype.AudioData;
 import org.bytedeco.pytorch.utils.audio.functional.F;
 
 import java.util.Objects;

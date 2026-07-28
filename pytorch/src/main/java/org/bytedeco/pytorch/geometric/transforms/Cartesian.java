@@ -1,25 +1,31 @@
+/*
+ * Copyright (C) 2026 bytedeco.org and pytorch JavaCPP presets contributors
+ * PyG peer: torch_geometric.transforms.Cartesian
+ */
 package org.bytedeco.pytorch.geometric.transforms;
-import org.bytedeco.pytorch.*;
+
+import org.bytedeco.pytorch.Scalar;
+import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.geometric.data.GraphData;
 
-import static org.bytedeco.pytorch.global.torch.*;
+/** Append normalized Cartesian offsets {@code pos_j - pos_i} to edge_attr. */
+public class Cartesian implements BaseTransform {
+    private final boolean norm;
+    public Cartesian() { this(true); }
+    public Cartesian(boolean norm) { this.norm = norm; }
 
-public  class Cartesian implements BaseTransform {
     @Override
     public GraphData apply(GraphData data) {
-        Tensor row = data.edge_index.select(0, 0);
-        Tensor col = data.edge_index.select(0, 1);
-
-        Tensor pos_i = data.pos.index_select(0, row);
-        Tensor pos_j = data.pos.index_select(0, col);
-
-        // 计算相对偏移 [E, D]
-        Tensor cart = pos_j.sub(pos_i);
-
-        // 归一化到 [0, 1] 之间 (通常用于处理图像像素坐标)
-        cart = cart.div(data.pos.max().mul(new Scalar(2))).add(new Scalar(0.5));
-
-        data.edge_attr = (data.edge_attr == null) ? cart : cat(new TensorVector(data.edge_attr, cart), 1);
+        Tensor ei = TransformUtils.requireEdgeIndex(data);
+        Tensor pos = TransformUtils.requirePos(data);
+        Tensor cart = pos.index_select(0, ei.select(0, 1))
+                .sub(pos.index_select(0, ei.select(0, 0)));
+        if (norm) {
+            // Map roughly into [0,1] using global max extent (PyG-style)
+            Tensor scale = pos.max().mul(new Scalar(2)).clamp_min(new Scalar(1e-12));
+            cart = cart.div(scale).add(new Scalar(0.5));
+        }
+        data.edge_attr = TransformUtils.catEdgeAttr(data.edge_attr, cart);
         return data;
     }
 }

@@ -23,8 +23,8 @@
  * limitations under the License.
  */
 package org.bytedeco.pytorch.utils.opencv;
-import org.bytedeco.pytorch.data.transforms.*;
 
+import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.FloatPointer;
 import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.opencv.opencv_core.Rect;
@@ -83,14 +83,9 @@ public final class OpenCVIO {
             throw new OpenCVException("imread returned empty mat: " + path);
         }
         try {
-            // IMREAD_COLOR → BGR; convert to RGB
-            Mat bgr = mat;
-            if (bgr.channels() == 3) {
-                Mat rgb = new Mat();
-                cvtColor(bgr, rgb, COLOR_BGR2RGB);
-                return MatToTensor.fromMat(rgb);
-            }
-            return MatToTensor.fromMat(bgr);
+            // IMREAD_COLOR → BGR; MatToTensor.fromMat does BGR→RGB for 3-channel mats.
+            // Do NOT cvtColor here — that would double-swap channels.
+            return ensureCHW(MatToTensor.fromMat(mat));
         } finally {
             if (mat != null) mat.close();
         }
@@ -113,7 +108,8 @@ public final class OpenCVIO {
             throw new OpenCVException("imread returned empty mat: " + path);
         }
         try {
-            return MatToTensor.fromMat(mat);
+            // MatToTensor grayscale is [H,W]; expose torch-style [1,H,W]
+            return ensureCHW(MatToTensor.fromMat(mat));
         } finally {
             if (mat != null) mat.close();
         }
@@ -139,18 +135,18 @@ public final class OpenCVIO {
             throw new OpenCVException("imread returned empty mat: " + path);
         }
         try {
-            Mat converted = new Mat();
+            // Keep OpenCV native layout (BGR for color, gray for 1-ch).
+            // MatToTensor.fromMat handles BGR→RGB for 3-channel mats.
             if (mat.channels() == 1 && channels > 1) {
-                cvtColor(mat, converted, COLOR_GRAY2RGB);
+                Mat converted = new Mat();
+                cvtColor(mat, converted, COLOR_GRAY2BGR); // fromMat will BGR→RGB
+                return ensureCHW(MatToTensor.fromMat(converted));
             } else if (mat.channels() == 3 && channels == 1) {
-                cvtColor(mat, converted, COLOR_BGR2GRAY);
-                converted = converted.reshape(1); // ensure [H,W] → [1,H,W]
-            } else if (mat.channels() == 3) {
-                cvtColor(mat, converted, COLOR_BGR2RGB);
-            } else {
-                converted = mat.clone();
+                Mat gray = new Mat();
+                cvtColor(mat, gray, COLOR_BGR2GRAY);
+                return ensureCHW(MatToTensor.fromMat(gray));
             }
-            return MatToTensor.fromMat(converted);
+            return ensureCHW(MatToTensor.fromMat(mat));
         } finally {
             if (mat != null) mat.close();
         }
@@ -170,20 +166,17 @@ public final class OpenCVIO {
         }
         Mat buf = new Mat(1, encoded.length, CV_8UC1);
         buf.data().put(encoded);
-        Mat decoded = imdecode(buf, IMREAD_UNCHANGED);
+        // IMREAD_COLOR forces 3-channel BGR so MatToTensor.fromMat can BGR→RGB consistently
+        Mat decoded = imdecode(buf, IMREAD_COLOR);
         if (decoded == null || decoded.total() == 0) {
             throw new OpenCVException("imdecode returned empty mat");
         }
         try {
-            Mat rgb = new Mat();
-            if (decoded.channels() == 3) {
-                cvtColor(decoded, rgb, COLOR_BGR2RGB);
-            } else {
-                rgb = decoded.clone();
-            }
-            return MatToTensor.fromMat(rgb);
+            // Do NOT cvtColor — fromMat already does BGR→RGB for 3-channel mats.
+            return ensureCHW(MatToTensor.fromMat(decoded));
         } finally {
             if (decoded != null) decoded.close();
+            buf.close();
         }
     }
 
@@ -228,17 +221,30 @@ public final class OpenCVIO {
     public static byte[] encode(Tensor tensor, String format) {
         Mat mat = MatToTensor.toMat(tensor);
         try {
-            String ext = format.toLowerCase();
-            if (ext.equals("jpeg") || ext.equals("jpg")) ext = ".jpg";
-            else if (ext.equals("png")) ext = ".png";
-            else ext = "." + ext;
+            String ext = format == null ? ".png" : format.toLowerCase();
+            if (ext.equals("jpeg") || ext.equals("jpg") || ext.equals(".jpeg") || ext.equals(".jpg")) {
+                ext = ".jpg";
+            } else if (ext.equals("png") || ext.equals(".png")) {
+                ext = ".png";
+            } else if (!ext.startsWith(".")) {
+                ext = "." + ext;
+            }
 
-            byte[][] buf = new byte[1][];
-            boolean ok = imencode(ext, mat, buf[0]);
+            // JavaCPP imencode writes into a growable BytePointer (std::vector<uchar>).
+            BytePointer buf = new BytePointer();
+            boolean ok = imencode(ext, mat, buf);
             if (!ok) {
                 throw new OpenCVException("imencode failed for format: " + format);
             }
-            return buf[0];
+            long lim = buf.limit();
+            if (lim <= 0) lim = buf.capacity();
+            if (lim <= 0) {
+                throw new OpenCVException("imencode produced empty buffer for format: " + format);
+            }
+            byte[] out = new byte[(int) lim];
+            buf.position(0).get(out);
+            buf.deallocate();
+            return out;
         } finally {
             if (mat != null) mat.close();
         }
@@ -259,7 +265,7 @@ public final class OpenCVIO {
         try {
             Mat resized = new Mat();
             org.bytedeco.opencv.global.opencv_imgproc.resize(mat, resized, new Size(width, height), 0, 0, INTER_LINEAR);
-            return MatToTensor.fromMat(resized);
+            return ensureCHW(MatToTensor.fromMat(resized));
         } finally {
             if (mat != null) mat.close();
         }
@@ -280,7 +286,7 @@ public final class OpenCVIO {
             int dstH = (int) Math.round(mat.rows() * fy);
             Mat resized = new Mat();
             org.bytedeco.opencv.global.opencv_imgproc.resize(mat, resized, new Size(dstW, dstH), 0, 0, INTER_LINEAR);
-            return MatToTensor.fromMat(resized);
+            return ensureCHW(MatToTensor.fromMat(resized));
         } finally {
             if (mat != null) mat.close();
         }
@@ -289,21 +295,17 @@ public final class OpenCVIO {
     // ---- Color conversion ----
 
     /**
-     * Convert RGB tensor to BGR OpenCV Mat (and back via {@link #writeImage}).
-     * This is a no-op at the tensor level since internal Mat→Tensor always produces RGB.
+     * Convert RGB tensor to BGR (channel swap). Useful when handing tensors to pure-OpenCV code.
      */
     public static Tensor rgbToBgr(Tensor tensor) {
-        // OpenCV stores BGR; our MatToTensor.fromMat already BGR→RGB on read
-        // and MatToTensor.toMat already RGB→BGR on write.
-        // So this is a semantic identity for the Java side.
-        return tensor;
+        return swapRB(tensor);
     }
 
     /**
-     * Convert BGR tensor to RGB.
+     * Convert BGR tensor to RGB (channel swap).
      */
     public static Tensor bgrToRgb(Tensor tensor) {
-        return tensor; // same as rgbToBgr
+        return swapRB(tensor);
     }
 
     /**
@@ -316,9 +318,12 @@ public final class OpenCVIO {
         Mat mat = MatToTensor.toMat(tensor);
         try {
             Mat gray = new Mat();
+            // toMat emits BGR for 3-channel tensors
+            if (mat.channels() == 1) {
+                return ensureCHW(MatToTensor.fromMat(mat));
+            }
             cvtColor(mat, gray, COLOR_BGR2GRAY);
-            Mat reshaped = gray.reshape(1); // [H, W] → [1, H, W]
-            return MatToTensor.fromMat(reshaped);
+            return ensureCHW(MatToTensor.fromMat(gray));
         } finally {
             if (mat != null) mat.close();
         }
@@ -341,7 +346,7 @@ public final class OpenCVIO {
         try {
             Rect roi = new Rect(x, y, width, height);
             Mat cropped = new Mat(mat, roi);
-            return MatToTensor.fromMat(cropped);
+            return ensureCHW(MatToTensor.fromMat(cropped));
         } finally {
             if (mat != null) mat.close();
         }
@@ -360,7 +365,7 @@ public final class OpenCVIO {
         try {
             Mat flipped = new Mat();
             flip(mat, flipped, 1); // flipCode=1 → horizontal
-            return MatToTensor.fromMat(flipped);
+            return ensureCHW(MatToTensor.fromMat(flipped));
         } finally {
             if (mat != null) mat.close();
         }
@@ -379,7 +384,7 @@ public final class OpenCVIO {
         try {
             Mat rotated = new Mat();
             rotate(mat, rotated, ROTATE_90_CLOCKWISE);
-            return MatToTensor.fromMat(rotated);
+            return ensureCHW(MatToTensor.fromMat(rotated));
         } finally {
             if (mat != null) mat.close();
         }
@@ -416,6 +421,40 @@ public final class OpenCVIO {
             }
         }
         return tCpu;
+    }
+
+    // ---- helpers ----
+
+    /** Ensure channel-first layout: {@code [H,W]} → {@code [1,H,W]}; pass through {@code [C,H,W]}. */
+    private static Tensor ensureCHW(Tensor t) {
+        long[] s = sizes(t);
+        if (s.length == 2) {
+            return t.reshape(1, s[0], s[1]);
+        }
+        return t;
+    }
+
+    /** Swap R↔B on a 3-channel CHW tensor; identity for other ranks/channels. */
+    private static Tensor swapRB(Tensor tensor) {
+        long[] s = sizes(tensor);
+        if (s.length != 3 || s[0] != 3) return tensor;
+        // out[0]=in[2], out[1]=in[1], out[2]=in[0] via clone + channel copy
+        Tensor out = tensor.contiguous().clone();
+        Tensor src = tensor.contiguous().cpu();
+        Tensor dst = out.cpu();
+        FloatPointer sp = src.data_ptr_float();
+        FloatPointer dp = dst.data_ptr_float();
+        int h = (int) s[1], w = (int) s[2];
+        long plane = (long) h * w;
+        for (long i = 0; i < plane; i++) {
+            float r = sp.get(i);           // ch0
+            float g = sp.get(plane + i);   // ch1
+            float b = sp.get(2 * plane + i); // ch2
+            dp.put(i, b);
+            dp.put(plane + i, g);
+            dp.put(2 * plane + i, r);
+        }
+        return out;
     }
 
     private static long[] sizes(Tensor t) {

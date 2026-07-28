@@ -1,24 +1,27 @@
+/*
+ * Copyright (C) 2026 bytedeco.org and pytorch JavaCPP presets contributors
+ * PyG peer: torch_geometric.transforms.MaskToIndex
+ */
 package org.bytedeco.pytorch.geometric.transforms;
 
+import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.geometric.data.GraphData;
 
-/**
- * MaskToIndex: 将布尔掩码转换为索引张量
- * [true, false, true] -> [0, 2]
- */
+/** Convert train/val/test boolean masks to 1-D index tensors. */
 public class MaskToIndex implements BaseTransform {
     @Override
     public GraphData apply(GraphData data) {
-        if (data.get("train_mask") != null) {
-            // nonzero() 返回的是 [K, 1]，通过 view(-1) 转为一维索引
-            data.put("train_indices", data.get("train_mask").nonzero().view(-1));
-        }
-        if (data.get("val_mask") != null) {
-            data.put("val_indices", data.get("val_mask").nonzero().view(-1));
-        }
-        if (data.get("test_mask") != null) {
-            data.put("test_indices", data.get("test_mask").nonzero().view(-1));
-        }
+        TransformUtils.requireData(data);
+        convert(data, "train_mask", "train_indices");
+        convert(data, "val_mask", "val_indices");
+        convert(data, "test_mask", "test_indices");
         return data;
+    }
+
+    private static void convert(GraphData data, String maskKey, String idxKey) {
+        Tensor mask = data.get(maskKey);
+        if (mask != null && mask.defined()) {
+            data.put(idxKey, mask.nonzero().view(-1));
+        }
     }
 }

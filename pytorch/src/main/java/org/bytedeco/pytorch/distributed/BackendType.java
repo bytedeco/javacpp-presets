@@ -21,10 +21,34 @@
  */
 package org.bytedeco.pytorch.distributed;
 
-/** Collective communication backend selection for distributed helpers. */
+/**
+ * Collective communication backend selection for distributed helpers.
+ *
+ * <p>Maps to {@link ProcessGroup.BackendType} when installing into a
+ * {@code c10d::ProcessGroup} container. {@link #AUTO} resolves to NCCL when
+ * CUDA is available, otherwise GLOO.
+ */
 public enum BackendType {
     GLOO,
     NCCL,
+    MPI,
+    UCC,
     /** Prefer NCCL when CUDA is available, otherwise GLOO. */
-    AUTO
+    AUTO;
+
+    /** Map to the generated c10d ProcessGroup backend enum (byte value). */
+    public ProcessGroup.BackendType toProcessGroupBackendType() {
+        switch (this) {
+            case NCCL:
+                return ProcessGroup.BackendType.NCCL;
+            case MPI:
+                return ProcessGroup.BackendType.MPI;
+            case UCC:
+                return ProcessGroup.BackendType.UCC;
+            case GLOO:
+            case AUTO:
+            default:
+                return ProcessGroup.BackendType.GLOO;
+        }
+    }
 }

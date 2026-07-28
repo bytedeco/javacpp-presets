@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2026 bytedeco.org and pytorch JavaCPP presets contributors
+ * PyG peer: torch_geometric.transforms.ToSparseTensor
+ */
 package org.bytedeco.pytorch.geometric.transforms;
 
 import org.bytedeco.pytorch.Tensor;
@@ -6,21 +10,19 @@ import org.bytedeco.pytorch.geometric.data.GraphData;
 import static org.bytedeco.pytorch.global.torch.ones;
 import static org.bytedeco.pytorch.global.torch.sparse_coo_tensor;
 
-/**
- * ToSparseTensor: 将 edge_index 转换为稀疏矩阵表示 adj_t
- * 在处理超大规模图时，SparseTensor 的内存效率远高于稠密矩阵
- */
+/** Build coalesced sparse COO {@code adj_t} from {@code edge_index}. */
 public class ToSparseTensor implements BaseTransform {
     @Override
     public GraphData apply(GraphData data) {
-        long numNodes = data.x.size(0);
-        // 在 JavaCPP-PyTorch 中，我们构造一个标准的 torch.sparse_coo_tensor
-        // 形状为 [N, N]
-        Tensor values = ones(new long[]{data.edge_index.size(1)}, data.x.options());
-        data.put("adj_t", sparse_coo_tensor(data.edge_index, values, new long[]{numNodes, numNodes}));
-
-        // 通常还需要将稀疏矩阵转为 CSR 格式以加速计算
-        data.put("adj_t", data.get("adj_t").coalesce());
+        Tensor ei = TransformUtils.requireEdgeIndex(data);
+        long numNodes = TransformUtils.numNodes(data);
+        Tensor values = data.edge_weight != null && data.edge_weight.defined()
+                ? data.edge_weight
+                : ones(new long[]{ei.size(1)},
+                    data.x != null ? data.x.options() : TransformUtils.floatOptsLike(ei));
+        Tensor adj = sparse_coo_tensor(ei.to(org.bytedeco.pytorch.global.torch.kLong()),
+                values, new long[]{numNodes, numNodes});
+        data.put("adj_t", adj.coalesce());
         return data;
     }
 }

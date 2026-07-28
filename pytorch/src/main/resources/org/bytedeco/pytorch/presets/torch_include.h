@@ -5,9 +5,12 @@
 // #include <aoti_model_container_runner_mps_java.h>  // MPS parse shim
 // #include <aoti_model_container_runner_xpu_java.h>  // SYCL-free XPU shim
 // torch/csrc/distributed/c10d/ProcessGroupGloo.hpp
+// torch/csrc/distributed/c10d/ProcessGroupWrapper.hpp  // → ProcessGroupNativeWrapper
 // torch/csrc/distributed/c10d/PrefixStore.hpp
 // torch/csrc/distributed/c10d/logger.hpp
+// (+ profiler_kineto via torch/utils.h → enableProfiler / ProfilerResult)
 // as listed by g++ -H torch/torch.h torch/script.h
+// MPI/UCC backends: torch_mpi_include.h / torch_ucc_include.h (separate presets)
 // Excluding:
 // - the ones that fill at::meta at::native and at::_ops namespaces
 //   (ATen/ops/*_native.h ATen/ops/*_meta.h ATen/ops/*_ops.h)
@@ -1521,6 +1524,8 @@
 // #include "torch/csrc/distributed/autograd/context/context.h" // Not on Windows
 #include "torch/csrc/distributed/c10d/reducer.hpp"
 #include "torch/csrc/distributed/c10d/ProcessGroupGloo.hpp"
+// C++ debug wrapper (USE_C10D_GLOO). Java peer: ProcessGroupNativeWrapper.
+#include "torch/csrc/distributed/c10d/ProcessGroupWrapper.hpp"
 #include "torch/csrc/distributed/c10d/PrefixStore.hpp"
 #include "torch/csrc/distributed/c10d/FileStore.hpp"
 #include "torch/csrc/distributed/c10d/TCPStore.hpp"
@@ -1529,3 +1534,11 @@
 
 #include "datasets.h"
 #include "pytorch_adapters.h"
+// Python-only optimizers / LR schedulers (not in C++ LibTorch API).
+// Header-only subclasses of torch::optim::Optimizer / LRScheduler so JavaCPP
+// peers `extends Optimizer` / `extends LRScheduler` and reuse OptimizerParamGroup.
+#include "python_optim_java.h"
+#include "python_lr_scheduler_java.h"
+// Python-only data samplers (SubsetRandom / WeightedRandom / Batch drop_last)
+// as real subclasses of torch::data::samplers::Sampler<>.
+#include "python_samplers_java.h"

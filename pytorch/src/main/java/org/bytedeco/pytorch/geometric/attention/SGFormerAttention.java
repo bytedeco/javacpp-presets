@@ -1,77 +1,80 @@
 package org.bytedeco.pytorch.geometric.attention;
-import org.bytedeco.pytorch.autograd.*;
-import org.bytedeco.pytorch.nn.modules.container.*;
-import org.bytedeco.pytorch.nn.options.*;
-import org.bytedeco.pytorch.nn.modules.*;
 
-import org.bytedeco.pytorch.*;
-import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.Scalar;
+import org.bytedeco.pytorch.ScalarTypeOptional;
+import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.global.torch;
+import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 
 /**
- * SGFormer Attention (Simple Global Attention)
- * 通过 Global Average Pooling 提取全局信息，然后广播回所有节点。
- * 极简、极快、线性复杂度。
+ * SGFormer simple global attention (Wu et al.).
+ *
+ * <pre>
+ *   g = mean(X)
+ *   α_i = σ( (q_i · k_g) / √d )
+ *   y_i = α_i ⊙ v_g
+ * </pre>
+ * Linear complexity: one global token for K/V, all nodes as Q.
  */
 public class SGFormerAttention extends Module {
-    private LinearImpl linQ, linK, linV, linOut;
-    private long numHeads;
-    private long headDim;
+
+    private final LinearImpl linQ;
+    private final LinearImpl linK;
+    private final LinearImpl linV;
+    private final LinearImpl linOut;
+    private final long numHeads;
+    private final long headDim;
+    private final long inChannels;
 
     public SGFormerAttention(long inChannels, long numHeads) {
         super();
+        if (inChannels <= 0 || numHeads <= 0) {
+            throw new IllegalArgumentException("inChannels/numHeads must be > 0");
+        }
+        if (inChannels % numHeads != 0) {
+            throw new IllegalArgumentException("inChannels must be divisible by numHeads");
+        }
+        this.inChannels = inChannels;
         this.numHeads = numHeads;
         this.headDim = inChannels / numHeads;
 
-        // 这里我们不需要 Full Attention Matrix
-        // 只需要 Q 投影 X，K, V 投影 Global Node
-        this.linQ = new LinearImpl(inChannels, inChannels);
-        this.linK = new LinearImpl(inChannels, inChannels); // Input 1 (Global) -> Output In
-        this.linV = new LinearImpl(inChannels, inChannels); // Input 1 (Global) -> Output In
-        this.linOut = new LinearImpl(inChannels, inChannels);
-
-        register_module("linQ", linQ);
-        register_module("linK", linK);
-        register_module("linV", linV);
-        register_module("linOut", linOut);
+        this.linQ = register_module("linQ", new LinearImpl(inChannels, inChannels));
+        this.linK = register_module("linK", new LinearImpl(inChannels, inChannels));
+        this.linV = register_module("linV", new LinearImpl(inChannels, inChannels));
+        this.linOut = register_module("linOut", new LinearImpl(inChannels, inChannels));
     }
 
+    /** @param x [N, C] @return [N, C] */
     public Tensor forward(Tensor x) {
-        // x: [N, C]
+        if (x == null || x.dim() != 2 || x.size(1) != inChannels) {
+            throw new IllegalArgumentException("x must be [N," + inChannels + "]");
+        }
         long N = x.size(0);
-        long C = x.size(1);
+        long C = inChannels;
 
-        // 1. Calculate Global Node g = Mean(x) -> [1, C]
-        Tensor g = x.mean(new long[]{0}, true, new ScalarTypeOptional());
+        // Global token
+        Tensor g = x.mean(new long[]{0}, true, new ScalarTypeOptional()); // [1, C]
 
-        // 2. Projections
-        // Q from all nodes: [N, H, D]
-        Tensor q = linQ.forward(x).view(N, numHeads, headDim);
+        Tensor q = linQ.forward(x).view(N, numHeads, headDim);   // [N,H,D]
+        Tensor k = linK.forward(g).view(1, numHeads, headDim);   // [1,H,D]
+        Tensor v = linV.forward(g).view(1, numHeads, headDim);   // [1,H,D]
 
-        // K, V from global node: [1, H, D]
-        Tensor k = linK.forward(g).view(1, numHeads, headDim);
-        Tensor v = linV.forward(g).view(1, numHeads, headDim);
-
-        // 3. Simple Attention: Q * K^T * V
-        // 注意：这里 K 只有一个 token，所以 attention score 是 [N, 1]
-        // Score = (Q * K) / sqrt(d)
-        // [N, H, D] * [1, H, D] -> [N, H, D] -> sum(D) -> [N, H, 1]
+        // Scaled dot-product with single global key → [N,H,1]
         Tensor score = q.mul(k).sum(new long[]{2}, true, new ScalarTypeOptional());
         score = score.mul(new Scalar(1.0 / Math.sqrt(headDim)));
+        // Gating (single key makes softmax degenerate to 1)
+        Tensor attn = torch.sigmoid(score);
 
-        // Softmax over global tokens (只有1个token，softmax必定是1.0)
-        // 但 SGFormer 原文其实不需要 softmax，或者说这就是 scaling
-        // 这里为了保持 Attention 语义，我们保留 score，或者对其做 sigmoid/relu
-        // SGFormer 实际上使用的是 Input-dependent scaling
-        // 我们这里使用 Sigmoid 作为 Gating
-        Tensor attn = torch.sigmoid(score); // [N, H, 1]
-
-        // 4. Output = Attn * V
-        // [N, H, 1] * [1, H, D] -> [N, H, D]
-        Tensor out = v.mul(attn);
-
-        // 5. Final
-        out = out.reshape(N, C);
+        Tensor out = v.mul(attn).reshape(N, C); // [N,H,D] → [N,C]
         return linOut.forward(out);
+    }
+
+    public long getNumHeads() {
+        return numHeads;
+    }
+
+    public long getInChannels() {
+        return inChannels;
     }
 }

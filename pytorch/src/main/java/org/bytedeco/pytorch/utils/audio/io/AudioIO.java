@@ -22,7 +22,7 @@
 package org.bytedeco.pytorch.utils.audio.io;
 
 import org.bytedeco.pytorch.Tensor;
-import org.bytedeco.pytorch.data.dataframe.dtype.AudioData;
+import org.bytedeco.pytorch.dataframe.dtype.AudioData;
 import org.bytedeco.pytorch.utils.audio.utils.AudioTensors;
 
 import java.io.IOException;

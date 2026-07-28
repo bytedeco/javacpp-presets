@@ -6,7 +6,7 @@ import org.bytedeco.pytorch.nn.modules.*;
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.global.torch;
-import org.bytedeco.pytorch.geometric.nn.Parameter;
+import org.bytedeco.pytorch.nn.Parameter;
 /**
  * PANPooling: 基于路径积分的池化
  * 核心：通过拉普拉斯能量或路径权重选择得分最高的节点

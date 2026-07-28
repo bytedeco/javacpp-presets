@@ -1,10 +1,7 @@
 package org.bytedeco.pytorch.rl.agent;
-import org.bytedeco.pytorch.data.transforms.*;
-import org.bytedeco.pytorch.optim.*;
 
 import org.bytedeco.pytorch.MemoryFormatOptional;
 import org.bytedeco.pytorch.Scalar;
-import org.bytedeco.pytorch.ScalarOptional;
 import org.bytedeco.pytorch.ScalarTypeOptional;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorOptions;
@@ -13,17 +10,16 @@ import org.bytedeco.pytorch.distribution.Distribution;
 import org.bytedeco.pytorch.llm.trl.LogProbUtils;
 import org.bytedeco.pytorch.llm.trl.loss.PPOLoss;
 import org.bytedeco.pytorch.optim.AdamW;
-import org.bytedeco.pytorch.optim.AdamWOptions;
+import org.bytedeco.pytorch.optim.options.AdamWOptions;
 import org.bytedeco.pytorch.optim.Optimizer;
 import org.bytedeco.pytorch.rl.ReplayBuffer;
 import org.bytedeco.pytorch.rl.critic.AbstractActorCritic;
 import org.bytedeco.pytorch.rl.critic.CausalLMActorCritic;
 import org.bytedeco.pytorch.rl.critic.LMActorCritic;
-import org.bytedeco.pytorch.utils.transformers.CausalLM;
-import org.bytedeco.pytorch.utils.transformers.PretrainedConfig;
-import org.bytedeco.pytorch.utils.tokenizers.Encoding;
-import org.bytedeco.pytorch.utils.tokenizers.FastTokenizer;
-import org.bytedeco.pytorch.utils.transformers.AutoTokenizer;
+import org.bytedeco.pytorch.llm.transformers.CausalLM;
+import org.bytedeco.pytorch.llm.tokenizers.Encoding;
+import org.bytedeco.pytorch.llm.tokenizers.FastTokenizer;
+import org.bytedeco.pytorch.llm.transformers.AutoTokenizer;
 
 import static org.bytedeco.pytorch.global.torch.*;
 

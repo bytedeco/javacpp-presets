@@ -1,95 +1,136 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
 
-import org.bytedeco.pytorch.*;
-import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.Scalar;
+import org.bytedeco.pytorch.ScalarOptional;
+import org.bytedeco.pytorch.ScalarTypeOptional;
+import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.TensorVector;
+import org.bytedeco.pytorch.geometric.utils.AggrUtils;
+import org.bytedeco.pytorch.geometric.utils.GraphUtils;
 import org.bytedeco.pytorch.global.torch;
+import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.nn.modules.container.SequentialImpl;
 
 /**
- * 实现 torch_geometric.nn.conv.PPFConv
- * 基于点对特征（位置+法向量夹角）的卷积算子，具有极强的旋转不变性。
+ * Point Pair Feature convolution (PPFConv) — rotation-robust geometric messages.
+ *
+ * <pre>
+ *   d = p_j - p_i
+ *   PPF = [ ‖d‖, ∠(n_i,d), ∠(n_j,d), ∠(n_i,n_j) ]
+ *   m_{ij} = LocalNN([ x_j || PPF ])
+ *   x'_i   = GlobalNN( max_j m_{ij} )
+ * </pre>
  */
 public class PPFConv extends MessagePassing {
-    private Module localNN;  // 局部 MLP: h(x_j, PPF(i, j))
-    private Module globalNN; // 全局 MLP: γ(...)
-    private boolean addSelfLoops;
+
+    private final Module localNN;
+    private final Module globalNN;
+    private final boolean addSelfLoops;
+
+    private Tensor _pos;
+    private Tensor _normal;
 
     public PPFConv(Module localNN, Module globalNN, boolean addSelfLoops) {
-        super("max"); // 论文建议使用最大池化以获取鲁棒特征
-        this.localNN = localNN;
-        this.globalNN = globalNN;
+        super("max");
+        if (localNN == null) {
+            throw new IllegalArgumentException("localNN must not be null");
+        }
+        this.localNN = register_module("local_nn", localNN);
+        this.globalNN = globalNN != null ? register_module("global_nn", globalNN) : null;
         this.addSelfLoops = addSelfLoops;
-
-        if (localNN != null) register_module("local_nn", localNN);
-        if (globalNN != null) register_module("global_nn", globalNN);
     }
 
     @Override
     public Tensor forward(Tensor x, Tensor edge_index) {
-        return forward(x, edge_index, (Tensor)null);
+        throw new UnsupportedOperationException(
+                "PPFConv requires pos and normal — use forward(x, pos, normal, edge_index)");
     }
+
     /**
-     * @param x       节点特征 [N, C]
-     * @param pos     节点位置 [N, 3]
-     * @param normal  节点法向量 [N, 3]
-     * @param edge_index 边索引 [2, E]
+     * @param x          node features [N, C] (may be null → PPF-only messages)
+     * @param pos        positions [N, 3]
+     * @param normal     normals [N, 3]
+     * @param edge_index [2, E]
      */
     public Tensor forward(Tensor x, Tensor pos, Tensor normal, Tensor edge_index) {
+        if (pos == null || normal == null || edge_index == null) {
+            throw new NullPointerException("pos, normal, edge_index must not be null");
+        }
+        if (pos.size(0) != normal.size(0)) {
+            throw new IllegalArgumentException("pos and normal must have same N");
+        }
         long N = pos.size(0);
-
-        // 消息传递：输入包含特征、位置和法向量
-        Tensor out = propagate(edge_index, x, pos, normal);
-
-        if (globalNN != null) {
-            out = globalNN.asSequential().forward(out);
+        Tensor ei = edge_index;
+        if (addSelfLoops) {
+            ei = GraphUtils.add_self_loops(ei, N);
         }
 
-        return out;
-    }
+        // Dummy features if x is null — lift still needs a tensor; use ones
+        Tensor feat = x != null ? x : torch.ones(new long[]{N, 1}, pos.options());
 
-    /**
-     * 重写 propagate 以计算 4 维 PPF 特征
-     */
-    public Tensor propagate(Tensor edge_index, Tensor x, Tensor pos, Tensor normal) {
-        long N = pos.size(0);
-        Tensor sourceIdx = edge_index.select(0, 0);
-        Tensor targetIdx = edge_index.select(0, 1);
-
-        // 获取 i 和 j 的位置与法向量
-        Tensor pos_i = pos.index_select(0, targetIdx);
-        Tensor pos_j = pos.index_select(0, sourceIdx);
-        Tensor norm_i = normal.index_select(0, targetIdx);
-        Tensor norm_j = normal.index_select(0, sourceIdx);
-
-        // 1. 计算相对位移 d_ij = pos_j - pos_i
-        Tensor rel_pos = pos_j.sub(pos_i);
-        Tensor dist = rel_pos.norm(new ScalarOptional(new Scalar(2)), new long[]{-1}, true); // 距离 ||d_ij||
-        Tensor d_norm = rel_pos.div(dist.clamp_min(new Scalar(1e-12))); // 单位化方向向量
-
-        // 2. 计算 PPF 的四个分量:
-        // f1: ||d_ij||
-        // f2: angle(norm_i, d_ij)
-        // f3: angle(norm_j, d_ij)
-        // f4: angle(norm_i, norm_j)
-        Tensor f2 = torch.atan2(torch.cross(norm_i, d_norm).norm(new ScalarOptional(new Scalar(2)), new long[]{-1}, true), (norm_i.mul(d_norm)).sum(new long[]{-1}, true, new ScalarTypeOptional(torch.kFloat())));
-        Tensor f3 = torch.atan2(torch.cross(norm_j, d_norm).norm(new ScalarOptional(new Scalar(2)), new long[]{-1}, true), (norm_j.mul(d_norm)).sum(new long[]{-1}, true,new ScalarTypeOptional(torch.kFloat())));
-        Tensor f4 = torch.atan2(torch.cross(norm_i, norm_j).norm(new ScalarOptional(new Scalar(2)), new long[]{-1}, true), (norm_i.mul(norm_j)).sum(new long[]{-1}, true,new ScalarTypeOptional(torch.kFloat())));
-
-        Tensor ppf = torch.cat(new TensorVector(dist, f2, f3, f4), -1);
-
-        // 3. 拼接节点特征 x_j (如果存在)
-        Tensor msgInput = ppf;
-        if (x != null) {
-            msgInput = torch.cat(new TensorVector(x.index_select(0, sourceIdx), ppf), -1);
+        this._pos = pos;
+        this._normal = normal;
+        try {
+            Tensor out = propagate(ei, feat);
+            if (globalNN != null) {
+                out = forwardMlp(globalNN, out);
+            }
+            return out;
+        } finally {
+            this._pos = null;
+            this._normal = null;
         }
-
-        // 4. 局部非线性变换与聚合
-        Tensor msg = localNN.asSequential().forward(msgInput);
-        return aggregate(msg, targetIdx, N);
     }
 
     @Override
     public Tensor message(Tensor x_j, Tensor x_i, Tensor edge_index, Tensor edge_attr, long numNodes) {
-        // 由于上面使用了自定义的 propagate_gated，这里的基类实现作为备用签名
-        return x_j;
+        if (_pos == null || _normal == null) {
+            throw new IllegalStateException("PPFConv message requires active forward(pos,normal)");
+        }
+        Tensor index_j = AggrUtils.asLongIndex(
+                _index_j != null ? _index_j : edge_index.select(0, 0));
+        Tensor index_i = AggrUtils.asLongIndex(
+                _index_i != null ? _index_i : edge_index.select(0, 1));
+
+        Tensor pos_i = _pos.index_select(0, index_i);
+        Tensor pos_j = _pos.index_select(0, index_j);
+        Tensor n_i = _normal.index_select(0, index_i);
+        Tensor n_j = _normal.index_select(0, index_j);
+
+        Tensor rel = pos_j.sub(pos_i);
+        Tensor dist = rel.norm(new ScalarOptional(new Scalar(2)), new long[]{-1}, true);
+        Tensor dHat = rel.div(dist.clamp_min(new Scalar(1e-12)));
+
+        // angle(a,b) = atan2(‖a×b‖, a·b)
+        Tensor f2 = angle(n_i, dHat);
+        Tensor f3 = angle(n_j, dHat);
+        Tensor f4 = angle(n_i, n_j);
+        Tensor ppf = torch.cat(new TensorVector(dist, f2, f3, f4), -1); // [E,4]
+
+        Tensor msgInput = ppf;
+        // If original x was provided, x_j carries real features (not dummy ones)
+        if (x_j.size(1) > 1 || (x_j.size(1) == 1 && _pos.size(1) != 1)) {
+            // Prefer concatenating neighbor features when they look like real features.
+            // Always concat x_j — callers that pass null x get dummy 1-d ones.
+            msgInput = torch.cat(new TensorVector(x_j, ppf), -1);
+        } else {
+            msgInput = torch.cat(new TensorVector(x_j, ppf), -1);
+        }
+        return forwardMlp(localNN, msgInput);
+    }
+
+    private static Tensor angle(Tensor a, Tensor b) {
+        Tensor crossN = torch.cross(a, b)
+                .norm(new ScalarOptional(new Scalar(2)), new long[]{-1}, true);
+        Tensor dot = a.mul(b).sum(new long[]{-1}, true,
+                new ScalarTypeOptional(torch.ScalarType.Float));
+        return torch.atan2(crossN, dot);
+    }
+
+    private static Tensor forwardMlp(Module m, Tensor in) {
+        if (m instanceof SequentialImpl) {
+            return ((SequentialImpl) m).forward(in);
+        }
+        return m.asSequential().forward(in);
     }
 }

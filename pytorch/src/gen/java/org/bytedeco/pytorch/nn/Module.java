@@ -142,8 +142,7 @@ public class Module extends Pointer {
    *     });
    * 
    *  \endrst */
-
-  // JavaCPP multi-arg forward shims (non-virtual — no vtable impact).
+  // JavaCPP multi-arg forward shims (non-virtual - no vtable impact).
   private native @ByVal @Name("forward_tensor") @Virtual(subclasses=false, method="forward") Tensor _forward_tensor(@Const @ByRef Tensor input);
   public @ByVal Tensor forward(@Const @ByRef Tensor input) { Module m = org.bytedeco.pytorch.nn.ModuleAsHelper.recover(this); return org.bytedeco.pytorch.nn.ModuleAsHelper.hasForwardOverride(m, Tensor.class) ? m.forward(input) : _forward_tensor(input); }
   private native @ByVal @Name("forward_tensor2") @Virtual(subclasses=false, method="forward") Tensor _forward_tensor2(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2);

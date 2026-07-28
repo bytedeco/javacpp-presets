@@ -1,274 +1,477 @@
+/*
+ * Copyright (C) 2026 bytedeco.org and pytorch JavaCPP presets contributors
+ *
+ * Hand-written peer for PyG torch_geometric.nn.pool.EdgePooling
+ * (Diehl et al., "Towards Graph Pooling by Edge Contraction", 2019).
+ */
 package org.bytedeco.pytorch.geometric.nn.pooling;
-import org.bytedeco.pytorch.autograd.*;
-import org.bytedeco.pytorch.nn.modules.*;
 
-import org.bytedeco.javacpp.LongPointer;
-import org.bytedeco.pytorch.*;
+import org.bytedeco.javacpp.indexer.LongIndexer;
+import org.bytedeco.pytorch.AbstractTensor;
+import org.bytedeco.pytorch.Device;
+import org.bytedeco.pytorch.DeviceOptional;
+import org.bytedeco.pytorch.Scalar;
+import org.bytedeco.pytorch.ScalarTypeOptional;
+import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.TensorOptions;
+import org.bytedeco.pytorch.TensorVector;
+import org.bytedeco.pytorch.geometric.utils.AggrUtils;
 import org.bytedeco.pytorch.global.torch;
+import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+/**
+ * EdgePooling — greedy edge contraction by learned scores (Diehl et al. / PyG).
+ *
+ * <h2>Algorithm</h2>
+ * <pre>
+ *   raw_e  = Linear([x_i ‖ x_j])                  // [E, 1] → [E]
+ *   s_e    = score_fn(raw_e)                      // softmax / tanh / sigmoid
+ *   if add_to_edge_score:
+ *       s_e ← s_e + s_e.detach()                  // residual (PyG default)
+ *   s_e    = dropout(s_e, p=dropout)
+ *   greedily contract highest-scoring non-incident edges (matching)
+ *   uncontracted nodes become singleton clusters
+ *   x'_c   = mean_{i ∈ c} x_i
+ *   A'     = coarsen(A)  (map endpoints → clusters, drop self-loops, optional coalesce)
+ * </pre>
+ *
+ * <h2>Design notes (enterprise / JavaCPP)</h2>
+ * <ul>
+ *   <li>Greedy matching is inherently sequential — runs on a CPU long copy of
+ *       {@code edge_index}/{@code score} via {@link LongIndexer}. Feature
+ *       pooling and edge coarsening stay on the input device so gradients flow
+ *       through {@code lin} and the mean-pool path.</li>
+ *   <li>Batch-aware: matching is independent per graph (nodes of graph g only
+ *       match within g). Coarse {@code batch} is derived by taking any fine
+ *       node's batch id per cluster (all members share the same graph).</li>
+ *   <li>Ownership: {@link LinearImpl} is registered via {@code register_module};
+ *       do not store {@code register_parameter} ByRef returns elsewhere.</li>
+ *   <li>Aligned with {@link TopKPooling} / {@link SAGPooling} validation style
+ *       and with dense poolers ({@link DenseDiffPool}, {@link DenseMinCutPool})
+ *       on the "return structured payload + auxiliary signal" pattern
+ *       (here: {@code edgeScore} instead of link/cut loss).</li>
+ * </ul>
+ *
+ * <h2>Score functions</h2>
+ * Matching PyG static helpers:
+ * <ul>
+ *   <li>{@link ScoreFunction#SOFTMAX} — {@code softmax} over all edges (default)</li>
+ *   <li>{@link ScoreFunction#TANH} — {@code tanh}</li>
+ *   <li>{@link ScoreFunction#SIGMOID} — {@code sigmoid}</li>
+ * </ul>
+ *
+ * @see EdgePoolingOutput
+ * @see <a href="https://arxiv.org/abs/1905.10990">Diehl et al., 2019</a>
+ */
+public class EdgePooling extends Module {
 
-import static org.bytedeco.pytorch.global.torch.*;
-
-public class EdgePooling extends org.bytedeco.pytorch.nn.Module {
-    private long inChannels;
-    private LinearImpl lin;
-
-    public EdgePooling(long inChannels) {
-        super();
-        this.inChannels = inChannels;
-        // PyG 逻辑: 拼接两个节点的特征 [2 * inChannels] 映射到 1 个分数
-        this.lin = new LinearImpl(2 * inChannels, 1);
-        register_module("lin", lin);
+    /** Edge-score normalizer, matching PyG {@code compute_edge_score_*}. */
+    public enum ScoreFunction {
+        /** Softmax over the full edge set (PyG default). */
+        SOFTMAX,
+        /** Element-wise tanh. */
+        TANH,
+        /** Element-wise sigmoid. */
+        SIGMOID
     }
 
+    private final long inChannels;
+    private final boolean addToEdgeScore;
+    private final double dropout;
+    private final ScoreFunction scoreFunction;
+    private final boolean coalesceCoarseEdges;
+    private final LinearImpl lin;
 
-    public EdgePoolingOutput edgePool(Tensor x, Tensor edge_index) {
-        x = x.contiguous();
-        long numNodes = x.size(0);
-        long numEdges = edge_index.size(1);
+    // -------------------------------------------------------------------------
+    // Constructors
+    // -------------------------------------------------------------------------
 
-        // 1. 计算边得分
-        Tensor x_j = x.index_select(0, edge_index.select(0, 0));
-        Tensor x_i = x.index_select(0, edge_index.select(0, 1));
-        Tensor score = lin.forward(cat(new TensorVector(x_i, x_j), 1)).view(new long[]{-1});
-        score = softmax(score, 0);
+    /** {@code EdgePooling(inChannels)} — softmax, add_to_edge_score=true, dropout=0. */
+    public EdgePooling(long inChannels) {
+        this(inChannels, true, 0.0, ScoreFunction.SOFTMAX, true);
+    }
 
-        // 2. 准备贪婪匹配的数据 (拉回 CPU 连续内存)
-        Tensor sortedIndices = score.argsort(0, true).cpu().contiguous();
-        Tensor edge_indexCPU = edge_index.cpu().contiguous();
-
-        // 获取原生指针，替代报错的 .index(new Slice...)
-        LongPointer sortedIdxPtr = new LongPointer(sortedIndices.data_ptr());
-        LongPointer edgeIdxPtr = new LongPointer(edge_indexCPU.data_ptr());
-
-        // 使用 Java 数组管理状态，速度比 Tensor 快 100 倍且不会报 Slice 错误
-        boolean[] matched = new boolean[(int) numNodes];
-        long[] cluster = new long[(int) numNodes];
-        Arrays.fill(cluster, -1);
-        long newNumNodes = 0;
-
-        // --- 核心贪婪逻辑 (修复崩溃点) ---
-        for (int i = 0; i < numEdges; i++) {
-            // 获取排好序的边 ID
-            long idx = sortedIdxPtr.get(i);
-
-            // 获取该边连接的两个节点 u, v
-            // edge_index 形状 [2, E]，row-major 存储
-            long u = edgeIdxPtr.get(idx);              // 行 0, 列 idx
-            long v = edgeIdxPtr.get(numEdges + idx);   // 行 1, 列 idx
-
-            if (!matched[(int) u] && !matched[(int) v]) {
-                matched[(int) u] = true;
-                matched[(int) v] = true;
-                cluster[(int) u] = newNumNodes;
-                cluster[(int) v] = newNumNodes;
-                newNumNodes++;
-            }
-        }
-
-        // 处理未匹配的孤立节点
-        for (int i = 0; i < numNodes; i++) {
-            if (cluster[i] == -1) {
-                cluster[i] = newNumNodes;
-                newNumNodes++;
-            }
-        }
-
-        // 3. 构建聚类张量并池化 (转换 cluster 为 Long 类型)
-        Tensor clusterTensor = tensor(cluster, x.options().dtype(new ScalarTypeOptional(ScalarType.Long)));
-
-        // 聚合节点特征 (Mean Pooling)
-        Tensor newX = zeros(new long[]{newNumNodes, inChannels}, x.options());
-        Tensor expandedCluster = clusterTensor.unsqueeze(1).expand_as(x);
-        newX = newX.scatter_add(0, expandedCluster, x);
-
-        // 计算每个 cluster 的节点数用于求均值
-        Tensor count = zeros(new long[]{newNumNodes, 1}, x.options());
-        count = count.scatter_add(0, clusterTensor.unsqueeze(1), ones(new long[]{numNodes, 1}, x.options()));
-        newX = newX.divide(count.clamp_min(new Scalar(1.0)));
-
-        return new EdgePoolingOutput(newX, clusterTensor);
+    /** PyG-style two-arg ctor. */
+    public EdgePooling(long inChannels, boolean addToEdgeScore) {
+        this(inChannels, addToEdgeScore, 0.0, ScoreFunction.SOFTMAX, true);
     }
 
     /**
-     * @param x         节点特征 [N, C]
-     * @param edge_index 边索引 [2, E]
-     *                  //     * @param batch 批次索引 [N]
+     * Full constructor.
+     *
+     * @param inChannels           node feature dim C
+     * @param addToEdgeScore       PyG residual {@code s = s + s.detach()}
+     * @param dropout              edge-score dropout in train mode (0 disables)
+     * @param scoreFunction        raw→score map
+     * @param coalesceCoarseEdges  dedup coarse multi-edges after contraction
      */
-    public EdgePoolingOutput forward2(Tensor x, Tensor edge_index) {
+    public EdgePooling(long inChannels, boolean addToEdgeScore, double dropout,
+                       ScoreFunction scoreFunction, boolean coalesceCoarseEdges) {
+        super();
+        if (inChannels <= 0) {
+            throw new IllegalArgumentException("inChannels must be > 0, got " + inChannels);
+        }
+        if (dropout < 0.0 || dropout >= 1.0) {
+            throw new IllegalArgumentException(
+                    "dropout must be in [0, 1), got " + dropout);
+        }
+        if (scoreFunction == null) {
+            throw new NullPointerException("scoreFunction");
+        }
+        this.inChannels = inChannels;
+        this.addToEdgeScore = addToEdgeScore;
+        this.dropout = dropout;
+        this.scoreFunction = scoreFunction;
+        this.coalesceCoarseEdges = coalesceCoarseEdges;
+        // Score head: [x_i ‖ x_j] → R   (bias on, matching nn.Linear default)
+        this.lin = register_module("lin", new LinearImpl(2L * inChannels, 1L));
+    }
+
+    // -------------------------------------------------------------------------
+    // Forward
+    // -------------------------------------------------------------------------
+
+    /**
+     * Single-graph / no-batch forward.
+     *
+     * <p>Named {@code forwardGraph} (not {@code forward}) because
+     * {@link Module#forward(Tensor, Tensor)} returns {@link Tensor}; this API
+     * returns the full {@link EdgePoolingOutput} payload.
+     *
+     * @param x          [N, C]
+     * @param edge_index [2, E]
+     */
+    public EdgePoolingOutput forwardGraph(Tensor x, Tensor edge_index) {
+        return forwardGraph(x, edge_index, /*batch=*/null);
+    }
+
+    /**
+     * Primary forward (PyG signature minus edge_attr — scores are purely
+     * feature-based; edge_attr can be folded in by a subclass override of
+     * {@link #computeRawScores}).
+     *
+     * @param x          [N, C]
+     * @param edge_index [2, E]  (directed or undirected; both orientations OK)
+     * @param batch      [N] graph ids, or {@code null} → single graph
+     */
+    public EdgePoolingOutput forwardGraph(Tensor x, Tensor edge_index, Tensor batch) {
+        validate(x, edge_index);
         x = x.contiguous();
-        // 1. 计算边得分
-        // 提取每条边对应的源节点和目标节点特征
-        Tensor x_j = x.index_select(0, edge_index.select(0, 0));
-        Tensor x_i = x.index_select(0, edge_index.select(0, 1));
+        edge_index = edge_index.contiguous();
 
-        // 拼接并计算 score [E, 1]
-        Tensor score = lin.forward(cat(new TensorVector(x_i, x_j), 1)).view(new long[]{-1});
-        score = softmax(score, 0); // 在全图边上做 softmax
+        final long numNodes = x.size(0);
+        final long numEdges = edge_index.size(1);
 
-        // 2. 贪婪边合并逻辑 (Greedy Matching)
-        // 注意：由于 JavaCPP 访问数据较慢，我们尽量在 C++ 层完成
-        // 按照分数从大到小排列索引
-        Tensor sortedIndices = score.argsort(0, true);
+        if (batch == null) {
+            batch = torch.zeros(new long[]{numNodes}, longOpts(x.device()));
+        } else {
+            if (batch.dim() != 1 || batch.size(0) != numNodes) {
+                throw new IllegalArgumentException(
+                        "batch must be [N=" + numNodes + "], got shape mismatch");
+            }
+            batch = batch.to(torch.ScalarType.Long).contiguous();
+        }
 
-        // 获取原生数据指针 (替代 dataAsLongArray)
-        // 使用 LongIndexer 访问索引
-        long numNodes = x.size(0);
-        long numEdges = edge_index.size(1);
+        // ---------- empty edge set: identity clusters ----------
+        if (numEdges == 0) {
+            Tensor cluster = torch.arange(
+                    new Scalar(0), new Scalar(numNodes), longOpts(x.device()));
+            Tensor emptyEi = torch.zeros(new long[]{2, 0}, longOpts(x.device()));
+            return new EdgePoolingOutput(x.clone(), emptyEi, batch.clone(), cluster,
+                    /*edgeScore=*/null);
+        }
 
-        // 创建一个用于标记节点是否被占用的数组
-        Tensor matched = zeros(new long[]{numNodes}, x.options().dtype(new ScalarTypeOptional(ScalarType.Bool)));
-        List<Long> clusterList = new ArrayList<>();
+        // ---------- 1. edge scores (device-resident, grad-connected) ----------
+        Tensor raw = computeRawScores(x, edge_index);          // [E]
+        Tensor score = applyScoreFunction(raw);                // [E]
+        if (addToEdgeScore) {
+            // PyG: edge_score = edge_score + edge_score.detach()
+            // Doubles the forward value while keeping full grad through `score`.
+            score = score.add(score.detach());
+        }
+        if (dropout > 0.0 && is_training()) {
+            score = torch.dropout(score, dropout, /*train=*/true);
+        }
 
-        // --- 核心贪婪逻辑 ---
-        // 为了性能，我们这里使用底层的 IndexSelect
-        // 我们需要找到不冲突的边进行合并
-        // 这里提供一个向量化模拟逻辑或低频次 item() 访问
+        // ---------- 2. greedy matching (CPU, no grad) ----------
+        // cluster_cpu[i] ∈ [0, N') ; built on host then lifted to x.device()
+        MatchResult match = greedyMatch(edge_index, score, batch, numNodes);
+        Tensor cluster = match.cluster.to(x.device(), torch.ScalarType.Long);
+        long numClusters = match.numClusters;
 
-        // 注意：在实际大规模图中，此处建议调用 C++ 自定义算子
-        // 这里展示符合 PyG 逻辑的 Java 实现：
-        long[] cluster = new long[(int) numNodes];
-        for (int i = 0; i < numNodes; i++) cluster[i] = -1;
+        // ---------- 3. mean-pool features (device, grad through x) ----------
+        // cluster is a pure index tensor (no grad) — scatter mean is fine.
+        Tensor newX = AggrUtils.scatter(x, cluster, numClusters, "mean");
+
+        // ---------- 4. coarse batch: any member's batch id per cluster ----------
+        // max works because all members of a cluster share the same graph id
+        // (matching is batch-restricted). Cast via float for scatter max path.
+        Tensor batchF = batch.to(torch.ScalarType.Float);
+        Tensor newBatch = AggrUtils.scatter(batchF, cluster, numClusters, "max")
+                .to(torch.ScalarType.Long);
+
+        // ---------- 5. coarsen topology ----------
+        Tensor newEdgeIndex = coarsenEdges(edge_index, cluster, numClusters,
+                coalesceCoarseEdges);
+
+        return new EdgePoolingOutput(newX, newEdgeIndex, newBatch, cluster, score);
+    }
+
+    /** Alias kept for older call sites / demos. */
+    public EdgePoolingOutput edgePool(Tensor x, Tensor edge_index) {
+        return forwardGraph(x, edge_index, null);
+    }
+
+    /** Alias kept for older call sites. */
+    public EdgePoolingOutput edgePool(Tensor x, Tensor edge_index, Tensor batch) {
+        return forwardGraph(x, edge_index, batch);
+    }
+
+    /** Alias kept for older call sites. */
+    public EdgePoolingOutput forward2(Tensor x, Tensor edge_index) {
+        return forwardGraph(x, edge_index, null);
+    }
+
+    /**
+     * Unpool helper (stateless) — expands coarse features with a cluster map.
+     * Prefer {@link EdgePoolingOutput#unpool(Tensor)} when you hold the output.
+     */
+    public static Tensor unpool(Tensor xCoarse, Tensor cluster) {
+        if (xCoarse == null || cluster == null) {
+            throw new NullPointerException("xCoarse and cluster must not be null");
+        }
+        return xCoarse.index_select(0, cluster);
+    }
+
+    // -------------------------------------------------------------------------
+    // Score path (overridable)
+    // -------------------------------------------------------------------------
+
+    /**
+     * Raw edge logits before the score function.
+     * Default: {@code Linear([x_i ‖ x_j]).squeeze(-1)}.
+     * Subclass to inject edge_attr / attention / etc.
+     *
+     * @return [E] float tensor on {@code x}'s device, connected to {@code lin}
+     */
+    protected Tensor computeRawScores(Tensor x, Tensor edge_index) {
+        Tensor row = edge_index.select(0, 0);
+        Tensor col = edge_index.select(0, 1);
+        Tensor xI = x.index_select(0, row);                         // [E, C]
+        Tensor xJ = x.index_select(0, col);                         // [E, C]
+        Tensor cat = torch.cat(new TensorVector(xI, xJ), 1);        // [E, 2C]
+        Tensor raw = lin.forward(cat);                              // [E, 1]
+        if (raw.dim() == 2 && raw.size(1) == 1) {
+            raw = raw.view(-1);
+        }
+        return raw;
+    }
+
+    /** Map raw logits → ranking scores (PyG {@code compute_edge_score_*}). */
+    protected Tensor applyScoreFunction(Tensor raw) {
+        switch (scoreFunction) {
+            case SOFTMAX:
+                // Global softmax over edges — relative ranking, sum_e s_e = 1.
+                return torch.softmax(raw, 0);
+            case TANH:
+                return torch.tanh(raw);
+            case SIGMOID:
+                return torch.sigmoid(raw);
+            default:
+                throw new IllegalStateException("Unknown scoreFunction: " + scoreFunction);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Greedy matching (CPU)
+    // -------------------------------------------------------------------------
+
+    private static final class MatchResult {
+        final Tensor cluster;     // Long CPU [N]
+        final long numClusters;
+
+        MatchResult(Tensor cluster, long numClusters) {
+            this.cluster = cluster;
+            this.numClusters = numClusters;
+        }
+    }
+
+    /**
+     * Greedy non-incident edge contraction, restricted per batch graph.
+     *
+     * <p>Complexity O(E log E) for the sort + O(E) scan. Operates on CPU long
+     * copies so device tensors (with grad) are never indexed from Java loops.
+     */
+    private static MatchResult greedyMatch(Tensor edgeIndex, Tensor score,
+                                           Tensor batch, long numNodes) {
+        final long numEdges = edgeIndex.size(1);
+        // Host-side boolean[] / long[] require N fit in int — true for any
+        // graph EdgePooling is practical on (CPU greedy match is O(E log E)).
+        if (numNodes > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException(
+                    "EdgePooling greedy match supports at most Integer.MAX_VALUE nodes, got "
+                            + numNodes);
+        }
+        final int n = (int) numNodes;
+
+        // Sort edges by score descending. argsort returns int64 indices.
+        Tensor order = score.detach().argsort(/*dim=*/0, /*descending=*/true)
+                .cpu().contiguous().to(torch.ScalarType.Long);
+        // Force row-major [2,E] so flat index r*E+c is valid.
+        Tensor eiCpu = edgeIndex.detach().cpu().contiguous().to(torch.ScalarType.Long);
+        Tensor batchCpu = batch.detach().cpu().contiguous().to(torch.ScalarType.Long);
+
+        LongIndexer orderIdx = order.createIndexer();
+        LongIndexer eiIdx = eiCpu.createIndexer();
+        LongIndexer batchIdx = batchCpu.createIndexer();
+
+        boolean[] matched = new boolean[n];
+        long[] clusterArr = new long[n];
+        java.util.Arrays.fill(clusterArr, -1L);
         long newNumNodes = 0;
 
-        // 这里必须小心处理，避免频繁跨 JNI // new TensorIndexVector(new TensorIndex(new Slice(i)), new TensorIndex(new Slice(i)))
-        for (int i = 0; i < numEdges; i++) {
-            long idx = sortedIndices.index(new TensorIndexVector(new TensorIndex(new Slice(i)))).item().toLong();
-            long u = edge_index.index(new TensorIndexVector(new TensorIndex(new Slice(0)), new TensorIndex(new Slice(idx)))).item().toLong();
-            long v = edge_index.index(new TensorIndexVector(new TensorIndex(new Slice(1)), new TensorIndex(new Slice(idx)))).item().toLong();
-
-            if (!matched.index(new TensorIndexVector(new TensorIndex(new Slice(u)))).item().toBool() &&
-                    !matched.index(new TensorIndexVector(new TensorIndex(new Slice(v)))).item().toBool()) {
-
-                matched.index(new TensorIndexVector(new TensorIndex(new Slice(u)))).fill_(torch.tensor(true));
-                matched.index(new TensorIndexVector(new TensorIndex(new Slice(v)))).fill_(torch.tensor(true));
-                cluster[(int) u] = newNumNodes;
-                cluster[(int) v] = newNumNodes;
+        for (long i = 0; i < numEdges; i++) {
+            long e = orderIdx.get(i);
+            if (e < 0 || e >= numEdges) {
+                continue;
+            }
+            // element (r, c) at flat index r * E + c
+            long u = eiIdx.get(e);
+            long v = eiIdx.get(numEdges + e);
+            if (u < 0 || v < 0 || u >= numNodes || v >= numNodes) {
+                continue;
+            }
+            if (u == v) {
+                continue; // self-loop — never contract
+            }
+            int ui = (int) u;
+            int vi = (int) v;
+            // Batch restriction: only contract within the same graph
+            if (batchIdx.get(ui) != batchIdx.get(vi)) {
+                continue;
+            }
+            if (!matched[ui] && !matched[vi]) {
+                matched[ui] = true;
+                matched[vi] = true;
+                clusterArr[ui] = newNumNodes;
+                clusterArr[vi] = newNumNodes;
                 newNumNodes++;
             }
         }
-
-        // 处理未匹配的孤立节点
-        for (int i = 0; i < numNodes; i++) {
-            if (cluster[i] == -1) {
-                cluster[i] = newNumNodes;
-                newNumNodes++;
+        // Singletons keep their own cluster id
+        for (int i = 0; i < n; i++) {
+            if (clusterArr[i] < 0) {
+                clusterArr[i] = newNumNodes++;
             }
         }
 
-        // 3. 构建聚类张量并池化
-        Tensor clusterTensor = tensor(cluster, x.options().dtype(new ScalarTypeOptional(ScalarType.Bool)));
+        // Build Long CPU tensor via AbstractTensor.create (safe, no torch.tensor overload games)
+        Tensor cluster = AbstractTensor.create(clusterArr, numNodes);
+        return new MatchResult(cluster, newNumNodes);
+    }
 
-        // 聚合节点特征 (Mean Pooling)
-        Tensor newX = zeros(new long[]{newNumNodes, inChannels}, x.options());
-        Tensor expandedCluster = clusterTensor.unsqueeze(1).expand_as(x);
-        newX = newX.scatter_add(0, expandedCluster, x);
+    // -------------------------------------------------------------------------
+    // Topology coarsening
+    // -------------------------------------------------------------------------
 
-        // 修正均值
-        Tensor count = zeros(new long[]{newNumNodes, 1}, x.options());
-        count = count.scatter_add(0, clusterTensor.unsqueeze(1), ones(new long[]{numNodes, 1}, x.options()));
-        newX = newX.divide(count.clamp_min(new Scalar(1.0)));
+    /**
+     * Map fine edges → coarse cluster edges; drop self-loops; optionally
+     * coalesce duplicate (src,dst) pairs (keeps first occurrence order-stable
+     * via sort+unique_consecutive on pair keys).
+     *
+     * @return [2, E'] Long tensor on the same device as {@code edgeIndex}
+     */
+    static Tensor coarsenEdges(Tensor edgeIndex, Tensor cluster, long numClusters,
+                               boolean coalesce) {
+        Tensor row = cluster.index_select(0, edgeIndex.select(0, 0));
+        Tensor col = cluster.index_select(0, edgeIndex.select(0, 1));
+        Tensor mask = row.ne(col);
+        Tensor r = row.masked_select(mask);
+        Tensor c = col.masked_select(mask);
 
-        // 4. 重构边索引 (使用 PyG pooling 工具逻辑)
-        // 这里简化处理：通常使用 coalesce + remove_self_loops
-        return new EdgePoolingOutput(newX, clusterTensor);
+        if (r.numel() == 0) {
+            return torch.zeros(new long[]{2, 0}, longOpts(edgeIndex.device()));
+        }
+
+        if (!coalesce) {
+            return torch.stack(new TensorVector(r, c), 0);
+        }
+
+        // Dedup directed pairs: key = r * numClusters + c
+        // (numClusters fits in int64 for any realistic graph; overflow would
+        //  require N' > sqrt(2^63) which is outside EdgePooling's CPU-match regime.)
+        Tensor keys = r.to(torch.ScalarType.Long)
+                .mul(new Scalar(numClusters))
+                .add(c.to(torch.ScalarType.Long));
+        // sort + unique_consecutive ≈ unique; recover (r,c) from keys
+        Tensor sortedKeys = keys.sort(/*dim=*/0, /*descending=*/false).get0();
+        Tensor uniq = torch.unique_consecutive(sortedKeys).get0(); // [E_uniq]
+        if (uniq.numel() == 0) {
+            return torch.zeros(new long[]{2, 0}, longOpts(edgeIndex.device()));
+        }
+        // floor_divide keeps integer semantics on Long tensors (plain div may promote).
+        Tensor newR = uniq.floor_divide(new Scalar(numClusters));
+        Tensor newC = uniq.remainder(new Scalar(numClusters));
+        return torch.stack(new TensorVector(newR, newC), 0);
+    }
+
+    // -------------------------------------------------------------------------
+    // Validation / accessors
+    // -------------------------------------------------------------------------
+
+    /** Long options pinned to {@code device} (cluster / edge_index construction). */
+    private static TensorOptions longOpts(Device device) {
+        return new TensorOptions()
+                .dtype(new ScalarTypeOptional(torch.ScalarType.Long))
+                .device(new DeviceOptional(device));
+    }
+
+    private void validate(Tensor x, Tensor edge_index) {
+        if (x == null || edge_index == null) {
+            throw new NullPointerException("x and edge_index must not be null");
+        }
+        if (!x.defined() || !edge_index.defined()) {
+            throw new IllegalArgumentException("x and edge_index must be defined Tensors");
+        }
+        if (x.dim() != 2 || x.size(1) != inChannels) {
+            throw new IllegalArgumentException(
+                    "x must be [N," + inChannels + "], got dim=" + x.dim()
+                            + " size(1)=" + (x.dim() >= 2 ? x.size(1) : -1));
+        }
+        if (edge_index.dim() != 2 || edge_index.size(0) != 2) {
+            throw new IllegalArgumentException(
+                    "edge_index must be [2,E], got dim=" + edge_index.dim()
+                            + " size(0)=" + (edge_index.dim() >= 1 ? edge_index.size(0) : -1));
+        }
+    }
+
+    public long getInChannels() {
+        return inChannels;
+    }
+
+    public boolean isAddToEdgeScore() {
+        return addToEdgeScore;
+    }
+
+    public double getDropout() {
+        return dropout;
+    }
+
+    public ScoreFunction getScoreFunction() {
+        return scoreFunction;
+    }
+
+    public LinearImpl getLin() {
+        return lin;
+    }
+
+    @Override
+    public String toString() {
+        return "EdgePooling(inChannels=" + inChannels
+                + ", addToEdgeScore=" + addToEdgeScore
+                + ", dropout=" + dropout
+                + ", score=" + scoreFunction
+                + ", coalesce=" + coalesceCoarseEdges + ")";
     }
 }
-//public class EdgePooling extends Module {
-//    private LinearImpl lin; // 计算 Edge Score
-//    private double dropout;
-//
-//    public EdgePooling(long inChannels, double dropout) {
-//        this.dropout = dropout;
-//        // 输入: Cat(x_i, x_j) -> [2 * In]
-//        this.lin = new LinearImpl(2 * inChannels, 1);
-//        register_module("lin", lin);
-//    }
-//
-//    /**
-//     * @return {x, edge_index, batch, unpool_info}
-//     */
-//    public Tensor[] forward(Tensor x, Tensor edge_index, Tensor batch) {
-//        long numNodes = x.size(0);
-//
-//        // 1. 计算 Edge Scores
-//        Tensor row = edge_index.select(0, 0);
-//        Tensor col = edge_index.select(0, 1);
-//
-//        Tensor xRow = x.index_select(0, row);
-//        Tensor xCol = x.index_select(0, col);
-//
-//        // [E, 2*C]
-//        Tensor catFeat = torch.cat(new TensorVector(xRow, xCol), 1);
-//        Tensor scores = lin.forward(catFeat).squeeze(1); // [E]
-//        scores = torch.dropout(scores, dropout, is_training());
-//        scores = torch.softmax(scores, 0); // 或者 sigmoid
-//
-//        // 2. 寻找非重叠的边 (Matching)
-//        // 这里需要实现一个类似 graclus 的匹配逻辑，但是基于 scores 排序
-//        // 我们可以复用 ClusterPooling.graclus 的逻辑，但在 CPU 上根据 score 排序
-//
-//        // 简化的 CPU Matching 实现：
-//        // cluster[i] 存储节点 i 归属的新节点 ID
-//        long[] clusterArr = new long[(int)numNodes];
-//        java.util.Arrays.fill(clusterArr, -1);
-//
-//        // 获取排序索引 (Descending)
-//        Tensor sortIdx = torch.argsort(scores, 0, true);
-//        long[] sortIdxArr = sortIdx.cpu().dataAsLongArray();
-//        long[] rowArr = row.cpu().dataAsLongArray();
-//        long[] colArr = col.cpu().dataAsLongArray();
-//
-//        int newIdx = 0;
-//
-//        // Greedy Matching
-//        for (long idx : sortIdxArr) {
-//            int u = (int) rowArr[(int)idx];
-//            int v = (int) colArr[(int)idx];
-//
-//            if (clusterArr[u] == -1 && clusterArr[v] == -1) {
-//                // Merge u and v into newIdx
-//                clusterArr[u] = newIdx;
-//                clusterArr[v] = newIdx;
-//                newIdx++;
-//            }
-//        }
-//
-//        // 处理未合并节点
-//        for (int i = 0; i < numNodes; i++) {
-//            if (clusterArr[i] == -1) {
-//                clusterArr[i] = newIdx++;
-//            }
-//        }
-//
-//        Tensor cluster = torch.tensor(clusterArr).to(x.device(), torch.ScalarType.Long);
-//
-//        // 3. 聚合特征 (Coarsening)
-//        // Merged nodes: x_new = max(x_u, x_v) + score * (x_u + x_v) (ASAP style) or just sum
-//        // EdgePooling 原文: max pooling
-//        Tensor newX = ClusterPooling.max_pool(cluster, x);
-//
-//        // 4. 重构 Edge Index
-//        // 这一步比较繁琐，需要将 old_edge_index 的端点映射到 new cluster id
-//        // 然后去重 (remove duplicate edges)
-//        Tensor newRow = cluster.index_select(0, row);
-//        Tensor newCol = cluster.index_select(0, col);
-//
-//        // 移除自环 (newRow != newCol)
-//        Tensor mask = newRow.ne(newCol);
-//        Tensor finalRow = newRow.masked_select(mask);
-//        Tensor finalCol = newCol.masked_select(mask);
-//
-//        // Stack -> Unique (去重)
-//        // unique(dim=1)
-//        Tensor newedge_indexRaw = torch.stack(new TensorVector(finalRow, finalCol), 0);
-//        // LibTorch unique 算子比较 tricky，这里简化返回未去重的（GNN 通常能容忍多重边）
-//
-//        Tensor newBatch = ClusterPooling.max_pool(cluster, batch.to(torch.ScalarType.Float)).to(torch.ScalarType.Long);
-//
-//        return new Tensor[]{newX, newedge_indexRaw, newBatch, cluster};
-//    }
-//}

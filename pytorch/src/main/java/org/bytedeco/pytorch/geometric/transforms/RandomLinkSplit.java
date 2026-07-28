@@ -1,38 +1,44 @@
+/*
+ * Copyright (C) 2026 bytedeco.org and pytorch JavaCPP presets contributors
+ * PyG peer: torch_geometric.transforms.RandomLinkSplit
+ */
 package org.bytedeco.pytorch.geometric.transforms;
 
-import org.bytedeco.pytorch.ScalarTypeOptional;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.geometric.data.GraphData;
 
-import static org.bytedeco.pytorch.global.torch.kLong;
 import static org.bytedeco.pytorch.global.torch.randperm;
 
 /**
- * RandomLinkSplit: 边级随机划分（用于链路预测任务）
- * 将边划分为训练、验证、测试集，并生成负采样边
+ * Random edge split into train/val/test edge_index stores
+ * ({@code train_edge_index}, {@code val_edge_index}, {@code test_edge_index}).
  */
 public class RandomLinkSplit implements BaseTransform {
-    private double numVal, numTest;
+    private final double numVal, numTest;
 
     public RandomLinkSplit(double numVal, double numTest) {
+        if (numVal < 0 || numTest < 0 || numVal + numTest >= 1.0) {
+            throw new IllegalArgumentException(
+                    "numVal/numTest must be >=0 and sum < 1");
+        }
         this.numVal = numVal;
         this.numTest = numTest;
     }
 
     @Override
     public GraphData apply(GraphData data) {
-        long numEdges = data.edge_index.size(1);
-        Tensor perm = randperm(numEdges, data.edge_index.options().dtype(new ScalarTypeOptional(kLong())));
-
+        Tensor ei = TransformUtils.requireEdgeIndex(data);
+        long numEdges = ei.size(1);
+        Tensor perm = randperm(numEdges, TransformUtils.longOptsLike(ei));
         long nVal = (long) (numEdges * numVal);
         long nTest = (long) (numEdges * numTest);
         long nTrain = numEdges - nVal - nTest;
+        if (nTrain < 0) nTrain = 0;
 
-        // 划分训练边、验证边、测试边
-        data.put("train_edge_index", data.edge_index.index_select(1, perm.narrow(0, 0, nTrain)));
-        data.put("val_edge_index", data.edge_index.index_select(1, perm.narrow(0, nTrain, nVal)));
-        data.put("test_edge_index", data.edge_index.index_select(1, perm.narrow(0, nTrain + nVal, nTest)));
-
+        data.put("train_edge_index", ei.index_select(1, perm.narrow(0, 0, nTrain)));
+        data.put("val_edge_index", ei.index_select(1, perm.narrow(0, nTrain, nVal)));
+        data.put("test_edge_index",
+                ei.index_select(1, perm.narrow(0, nTrain + nVal, nTest)));
         return data;
     }
 }

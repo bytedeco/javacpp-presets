@@ -1,4 +1,5 @@
 package org.bytedeco.pytorch.data.serialize;
+import org.bytedeco.pytorch.optim.options.*;
 import org.bytedeco.pytorch.optim.*;
 
 import org.bytedeco.pytorch.Tensor;

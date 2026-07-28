@@ -1,21 +1,30 @@
+/*
+ * Copyright (C) 2026 bytedeco.org and pytorch JavaCPP presets contributors
+ * PyG peer: torch_geometric.transforms.ToDevice
+ */
 package org.bytedeco.pytorch.geometric.transforms;
 
 import org.bytedeco.pytorch.Device;
-import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.geometric.data.GraphData;
 
-/**
- * ToDevice: 设备转换 (CPU/GPU)
- */
+/** Move all tensor fields of a {@link GraphData} onto {@code device}. */
 public class ToDevice implements BaseTransform {
-    private Device device;
-    public ToDevice(Device device) { this.device = device; }
+
+    private final Device device;
+
+    public ToDevice(Device device) {
+        if (device == null) {
+            throw new NullPointerException("device");
+        }
+        this.device = device;
+    }
 
     @Override
     public GraphData apply(GraphData data) {
-        data.x = data.x.to(device, torch.ScalarType.Float);
-        data.edge_index = data.edge_index.to(device, torch.ScalarType.Long);
-        if (data.get("train_mask") != null) data.put("train_mask", data.get("train_mask").to(device, torch.ScalarType.Bool));
-        return data;
+        return TransformUtils.toDevice(data, device);
+    }
+
+    public Device getDevice() {
+        return device;
     }
 }

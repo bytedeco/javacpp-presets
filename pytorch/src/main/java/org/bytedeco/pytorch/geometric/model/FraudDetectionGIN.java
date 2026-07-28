@@ -6,7 +6,7 @@ import org.bytedeco.javacpp.PointerScope;
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.optim.Adam;
-import org.bytedeco.pytorch.optim.AdamOptions;
+import org.bytedeco.pytorch.optim.options.AdamOptions;
 import org.bytedeco.pytorch.geometric.nn.model.GIN;
 
 import java.text.DecimalFormat;

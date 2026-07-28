@@ -5,7 +5,7 @@ import org.bytedeco.pytorch.optim.*;
 import org.bytedeco.javacpp.PointerScope;
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.optim.Adam;
-import org.bytedeco.pytorch.optim.AdamOptions;
+import org.bytedeco.pytorch.optim.options.AdamOptions;
 import org.bytedeco.pytorch.geometric.metrics.LinkPredDiversity;
 import org.bytedeco.pytorch.geometric.metrics.LinkPredMRR;
 import org.bytedeco.pytorch.geometric.metrics.LinkPredMetricCollection;

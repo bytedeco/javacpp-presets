@@ -165,7 +165,4 @@ public class RpcAgent extends Pointer {
 
   // Retrieve the (non-CPU) devices that are supported by the agent.
   public native @Const @ByRef DeviceVector getDevices();
-  // javacpp: made public for JNI virtualization
-  // Add GIL wait time data point to metrics
-  public native void addGilWaitTime(@Const @ByVal Microseconds gilWaitTime);
 }

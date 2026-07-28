@@ -1,78 +1,77 @@
 package org.bytedeco.pytorch.geometric.attention;
-import org.bytedeco.pytorch.data.transforms.*;
-import org.bytedeco.pytorch.enumtype.*;
-import org.bytedeco.pytorch.nn.modules.*;
 
-import org.bytedeco.pytorch.*;
-import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.Scalar;
+import org.bytedeco.pytorch.ScalarTypeOptional;
+import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.geometric.utils.AttentionUtils;
+import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 
 /**
- * Polynormer Attention (Linear Attention)
- * 使用 phi(x) = elu(x) + 1 作为核函数
+ * Polynormer / linear attention with {@code φ(x) = elu(x) + 1}.
+ *
+ * <pre>
+ *   y = φ(Q) (φ(K)ᵀ V) / (φ(Q) (φ(K)ᵀ 1))
+ * </pre>
+ * Linear complexity in sequence length; no random features required.
  */
 public class PolynormerAttention extends Module {
-    private LinearImpl linQ, linK, linV, linOut;
-    private long numHeads;
-    private long headDim;
+
+    private final LinearImpl linQ;
+    private final LinearImpl linK;
+    private final LinearImpl linV;
+    private final LinearImpl linOut;
+    private final long numHeads;
+    private final long headDim;
+    private final long inChannels;
 
     public PolynormerAttention(long inChannels, long numHeads) {
         super();
+        if (inChannels <= 0 || numHeads <= 0) {
+            throw new IllegalArgumentException("inChannels/numHeads must be > 0");
+        }
+        if (inChannels % numHeads != 0) {
+            throw new IllegalArgumentException("inChannels must be divisible by numHeads");
+        }
+        this.inChannels = inChannels;
         this.numHeads = numHeads;
         this.headDim = inChannels / numHeads;
 
-        this.linQ = new LinearImpl(inChannels, inChannels);
-        this.linK = new LinearImpl(inChannels, inChannels);
-        this.linV = new LinearImpl(inChannels, inChannels);
-        this.linOut = new LinearImpl(inChannels, inChannels);
-
-        register_module("linQ", linQ);
-        register_module("linK", linK);
-        register_module("linV", linV);
-        register_module("linOut", linOut);
+        this.linQ = register_module("linQ", new LinearImpl(inChannels, inChannels));
+        this.linK = register_module("linK", new LinearImpl(inChannels, inChannels));
+        this.linV = register_module("linV", new LinearImpl(inChannels, inChannels));
+        this.linOut = register_module("linOut", new LinearImpl(inChannels, inChannels));
     }
 
+    /** @param x [N, C] @return [N, C] */
     public Tensor forward(Tensor x) {
+        if (x == null || x.dim() != 2 || x.size(1) != inChannels) {
+            throw new IllegalArgumentException("x must be [N," + inChannels + "]");
+        }
         long N = x.size(0);
-        long C = x.size(1);
+        long C = inChannels;
 
-        // 1. Projections [N, H, D]
         Tensor q = linQ.forward(x).view(N, numHeads, headDim);
         Tensor k = linK.forward(x).view(N, numHeads, headDim);
         Tensor v = linV.forward(x).view(N, numHeads, headDim);
 
-        // 2. Kernel Map: elu(x) + 1
-        Tensor qPrime = AttentionUtils.kernel_elu(q);
-        Tensor kPrime = AttentionUtils.kernel_elu(k);
+        Tensor qP = AttentionUtils.kernel_elu(q).permute(1, 0, 2); // [H,N,D]
+        Tensor kP = AttentionUtils.kernel_elu(k).permute(1, 0, 2);
+        Tensor vP = v.permute(1, 0, 2);
 
-        // 3. Linear Attention Logic
-        // Einsum('nhd, nhm -> hdm') (KV Global)
-        // Permute to [H, N, D]
-        Tensor qP = qPrime.permute(1, 0, 2); // [H, N, D]
-        Tensor kP = kPrime.permute(1, 0, 2); // [H, N, D]
-        Tensor vP = v.permute(1, 0, 2);      // [H, N, D]
-
-        // KV = K^T V -> [H, D, N] @ [H, N, D] -> [H, D, D]
-        Tensor kPt = kP.permute(0, 2, 1);
-        Tensor kv = kPt.matmul(vP);
-
-        // 4. Numerator: Q' (K'^T V)
-        // [H, N, D] @ [H, D, D] -> [H, N, D]
+        Tensor kv = kP.permute(0, 2, 1).matmul(vP); // [H,D,D]
         Tensor out = qP.matmul(kv);
-
-        // 5. Denominator: Q' (K'^T 1)
-        // K_sum = sum(K', dim=1) -> [H, D]
-        Tensor kSum = kP.sum(new long[]{1}, false, new ScalarTypeOptional()).unsqueeze(2); // [H, D, 1]
-
-        // Norm = Q' @ kSum -> [H, N, D] @ [H, D, 1] -> [H, N, 1]
-        Tensor norm = qP.matmul(kSum);
-        norm = norm.add(new Scalar(1e-6)); // Prevent div 0
-
-        // 6. Normalize
-        out = out.div(norm);
-
-        // 7. Output
-        out = out.permute(1, 0, 2).reshape(N, C);
+        Tensor kSum = kP.sum(new long[]{1}, false, new ScalarTypeOptional()).unsqueeze(2);
+        Tensor norm = qP.matmul(kSum).add(new Scalar(1e-6));
+        out = out.div(norm).permute(1, 0, 2).reshape(N, C);
         return linOut.forward(out);
+    }
+
+    public long getNumHeads() {
+        return numHeads;
+    }
+
+    public long getInChannels() {
+        return inChannels;
     }
 }

@@ -4,7 +4,7 @@ import org.bytedeco.pytorch.nn.modules.*;
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.global.torch;
-import org.bytedeco.pytorch.geometric.nn.Parameter;
+import org.bytedeco.pytorch.nn.Parameter;
 public class ViSNet extends Module {
     // 简化版：仅演示 Vector-Scalar 交互逻辑
     private LinearImpl s2v;

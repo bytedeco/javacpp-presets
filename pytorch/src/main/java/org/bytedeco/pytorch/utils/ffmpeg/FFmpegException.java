@@ -4,8 +4,7 @@
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
  * the Free Software Foundation (subject to the "Classpath" exception),
- * either version 2, or (at your option)
- * any later version (collectively, the "License");
+ * either version 2, or any later version (collectively, the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -24,6 +23,8 @@ package org.bytedeco.pytorch.utils.ffmpeg;
 
 /**
  * Unchecked exception wrapping FFmpeg error codes.
+ *
+ * <p>PyAV equivalent: {@code av.error.FFmpegError} / {@code av.error.ValueError}.
  */
 public class FFmpegException extends RuntimeException {
 
@@ -35,7 +36,7 @@ public class FFmpegException extends RuntimeException {
     }
 
     public FFmpegException(String message, int errorCode) {
-        super(message + " (error " + errorCode + ")");
+        super(message + " (error " + errorCode + (errorCode < 0 ? ": " + errorMessage(errorCode) : "") + ")");
         this.errorCode = errorCode;
     }
 
@@ -48,8 +49,13 @@ public class FFmpegException extends RuntimeException {
         return errorCode;
     }
 
-    /** Make a descriptive message from an FFmpeg negative error code. */
+    /** Make a descriptive message from an FFmpeg negative error code via {@code av_strerror}. */
     public static String errorMessage(int code) {
-        return "FFmpeg error " + code;
+        try {
+            FFmpegNative.load();
+            return FFmpegNative.errorString(code);
+        } catch (Throwable t) {
+            return "FFmpeg error " + code;
+        }
     }
 }

@@ -26,6 +26,7 @@ import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.pytorch.LongOptional;
 import org.bytedeco.pytorch.Tensor;
 
+import static org.bytedeco.pytorch.global.torch.ScalarType;
 import static org.bytedeco.pytorch.global.torch.cross_entropy;
 
 /**
@@ -41,10 +42,17 @@ public final class SFTLoss {
 
     /**
      * @param logits {@code [B, T, V]}
-     * @param labels {@code [B, T]}
+     * @param labels {@code [B, T]} (promoted to Long if needed — CE requires Long/Byte targets)
      * @return scalar mean CE over shifted tokens
      */
     public static Tensor compute(Tensor logits, Tensor labels) {
+        // cross_entropy requires Long/Byte targets. JavaCPP tensor(long[]) without
+        // TensorOptions may materialize Float — always promote before CE.
+        // scalar_type() returns a non-canonical proxy — intern() before compare/branch.
+        ScalarType st = labels.scalar_type().intern();
+        if (st != ScalarType.Long && st != ScalarType.Byte && st != ScalarType.Char) {
+            labels = labels.to(ScalarType.Long);
+        }
         // shift: logits[:, :-1, :] vs labels[:, 1:]
         long t = logits.size(1);
         Tensor shiftLogits = logits.slice(1, new LongOptional(0), new LongOptional(t - 1), 1);
@@ -54,7 +62,7 @@ public final class SFTLoss {
         long tt = shiftLogits.size(1);
         long v = shiftLogits.size(2);
         Tensor flatLogits = shiftLogits.reshape(b * tt, v);
-        Tensor flatLabels = shiftLabels.reshape(b * tt);
+        Tensor flatLabels = shiftLabels.reshape(b * tt).to(ScalarType.Long);
         return cross_entropy(flatLogits, flatLabels);
     }
 }

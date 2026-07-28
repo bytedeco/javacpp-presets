@@ -6,7 +6,7 @@ import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.global.torch;
-import org.bytedeco.pytorch.geometric.nn.Parameter;
+import org.bytedeco.pytorch.nn.Parameter;
 
 public class Node2Vec extends Module {
     private EmbeddingImpl embedding;

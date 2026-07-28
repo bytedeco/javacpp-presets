@@ -1,383 +1,519 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
-import org.bytedeco.pytorch.jit.*;
-import org.bytedeco.pytorch.c10.*;
 
 import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.Tensor;
-import org.bytedeco.pytorch.TensorVector;
-import org.bytedeco.pytorch.global.torch;
-import org.bytedeco.pytorch.geometric.demo.layer.SimpleGAT;
-import org.bytedeco.pytorch.geometric.utils.Scatter;
-
-import static org.bytedeco.pytorch.global.torch.zeros;
-//import org.gnn.framework.utils.org.bytedeco.pytorch.geometric.utils.Scatter;
+import org.bytedeco.pytorch.geometric.aggr.Aggregation;
+import org.bytedeco.pytorch.geometric.utils.AggrUtils;
+import org.bytedeco.pytorch.geometric.utils.GraphUtils;
+import org.bytedeco.pytorch.nn.Module;
 
 /**
- * 模仿 PyG 的 org.bytedeco.pytorch.geometric.nn.conv.MessagePassing 基类
+ * Industrial MessagePassing base (PyG-aligned) for sparse GNN layers.
+ *
+ * <p>Pipeline for every {@code propagate} overload:
+ * <pre>
+ *   edge_index [2,E] → resolve flow → (index_j, index_i)
+ *   → resolve size [N_src, N_dst]
+ *   → optional fused message_and_aggregate
+ *   else:
+ *     x_j = lift(x_src, index_j)
+ *     x_i = lift(x_dst, index_i)   // when bipartite or needsX_i()
+ *     msg = collectMessage(...)
+ *     out = aggregate(msg, index_i, N_dst)
+ *     out = update(out, x_dst)
+ * </pre>
+ *
+ * <p>Java has no {@code **kwargs}, so call sites use typed overloads that all funnel
+ * into {@link #propagateImpl}. Subclasses override {@code message} / {@code update} /
+ * {@code needsX_i} / {@code messageAndAggregate}; the 5-arg message is non-abstract so
+ * simple layers need not implement it (existing {@code @Override}s still work).
+ *
+ * <p><b>Do not</b> close intermediate tensors in this base (JavaCPP ByRef / leaf retain).
  */
-public abstract class MessagePassing extends Module implements AutoCloseable {
+public abstract class MessagePassing extends Module {
 
-    protected String aggr; // "add", "mean", "max"
-    protected String flow; // "source_to_target" (default)
-    protected final TensorVector tensors = new TensorVector();
-//    public MessagePassing() {
-//        this("add", "source_to_target");
-//    }
+    // ---- configuration ----
+    protected String aggr;                 // string reduce when aggrModule == null
+    protected Aggregation aggrModule;      // wins over string when non-null
+    protected String flow;                 // source_to_target | target_to_source
+    protected int nodeDim = -2;            // feature layout docs (scatter always dim 0)
+
+    // ---- transient propagate state (valid only during a propagate call) ----
+    protected Tensor _edgeIndex;
+    protected Tensor _index_i;             // target indices [E]
+    protected Tensor _index_j;             // source indices [E]
+    protected long[] _size;                // {N_src, N_dst}
+
+    // ========================================================================
+    // Constructors
+    // ========================================================================
+
+    public MessagePassing() {
+        this("add", "source_to_target");
+    }
+
+    public MessagePassing(String aggr) {
+        this(aggr, "source_to_target");
+    }
 
     public MessagePassing(String aggr, String flow) {
         super();
-        // 校验聚合方式合法性
-        if (!aggr.equals("add") && !aggr.equals("mean") && !aggr.equals("max")) {
-            throw new IllegalArgumentException("不支持的聚合方式: " + aggr + "，仅支持 add/mean/max");
-        }
-        // 校验流向合法性
-        if (!flow.equals("source_to_target") && !flow.equals("target_to_source")) {
-            throw new IllegalArgumentException("不支持的流向: " + flow + "，仅支持 source_to_target/target_to_source");
-        }
-        this.aggr = aggr;
-        this.flow = flow;
+        this.aggr = normalizeAggr(aggr);
+        this.flow = normalizeFlow(flow);
+        this.aggrModule = null;
     }
-    
-    public MessagePassing(String aggr) {
+
+    public MessagePassing(Aggregation aggr) {
+        this(aggr, "source_to_target");
+    }
+
+    public MessagePassing(Aggregation aggr, String flow) {
         super();
-        this.aggr = aggr;
-        this.flow = "source_to_target";
-    }
-
-    public MessagePassing(Pointer p) {
-        
-        super(p);
-        this.aggr = "add";
-        this.flow = "source_to_target";
-        
-    }
-
-    public MessagePassing() {
-        this.aggr = "add";
-        this.flow = "source_to_target";
-    }
-
-    public abstract Tensor forward(Tensor x, Tensor edge_index);
-
-    public Tensor forward(Tensor x, Tensor edge_index, Tensor edge_attr) {
-        // 默认行为：如果子类没实现带 edge_attr 的，就退化调用基础版本
-//        return forward(x, edge_index);
-        throw new UnsupportedOperationException(this.getClass().getName() + " requires edge_attr");
-    }
-    
-
-    public final Tensor forward(Tensor[] args) {
-        if (args.length == 2) return forward(args[0], args[1]);
-        if (args.length == 3) return forward(args[0], args[1], args[2]);
-        throw new IllegalArgumentException("Unsupported number of arguments for GNN forward");
-    }
-//    forward(*args: Any, **kwargs: Any)→ Any
-    /**
-     * 核心传播方法
-     * @param edge_index [2, E]
-     * @param x [N, F] 节点特征
-     *          propagate(edge_index: Union[Tensor, SparseTensor], size: Optional[Tuple[int, int]] = None, **kwargs: Any)→ Tensor
-     */
-    public Tensor propagate(Tensor edge_index, Tensor x) {
-//        return propagate(edge_index, x, null);
-        return propagate(edge_index, x, new long[]{x.size(0), x.size(0)});
-    }
-
-
-    /**
-     * 核心实现：支持二部图的传播
-     *
-     * @param edgeIndex [2, E]
-     * @param x         源节点特征 [N_src, Dim]
-     * @param size      {N_src, N_dst}
-     */
-    public Tensor propagate(Tensor edgeIndex, Tensor x, long[] size) {
-        // 调试打印：确认进入 propagate 的 Tensor 状态
-        // System.out.println("Propagate -> x shape: " + Arrays.toString(x.sizes().vec().get()) + ", size: " + Arrays.toString(size));
-
-        // 获取 row (source) 索引
-        Tensor index_j = edgeIndex.select(0, 0);
-
-        // 【核心防御检查】
-        long numNodesInX = x.size(0);
-        long maxIdxInEdge = index_j.max().item_long();
-
-        if (maxIdxInEdge >= numNodesInX) {
-            throw new RuntimeException(String.format(
-                    "IndexSelect 越界！试图从长度为 %d 的 Tensor 中通过 index_select 提取索引 %d",
-                    numNodesInX, maxIdxInEdge));
+        if (aggr == null) {
+            throw new IllegalArgumentException("Aggregation module must not be null");
         }
-
-        // 执行 index_select
-        // 如果这里依然报错 "index out of range"，说明 x 根本不是你以为的那个 x
-        Tensor x_j = x.index_select(0, index_j);
-
-        // 后续逻辑...
-        Tensor msg = message(x_j);
-
-        Tensor col = edgeIndex.select(0, 1); // target
-        Tensor out = torch.zeros(new long[]{size[1], msg.size(1)}, msg.options());
-        return out.index_add_(0, col, msg);
+        this.aggr = null;
+        this.flow = normalizeFlow(flow);
+        this.aggrModule = aggr;
+        register_module("aggr_module", aggr);
     }
 
-    public Tensor propagate4(Tensor edgeIndex, Tensor x, long[] size) {
-        // 1. 解析 Source 和 Target 索引
-        Tensor row = edgeIndex.select(0, 0); // 源节点索引 (index_j)
-        Tensor col = edgeIndex.select(0, 1); // 目标节点索引 (index_i)
-
-        // 2. Lift: 将源节点特征映射到每一条边上
-        // [N_src, Dim] -> [E, Dim]
-        // 这一步解决了你看到的 "size 32 must match 150" 的问题
-        Tensor x_j = x.index_select(0, row);
-
-        // 3. 构建消息 (调用子类实现的 message)
-        // 此时 x_j 的 shape 是 [150, Dim]，可以安全地与边特征运算
-        Tensor msg = message(x_j);
-
-        // 4. 聚合 (Aggregate)
-        // 将消息 [150, Dim] 根据 col 聚合到目标节点 [N_dst, Dim]
-        // index_reduce 是 PyTorch 处理 GNN 聚合的高效算子
-        Tensor out = zeros(new long[]{size[1], msg.size(1)}, msg.options());
-
-        // 使用 index_add 或 scatter 将消息累加到目标节点
-        // "sum" 聚合示例：
-        out.index_add_(0, col, msg);
-
-        return out;
+    /** JavaCPP pointer ctor (interop). Defaults to sum / source_to_target. */
+    public MessagePassing(Pointer p) {
+        super(p);
+        this.aggr = "sum";
+        this.flow = "source_to_target";
+        this.aggrModule = null;
     }
 
+    // ========================================================================
+    // Configuration mutators
+    // ========================================================================
 
-    public Tensor propagate(Tensor edge_index, Tensor x, Tensor edge_attr) {
-        long numNodes = x.size(0);
-        Tensor sourceIdx = edge_index.select(0, 0).to(torch.kLong()); ;
-        Tensor targetIdx = edge_index.select(0, 1).to(torch.kLong()); ;
-
-        Tensor x_j = x.index_select(0, sourceIdx);
-        Tensor x_i = x.index_select(0, targetIdx);
-
-        // 核心修正：显式传入 edge_index 和额外的 edge_attr
-        Tensor out = aggregate(message(x_j, x_i, edge_index, edge_attr, numNodes), targetIdx, numNodes);
-        return update(out, x);
+    public void setAggr(String reduce) {
+        this.aggr = normalizeAggr(reduce);
+        this.aggrModule = null;
     }
 
-    public Tensor propagate(Tensor edge_index, Tensor x, Tensor pos, Tensor deltaPos) {
-        Tensor row = edge_index.select(0, 0);
-        Tensor col = edge_index.select(0, 1);
-
-        // 1. 手动执行 message 逻辑 (对应四个参数)
-        Tensor x_j = x.index_select(0, row);
-        Tensor p_j = pos.index_select(0, row);
-        Tensor dp_i = deltaPos.index_select(0, col);
-
-        // 这里的逻辑就是你原本想写在 message 里的内容
-        Tensor msg = message(x_j, p_j, dp_i);
-
-        // 2. 手动执行 aggregate 逻辑
-        Tensor out = zeros(new long[]{x.size(0), msg.size(1)}, x.options());
-        // 使用 scatter_add 模拟 "add" 聚合
-        out.scatter_add_(0, col.unsqueeze(-1).expand_as(msg), msg);
-
-        // 3. 手动执行 update 逻辑
-        return update(out, x);
-    }
-
-    /**
-     * 二部图传播（源/目标节点分离）+ 边权重支持
-     */
-    public Tensor propagate(Tensor edge_index, Tensor xSrc, Tensor xDst, Tensor edge_weight, long numNodes) {
-        // 1. 提取边索引
-        Tensor row = edge_index.select(0, 0); // 源节点索引 [E]
-        Tensor col = edge_index.select(0, 1); // 目标节点索引 [E]
-
-        // 2. 提取源节点特征 x_j [E, *]
-        Tensor x_j = xSrc.index_select(0, row);
-
-        // 3. 提取目标节点特征 x_i [E, *]
-        Tensor x_i = xDst.index_select(0, col);
-
-        // 4. 执行 message 逻辑（传入边权重）
-        Tensor msg = message(x_j, x_i, edge_index, edge_weight, numNodes);
-
-        // 5. 执行聚合
-        Tensor out = aggregate(msg, col, numNodes);
-
-        // 6. 执行更新
-        out = update(out, xDst);
-
-        // 释放临时张量
-        row.close();
-        col.close();
-        x_j.close();
-        x_i.close();
-        msg.close();
-
-        return out;
-    }
-    
-    /**
-     * 核心逻辑：支持二部图的传播
-     * @param edge_index 边索引 [2, E]
-     * @param xSrc       源节点特征 (例如 50 个作者)
-     * @param xDst       目标节点特征 (例如 100 篇论文)
-     * @param size       目标节点总数 (100)
-     */
-    public Tensor propagate(Tensor edge_index, Tensor xSrc, Tensor xDst, long size) {
-        // 1. 提取索引
-        Tensor row = edge_index.select(0, 0); // Source indices
-        Tensor col = edge_index.select(0, 1); // Destination indices
-
-        // 2. 准备消息：从源特征中 index_select
-        // x_j 形状为 [E, channels]
-        Tensor x_j = xSrc.index_select(0, row);
-
-        // 3. 准备目标引用（如果需要，如 SAGEConv 的 x_i）
-        Tensor x_i = xDst.index_select(0, col);
-
-        // 4. 执行 message 逻辑 (由子类重写)
-        Tensor msg = message(x_j, x_i, edge_index);
-
-        // 5. 执行聚合：关键点在于传入 size (100)
-        // 这样创建的聚合张量形状就是 [100, channels]
-        Tensor out = aggregate(msg, col, size);
-
-        // 6. 执行更新
-        return update(out, xDst);
-    }
-
-//    protected Tensor propagate(Tensor edgeIndex, Tensor x) {
-//        return propagate(edgeIndex, x, null, new long[]{x.size(0), x.size(0)});
-//    }
-//
-//    /**
-//     * 带边特征的消息传递（默认二部图大小为 [N, N]）
-//     */
-//    protected Tensor propagate(Tensor edgeIndex, Tensor x, Tensor edgeAttr) {
-//        return propagate(edgeIndex, x, edgeAttr, new long[]{x.size(0), x.size(0)});
-//    }
-
-//    public abstract Tensor message(Tensor x_j, Tensor x_i, Tensor edge_index, Tensor edge_attr);
-
-
-    public Tensor propagate2(Tensor edge_index, Tensor x, Tensor edge_attr) {
-        long numNodes = x.size(0);
-
-        // =========================================================================
-        // 修正点 1: 使用 .select() 而不是 .index_select()
-        // .select(0, 0) 表示在第 0 维取第 0 个元素，结果会自动降维
-        // [2, E] -> [E] (这才是 index_select 需要的 1D 向量格式)
-        // =========================================================================
-        Tensor sourceIdx = edge_index.select(0, 0).to(torch.kLong()); // 对应 source (j)
-        Tensor targetIdx = edge_index.select(0, 1).to(torch.kLong());// 对应 target (i)
-
-        // 2. 收集特征 (Lift)
-        // x_j: 源节点特征 [E, F]
-        // x.index_select(0, idx) 要求 idx 必须是 1D LongTensor
-        Tensor x_j = x.index_select(0, sourceIdx);
-
-        // x_i: 目标节点特征 [E, F]
-        Tensor x_i = x.index_select(0, targetIdx);
-
-        // 3. 生成消息 (Message)
-        Tensor msg = message(x_j, x_i, edge_attr);
-
-        // 4. 聚合 (Aggregate) -> [N, F]
-        Tensor out = aggregate(msg, targetIdx, numNodes);
-
-        // 5. 更新 (Update)
-        return update(out, x);
-    }
-
-
-    // 子类需实现的钩子
-    protected Tensor message(Tensor x_j) {
-        return x_j; // 默认恒等映射
-    }
-
-    /**
-     * 构造消息，默认直接返回 x_j (如同 GCN) 
-     * 子类可以重写此方法 (如 org.bytedeco.pytorch.geometric.nn.model.GAT 加入 Attention)
-     * message(x_j: Tensor)→ Tensor
-     */
-    public Tensor message(Tensor x_j, Tensor x_i, Tensor edge_attr) {
-        return (edge_attr != null) ? x_j.mul(edge_attr) : x_j;
-    }
-
-    public abstract Tensor message(Tensor x_j, Tensor x_i, Tensor edge_index, Tensor edge_attr, long numNodes);
-
-    /**
-     * 生成消息（子类必须实现）
-     * @param x_j 源节点特征 [E, F]
-     * @param x_i 目标节点特征 [E, F]
-     * @param edgeAttr 边特征 [E, F_e]（可为 null）
-     * @param edgeIndex 边索引 [2, E]
-     * @return 边消息 [E, F_out]
-     */
-    protected Tensor message(Tensor x_j, Tensor x_i, Tensor edgeIndex, Tensor edgeAttr){
-       return message( x_j,  x_i,  edgeIndex,  edgeAttr,  x_j.size(0));
-    }
-
-//    public Tensor propagate2(Tensor edge_index, Tensor x) {
-//        long numNodes = x.size(0);
-//
-//        // 1. 区分源节点和目标节点索引
-//        // edge_index[0] 是 source (j), edge_index[1] 是 target (i)
-//        Tensor sourceIdx = edge_index.index_select(0, torch.tensor(0)); // row 0
-//        Tensor targetIdx = edge_index.index_select(0, torch.tensor(1)); // row 1
-//
-//        // 2. 收集特征 (Lift)
-//        // x_j: 源节点特征 [E, F]
-//        Tensor x_j = x.index_select(0, sourceIdx);
-//        // x_i: 目标节点特征 [E, F] (有些层如 org.bytedeco.pytorch.geometric.nn.model.GAT 需要这个)
-//        Tensor x_i = x.index_select(0, targetIdx);
-//
-//        // 3. 生成消息 (Message)
-//        Tensor msg = message(x_j, x_i, edge_index);
-//
-//        // 4. 聚合 (Aggregate) -> [N, F]
-//        Tensor out = aggregate(msg, targetIdx, numNodes);
-//
-//        // 5. 更新 (Update)
-//        return update(out, x);
-//    }
-
-
-//    public Tensor message(Tensor x_j, Tensor x_i, Tensor edge_index) {
-//        return x_j;
-//    }
-
-    /**
-     * 聚合消息（默认支持 add/mean/max）
-     * @param inputs 边消息 [E, F_out]
-     * @param index 目标节点索引 [E]
-     * @param dimSize 目标节点数量
-     * @return 聚合后的特征 [dimSize, F_out]
-     * aggregate(inputs: Tensor, index: Tensor, ptr: Optional[Tensor] = None, dim_size: Optional[int] = None)→ Tensor
-     */
-    public Tensor aggregate(Tensor inputs, Tensor index, long dimSize) {
-        return Scatter.scatter(inputs, index, dimSize, this.aggr);
-    }
-    
-    /**
-     * 更新节点嵌入，默认直接返回聚合结果 ok
-     * 更新节点特征（默认直接返回聚合结果）
-     * @param inputs 聚合后的特征 [N_dst, F_out]
-     * @param x 原始节点特征 [N, F]
-     * @return 更新后的特征 [N_dst, F_out]
-     * update(inputs: Tensor)→ Tensor
-     */
-    public Tensor update(Tensor inputs, Tensor x) {
-        return inputs;
+    public void setAggr(Aggregation module) {
+        if (module == null) {
+            throw new IllegalArgumentException("Aggregation module must not be null");
+        }
+        this.aggrModule = module;
+        this.aggr = null;
+        register_module("aggr_module", module);
     }
 
     public String getAggr() {
-        return aggr;
+        return aggrModule != null ? aggrModule.getClass().getSimpleName() : aggr;
+    }
+
+    public Aggregation getAggrModule() {
+        return aggrModule;
     }
 
     public String getFlow() {
         return flow;
     }
 
+    public void setFlow(String flow) {
+        this.flow = normalizeFlow(flow);
+    }
 
-//    protected abstract void reset_parameters();
+    public int getNodeDim() {
+        return nodeDim;
+    }
+
+    // ========================================================================
+    // Forward API
+    // ========================================================================
+
+    /** Standard sparse-layer forward. Dense / special layers may throw or override freely. */
+    public abstract Tensor forward(Tensor x, Tensor edge_index);
+
+    /**
+     * Edge-attr forward. Default throws — subclasses that need edge features override.
+     * Layers that can ignore edge_attr may call {@link #forward(Tensor, Tensor)}.
+     */
+    public Tensor forward(Tensor x, Tensor edge_index, Tensor edge_attr) {
+        throw new UnsupportedOperationException(
+                getClass().getName() + " does not implement forward(x, edge_index, edge_attr)");
+    }
+
+    /** Varargs dispatch for generic callers. */
+    public final Tensor forward(Tensor[] args) {
+        if (args == null || args.length < 2) {
+            throw new IllegalArgumentException("forward requires at least (x, edge_index)");
+        }
+        if (args.length == 2) {
+            return forward(args[0], args[1]);
+        }
+        if (args.length == 3) {
+            return forward(args[0], args[1], args[2]);
+        }
+        throw new IllegalArgumentException(
+                "Unsupported number of arguments for GNN forward: " + args.length);
+    }
+
+    // ========================================================================
+    // Public propagate overloads → single propagateImpl
+    //
+    // NOTE: Java cannot overload (Tensor,Tensor,Tensor) twice. The 3-tensor
+    // form is therefore ALWAYS interpreted as homogeneous (x, edgeAttr).
+    // Bipartite without edge features uses:
+    //   propagate(edge, xSrc, xDst, (Tensor) null)
+    //   propagate(edge, xSrc, long[] size)
+    //   propagate(edge, xSrc, xDst, long numDst)
+    // Subclasses may override these for specialized paths (GEN/Spline/…).
+    // ========================================================================
+
+    /** Homogeneous: x is both source and destination features. */
+    public Tensor propagate(Tensor edgeIndex, Tensor x) {
+        return propagateImpl(edgeIndex, x, x, null, null);
+    }
+
+    /**
+     * Homogeneous with edge attributes / weights (or bipartite if a subclass
+     * overrides). Base implementation treats the third tensor as edgeAttr.
+     */
+    public Tensor propagate(Tensor edgeIndex, Tensor x, Tensor edgeAttr) {
+        return propagateImpl(edgeIndex, x, x, edgeAttr, null);
+    }
+
+    /**
+     * Size override: {@code size = {N_src, N_dst}}.
+     * Both ends use {@code x} as features; aggregation dim is {@code size[1]}.
+     * For true bipartite features prefer
+     * {@link #propagate(Tensor, Tensor, Tensor, Tensor, long[])}.
+     */
+    public Tensor propagate(Tensor edgeIndex, Tensor x, long[] size) {
+        // Bipartite-size with a single feature tensor: messages from x, write to size[1].
+        // If size[0] != size[1], still lift from x (caller must ensure indices fit).
+        return propagateImpl(edgeIndex, x, x, null, size);
+    }
+
+    /** Bipartite + optional edge attributes ({@code edgeAttr} may be null). */
+    public Tensor propagate(Tensor edgeIndex, Tensor xSrc, Tensor xDst, Tensor edgeAttr) {
+        return propagateImpl(edgeIndex, xSrc, xDst, edgeAttr, null);
+    }
+
+    /** Bipartite + edge attributes + explicit size. */
+    public Tensor propagate(Tensor edgeIndex, Tensor xSrc, Tensor xDst,
+                            Tensor edgeAttr, long[] size) {
+        return propagateImpl(edgeIndex, xSrc, xDst, edgeAttr, size);
+    }
+
+    /**
+     * Legacy DNAConv / CGConv shape: {@code numNodes} is N_dst
+     * (N_src from {@code xSrc} when available). {@code edgeAttr} may be edge weight.
+     */
+    public Tensor propagate(Tensor edgeIndex, Tensor xSrc, Tensor xDst,
+                            Tensor edgeAttr, long numNodes) {
+        long nSrc = xSrc != null ? xSrc.size(0) : numNodes;
+        return propagateImpl(edgeIndex, xSrc, xDst, edgeAttr, new long[]{nSrc, numNodes});
+    }
+
+    /**
+     * Bipartite with explicit destination count only.
+     * {@code size} is N_dst; N_src is taken from {@code xSrc}.
+     */
+    public Tensor propagate(Tensor edgeIndex, Tensor xSrc, Tensor xDst, long size) {
+        long nSrc = xSrc != null ? xSrc.size(0) : size;
+        return propagateImpl(edgeIndex, xSrc, xDst, null, new long[]{nSrc, size});
+    }
+
+    // ========================================================================
+    // Core implementation
+    // ========================================================================
+
+    /**
+     * Unified message-passing implementation.
+     *
+     * @param edgeIndex [2, E]
+     * @param xSrc      source node features [N_src, F...] (may equal xDst)
+     * @param xDst      destination node features [N_dst, F...]
+     * @param edgeAttr  optional edge features / weights [E] or [E, F_e]
+     * @param size      optional {N_src, N_dst}; inferred when null
+     */
+    protected Tensor propagateImpl(Tensor edgeIndex, Tensor xSrc, Tensor xDst,
+                                   Tensor edgeAttr, long[] size) {
+        if (edgeIndex == null) {
+            throw new NullPointerException("edgeIndex must not be null");
+        }
+        if (edgeIndex.dim() != 2 || edgeIndex.size(0) != 2) {
+            throw new IllegalArgumentException(
+                    "edgeIndex must have shape [2, E], got dim=" + edgeIndex.dim()
+                            + " size0=" + (edgeIndex.dim() > 0 ? edgeIndex.size(0) : -1));
+        }
+
+        // 1. Flow → (index_j source, index_i target)
+        Tensor[] endpoints = resolveFlow(edgeIndex);
+        Tensor index_j = endpoints[0];
+        Tensor index_i = endpoints[1];
+
+        // 2. Size
+        long[] resolved = resolveSize(edgeIndex, xSrc, xDst, index_j, index_i, size);
+        long nSrc = resolved[0];
+        long nDst = resolved[1];
+
+        // 3. Stash transient state for hooks (attention etc.)
+        this._edgeIndex = edgeIndex;
+        this._index_j = index_j;
+        this._index_i = index_i;
+        this._size = resolved;
+
+        try {
+            // 4. Fused path
+            if (xSrc != null) {
+                Tensor fused = messageAndAggregate(edgeIndex, xSrc);
+                if (fused != null) {
+                    return update(fused, xDst != null ? xDst : xSrc);
+                }
+            }
+
+            if (xSrc == null) {
+                throw new IllegalArgumentException("xSrc must not be null when fused path is unused");
+            }
+
+            // 5. Bounds check on source indices
+            if (index_j.size(0) > 0) {
+                long maxJ = index_j.max().item_long();
+                if (maxJ >= xSrc.size(0)) {
+                    throw new IndexOutOfBoundsException(String.format(
+                            "source index %d out of bounds for xSrc with %d nodes",
+                            maxJ, xSrc.size(0)));
+                }
+            }
+
+            // 6. Lift
+            Tensor x_j = lift(xSrc, index_j);
+            Tensor x_i = null;
+            boolean needXi = needsX_i() || (xDst != null && xDst != xSrc);
+            if (needXi) {
+                Tensor dstFeat = xDst != null ? xDst : xSrc;
+                if (index_i.size(0) > 0) {
+                    long maxI = index_i.max().item_long();
+                    if (maxI >= dstFeat.size(0)) {
+                        throw new IndexOutOfBoundsException(String.format(
+                                "target index %d out of bounds for xDst with %d nodes",
+                                maxI, dstFeat.size(0)));
+                    }
+                }
+                x_i = lift(dstFeat, index_i);
+            }
+
+            // 7. Message
+            Tensor msg = collectMessage(x_j, x_i, edgeIndex, edgeAttr, nDst);
+
+            // 8. Aggregate
+            Tensor out = aggregate(msg, index_i, nDst);
+
+            // 9. Update
+            return update(out, xDst != null ? xDst : xSrc);
+        } finally {
+            // Clear transient refs (do not close tensors — caller / autograd owns them)
+            this._edgeIndex = null;
+            this._index_j = null;
+            this._index_i = null;
+            this._size = null;
+        }
+    }
+
+    /**
+     * Collect message: always invoke the 5-arg hook so existing subclass {@code @Override}s
+     * (GAT/GCN/…) run. Default 5-arg delegates down the arity chain.
+     */
+    protected Tensor collectMessage(Tensor x_j, Tensor x_i, Tensor edgeIndex,
+                                    Tensor edgeAttr, long numNodes) {
+        // Provide a non-null x_i placeholder when not lifted so 5-arg overrides that only
+        // use x_j still work (they typically ignore x_i).
+        Tensor xi = x_i != null ? x_i : x_j;
+        return message(x_j, xi, edgeIndex, edgeAttr, numNodes);
+    }
+
+    // ========================================================================
+    // Hooks (non-abstract defaults)
+    // ========================================================================
+
+    /** Identity message (GraphSAGE / GIN style). */
+    protected Tensor message(Tensor x_j) {
+        return x_j;
+    }
+
+    /**
+     * Edge-weighted message. Rank-1 {@code edgeAttr} [E] is broadcast as [E,1];
+     * higher-rank attrs are left to subclasses (default: ignore and return x_j).
+     */
+    protected Tensor message(Tensor x_j, Tensor edgeAttr) {
+        if (edgeAttr == null) {
+            return message(x_j);
+        }
+        if (edgeAttr.dim() == 1) {
+            return x_j.mul(edgeAttr.view(new long[]{-1, 1}));
+        }
+        // [E, 1] already
+        if (edgeAttr.dim() == 2 && edgeAttr.size(1) == 1) {
+            return x_j.mul(edgeAttr);
+        }
+        return message(x_j);
+    }
+
+    /** Default: ignore x_i, use edge-weighted path. Attention layers override. */
+    public Tensor message(Tensor x_j, Tensor x_i, Tensor edgeAttr) {
+        return message(x_j, edgeAttr);
+    }
+
+    /**
+     * Full message hook used by the pipeline. <b>Non-abstract</b> — default delegates
+     * to the 3-arg form. Existing layers may {@code @Override} this signature.
+     */
+    public Tensor message(Tensor x_j, Tensor x_i, Tensor edge_index,
+                          Tensor edge_attr, long numNodes) {
+        return message(x_j, x_i, edge_attr);
+    }
+
+    /**
+     * 4-arg bridge kept for older call sites / overrides.
+     */
+    protected Tensor message(Tensor x_j, Tensor x_i, Tensor edgeIndex, Tensor edgeAttr) {
+        long n = _size != null ? _size[1] : (x_j != null ? x_j.size(0) : 0);
+        return message(x_j, x_i, edgeIndex, edgeAttr, n);
+    }
+
+    /**
+     * Aggregate edge messages into node embeddings.
+     * Uses {@link #aggrModule} when set, else string {@link #aggr} via {@link AggrUtils}.
+     */
+    public Tensor aggregate(Tensor inputs, Tensor index, long dimSize) {
+        if (aggrModule != null) {
+            return aggrModule.forward(inputs, index, dimSize);
+        }
+        String reduce = aggr != null ? aggr : "sum";
+        return AggrUtils.scatter(inputs, index, dimSize, reduce);
+    }
+
+    /** CSR-style aggregate; default ignores ptr. */
+    public Tensor aggregate(Tensor inputs, Tensor index, Tensor ptr, long dimSize) {
+        if (aggrModule != null) {
+            return aggrModule.forward(inputs, index, ptr, dimSize);
+        }
+        return aggregate(inputs, index, dimSize);
+    }
+
+    /** Update without residual features. */
+    public Tensor update(Tensor inputs) {
+        return inputs;
+    }
+
+    /** Update with original (destination) node features available. Default: identity. */
+    public Tensor update(Tensor inputs, Tensor x) {
+        return update(inputs);
+    }
+
+    /**
+     * Optional fused message+aggregate (e.g. SpMM). Return non-null to skip the
+     * lift → message → aggregate path. Default: {@code null}.
+     */
+    protected Tensor messageAndAggregate(Tensor edgeIndex, Tensor x) {
+        return null;
+    }
+
+    /**
+     * When true, destination features are always lifted to {@code x_i} even in the
+     * homogeneous case (required by attention). Default false for efficiency.
+     */
+    protected boolean needsX_i() {
+        return false;
+    }
+
+    // ========================================================================
+    // Helpers
+    // ========================================================================
+
+    /** Gather node features onto edges: {@code src.index_select(0, index)}. */
+    protected Tensor lift(Tensor src, Tensor index) {
+        if (src == null) {
+            throw new NullPointerException("lift src must not be null");
+        }
+        index = AggrUtils.asLongIndex(index);
+        if (index.size(0) == 0) {
+            // Empty edge set: return empty [0, F...]
+            long[] shape = src.shape();
+            long[] outShape = new long[shape.length];
+            outShape[0] = 0;
+            System.arraycopy(shape, 1, outShape, 1, shape.length - 1);
+            return src.new_empty(outShape);
+        }
+        return src.index_select(0, index);
+    }
+
+    /**
+     * Apply flow: returns {index_j (source), index_i (target)}.
+     */
+    protected Tensor[] resolveFlow(Tensor edgeIndex) {
+        Tensor row = AggrUtils.asLongIndex(edgeIndex.select(0, 0));
+        Tensor col = AggrUtils.asLongIndex(edgeIndex.select(0, 1));
+        if ("target_to_source".equals(flow)) {
+            return new Tensor[]{col, row};
+        }
+        // default source_to_target: message flows j→i, index_j=row, index_i=col
+        return new Tensor[]{row, col};
+    }
+
+    /**
+     * Resolve {N_src, N_dst}.
+     */
+    protected long[] resolveSize(Tensor edgeIndex, Tensor xSrc, Tensor xDst,
+                                 Tensor index_j, Tensor index_i, long[] size) {
+        if (size != null) {
+            if (size.length != 2) {
+                throw new IllegalArgumentException("size must be long[2] {N_src, N_dst}");
+            }
+            return new long[]{size[0], size[1]};
+        }
+        return GraphUtils.bipartite_size(edgeIndex, xSrc, xDst);
+    }
+
+    // ========================================================================
+    // Validation
+    // ========================================================================
+
+    /**
+     * Normalize common aliases. Unknown strings (e.g. GENConv "softmax"/"powermean")
+     * are kept as-is — subclasses that override {@link #aggregate} may use custom names.
+     * Default {@link #aggregate} still routes through {@link AggrUtils} which validates.
+     */
+    private static String normalizeAggr(String reduce) {
+        if (reduce == null) {
+            return "sum";
+        }
+        switch (reduce) {
+            case "add":
+            case "sum":
+                return "sum";
+            case "mean":
+                return "mean";
+            case "max":
+                return "max";
+            case "min":
+                return "min";
+            case "mul":
+            case "prod":
+                return "prod";
+            default:
+                // Custom / layer-specific reduce keys (softmax, powermean, …)
+                return reduce;
+        }
+    }
+
+    private static String normalizeFlow(String flow) {
+        if (flow == null) {
+            return "source_to_target";
+        }
+        if (!"source_to_target".equals(flow) && !"target_to_source".equals(flow)) {
+            throw new IllegalArgumentException(
+                    "Unsupported flow='" + flow + "' (use source_to_target or target_to_source)");
+        }
+        return flow;
+    }
 }

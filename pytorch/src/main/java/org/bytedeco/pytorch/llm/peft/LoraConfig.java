@@ -117,9 +117,29 @@ public final class LoraConfig extends PeftConfig {
             return this;
         }
 
+        /** Snake alias matching Python {@code lora_alpha=}. */
+        public Builder lora_alpha(double alpha) {
+            return alpha(alpha);
+        }
+
+        /** Camel alias for HF field {@code lora_alpha}. */
+        public Builder loraAlpha(double alpha) {
+            return alpha(alpha);
+        }
+
         public Builder dropout(double dropout) {
             this.dropout = dropout;
             return this;
+        }
+
+        /** Snake alias matching Python {@code lora_dropout=}. */
+        public Builder lora_dropout(double dropout) {
+            return dropout(dropout);
+        }
+
+        /** Camel alias for HF field {@code lora_dropout}. */
+        public Builder loraDropout(double dropout) {
+            return dropout(dropout);
         }
 
         public Builder targetModules(String... modules) {
@@ -127,9 +147,18 @@ public final class LoraConfig extends PeftConfig {
             return this;
         }
 
+        /** Snake alias matching Python {@code target_modules=}. */
+        public Builder target_modules(String... modules) {
+            return targetModules(modules);
+        }
+
         public Builder targetModules(List<String> modules) {
             this.targetModules = new ArrayList<>(Objects.requireNonNull(modules));
             return this;
+        }
+
+        public Builder target_modules(List<String> modules) {
+            return targetModules(modules);
         }
 
         public Builder freezeBase(boolean freezeBase) {
@@ -142,9 +171,19 @@ public final class LoraConfig extends PeftConfig {
             return this;
         }
 
+        /** Snake alias matching Python {@code use_rslora=}. */
+        public Builder use_rslora(boolean useRslora) {
+            return useRslora(useRslora);
+        }
+
         public Builder bias(String bias) {
             this.bias = bias != null ? bias : "none";
             return this;
+        }
+
+        /** Snake alias matching Python {@code task_type=} (delegates to PeftConfig). */
+        public Builder task_type(String taskType) {
+            return taskType(taskType);
         }
 
         @Override

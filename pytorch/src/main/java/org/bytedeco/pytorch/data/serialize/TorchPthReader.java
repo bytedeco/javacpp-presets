@@ -1,4 +1,5 @@
 package org.bytedeco.pytorch.data.serialize;
+import org.bytedeco.pytorch.nn.*;
 
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.pytorch.Tensor;

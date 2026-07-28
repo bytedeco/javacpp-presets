@@ -4,7 +4,7 @@ import org.bytedeco.pytorch.nn.modules.*;
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.global.torch;
-import org.bytedeco.pytorch.geometric.nn.Parameter;
+import org.bytedeco.pytorch.nn.Parameter;
 
 import static org.bytedeco.pytorch.global.torch.mm;
 import static org.bytedeco.pytorch.global.torch.softmax;

@@ -4,149 +4,230 @@ import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.global.torch;
 
 /**
- * 聚合操作底层工具箱
+ * Canonical scatter / degree / softmax backend for the geometric stack.
+ *
+ * <p>Isolated-node policy (PyG-aligned):
+ * <ul>
+ *   <li>sum / mean → 0</li>
+ *   <li>max / min → 0 after reduce (sentinels cleared)</li>
+ *   <li>mul / prod → 1 (identity of product)</li>
+ * </ul>
  */
-public class AggrUtils {
+public final class AggrUtils {
 
-    // 基础 org.bytedeco.pytorch.geometric.utils.Scatter 操作
+    private AggrUtils() {}
+
+    /** Normalize reduce aliases: add≡sum, mul≡prod. */
+    public static String normalizeReduce(String reduce) {
+        if (reduce == null) {
+            throw new IllegalArgumentException("reduce must not be null");
+        }
+        switch (reduce) {
+            case "add":
+            case "sum":
+                return "sum";
+            case "mean":
+                return "mean";
+            case "max":
+                return "max";
+            case "min":
+                return "min";
+            case "mul":
+            case "prod":
+                return "prod";
+            default:
+                throw new UnsupportedOperationException(
+                        "Unknown reduce='" + reduce + "' (supported: sum/add/mean/max/min/mul/prod)");
+        }
+    }
+
+    /** Ensure 1-D Long index for index_add_ / index_reduce_ / index_select. */
+    public static Tensor asLongIndex(Tensor index) {
+        if (index == null) {
+            throw new NullPointerException("index must not be null");
+        }
+        if (index.dim() != 1) {
+            throw new IllegalArgumentException(
+                    "index must be 1-D, got dim=" + index.dim() + " shape=" + shapeStr(index));
+        }
+        // scalar_type() may return a non-canonical proxy — always intern() both sides.
+        if (index.scalar_type().intern() != torch.ScalarType.Long.intern()) {
+            return index.to(torch.kLong());
+        }
+        return index;
+    }
+
+    /**
+     * Scatter {@code src} [E, F...] into [dimSize, F...] along dim 0 using {@code index} [E].
+     */
     public static Tensor scatter(Tensor src, Tensor index, long dimSize, String reduce) {
-        // 构造输出形状: [dimSize, F...]
+        if (src == null) {
+            throw new NullPointerException("src must not be null");
+        }
+        index = asLongIndex(index);
+        if (index.size(0) != src.size(0)) {
+            throw new IllegalArgumentException(
+                    "index.length (" + index.size(0) + ") != src.size(0) (" + src.size(0) + ")");
+        }
+        String r = normalizeReduce(reduce);
+        if (dimSize < 0) {
+            if (index.size(0) == 0) {
+                dimSize = 0;
+            } else {
+                dimSize = index.max().item_long() + 1;
+            }
+        }
+
         long[] srcShape = src.shape();
         long[] outShape = new long[srcShape.length];
         outShape[0] = dimSize;
         System.arraycopy(srcShape, 1, outShape, 1, srcShape.length - 1);
 
-        Tensor out = torch.zeros(outShape, src.options());
-        if ("prod".equals(reduce) || "mul".equals(reduce)) {
-            // 初始化为 1.0
-            Tensor out2 = torch.ones(outShape, src.options());
-            return out2.index_reduce_(0, index, src, "prod", false);
+        switch (r) {
+            case "sum": {
+                Tensor out = torch.zeros(outShape, src.options());
+                return out.index_add_(0, index, src);
+            }
+            case "mean": {
+                Tensor out = torch.zeros(outShape, src.options());
+                Tensor sum = out.index_add_(0, index, src);
+                Tensor count = torch.zeros(new long[]{dimSize}, src.options());
+                Tensor ones = torch.ones(new long[]{src.size(0)}, src.options());
+                count.index_add_(0, index, ones);
+                count = count.clamp_min(new Scalar(1.0));
+                for (int i = 1; i < outShape.length; i++) {
+                    count = count.unsqueeze(i);
+                }
+                return sum.div(count);
+            }
+            case "max": {
+                // include_self=false: only positions hit by index get reduced values.
+                Tensor out = torch.full(outShape, new Scalar(-1.0e38), src.options());
+                out = out.index_reduce_(0, index, src, "amax", false);
+                return fillIsolated(out, index, dimSize, src.options());
+            }
+            case "min": {
+                Tensor out = torch.full(outShape, new Scalar(1.0e38), src.options());
+                out = out.index_reduce_(0, index, src, "amin", false);
+                return fillIsolated(out, index, dimSize, src.options());
+            }
+            case "prod": {
+                Tensor out = torch.ones(outShape, src.options());
+                return out.index_reduce_(0, index, src, "prod", false);
+            }
+            default:
+                throw new UnsupportedOperationException("Unknown reduce: " + r);
         }
-        if ("add".equals(reduce) || "sum".equals(reduce)) {
-            return out.index_add_(0, index, src);
-        } else if ("mean".equals(reduce)) {
-            Tensor sum = out.index_add_(0, index, src);
-            Tensor count = torch.zeros(new long[]{dimSize}, src.options());
-            Tensor ones = torch.ones(new long[]{src.size(0)}, src.options());
-            count.index_add_(0, index, ones);
-            count = count.clamp_min(new Scalar(1.0));
-
-            // 广播 count
-            for (int i = 1; i < outShape.length; i++) count = count.unsqueeze(i);
-            return sum.div(count);
-        } else if ("max".equals(reduce)) {
-            // 初始化为极小值
-            out.fill_(new Scalar(-1.0e38));
-            return out.index_reduce_(0, index, src, "amax", false);
-        } else if ("min".equals(reduce)) {
-            // 初始化为极大值
-            out.fill_(new Scalar(1.0e38));
-            return out.index_reduce_(0, index, src, "amin", false);
-        }
-        throw new UnsupportedOperationException("Unknown reduce: " + reduce);
     }
 
-    // 实现 org.bytedeco.pytorch.geometric.utils.Scatter Softmax: exp(x_i) / sum(exp(x_j))
-    // 用于 Attention 和 org.bytedeco.pytorch.geometric.aggr.SoftmaxAggregation
+    /**
+     * Zero-fill rows that received no messages (isolated nodes) after max/min reduce.
+     * Vectorized: build presence mask via scatter of ones, broadcast to feature dims.
+     */
+    private static Tensor fillIsolated(Tensor out, Tensor index, long dimSize, TensorOptions opts) {
+        if (dimSize == 0) {
+            return out;
+        }
+        Tensor presence = torch.zeros(new long[]{dimSize}, opts);
+        if (index.size(0) > 0) {
+            Tensor ones = torch.ones(new long[]{index.size(0)}, opts);
+            presence.index_add_(0, index, ones);
+        }
+        Tensor mask = presence.gt(new Scalar(0)); // [N]
+        for (int i = 1; i < out.dim(); i++) {
+            mask = mask.unsqueeze(i);
+        }
+        mask = mask.expand_as(out);
+        return torch.where(mask, out, torch.zeros_like(out));
+    }
+
+    /**
+     * Segment-wise softmax: for each group defined by {@code index},
+     * {@code exp(x - max) / sum(exp(x - max))}. Used by attention and SoftmaxAggregation.
+     */
     public static Tensor scatter_softmax(Tensor src, Tensor index, long dimSize) {
-        // 1. 数值稳定性: x - max(x)
-        Tensor maxVal = scatter(src, index, dimSize, "max"); // [N, F]
+        index = asLongIndex(index);
+        // Numerically stable: x - max(x)
+        // For max intermediate we need raw max, not zero-filled isolated — use internal path.
+        long[] srcShape = src.shape();
+        long[] outShape = new long[srcShape.length];
+        outShape[0] = dimSize;
+        System.arraycopy(srcShape, 1, outShape, 1, srcShape.length - 1);
 
-        // 将 maxVal 映射回边维度 [E, F]
+        Tensor maxVal = torch.full(outShape, new Scalar(-1.0e38), src.options());
+        maxVal = maxVal.index_reduce_(0, index, src, "amax", false);
+        // Isolated stay at -1e38; they are never index_select'ed by real edges.
+
         Tensor maxExpanded = maxVal.index_select(0, index);
-
-        // 2. 计算 exp
         Tensor num = src.sub(maxExpanded).exp();
-
-        // 3. 计算分母 sum
-        Tensor den = scatter(num, index, dimSize, "sum"); // [N, F]
+        Tensor den = scatter(num, index, dimSize, "sum");
         Tensor denExpanded = den.index_select(0, index);
-
-        // 4. 除法 (加 eps 防止除0)
         return num.div(denExpanded.add(new Scalar(1e-12)));
     }
-    
 
-    // 计算节点的度 (Degree)
+    /** Node degree from edge endpoint index [E] → [dimSize]. */
     public static Tensor compute_degree(Tensor index, long dimSize) {
-        Tensor ones = torch.ones(new long[]{index.size(0)}, index.options().dtype(new ScalarTypeOptional(torch.ScalarType.Float)));
-        Tensor out = torch.zeros(new long[]{dimSize}, index.options().dtype(new ScalarTypeOptional(torch.ScalarType.Float)));
+        index = asLongIndex(index);
+        Tensor ones = torch.ones(
+                new long[]{index.size(0)},
+                index.options().dtype(new ScalarTypeOptional(torch.ScalarType.Float)));
+        Tensor out = torch.zeros(
+                new long[]{dimSize},
+                index.options().dtype(new ScalarTypeOptional(torch.ScalarType.Float)));
         return out.index_add_(0, index, ones);
     }
 
-    // 请添加到 org.gnn.framework.utils.org.bytedeco.pytorch.geometric.utils.AggrUtils 类中
-
     /**
-     * 将稀疏的邻居特征转换为稠密 Batch 格式，便于进行 Median/Quantile/LSTM 计算。
+     * Pack sparse neighbor features into a dense batch for Median/Quantile/LSTM aggregators.
      *
-     * @param x       特征 [E, F]
-     * @param index   索引 [E]
-     * @param dimSize 目标节点数 N
-     * @param fillValue 填充值 (通常是 0 或 NaN)
-     * @return Tensor[] {dense_x, mask, lengths}
-     * dense_x: [N, MaxDeg, F]
-     * mask:    [N, MaxDeg] (Boolean, True表示有效数据)
-     * lengths: [N] (每个节点的度)
+     * @return {dense_x [N, MaxDeg, F], mask [N, MaxDeg], lengths [N]}
      */
     public static Tensor[] to_dense_batch(Tensor x, Tensor index, long dimSize, float fillValue) {
         long numEdges = x.size(0);
         long numFeatures = x.size(1);
+        index = asLongIndex(index);
 
-        // 1. 计算度数 (Lengths)
-        Tensor lengths = compute_degree(index, dimSize).to(torch.ScalarType.Long); // [N]
+        Tensor lengths = compute_degree(index, dimSize).to(torch.ScalarType.Long);
         long maxDeg = lengths.max().item().toLong();
+        if (maxDeg == 0) {
+            Tensor dense = torch.full(new long[]{dimSize, 1, numFeatures}, new Scalar(fillValue), x.options());
+            Tensor mask = torch.zeros(new long[]{dimSize, 1},
+                    new TensorOptions().dtype(new ScalarTypeOptional(torch.ScalarType.Bool)));
+            return new Tensor[]{dense, mask, lengths};
+        }
 
-        // 2. 排序 Index 以确保分组连续
-        // 这一步对于生成 inner_index 至关重要
         T_TensorTensor_T sortRet = torch.sort(index);
-        Tensor perm = sortRet.get1(); //indices
-        Tensor sortedIndex = sortRet.get0(); //values
+        Tensor perm = sortRet.get1();
+        Tensor sortedIndex = sortRet.get0();
         Tensor sortedX = x.index_select(0, perm);
 
-        // 3. 生成 Inner Index (组内索引 0, 1, 2...)
-        // 算法：arange(E) - cumsum(counts)[sorted_index] + counts[sorted_index] - 这里的逻辑比较复杂
-        // 我们采用更稳健的 searchsorted 方法:
-        // inner_idx = arange(E) - starts[sorted_index]
-
-        // 3.1 找到每组的起始位置
-        // Cumulative sum of lengths gives end positions. Shift to get start.
         Tensor endPos = torch.cumsum(lengths, 0);
-        Tensor startPos = torch.cat(new TensorVector(torch.zeros(new long[]{1}, lengths.options()), endPos.slice(0, new LongOptional(0), new LongOptional(dimSize - 1), 1l)), 0);
+        Tensor startPos = torch.cat(new TensorVector(
+                torch.zeros(new long[]{1}, lengths.options()),
+                endPos.slice(0, new LongOptional(0), new LongOptional(dimSize - 1), 1L)), 0);
 
-        // 3.2 扩展 Start Position 到每条边
         Tensor edgeStartPos = startPos.index_select(0, sortedIndex);
-
-        // 3.3 计算组内偏移量
         Tensor range = torch.arange(new Scalar(numEdges), index.options());
-        Tensor innerIdx = range.sub(edgeStartPos); // [E]
+        Tensor innerIdx = range.sub(edgeStartPos);
 
-        // 4. org.bytedeco.pytorch.geometric.utils.Scatter 填充 Dense Tensor
-        // 目标: dense[sortedIndex, innerIdx, :] = sortedX
-        // 由于 LibTorch 没有 scatter_nd (或者是高级索引比较麻烦)，我们展平前两维进行 scatter
-
-        // Init with fillValue
         Tensor dense = torch.full(new long[]{dimSize, maxDeg, numFeatures}, new Scalar(fillValue), x.options());
-
-        // 计算 Flatten Index: idx * maxDeg + inner
-        Tensor flatIdx = sortedIndex.mul(new Scalar(maxDeg)).add(innerIdx); // [E]
-
-        // Flatten dense to [N*MaxDeg, F]
+        Tensor flatIdx = sortedIndex.mul(new Scalar(maxDeg)).add(innerIdx);
         Tensor denseFlat = dense.view(dimSize * maxDeg, numFeatures);
-
-        // org.bytedeco.pytorch.geometric.utils.Scatter: denseFlat[flatIdx] = sortedX
-        // index_copy_ 或 index_add_ (如果初始为0)
-        // 这里用 index_copy_ 确保覆盖
         denseFlat.index_copy_(0, flatIdx, sortedX);
-
-        // Reshape back
         dense = denseFlat.view(dimSize, maxDeg, numFeatures);
 
-        // 5. 生成 Mask
-        // mask[i, j] = j < lengths[i]
-        Tensor degRange = torch.arange(new Scalar(maxDeg), lengths.options()).unsqueeze(0); // [1, MaxDeg]
-        Tensor mask = degRange.lt(lengths.unsqueeze(1)); // [N, MaxDeg]
-
+        Tensor degRange = torch.arange(new Scalar(maxDeg), lengths.options()).unsqueeze(0);
+        Tensor mask = degRange.lt(lengths.unsqueeze(1));
         return new Tensor[]{dense, mask, lengths};
     }
-}
 
+    private static String shapeStr(Tensor t) {
+        long[] s = t.shape();
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < s.length; i++) {
+            if (i > 0) sb.append(',');
+            sb.append(s[i]);
+        }
+        return sb.append(']').toString();
+    }
+}

@@ -211,7 +211,4 @@ public class RRef extends RRefInterface {
   // 2, RPC module graceful shutdown calls it on all UserRRefs tracked
   //    in the RRefContext.
   public native void tryDel();
-
-  // javacpp: made public for JNI virtualization
-  public native @ByVal RRefForkData fork();
 }

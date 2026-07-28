@@ -57,6 +57,4 @@ public class UserRRef extends RRef {
   // https://github.com/pytorch/pytorch/blob/9116f02bebf3a5260feef5732d36c54ecb3b4033/c10/util/intrusive_ptr.h#L204
   // This is called on destructing the wrapping intrusive_ptr_target instance
   // and its data members.
-  // javacpp: made public for JNI virtualization
-  public native @ByVal RRefForkData fork();
 }

@@ -1,0 +1,10 @@
+{
+  "model_type": "gpt2",
+  "java_class": "org.bytedeco.pytorch.utils.transformers.CausalLM",
+  "norm": "layernorm",
+  "mlp": "gelu",
+  "attention": "mha_fused_qkv",
+  "position": "learned",
+  "qkv_bias": true,
+  "notes": "Uses CausalLM teaching backbone; Conv1D weights need transpose via weight map"
+}

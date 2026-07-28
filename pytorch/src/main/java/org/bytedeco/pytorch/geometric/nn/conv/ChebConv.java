@@ -3,17 +3,11 @@ import org.bytedeco.pytorch.nn.modules.*;
 
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.global.torch;
-import org.bytedeco.pytorch.geometric.nn.Parameter;
+import org.bytedeco.pytorch.nn.Parameter;
 
 import java.util.Arrays;
 import java.util.List;
-import org.bytedeco.pytorch.*;
 
-import org.bytedeco.pytorch.*;
-import org.bytedeco.pytorch.global.torch;
-import org.bytedeco.pytorch.geometric.nn.Parameter; // 确保导入自定义的 Parameter 类
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * 最终适配版 ChebConv：完全匹配你的 JavaCPP/PyTorch API 环境

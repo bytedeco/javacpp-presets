@@ -1,38 +1,115 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
-import org.bytedeco.pytorch.nn.modules.*;
 
-import org.bytedeco.pytorch.*;
-//import org.gnn.framework.nn.org.bytedeco.pytorch.geometric.nn.conv.MessagePassing;
+import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.geometric.utils.GraphUtils;
+import org.bytedeco.pytorch.global.torch;
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
+import org.bytedeco.pytorch.nn.options.LinearOptions;
 
+/**
+ * Simple Graph Convolution (Wu et al., ICML 2019).
+ *
+ * <pre>
+ *   S = D̃^{-1/2} Ã D̃^{-1/2}
+ *   Y = S^K X Θ
+ * </pre>
+ * K-hop linear propagation then a single linear transform (no intermediate nonlinearities).
+ */
 public class SGConv extends MessagePassing {
-    private LinearImpl lin;
-    private int K;
+
+    private final LinearImpl lin;
+    private final int K;
+    private final boolean addSelfLoops;
+    private final boolean cached;
+    private Tensor cachedEdgeIndex;
+    private Tensor cachedNorm;
+    private final long inChannels;
+    private final long outChannels;
 
     public SGConv(long inChannels, long outChannels, int K) {
-        super("add");
+        this(inChannels, outChannels, K, true, false);
+    }
+
+    public SGConv(long inChannels, long outChannels, int K, boolean addSelfLoops, boolean cached) {
+        super("sum");
+        if (inChannels <= 0 || outChannels <= 0 || K < 1) {
+            throw new IllegalArgumentException("in/out > 0 and K >= 1 required");
+        }
+        this.inChannels = inChannels;
+        this.outChannels = outChannels;
         this.K = K;
-        this.lin = new LinearImpl(inChannels, outChannels);
-        register_module("lin", lin);
+        this.addSelfLoops = addSelfLoops;
+        this.cached = cached;
+        LinearOptions opt = new LinearOptions(inChannels, outChannels);
+        this.lin = register_module("lin", new LinearImpl(opt));
     }
 
     @Override
     public Tensor forward(Tensor x, Tensor edge_index) {
-        Tensor xRun = x;
-        // 连续传播 K 次，中间没有非线性变换
-        for (int i = 0; i < K; i++) {
-            xRun = propagate(edge_index, xRun);
+        return forward(x, edge_index, (Tensor) null);
+    }
+
+    @Override
+    public Tensor forward(Tensor x, Tensor edge_index, Tensor edge_weight) {
+        if (x == null || edge_index == null) {
+            throw new NullPointerException("x and edge_index must not be null");
         }
-        // 最后只做一次线性变换
+        if (x.size(1) != inChannels) {
+            throw new IllegalArgumentException(
+                    "x.size(1)=" + x.size(1) + " != inChannels=" + inChannels);
+        }
+
+        long N = x.size(0);
+        Tensor ei;
+        Tensor norm;
+
+        if (cached && cachedEdgeIndex != null && cachedNorm != null) {
+            ei = cachedEdgeIndex;
+            norm = cachedNorm;
+        } else {
+            torch.ScalarType dtype = x.scalar_type().intern();
+            Tensor[] normed = GraphUtils.gcn_norm(edge_index, edge_weight, N, addSelfLoops, dtype);
+            ei = normed[0];
+            norm = normed[1];
+            if (cached) {
+                cachedEdgeIndex = ei;
+                cachedNorm = norm;
+            }
+        }
+
+        Tensor xRun = x;
+        for (int i = 0; i < K; i++) {
+            xRun = propagate(ei, xRun, norm);
+        }
         return lin.forward(xRun);
     }
-    /**
-     * 必须匹配基类签名：(x_j, x_i, edge_index, edge_attr)
-     * 哪怕 SAGE 只需要 x_j，参数也必须写全！
-     */
+
     @Override
     public Tensor message(Tensor x_j, Tensor x_i, Tensor edge_index, Tensor edge_attr, long numNodes) {
-        // GraphSAGE 的 message 就是邻居特征本身
-        // 如果以后要支持带权重的 SAGE，可以在这里处理 edge_attr
+        if (edge_attr != null) {
+            if (edge_attr.dim() == 1) {
+                return x_j.mul(edge_attr.view(new long[]{-1, 1}));
+            }
+            return x_j.mul(edge_attr);
+        }
         return x_j;
+    }
+
+    /** Drop cached Ã_norm (call after graph structure changes). */
+    public void clearCache() {
+        cachedEdgeIndex = null;
+        cachedNorm = null;
+    }
+
+    public LinearImpl getLin() {
+        return lin;
+    }
+
+    public int getK() {
+        return K;
+    }
+
+    public long getOutChannels() {
+        return outChannels;
     }
 }

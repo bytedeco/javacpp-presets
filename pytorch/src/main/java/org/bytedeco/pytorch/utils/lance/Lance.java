@@ -27,7 +27,8 @@ import org.apache.arrow.vector.ipc.ArrowReader;
 import org.apache.arrow.vector.types.pojo.Field;
 import org.apache.arrow.vector.types.pojo.Schema;
 import org.bytedeco.pytorch.data.arrow.ArrowBridge;
-import org.bytedeco.pytorch.data.dataframe.DataFrame;
+import org.bytedeco.pytorch.dataframe.DataFrame;
+import org.bytedeco.pytorch.dataframe.lance.LanceDataset;
 import org.lance.Dataset;
 import org.lance.Tag;
 import org.lance.Version;
@@ -75,7 +76,7 @@ import java.util.stream.Collectors;
  * }</pre>
  *
  * <p>Also interoperates with the pure-Java training dataset under
- * {@link org.bytedeco.pytorch.data.dataframe.lance.LanceDataset} (different on-disk layout —
+ * {@link LanceDataset} (different on-disk layout —
  * use {@link #isOfficialLance(String)} / {@link #isPureJavaLance(String)} to detect).
  */
 public final class Lance implements Closeable {
@@ -727,13 +728,13 @@ public final class Lance implements Closeable {
      */
     public static DataFrame readAuto(String path) throws Exception {
         if (isPureJavaLance(path)) {
-            return org.bytedeco.pytorch.data.dataframe.lance.LanceDataset.read(path);
+            return LanceDataset.read(path);
         }
         try {
             return readDataFrame(path);
         } catch (Throwable officialEx) {
             try {
-                return org.bytedeco.pytorch.data.dataframe.lance.LanceDataset.read(path);
+                return LanceDataset.read(path);
             } catch (Throwable pureEx) {
                 officialEx.addSuppressed(pureEx);
                 throw officialEx;
@@ -743,7 +744,7 @@ public final class Lance implements Closeable {
 
     public static DataFrame readAuto(String path, LanceReadOptions opts) throws Exception {
         if (isPureJavaLance(path)) {
-            return org.bytedeco.pytorch.data.dataframe.lance.LanceDataset.read(path);
+            return LanceDataset.read(path);
         }
         return readDataFrame(path, opts);
     }

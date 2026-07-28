@@ -68,8 +68,8 @@ public class HeteroLayerNorm extends org.bytedeco.pytorch.nn.Module {
             // 获取对应的 Batch 索引（如果存在）
             Tensor batch = (batchDict != null) ? batchDict.get(nodeType) : null;
 
-            // 调用我们之前实现的 LayerNorm
-            Tensor out = lns.get(nodeType).forward2(x);
+            // Per-type LayerNorm over the feature dim (batch unused for pure LayerNorm)
+            Tensor out = lns.get(nodeType).forward(x);
             outDict.put(nodeType, out);
         }
 

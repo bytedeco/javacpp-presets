@@ -1,0 +1,8 @@
+{
+  "strip_prefixes": [],
+  "rules": [
+    {"hf": "^(.*\\.c_attn\\.weight)$", "module": "$1", "regex": true, "transform": "transpose"},
+    {"hf": "^(.*\\.c_proj\\.weight)$", "module": "$1", "regex": true, "transform": "transpose"},
+    {"hf": "^(.*\\.c_fc\\.weight)$", "module": "$1", "regex": true, "transform": "transpose"}
+  ]
+}

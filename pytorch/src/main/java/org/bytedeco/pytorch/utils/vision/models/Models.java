@@ -56,9 +56,16 @@ public final class Models {
         return new long[]{v, v};
     }
 
+    /**
+     * Conv2d with "same" spatial padding {@code k//2} (ResNet/VGG/MobileNet convention).
+     * Without padding, 3×3 kernels shrink H/W and residual adds in {@link BasicBlock} break.
+     * Padding is set via the ExpandingArray variant: {@code opt.padding().put(LongPointer)}.
+     */
     private static Conv2dImpl conv(long in, long out, long k, long stride, boolean bias) {
         Conv2dOptions opt = new Conv2dOptions(in, out, exp2ptr(k));
         opt.stride(exp2ptr(stride));
+        long pad = k / 2; // same-pad for odd kernels (1→0, 3→1, 7→3)
+        opt.padding().put(exp2ptr(pad));
         opt.bias(bias);
         return new Conv2dImpl(opt);
     }

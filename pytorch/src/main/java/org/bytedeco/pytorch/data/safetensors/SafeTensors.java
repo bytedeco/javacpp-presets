@@ -1,4 +1,5 @@
 package org.bytedeco.pytorch.data.safetensors;
+import org.bytedeco.pytorch.optim.options.*;
 import org.bytedeco.pytorch.nn.modules.*;
 import org.bytedeco.pytorch.nn.modules.container.*;
 

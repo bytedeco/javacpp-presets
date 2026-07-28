@@ -4,7 +4,7 @@ import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.global.torch;
-import org.bytedeco.pytorch.geometric.nn.Parameter;
+import org.bytedeco.pytorch.nn.Parameter;
 /**
  * Approx L2 KNN (via Random Projection)
  * 将高维数据投影到低维，然后在低维空间做 Exact Search。

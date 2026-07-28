@@ -3,7 +3,7 @@ import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.Scalar;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.global.torch;
-import org.bytedeco.pytorch.geometric.nn.Parameter;
+import org.bytedeco.pytorch.nn.Parameter;
 public class VGAE extends GAE {
     // Encoder 必须返回 mu 和 logstd
     // 我们假设 Encoder 输出 2*Dim，分割为 mu, logstd

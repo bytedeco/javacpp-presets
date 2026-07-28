@@ -79,6 +79,10 @@ import org.bytedeco.openblas.presets.openblas;
                 "aoti_model_container_runner_xpu_java.h",
                 "torch/csrc/inductor/aoti_package/model_package_loader.h",
                 "torch/csrc/distributed/c10d/ProcessGroupGloo.hpp",
+                // C++ debug wrapper around a Backend (Gloo coordination + checks).
+                // Java name: ProcessGroupNativeWrapper (avoids clash with hand-written
+                // org.bytedeco.pytorch.distributed.ProcessGroupWrapper).
+                "torch/csrc/distributed/c10d/ProcessGroupWrapper.hpp",
                 "torch/csrc/distributed/c10d/PrefixStore.hpp",
                 "torch/csrc/distributed/c10d/FileStore.hpp",
                 "torch/csrc/distributed/c10d/TCPStore.hpp",
@@ -94,6 +98,11 @@ import org.bytedeco.openblas.presets.openblas;
 
                 "datasets.h",
                 "pytorch_adapters.h",
+                // Header-only Python-parity optim / LR schedulers / samplers
+                // (must be in @Platform include so jnitorch.cpp sees the types).
+                "python_optim_java.h",
+                "python_lr_scheduler_java.h",
+                "python_samplers_java.h",
 
 		        // Fix link error on Windows:
 		        "gloo/common/logging.cc"
@@ -1281,6 +1290,13 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::unordered_set<c10::DeviceType>").pointerTypes("DeviceTypeSet").define())
             .put(new Info("std::unordered_set<int16_t>", "std::unordered_set<torch::distributed::rpc::worker_id_t>").pointerTypes("ShortSet").define())
             .put(new Info("std::set<torch::profiler::impl::ActivityType>").pointerTypes("ActivityTypeSet").define())
+            // enableProfiler optional scopes filter
+            .put(new Info("std::unordered_set<at::RecordScope>").pointerTypes("RecordScopeSet").define())
+            // KinetoEvent has no usable default ctor for vector adapters — skip vector + events().
+            .put(new Info("std::vector<torch::autograd::profiler::KinetoEvent>",
+                          "torch::autograd::profiler::ProfilerResult::events").skip())
+            // Skip KinetoEvent class allocation (no default ctor in this libtorch).
+            .put(new Info("torch::autograd::profiler::KinetoEvent").skip())
             // .put(new Info("std::unordered_map<int64_t,std::shared_ptr<torch::distributed::autograd::RecvRpcBackward> >").pointerTypes("LongRecvRpcBackwardMap").define()) // Not on windows
             // .put(new Info("std::unordered_map<int64_t,std::shared_ptr<torch::distributed::autograd::SendRpcBackward> >").pointerTypes("LongSendRpcBackwardMap").define())
         ;
@@ -1500,10 +1516,14 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             //new PointerInfo("torch::distributed::rpc::Message"), // Not on Windows
             new PointerInfo("c10d::ProcessGroupGloo::AsyncWork"),
             new PointerInfo("c10d::ProcessGroupGloo::Options"),
-            new PointerInfo("c10d::ProcessGroupGloo")
+            new PointerInfo("c10d::ProcessGroupGloo"),
+            // C++ c10d::ProcessGroupWrapper → Java ProcessGroupNativeWrapper
+            // (hand-written high-level ProcessGroupWrapper already occupies that name).
+            new PointerInfo("c10d::ProcessGroupWrapper").javaBaseName("ProcessGroupNativeWrapper")
         }) {
         pi.makeIntrusive(infoMap);
         }
+        infoMap.put(new Info("c10d::ProcessGroupWrapper").pointerTypes("ProcessGroupNativeWrapper"));
         infoMap.put(new Info("c10::ivalue::Object").pointerTypes("Obj"));
         infoMap.put(new Info("torch::distributed::rpc::JitFuture").pointerTypes("Future"));
         infoMap.put(new Info("c10::SymNodeImpl").pointerTypes("SymNode"));
@@ -1744,6 +1764,20 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info(
                 "torch::data::samplers::RandomSampler"
             ).pointerTypes("RandomSampler"))
+            // Python-parity samplers from python_samplers_java.h (extend Sampler<>)
+            .put(new Info(
+                "torch::data::samplers::SubsetRandomSampler"
+            ).pointerTypes("SubsetRandomSampler"))
+            .put(new Info(
+                "torch::data::samplers::WeightedRandomSampler"
+            ).pointerTypes("WeightedRandomSampler"))
+            .put(new Info(
+                "torch::data::samplers::BatchSampler"
+            ).pointerTypes("BatchSampler"))
+            .put(new Info(
+                "std::shared_ptr<torch::data::samplers::Sampler<std::vector<size_t> > >",
+                "std::shared_ptr<torch::data::samplers::Sampler<> >"
+            ).annotations("@SharedPtr").pointerTypes("Sampler"))
             .put(new Info(
                 "torch::data::samplers::DistributedSampler<std::vector<size_t> >",
                 "torch::data::samplers::DistributedSampler<>"
@@ -2856,9 +2890,23 @@ infoMap.put(new Info("torch::nn::Module::forward").javaText(
             new PointerInfo("c10::impl::PyObject_TorchDispatchMode"),
             new PointerInfo("c10::LazyValue<std::string>", "const c10::LazyValue<std::string>").javaBaseName("Backtrace"),
             new PointerInfo("c10::SafePyObjectT<c10::impl::TorchDispatchModeKey>").javaBaseName("PyObject_TorchDispatchMode")
+            // Do NOT makeShared Result: only forward-declared in profiler_kineto.h
+            // (full type lives in collection.h and pulls a huge dependency graph).
         }) {
             pi.makeShared(infoMap);
         }
+        // ProfilerResult / KinetoEvent: keep save()+simple accessors; skip Result-heavy APIs.
+        infoMap.put(new Info(
+            "torch::autograd::profiler::ProfilerResult::ProfilerResult(uint64_t, std::vector<torch::autograd::profiler::KinetoEvent>, std::unique_ptr<torch::profiler::impl::kineto::ActivityTraceWrapper>&&, std::vector<torch::autograd::profiler::experimental_event_t>&&)",
+            "torch::autograd::profiler::ProfilerResult::traceActivities",
+            "torch::autograd::profiler::ProfilerResult::event_tree",
+            "torch::autograd::profiler::KinetoEvent::KinetoEvent",
+            "std::vector<std::shared_ptr<torch::profiler::impl::Result> >",
+            "std::vector<torch::autograd::profiler::experimental_event_t>",
+            "std::shared_ptr<torch::profiler::impl::Result>",
+            "std::shared_ptr<const torch::profiler::impl::Result>",
+            "torch::profiler::impl::Result"
+        ).skip());
         // Disambiguate between candidate functions
         infoMap.put(new Info("torch::dynamo::autograd::CompiledNodeArgs::collect(torch::autograd::Node::Node*)") // Really collect(const std::shared_ptr<torch::autograd::Node>&)
                 .javaText("public native void collect(@Cast({\"\", \"const std::shared_ptr<torch::autograd::Node>\"}) @SharedPtr Node t);"))
@@ -2866,7 +2914,16 @@ infoMap.put(new Info("torch::nn::Module::forward").javaText(
 
 
         //// Classes handled with @UniquePtr
-        for (String opt: new String[] { "Adagrad", "Adam", "AdamW", "LBFGS", "RMSprop", "SGD" }) {
+        // LibTorch-native + Python-parity optimizers from python_optim_java.h
+        
+        // Skip LambdaLR/LRLambda for now: JavaCPP virtualize of header-only abstract
+        // LRLambda does not emit a usable JNI peer (UniquePtr make_unique fails).
+        // MultiplicativeLR / other concrete schedulers cover common cases.
+        infoMap.put(new Info("torch::optim::LRLambda", "torch::optim::LambdaLR").skip());
+
+        for (String opt: new String[] {
+                "Adagrad", "Adam", "AdamW", "LBFGS", "RMSprop", "SGD",
+                "Adadelta", "Adamax", "ASGD", "NAdam", "RAdam", "Rprop" }) {
             infoMap
                 .put(new Info("torch::optim::" + opt + "Options", "torch::optim::" + opt + "ParamState")) // Help qualification
                 .put(new Info("torch::optim::OptimizerCloneableOptions<torch::optim::" + opt + "Options>").pointerTypes("OptimizerCloneable" + opt + "Options"))
@@ -2891,6 +2948,8 @@ infoMap.put(new Info("torch::nn::Module::forward").javaText(
             new PointerInfo("caffe2::serialize::IStreamAdapter"),
             new PointerInfo("torch::autograd::FunctionPreHook").virtualize(),
             new PointerInfo("torch::autograd::FunctionPostHook").virtualize(),
+            // disableProfiler() returns unique_ptr<ProfilerResult>
+            new PointerInfo("torch::autograd::profiler::ProfilerResult"),
             // Other classes passed as unique ptr are abstract, so not instantiated from Java:
             // ReadAdapterInterface, PostAccumulateGradHook, FuncTorchTLSBase, AutogradMetaInterface,
             // GeneratorImpl, OpRegistrationListener, AttributeValue
@@ -2929,9 +2988,11 @@ infoMap.put(new Info("torch::nn::Module::forward").javaText(
         infoMap.put(new Info("c10::MaybeOwnedTraitsGenericImpl<std::shared_ptr<at::Tensor> >::assignBorrow",
             "c10::MaybeOwnedTraitsGenericImpl<std::shared_ptr<at::Tensor> >::destroyBorrow",
             "c10::InitEventSampledHandlers", "c10::GetEventSampledHandler", "c10::EventSampledHandler",
-            "torch::autograd::profiler::ProfilerResult", "torch::profiler::impl::ProfilerEventStub",
-            "torch::autograd::profiler::enableProfiler", "torch::autograd::profiler::enableProfilerWithEventPostProcess",
-            "torch::profiler::impl::ProfilerStateBase", "torch::profiler::impl::ProfilerStubs", "torch::autograd::profiler::KinetoEvent",
+            // ProfilerResult / enableProfiler / KinetoEvent are now mapped (Kineto chrome-trace path).
+            // enableProfilerWithEventPostProcess still skipped (std::function post_process_t callback).
+            "torch::profiler::impl::ProfilerEventStub",
+            "torch::autograd::profiler::enableProfilerWithEventPostProcess",
+            "torch::profiler::impl::ProfilerStateBase", "torch::profiler::impl::ProfilerStubs",
             "at::RecordFunction::before",
             "at::Tensor::wrap_tensor_impl(c10::TensorImpl*)",
             "c10::impl::list_element_to_const_ref",
@@ -3167,8 +3228,56 @@ infoMap.put(new Info("torch::nn::Module::forward").javaText(
                .put(new Info("torch::jit::String").pointerTypes("JitString"))
                .put(new Info("torch::autograd::Error").pointerTypes("AutogradError")) // Clash with c10::Error or Java Error
                .put(new Info("c10d::Backend").pointerTypes("Backend").purify())
+               // C++ c10d::ProcessGroupWrapper — avoid clash with hand-written Java ProcessGroupWrapper
+               .put(new Info("c10d::ProcessGroupWrapper").pointerTypes("ProcessGroupNativeWrapper").purify())
                .put(new Info("torch::dynamo::autograd::TensorArg").pointerTypes("DynamoTensorArg")) // Clash with at::TensorArg
         ;
+
+        // ProcessGroupWrapper Options methods: bare "Options" collides with GeneratorImpl
+        // adapter resolution — force Backend.Options like Backend itself.
+        infoMap
+            .put(new Info("c10d::ProcessGroupWrapper::getBackendOptions").javaText(
+                "public native @IntrusivePtr(\"c10d::Backend::Options\") @Cast({\"\", \"c10::intrusive_ptr<c10d::Backend::Options>&\"}) Backend.Options getBackendOptions();\n"))
+            .put(new Info("c10d::ProcessGroupWrapper::split").javaText(
+                "public native @IntrusivePtr(\"c10d::Backend\") @Cast({\"\", \"c10::intrusive_ptr<c10d::Backend>&\"}) Backend split(\n" +
+                "      @IntrusivePtr(\"c10d::Store\") @Cast({\"\", \"c10::intrusive_ptr<c10d::Store>&\"}) Store store,\n" +
+                "      @Cast(\"const std::vector<int>*\") @ByRef IntVector ranks,\n" +
+                "      @IntrusivePtr(\"c10d::Backend::Options\") @Cast({\"\", \"c10::intrusive_ptr<c10d::Backend::Options>&\"}) Backend.Options opts);\n"))
+            .put(new Info("c10d::ProcessGroupWrapper::merge").javaText(
+                "public native @IntrusivePtr(\"c10d::Backend\") @Cast({\"\", \"c10::intrusive_ptr<c10d::Backend>&\"}) Backend merge(\n" +
+                "      @IntrusivePtr(\"c10d::Store\") @Cast({\"\", \"c10::intrusive_ptr<c10d::Store>&\"}) Store store,\n" +
+                "      @IntrusivePtr(\"c10d::Backend::Options\") @Cast({\"\", \"c10::intrusive_ptr<c10d::Backend::Options>&\"}) Backend.Options opts,\n" +
+                "      int rank, int size);\n"))
+            .put(new Info("c10d::ProcessGroupWrapper::shrink").javaText(
+                "public native @IntrusivePtr(\"c10d::Backend\") @Cast({\"\", \"c10::intrusive_ptr<c10d::Backend>&\"}) Backend shrink(\n" +
+                "      @Cast(\"const std::vector<int64_t>*\") @ByRef LongVector ranks_to_exclude,\n" +
+                "      int shrink_flags/*=0*/,\n" +
+                "      @IntrusivePtr(\"c10d::Backend::Options\") @Cast({\"\", \"c10::intrusive_ptr<c10d::Backend::Options>&\"}) Backend.Options opts_override/*=nullptr*/);\n" +
+                "public native @IntrusivePtr(\"c10d::Backend\") @Cast({\"\", \"c10::intrusive_ptr<c10d::Backend>&\"}) Backend shrink(\n" +
+                "      @Cast(\"const std::vector<int64_t>*\") @ByRef LongVector ranks_to_exclude);\n"))
+        ;
+
+        // Kineto profiler: keep enableProfiler / disableProfiler / ProfilerResult::save usable.
+        // Skip hard-to-map KinetoEvent accessors (variant shape, nested ArrayRef, maps).
+        infoMap.put(new Info(
+            "torch::autograd::profiler::KinetoEvent::shapes",
+            "torch::autograd::profiler::KinetoEvent::dtypes",
+            "torch::autograd::profiler::KinetoEvent::concreteInputs",
+            "torch::autograd::profiler::KinetoEvent::kwinputs",
+            "torch::autograd::profiler::KinetoEvent::stack",
+            "torch::autograd::profiler::KinetoEvent::moduleHierarchy",
+            "torch::autograd::profiler::KinetoEvent::getPerfEventCounters",
+            "torch::autograd::profiler::KinetoEvent::extraMeta",
+            "torch::autograd::profiler::KinetoEvent::structuredInputShapes",
+            "torch::autograd::profiler::KinetoEvent::structuredInputStrides",
+            // std::function hook — same pattern as ProcessGroupNCCL
+            "c10d::ProcessGroupWrapper::registerOnCompletionHook",
+            // ActivityTraceWrapper stays opaque; save goes through ProfilerResult
+            "torch::profiler::impl::kineto::ActivityTraceWrapper::ActivityTraceWrapper",
+            "torch::profiler::impl::kineto::ActivityTraceWrapper::save",
+            "torch::profiler::impl::kineto::ActivityTraceWrapper::get",
+            "torch::profiler::impl::kineto::ActivityTraceWrapper::operator bool"
+        ).skip());
 
 
         //// Instantiation of misc class templates.
@@ -3683,10 +3792,18 @@ infoMap.put(new Info("torch::nn::Module::forward").javaText(
                 "public native @StdString @ByRef @NoException(true) BytePointer approximate();\n"
                 + "public native @ByRef @NoException(true) GELUOptions approximate(@StdString BytePointer setter);\n"
                 + "public native @ByRef @NoException(true) GELUOptions approximate(@StdString String setter);"))
-            .put(new Info("torch::optim::AdamOptions::betas", "torch::optim::AdamWOptions::betas").javaText(
+            .put(new Info("torch::optim::AdamOptions::betas", "torch::optim::AdamWOptions::betas",
+                    "torch::optim::AdamaxOptions::betas", "torch::optim::NAdamOptions::betas",
+                    "torch::optim::RAdamOptions::betas").javaText(
                 "public native @Cast(\"std::tuple<double,double>*\") @ByRef @NoException DoublePointer betas();"))
+            .put(new Info("torch::optim::RpropOptions::etas").javaText(
+                "public native @Cast(\"std::tuple<double,double>*\") @ByRef @NoException DoublePointer etas();"))
+            .put(new Info("torch::optim::RpropOptions::step_sizes").javaText(
+                "public native @Cast(\"std::tuple<double,double>*\") @ByRef @NoException DoublePointer step_sizes();"))
             .put(new Info("torch::optim::Adagrad::step", "torch::optim::Adam::step", "torch::optim::AdamW::step",
-                "torch::optim::LBFG::step", "torch::optim::RMSprop::step", "torch::optim::SGD::step").javaText(
+                "torch::optim::LBFG::step", "torch::optim::RMSprop::step", "torch::optim::SGD::step",
+                "torch::optim::Adadelta::step", "torch::optim::Adamax::step", "torch::optim::ASGD::step",
+                "torch::optim::NAdam::step", "torch::optim::RAdam::step", "torch::optim::Rprop::step").javaText(
                 "public native @ByVal Tensor step(@ByVal(nullValue = \"torch::optim::Optimizer::LossClosure(nullptr)\") LossClosure closure);\n"
                 + "public native @ByVal Tensor step();\n"));
 

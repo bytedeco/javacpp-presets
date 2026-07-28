@@ -45,11 +45,6 @@ public class Pair extends Pointer {
 
   public native @Cast("bool") boolean isConnected();
 
-  // Returns the global rank and address of the peer process this pair connects
-  // to
-  public native int getPeerRank();
-  public native @StdString BytePointer peerDescription();
-
   // Send from the specified buffer to remote side of pair.
   public native void send(
         UnboundBuffer buf,

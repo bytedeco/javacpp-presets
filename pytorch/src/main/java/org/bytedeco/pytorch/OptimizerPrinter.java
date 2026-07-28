@@ -1,4 +1,5 @@
 package org.bytedeco.pytorch;
+import org.bytedeco.pytorch.optim.options.*;
 import org.bytedeco.pytorch.nn.*;
 import org.bytedeco.pytorch.optim.*;
 

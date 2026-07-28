@@ -1,105 +1,149 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
-import org.bytedeco.pytorch.nn.modules.*;
 
-import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.Scalar;
+import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.geometric.utils.GraphUtils;
 import org.bytedeco.pytorch.global.torch;
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 
 /**
- * 严格使用 LinearImpl 实现 torch_geometric.nn.conv.GCN2Conv
- * 解决了深层图卷积网络中的过平滑问题。
+ * GCNII / GCN2Conv (Chen et al., ICML 2020) — deep GCN with initial residual
+ * and identity mapping.
+ *
+ * <pre>
+ *   X' = ((1-α) Ã X + α X^{(0)}) · ((1-β) I + β W)
+ * </pre>
+ * When {@code sharedWeights=false} (GCNII*), separate transforms are applied
+ * to the aggregated path and the initial residual path.
+ *
+ * <p>Primary API: {@link #forward(Tensor, Tensor, Tensor, Tensor)} with
+ * {@code (x, x0, edge_index, edge_weight)}. The 2-arg form uses {@code x0 = x}.
  */
 public class GCN2Conv extends MessagePassing {
-    private LinearImpl lin;         // 权重矩阵 W
-    private LinearImpl linRes;      // 针对 GCNII* 非共享权重的 W_2
-    private float alpha;            // 初始残差权重
-    private float beta;             // 恒等映射权重，由 theta/layer 计算得出
-    private boolean sharedWeights;
-    private boolean normalize;
+
+    private final LinearImpl lin;
+    private final LinearImpl linRes;
+    private final float alpha;
+    private final float beta;
+    private final boolean sharedWeights;
+    private final boolean normalize;
+    private final boolean addSelfLoops;
+    private final long channels;
 
     public GCN2Conv(long channels, float alpha, Float theta, Integer layer,
                     boolean sharedWeights, boolean normalize) {
-        super("add");
+        this(channels, alpha, theta, layer, sharedWeights, normalize, true);
+    }
+
+    public GCN2Conv(long channels, float alpha, Float theta, Integer layer,
+                    boolean sharedWeights, boolean normalize, boolean addSelfLoops) {
+        super("sum");
+        if (channels <= 0) {
+            throw new IllegalArgumentException("channels must be > 0");
+        }
+        this.channels = channels;
         this.alpha = alpha;
         this.sharedWeights = sharedWeights;
         this.normalize = normalize;
+        this.addSelfLoops = addSelfLoops;
 
-        // 计算 beta = log(theta / layer + 1)
-        if (theta != null && layer != null) {
+        if (theta != null && layer != null && layer > 0) {
             this.beta = (float) Math.log(theta / layer + 1.0);
         } else {
-            this.beta = 0.1f; // 默认值
+            this.beta = 0.1f;
         }
 
-        // 严格使用 LinearImpl
-        this.lin = new LinearImpl(channels, channels);
-        register_module("lin", lin);
-
+        this.lin = register_module("lin", new LinearImpl(channels, channels));
         if (!sharedWeights) {
-            this.linRes = new LinearImpl(channels, channels);
-            register_module("lin_res", linRes);
+            this.linRes = register_module("lin_res", new LinearImpl(channels, channels));
+        } else {
+            this.linRes = null;
         }
+    }
+
+    /** Convenience: treats current features as initial features. */
+    @Override
+    public Tensor forward(Tensor x, Tensor edge_index) {
+        return forward(x, x, edge_index, null);
     }
 
     @Override
-    public Tensor forward(Tensor x, Tensor edge_index) {
-        return forward(x, edge_index, (Tensor)null);
+    public Tensor forward(Tensor x, Tensor edge_index, Tensor edge_weight) {
+        return forward(x, x, edge_index, edge_weight);
     }
-    
+
     /**
-     * @param x          当前层的特征 [N, channels]
-     * @param x_0        初始输入特征 [N, channels]
-     * @param edge_index 边索引 [2, E]
-     * @param edge_weight 边权重 (可选)
+     * @param x           current-layer features [N, C]
+     * @param x0          initial features X^{(0)} [N, C]
+     * @param edge_index  [2, E]
+     * @param edge_weight optional [E]
      */
-    public Tensor forward(Tensor x, Tensor x_0, Tensor edge_index, Tensor edge_weight) {
-        long N = x.size(0);
-        Tensor edge_attr = null;
-        if (normalize) {
-            edge_attr = compute_normalization(edge_index, edge_weight, N);
-        } else {
-            edge_attr = edge_weight != null ? edge_weight : torch.ones(new long[]{edge_index.size(1)}, x.options());
+    public Tensor forward(Tensor x, Tensor x0, Tensor edge_index, Tensor edge_weight) {
+        if (x == null || x0 == null || edge_index == null) {
+            throw new NullPointerException("x, x0, edge_index must not be null");
         }
-        // 1. 邻居聚合：\hat{A} @ x
-        // 这里需要进行对称归一化处理
-//        Tensor norm = null;
-//        if (normalize) {
-//            norm = compute_normalization(edge_index, edge_weight, N);
-//        }
+        if (x.size(1) != channels || x0.size(1) != channels) {
+            throw new IllegalArgumentException(
+                    "feature dim must equal channels=" + channels);
+        }
 
-        Tensor out = propagate(edge_index, x, edge_attr);
+        long N = x.size(0);
+        Tensor ei = edge_index;
+        Tensor ew = edge_weight;
 
-        // 2. 初始残差连接: (1 - alpha) * \hat{A}x + alpha * x_0
-        out = out.mul(new Scalar(1.0 - alpha)).add(x_0.mul(new Scalar(alpha)));
+        if (normalize) {
+            torch.ScalarType dtype = x.scalar_type().intern();
+            Tensor[] normed = GraphUtils.gcn_norm(ei, ew, N, addSelfLoops, dtype);
+            ei = normed[0];
+            ew = normed[1];
+        } else if (addSelfLoops) {
+            if (ew == null) {
+                ei = GraphUtils.add_self_loops(ei, N);
+            } else {
+                Tensor[] pair = GraphUtils.add_self_loops(ei, ew, N, 1.0);
+                ei = pair[0];
+                ew = pair[1];
+            }
+        }
 
-        // 3. 恒等映射与线性变换: (1 - beta) * Identity + beta * W
-        if (sharedWeights) {
-            // 公式: (1 - beta) * out + beta * W(out)
+        // Ã X
+        Tensor out = propagate(ei, x, ew);
+
+        // (1-α) ÃX + α X0
+        out = out.mul(new Scalar(1.0 - alpha)).add(x0.mul(new Scalar(alpha)));
+
+        // Identity mapping: (1-β)I + β W
+        if (sharedWeights || linRes == null) {
             out = out.mul(new Scalar(1.0 - beta)).add(lin.forward(out).mul(new Scalar(beta)));
         } else {
-            // GCNII* 变体: 区分聚合部分和残差部分的权重
-            Tensor out1 = lin.forward(out.mul(new Scalar(1.0 - alpha)));
-            Tensor out2 = linRes.forward(x_0.mul(new Scalar(alpha)));
+            // GCNII* variant
+            Tensor out1 = lin.forward(out);
+            Tensor out2 = linRes.forward(x0);
             out = out1.add(out2).mul(new Scalar(beta)).add(out.mul(new Scalar(1.0 - beta)));
         }
-
         return out;
-    }
-
-    private Tensor compute_normalization(Tensor edge_index, Tensor edge_weight, long numNodes) {
-        if (edge_weight == null) {
-            edge_weight = torch.ones(new long[]{edge_index.size(1)}, edge_index.options());
-        }
-        Tensor row = edge_index.select(0, 0);
-        Tensor col = edge_index.select(0, 1);
-        Tensor deg = torch.zeros(new long[]{numNodes}, edge_weight.options());
-        deg.scatter_add_(0, row, edge_weight);
-        Tensor degInvSqrt = deg.pow(new Scalar(-0.5));
-        degInvSqrt.masked_fill_(degInvSqrt.isinf(), new Scalar(0));
-        return degInvSqrt.index_select(0, row).mul(edge_weight).mul(degInvSqrt.index_select(0, col));
     }
 
     @Override
     public Tensor message(Tensor x_j, Tensor x_i, Tensor edge_index, Tensor edge_attr, long numNodes) {
-        return x_j.mul(edge_attr.view(-1, 1));
+        if (edge_attr != null) {
+            if (edge_attr.dim() == 1) {
+                return x_j.mul(edge_attr.view(new long[]{-1, 1}));
+            }
+            return x_j.mul(edge_attr);
+        }
+        return x_j;
+    }
+
+    public float getAlpha() {
+        return alpha;
+    }
+
+    public float getBeta() {
+        return beta;
+    }
+
+    public long getChannels() {
+        return channels;
     }
 }

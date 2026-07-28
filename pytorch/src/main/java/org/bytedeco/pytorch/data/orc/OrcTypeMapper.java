@@ -1,8 +1,8 @@
 package org.bytedeco.pytorch.data.orc;
 
 import org.apache.orc.OrcProto;
-import org.bytedeco.pytorch.data.dataframe.Column;
-import org.bytedeco.pytorch.data.dataframe.DataFrame;
+import org.bytedeco.pytorch.dataframe.Column;
+import org.bytedeco.pytorch.dataframe.DataFrame;
 
 import java.util.ArrayList;
 import java.util.List;

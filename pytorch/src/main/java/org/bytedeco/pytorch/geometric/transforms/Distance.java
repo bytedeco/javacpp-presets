@@ -1,32 +1,34 @@
+/*
+ * Copyright (C) 2026 bytedeco.org and pytorch JavaCPP presets contributors
+ * PyG peer: torch_geometric.transforms.Distance
+ */
 package org.bytedeco.pytorch.geometric.transforms;
-import org.bytedeco.pytorch.*;
+
+import org.bytedeco.pytorch.Scalar;
+import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.geometric.data.GraphData;
 
-import static org.bytedeco.pytorch.global.torch.*;
+/**
+ * Append Euclidean distance of each edge's endpoints to {@code edge_attr}.
+ */
+public class Distance implements BaseTransform {
+    private final boolean norm;
 
-public  class Distance implements BaseTransform {
-    private final boolean norm; // 是否归一化
-
+    public Distance() { this(false); }
     public Distance(boolean norm) { this.norm = norm; }
 
     @Override
     public GraphData apply(GraphData data) {
-        Tensor row = data.edge_index.select(0, 0);
-        Tensor col = data.edge_index.select(0, 1);
-
-        // 获取源节点和目标节点的坐标 [E, D]
-        Tensor pos_i = data.pos.index_select(0, row);
-        Tensor pos_j = data.pos.index_select(0, col);
-
-        // 计算差值的二范数 (dim=1)
-        Tensor dist = pos_j.sub(pos_i).pow(new Scalar(2)).sum(1).sqrt().view(new long[]{-1, 1});
-
+        Tensor ei = TransformUtils.requireEdgeIndex(data);
+        Tensor pos = TransformUtils.requirePos(data);
+        Tensor row = ei.select(0, 0);
+        Tensor col = ei.select(0, 1);
+        Tensor dist = pos.index_select(0, col).sub(pos.index_select(0, row))
+                .pow(new Scalar(2)).sum(1).sqrt().view(new long[]{-1, 1});
         if (norm && dist.numel() > 0) {
-            dist = dist.div(dist.max());
+            dist = dist.div(dist.max().clamp_min(new Scalar(1e-12)));
         }
-
-        // 将结果存入 edge_attr
-        data.edge_attr = (data.edge_attr == null) ? dist : cat(new TensorVector(data.edge_attr, dist), 1);
+        data.edge_attr = TransformUtils.catEdgeAttr(data.edge_attr, dist);
         return data;
     }
 }

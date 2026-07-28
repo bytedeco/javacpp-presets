@@ -57,17 +57,14 @@ public final class ConvHelpers {
     public static Conv2dImpl conv3x3(long in, long out, long stride, long padding) {
         Conv2dOptions opt = new Conv2dOptions(in, out, k2(3));
         opt.stride(k2(stride));
-        // padding via raw long pointer expansion when available — use options ctor defaults + set
-        try {
-            opt.stride(k2(stride));
-        } catch (Throwable ignored) {
-        }
+        opt.padding().put(k2(padding));
         return new Conv2dImpl(opt);
     }
 
     public static Conv2dImpl conv2d(long in, long out, long kernel, long stride, long padding, boolean bias) {
         Conv2dOptions opt = new Conv2dOptions(in, out, k2(kernel));
         opt.stride(k2(stride));
+        opt.padding().put(k2(padding));
         opt.bias(bias);
         return new Conv2dImpl(opt);
     }

@@ -1,60 +1,87 @@
 package org.bytedeco.pytorch.geometric.utils;
 
-import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.LongOptional;
+import org.bytedeco.pytorch.Scalar;
+import org.bytedeco.pytorch.ScalarTypeOptional;
+import org.bytedeco.pytorch.T_TensorTensor_T;
+import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.global.torch;
 
-public class AttentionUtils {
+/**
+ * Shared kernels for linear / Performer-style attention.
+ */
+public final class AttentionUtils {
 
-    /**
-     * Polynormer / Linear Transformer 常用的核函数
-     * phi(x) = elu(x) + 1 (保证非负)
-     */
+    private AttentionUtils() {}
+
+    /** Polynormer / linear-attention kernel: {@code φ(x) = elu(x) + 1} (non-negative). */
     public static Tensor kernel_elu(Tensor x) {
         return torch.elu(x).add(new Scalar(1.0));
     }
 
     /**
-     * Performer 的正交随机特征 (ORF) 生成器
-     * 生成正交的高斯随机矩阵 Omega
+     * Build a random feature projection matrix of shape {@code [dim, numFeatures]} (D × M).
+     * When {@code orthogonal=true}, uses block-wise QR (FAVOR+ style ORF).
      */
     public static Tensor create_projection_matrix(long numFeatures, long dim, boolean orthogonal) {
+        if (numFeatures <= 0 || dim <= 0) {
+            throw new IllegalArgumentException("numFeatures and dim must be > 0");
+        }
         if (orthogonal) {
-            // 生成正交矩阵块
             long numBlocks = (long) Math.ceil((double) numFeatures / dim);
             TensorVector blocks = new TensorVector();
-            for (int i = 0; i < numBlocks; i++) {
+            for (long i = 0; i < numBlocks; i++) {
                 Tensor mat = torch.randn(new long[]{dim, dim});
-                // QR 分解获取正交矩阵 Q
                 T_TensorTensor_T qr = torch.linalg_qr(mat);
-                blocks.put(qr.get0()); // Q
+                // push_back grows the vector; put(Tensor) alone does not reliably append
+                blocks.push_back(qr.get0()); // Q [dim, dim]
             }
-            Tensor full = torch.cat(blocks, 0);
-            // 截取所需行数
-            return full.slice(0, new LongOptional(0), new LongOptional(numFeatures), 1l).t(); // [Dim, M]
-        } else {
-            return torch.randn(new long[]{dim, numFeatures}).t(); // [Dim, M]
+            // Stack blocks along rows → [numBlocks*dim, dim], take first numFeatures rows,
+            // transpose → [dim, M]
+            Tensor full = torch.cat(blocks, 0); // [numBlocks*dim, dim]
+            Tensor rows = full.slice(0, new LongOptional(0), new LongOptional(numFeatures), 1L); // [M, dim]
+            return rows.t().contiguous(); // [dim, M]
         }
+        // Non-orthogonal: plain Gaussian [dim, M]
+        return torch.randn(new long[]{dim, numFeatures}).contiguous();
     }
 
     /**
-     * Performer 核函数
-     * phi(x) = C * exp(x @ w - |x|^2 / 2)
+     * Performer positive feature map.
+     *
+     * @param data              [N, D]
+     * @param projectionMatrix  [D, M]
+     * @param isQuery           unused flag kept for API parity with FAVOR+ variants
+     * @return [N, M]
      */
     public static Tensor kernel_performer(Tensor data, Tensor projectionMatrix, boolean isQuery) {
-        // data: [N, D]
-        // projection: [D, M]
+        if (data.dim() != 2) {
+            throw new IllegalArgumentException("data must be [N, D]");
+        }
+        if (projectionMatrix.dim() != 2) {
+            throw new IllegalArgumentException("projectionMatrix must be [D, M]");
+        }
+        // Accept either [D,M] or [M,D] and normalize to [D,M]
+        Tensor projMat = projectionMatrix;
+        if (projMat.size(0) != data.size(1) && projMat.size(1) == data.size(1)) {
+            projMat = projMat.t().contiguous();
+        }
+        if (projMat.size(0) != data.size(1)) {
+            throw new IllegalArgumentException(
+                    "projectionMatrix rows must equal data.size(1) (got "
+                            + projMat.size(0) + " vs " + data.size(1) + ")");
+        }
+        long M = projMat.size(1);
 
-        // 1. 计算数据模长的平方 / 2
-        // sum(dim=-1, keepdim=true)
-        Tensor dataSq = data.pow(new Scalar(2.0)).sum(new long[]{-1}, true, new ScalarTypeOptional()).div(new Scalar(2.0));
+        // ‖x‖² / 2  → [N, 1]
+        Tensor dataSq = data.pow(new Scalar(2.0))
+                .sum(new long[]{-1}, true, new ScalarTypeOptional())
+                .div(new Scalar(2.0));
 
-        // 2. 投影 data @ projection -> [N, M]
-        // 缩放系数: 1 / sqrt(sqrt(M)) -> M^(-0.25)
-        double scale = Math.pow(projectionMatrix.size(1), -0.25);
-        Tensor proj = data.matmul(projectionMatrix).mul(new Scalar(scale));
-
-        // 3. 组合: exp(proj - dataSq)
-        // 注意广播机制
+        // scale = M^{-1/4}
+        double scale = Math.pow(M, -0.25);
+        Tensor proj = data.matmul(projMat).mul(new Scalar(scale)); // [N, M]
         return proj.sub(dataSq).exp();
     }
 }

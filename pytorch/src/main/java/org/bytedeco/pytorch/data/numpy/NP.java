@@ -10,6 +10,7 @@ import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorOptions;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.global.torch.ScalarType;
+import org.bytedeco.pytorch.utils.plot.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
@@ -185,28 +186,28 @@ public final class NP {
     /** Nested plotting namespace: {@code NP.Plot.plot(x,y).show()}. */
     public static final class Plot {
         private Plot() {}
-        public static org.bytedeco.pytorch.data.dataframe.plot.LineChart plot(NDArray y) { return NPPlot.plot(y); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.LineChart plot(NDArray x, NDArray y) { return NPPlot.plot(x, y); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.LineChart plot(NDArray x, NDArray y, String label) { return NPPlot.plot(x, y, label); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.LineChart plot(NDArray x, NDArray Y, String[] labels) { return NPPlot.plot(x, Y, labels); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.ScatterChart scatter(NDArray x, NDArray y) { return NPPlot.scatter(x, y); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.HistogramChart hist(NDArray data, int bins) { return NPPlot.hist(data, bins); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.HistogramChart hist(NDArray data) { return NPPlot.hist(data); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.BarChart bar(NDArray values) { return NPPlot.bar(values); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.BarChart bar(String[] cats, NDArray values) { return NPPlot.bar(cats, values); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.PieChart pie(String[] labels, NDArray values) { return NPPlot.pie(labels, values); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.BoxChart boxplot(NDArray values) { return NPPlot.boxplot(values); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.HeatmapChart imshow(NDArray a) { return NPPlot.imshow(a); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.HeatmapChart heatmap(NDArray a) { return NPPlot.heatmap(a); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.HeatmapChart corrplot(NDArray a) { return NPPlot.corrplot(a); }
+        public static LineChart plot(NDArray y) { return NPPlot.plot(y); }
+        public static LineChart plot(NDArray x, NDArray y) { return NPPlot.plot(x, y); }
+        public static LineChart plot(NDArray x, NDArray y, String label) { return NPPlot.plot(x, y, label); }
+        public static LineChart plot(NDArray x, NDArray Y, String[] labels) { return NPPlot.plot(x, Y, labels); }
+        public static ScatterChart scatter(NDArray x, NDArray y) { return NPPlot.scatter(x, y); }
+        public static HistogramChart hist(NDArray data, int bins) { return NPPlot.hist(data, bins); }
+        public static HistogramChart hist(NDArray data) { return NPPlot.hist(data); }
+        public static BarChart bar(NDArray values) { return NPPlot.bar(values); }
+        public static BarChart bar(String[] cats, NDArray values) { return NPPlot.bar(cats, values); }
+        public static PieChart pie(String[] labels, NDArray values) { return NPPlot.pie(labels, values); }
+        public static BoxChart boxplot(NDArray values) { return NPPlot.boxplot(values); }
+        public static HeatmapChart imshow(NDArray a) { return NPPlot.imshow(a); }
+        public static HeatmapChart heatmap(NDArray a) { return NPPlot.heatmap(a); }
+        public static HeatmapChart corrplot(NDArray a) { return NPPlot.corrplot(a); }
         public static void show() { NPPlot.show(); }
         public static void savefig(String path) throws Exception { NPPlot.savefig(path); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.BaseChart title(String t) { return NPPlot.title(t); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.BaseChart xlabel(String s) { return NPPlot.xlabel(s); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.BaseChart ylabel(String s) { return NPPlot.ylabel(s); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.BaseChart legend(boolean on) { return NPPlot.legend(on); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.BaseChart grid(boolean on) { return NPPlot.grid(on); }
-        public static org.bytedeco.pytorch.data.dataframe.plot.BaseChart last() { return NPPlot.last(); }
+        public static BaseChart title(String t) { return NPPlot.title(t); }
+        public static BaseChart xlabel(String s) { return NPPlot.xlabel(s); }
+        public static BaseChart ylabel(String s) { return NPPlot.ylabel(s); }
+        public static BaseChart legend(boolean on) { return NPPlot.legend(on); }
+        public static BaseChart grid(boolean on) { return NPPlot.grid(on); }
+        public static BaseChart last() { return NPPlot.last(); }
     }
 
     /** Nested PCA namespace: {@code NP.PCA.fitTransform(X, 2)}. */

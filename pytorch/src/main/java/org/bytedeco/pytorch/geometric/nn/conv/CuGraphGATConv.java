@@ -7,7 +7,7 @@ import org.bytedeco.javacpp.LongPointer;
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.global.torch;
-import org.bytedeco.pytorch.geometric.nn.Parameter;
+import org.bytedeco.pytorch.nn.Parameter;
 import org.bytedeco.pytorch.geometric.utils.Scatter;
 
 /**

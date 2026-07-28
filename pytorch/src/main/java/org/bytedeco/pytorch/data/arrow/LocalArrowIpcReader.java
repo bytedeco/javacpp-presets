@@ -15,9 +15,9 @@ import org.apache.arrow.vector.ipc.ArrowFileReader;
 import org.apache.arrow.vector.ipc.ArrowStreamReader;
 import org.apache.arrow.vector.util.TransferPair;
 import org.bytedeco.pytorch.JvmModuleSupport;
-import org.bytedeco.pytorch.data.dataframe.ArrowStorage;
-import org.bytedeco.pytorch.data.dataframe.Column;
-import org.bytedeco.pytorch.data.dataframe.DataFrame;
+import org.bytedeco.pytorch.dataframe.ArrowStorage;
+import org.bytedeco.pytorch.dataframe.Column;
+import org.bytedeco.pytorch.dataframe.DataFrame;
 
 /**
  * Local-only Arrow IPC / Feather v2 reader.

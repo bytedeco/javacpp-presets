@@ -1,110 +1,147 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
-import org.bytedeco.pytorch.nn.modules.*;
 
-import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.ScalarTypeOptional;
+import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.TensorOptions;
+import org.bytedeco.pytorch.nn.Parameter;
 import org.bytedeco.pytorch.global.torch;
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 
 /**
- * 实现 torch_geometric.nn.conv.ResGatedGraphConv
- * 具有残差门控机制的图卷积算子
+ * Residual Gated Graph ConvNet (Bresson & Laurent).
+ *
+ * <pre>
+ *   η_{ij} = σ( D x_i + E x_j )
+ *   m_{ij} = η_{ij} ⊙ (A x_j + B x_i)
+ *   x'_i   = Σ_j m_{ij}  (+ W_root x_i + b)
+ * </pre>
+ * Gate is computed per edge; sum aggregation over gated messages.
  */
 public class ResGatedGraphConv extends MessagePassing {
-    private LinearImpl linA, linB, linC, linD, linE;
-    private LinearImpl linRoot; // 对应公式中的 root_weight
-    private Tensor bias;
 
-    public ResGatedGraphConv(long inChannels, long outChannels, Integer edgeDim, boolean rootWeight, boolean hasBias) {
-        super("add"); // 基础聚合使用加法，因为门控已经处理了权重
+    private final LinearImpl linA;
+    private final LinearImpl linB;
+    private final LinearImpl linD;
+    private final LinearImpl linE;
+    private final LinearImpl linRoot;
+    private final LinearImpl linEdge;
+    private final Parameter bias;
+    private final long inChannels;
+    private final long outChannels;
 
-        // 对应公式中的五个权重矩阵
-        this.linA = new LinearImpl(inChannels, outChannels);
-        this.linB = new LinearImpl(inChannels, outChannels);
-        this.linC = new LinearImpl(inChannels, outChannels);
-        this.linD = new LinearImpl(inChannels, outChannels);
-        this.linE = new LinearImpl(inChannels, outChannels);
+    // Transient precomputed node transforms for one forward
+    private Tensor _Ax;
+    private Tensor _Bx;
+    private Tensor _Dx;
+    private Tensor _Ex;
 
-        register_module("lin_a", linA);
-        register_module("lin_b", linB);
-        register_module("lin_c", linC);
-        register_module("lin_d", linD);
-        register_module("lin_e", linE);
+    public ResGatedGraphConv(long inChannels, long outChannels) {
+        this(inChannels, outChannels, null, true, true);
+    }
 
-        if (edgeDim != null) {
-            // 如果存在边特征，增加一个线性映射层
-            // 这里我们将其简写为 lin_edge
+    public ResGatedGraphConv(long inChannels, long outChannels, Integer edgeDim,
+                             boolean rootWeight, boolean hasBias) {
+        super("sum");
+        if (inChannels <= 0 || outChannels <= 0) {
+            throw new IllegalArgumentException("in/out channels must be > 0");
+        }
+        this.inChannels = inChannels;
+        this.outChannels = outChannels;
+
+        this.linA = register_module("lin_a", new LinearImpl(inChannels, outChannels));
+        this.linB = register_module("lin_b", new LinearImpl(inChannels, outChannels));
+        this.linD = register_module("lin_d", new LinearImpl(inChannels, outChannels));
+        this.linE = register_module("lin_e", new LinearImpl(inChannels, outChannels));
+
+        if (edgeDim != null && edgeDim > 0) {
+            this.linEdge = register_module("lin_edge", new LinearImpl(edgeDim, outChannels));
+        } else {
+            this.linEdge = null;
         }
 
         if (rootWeight) {
-            this.linRoot = new LinearImpl(inChannels, outChannels);
-            register_module("lin_root", linRoot);
+            this.linRoot = register_module("lin_root", new LinearImpl(inChannels, outChannels));
+        } else {
+            this.linRoot = null;
         }
 
         if (hasBias) {
-            this.bias = torch.zeros(new long[]{outChannels});
-            register_parameter("bias", bias);
+            Tensor b = torch.zeros(new long[]{outChannels},
+                    new TensorOptions().dtype(new ScalarTypeOptional(torch.ScalarType.Float)));
+            this.bias = new Parameter(b, true);
+            register_parameter("bias", this.bias);
+        } else {
+            this.bias = null;
         }
     }
 
     @Override
+    protected boolean needsX_i() {
+        return true;
+    }
+
+    @Override
     public Tensor forward(Tensor x, Tensor edge_index) {
-        return forward(x, edge_index, (Tensor)null);
+        return forward(x, edge_index, (Tensor) null);
     }
-    
+
+    @Override
     public Tensor forward(Tensor x, Tensor edge_index, Tensor edge_attr) {
-        long N = x.size(0);
-
-        // 1. 预计算节点特征的线性映射
-        Tensor Ax = linA.forward(x);
-        Tensor Bx = linB.forward(x);
-        Tensor Cx = linC.forward(x);
-        Tensor Dx = linD.forward(x);
-        Tensor Ex = linE.forward(x);
-
-        // 2. 消息传递
-        // 我们需要传递 Ax, Bx, Cx, Dx, Ex 到边上。
-        // 为了符合 MessagePassing 契约，我们把这些 Tensor 封装或分步处理。
-        // 这里演示最清晰的逻辑：将 Ax 作为 x 传入，其余作为 context
-        return propagate_gated(edge_index, Ax, Bx, Cx, Dx, Ex, x);
-    }
-
-    private Tensor propagate_gated(Tensor edge_index, Tensor Ax, Tensor Bx, Tensor Cx, Tensor Dx, Tensor Ex, Tensor x_orig) {
-        Tensor sourceIdx = edge_index.select(0, 0);
-        Tensor targetIdx = edge_index.select(0, 1);
-
-        // 获取边两端的特征
-        Tensor Ax_j = Ax.index_select(0, sourceIdx);
-        Tensor Bx_i = Bx.index_select(0, targetIdx);
-        Tensor Cx_j = Cx.index_select(0, sourceIdx);
-        Tensor Dx_i = Dx.index_select(0, targetIdx);
-        Tensor Ex_j = Ex.index_select(0, sourceIdx);
-
-        // --- 计算门控 eta_ij ---
-        // eta = sigmoid(D*x_i + E*x_j)
-        Tensor gate = torch.sigmoid(Dx_i.add(Ex_j));
-
-        // --- 计算消息 ---
-        // msg = eta * (A*x_j + B*x_i)
-        // 注意：有些版本也包含 C*x_j
-        Tensor msg = gate.mul(Ax_j.add(Bx_i));
-
-        // 3. 聚合
-        Tensor out = aggregate(msg, targetIdx, Ax.size(0));
-
-        // 4. 合并中心节点特征 (Residual)
-        if (linRoot != null) {
-            out = out.add(linRoot.forward(x_orig));
+        if (x == null || edge_index == null) {
+            throw new NullPointerException("x and edge_index must not be null");
+        }
+        if (x.size(1) != inChannels) {
+            throw new IllegalArgumentException(
+                    "x.size(1)=" + x.size(1) + " != inChannels=" + inChannels);
         }
 
+        this._Ax = linA.forward(x);
+        this._Bx = linB.forward(x);
+        this._Dx = linD.forward(x);
+        this._Ex = linE.forward(x);
+
+        Tensor out;
+        try {
+            // Dummy features for lift; real values come from transients in message
+            out = propagate(edge_index, x, edge_attr);
+        } finally {
+            this._Ax = null;
+            this._Bx = null;
+            this._Dx = null;
+            this._Ex = null;
+        }
+
+        if (linRoot != null) {
+            out = out.add(linRoot.forward(x));
+        }
         if (bias != null) {
             out = out.add(bias);
         }
-
         return out;
     }
 
     @Override
     public Tensor message(Tensor x_j, Tensor x_i, Tensor edge_index, Tensor edge_attr, long numNodes) {
-        // 由于上面使用了自定义的 propagate_gated，这里的基类实现作为备用签名
-        return x_j;
+        Tensor index_j = _index_j != null ? _index_j : edge_index.select(0, 0);
+        Tensor index_i = _index_i != null ? _index_i : edge_index.select(0, 1);
+
+        Tensor Ax_j = _Ax.index_select(0, index_j);
+        Tensor Bx_i = _Bx.index_select(0, index_i);
+        Tensor Dx_i = _Dx.index_select(0, index_i);
+        Tensor Ex_j = _Ex.index_select(0, index_j);
+
+        // η = σ(D x_i + E x_j [+ edge])
+        Tensor gateLogits = Dx_i.add(Ex_j);
+        if (edge_attr != null && linEdge != null) {
+            gateLogits = gateLogits.add(linEdge.forward(edge_attr));
+        }
+        Tensor gate = torch.sigmoid(gateLogits);
+
+        // m = η ⊙ (A x_j + B x_i)
+        return gate.mul(Ax_j.add(Bx_i));
+    }
+
+    public long getOutChannels() {
+        return outChannels;
     }
 }

@@ -21,6 +21,12 @@
  */
 package org.bytedeco.pytorch.utils.datasets;
 
+import org.bytedeco.pytorch.dataframe.Column;
+import org.bytedeco.pytorch.dataframe.DataFrame;
+import org.bytedeco.pytorch.dataframe.dataset.*;
+import org.bytedeco.pytorch.llm.hub.HfHub;
+import org.bytedeco.pytorch.llm.hub.HfToken;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -48,7 +54,7 @@ import java.util.stream.Stream;
  * pure-Java {@code LocalParquetReader}), DataFrame bridge, and simple disk cache.
  *
  * <p>For Hub download + config/split selection use {@link HfDatasets#loadDataset(String)}
- * (token via {@code HF_TOKEN} / {@link org.bytedeco.pytorch.utils.hub.HfToken},
+ * (token via {@code HF_TOKEN} / {@link HfToken},
  * endpoint via {@code HF_ENDPOINT} / {@code HF_MIRROR}).
  *
  * <pre>{@code
@@ -238,7 +244,7 @@ public final class HfDataset implements Iterable<Map<String, Object>> {
         Objects.requireNonNull(path, "path");
         try {
             // Reflective call so this class still loads when Tensor natives are absent.
-            Class<?> dfCl = Class.forName("org.bytedeco.pytorch.data.dataframe.DataFrame");
+            Class<?> dfCl = Class.forName("org.bytedeco.pytorch.dataframe.DataFrame");
             Object df = dfCl.getMethod("readArrow", String.class).invoke(null, path.toString());
             return fromDataFrameReflect(df, "arrow:" + path.getFileName());
         } catch (ClassNotFoundException | NoClassDefFoundError e) {
@@ -481,7 +487,7 @@ public final class HfDataset implements Iterable<Map<String, Object>> {
         List<Path> files = new ArrayList<>();
         try (Stream<Path> walk = recursive ? Files.walk(dir) : Files.list(dir)) {
             walk.filter(Files::isRegularFile)
-                    .filter(p -> org.bytedeco.pytorch.utils.hub.HfHub.isDatasetDataFile(
+                    .filter(p -> HfHub.isDatasetDataFile(
                             p.getFileName().toString()))
                     .sorted()
                     .forEach(files::add);
@@ -512,11 +518,11 @@ public final class HfDataset implements Iterable<Map<String, Object>> {
     }
 
     /** Bridge: materialise a {@code DataFrame} into row maps. */
-    public static HfDataset fromDataFrame(org.bytedeco.pytorch.data.dataframe.DataFrame df) {
+    public static HfDataset fromDataFrame(DataFrame df) {
         return fromDataFrame(df, "dataframe");
     }
 
-    public static HfDataset fromDataFrame(org.bytedeco.pytorch.data.dataframe.DataFrame df, String info) {
+    public static HfDataset fromDataFrame(DataFrame df, String info) {
         Objects.requireNonNull(df, "df");
         List<String> cols = df.getColumnNames();
         int n = df.rowCount();
@@ -532,9 +538,9 @@ public final class HfDataset implements Iterable<Map<String, Object>> {
     }
 
     /** Export to a DataFrame (columnar). */
-    public org.bytedeco.pytorch.data.dataframe.DataFrame toDataFrame() {
+    public DataFrame toDataFrame() {
         if (rows.isEmpty()) {
-            return new org.bytedeco.pytorch.data.dataframe.DataFrame();
+            return new DataFrame();
         }
         // collect columns
         List<String> cols = columnNames.isEmpty()
@@ -546,13 +552,13 @@ public final class HfDataset implements Iterable<Map<String, Object>> {
                 if (!cols.contains(k)) cols.add(k);
             }
         }
-        org.bytedeco.pytorch.data.dataframe.DataFrame df =
-                new org.bytedeco.pytorch.data.dataframe.DataFrame();
+        DataFrame df =
+                new DataFrame();
         for (String c : cols) {
             // infer dtype loosely as STRING/OBJECT-friendly FLOAT64/INT64/BOOL
-            org.bytedeco.pytorch.data.dataframe.Column.DType dt = inferColumnDtype(c);
+            Column.DType dt = inferColumnDtype(c);
             df.addColumn(c, dt);
-            org.bytedeco.pytorch.data.dataframe.Column col = df.column(c);
+            Column col = df.column(c);
             for (Map<String, Object> r : rows) {
                 col.add(r.get(c));
             }
@@ -561,7 +567,7 @@ public final class HfDataset implements Iterable<Map<String, Object>> {
         return df;
     }
 
-    private org.bytedeco.pytorch.data.dataframe.Column.DType inferColumnDtype(String col) {
+    private Column.DType inferColumnDtype(String col) {
         boolean sawLong = false, sawDouble = false, sawBool = false;
         boolean sawList = false, sawMap = false, sawOther = false;
         for (Map<String, Object> r : rows) {
@@ -575,19 +581,19 @@ public final class HfDataset implements Iterable<Map<String, Object>> {
             else if (v instanceof Map) sawMap = true;
             else { sawOther = true; break; }
         }
-        if (sawOther) return org.bytedeco.pytorch.data.dataframe.Column.DType.STRING;
-        if (sawMap) return org.bytedeco.pytorch.data.dataframe.Column.DType.MAP;
-        if (sawList) return org.bytedeco.pytorch.data.dataframe.Column.DType.LIST;
-        if (sawDouble) return org.bytedeco.pytorch.data.dataframe.Column.DType.FLOAT64;
-        if (sawLong) return org.bytedeco.pytorch.data.dataframe.Column.DType.INT64;
-        if (sawBool) return org.bytedeco.pytorch.data.dataframe.Column.DType.BOOLEAN;
-        return org.bytedeco.pytorch.data.dataframe.Column.DType.STRING;
+        if (sawOther) return Column.DType.STRING;
+        if (sawMap) return Column.DType.MAP;
+        if (sawList) return Column.DType.LIST;
+        if (sawDouble) return Column.DType.FLOAT64;
+        if (sawLong) return Column.DType.INT64;
+        if (sawBool) return Column.DType.BOOLEAN;
+        return Column.DType.STRING;
     }
 
     // ---- javacpp-pytorch Dataset / DataLoader interop -----------------------
 
     /**
-     * Convert to a {@link org.bytedeco.pytorch.data.dataframe.dataset.DataFrameDataset}
+     * Convert to a {@link DataFrameDataset}
      * with automatic column roles:
      * <ul>
      *   <li>label-like columns ({@code label}, {@code labels}, {@code target}, {@code y},
@@ -597,7 +603,7 @@ public final class HfDataset implements Iterable<Map<String, Object>> {
      *       (tokenize first for NLP training)</li>
      * </ul>
      */
-    public org.bytedeco.pytorch.data.dataframe.dataset.DataFrameDataset asDataFrameDataset()
+    public DataFrameDataset asDataFrameDataset()
             throws Exception {
         return asDataFrameDataset(null, null);
     }
@@ -606,10 +612,10 @@ public final class HfDataset implements Iterable<Map<String, Object>> {
      * Convert with explicit feature / label column names.
      * {@code null} features → all non-label columns; {@code null} labels → auto-detect.
      */
-    public org.bytedeco.pytorch.data.dataframe.dataset.DataFrameDataset asDataFrameDataset(
+    public DataFrameDataset asDataFrameDataset(
             String[] featureCols, String[] labelCols) throws Exception {
-        org.bytedeco.pytorch.data.dataframe.DataFrame df = toDataFrame();
-        var b = org.bytedeco.pytorch.data.dataframe.dataset.DataFrameDataset.builder(df);
+        DataFrame df = toDataFrame();
+        var b = DataFrameDataset.builder(df);
         String[] labs = labelCols;
         if (labs == null || labs.length == 0) {
             labs = detectLabelColumns(df.getColumnNames()).toArray(new String[0]);
@@ -621,13 +627,13 @@ public final class HfDataset implements Iterable<Map<String, Object>> {
             List<String> seqs = new ArrayList<>();
             for (String c : featureCols) {
                 if (!df.hasColumn(c)) continue;
-                org.bytedeco.pytorch.data.dataframe.Column.DType dt = df.column(c).dtype();
-                if (dt == org.bytedeco.pytorch.data.dataframe.Column.DType.LIST
-                        || dt == org.bytedeco.pytorch.data.dataframe.Column.DType.VECTOR
-                        || dt == org.bytedeco.pytorch.data.dataframe.Column.DType.EMBEDDING
-                        || dt == org.bytedeco.pytorch.data.dataframe.Column.DType.TENSOR) {
+                Column.DType dt = df.column(c).dtype();
+                if (dt == Column.DType.LIST
+                        || dt == Column.DType.VECTOR
+                        || dt == Column.DType.EMBEDDING
+                        || dt == Column.DType.TENSOR) {
                     seqs.add(c);
-                } else if (dt != org.bytedeco.pytorch.data.dataframe.Column.DType.STRING) {
+                } else if (dt != Column.DType.STRING) {
                     scalars.add(c);
                 }
             }
@@ -645,17 +651,17 @@ public final class HfDataset implements Iterable<Map<String, Object>> {
             List<String> seqs = new ArrayList<>();
             for (String c : df.getColumnNames()) {
                 if (labSet.contains(c)) continue;
-                org.bytedeco.pytorch.data.dataframe.Column.DType dt = df.column(c).dtype();
-                if (dt == org.bytedeco.pytorch.data.dataframe.Column.DType.LIST
-                        || dt == org.bytedeco.pytorch.data.dataframe.Column.DType.VECTOR
-                        || dt == org.bytedeco.pytorch.data.dataframe.Column.DType.EMBEDDING
-                        || dt == org.bytedeco.pytorch.data.dataframe.Column.DType.TENSOR) {
+                Column.DType dt = df.column(c).dtype();
+                if (dt == Column.DType.LIST
+                        || dt == Column.DType.VECTOR
+                        || dt == Column.DType.EMBEDDING
+                        || dt == Column.DType.TENSOR) {
                     seqs.add(c);
-                } else if (dt == org.bytedeco.pytorch.data.dataframe.Column.DType.INT32
-                        || dt == org.bytedeco.pytorch.data.dataframe.Column.DType.INT64
-                        || dt == org.bytedeco.pytorch.data.dataframe.Column.DType.FLOAT32
-                        || dt == org.bytedeco.pytorch.data.dataframe.Column.DType.FLOAT64
-                        || dt == org.bytedeco.pytorch.data.dataframe.Column.DType.BOOLEAN) {
+                } else if (dt == Column.DType.INT32
+                        || dt == Column.DType.INT64
+                        || dt == Column.DType.FLOAT32
+                        || dt == Column.DType.FLOAT64
+                        || dt == Column.DType.BOOLEAN) {
                     scalars.add(c);
                 }
             }
@@ -667,7 +673,7 @@ public final class HfDataset implements Iterable<Map<String, Object>> {
                 String rid = "__row_id";
                 if (!df.hasColumn(rid)) {
                     // addColumn pads with nulls to current rowCount — set in place.
-                    df.addColumn(rid, org.bytedeco.pytorch.data.dataframe.Column.DType.INT64);
+                    df.addColumn(rid, Column.DType.INT64);
                     var col = df.column(rid);
                     for (int i = 0; i < df.rowCount(); i++) col.set(i, (long) i);
                 }
@@ -684,32 +690,32 @@ public final class HfDataset implements Iterable<Map<String, Object>> {
      * ({@code Example(data, target)}) for {@code RandomDataLoader} /
      * {@code SequentialDataLoader}.
      */
-    public org.bytedeco.pytorch.data.dataframe.dataset.DataFrameNativeDataset asDataset()
+    public DataFrameNativeDataset asDataset()
             throws Exception {
         return asDataFrameDataset().asDataset();
     }
 
-    public org.bytedeco.pytorch.data.dataframe.dataset.DataFrameNativeDataset asDataset(
+    public DataFrameNativeDataset asDataset(
             String[] featureCols, String[] labelCols) throws Exception {
         return asDataFrameDataset(featureCols, labelCols).asDataset();
     }
 
     /** Features-only {@link org.bytedeco.pytorch.data.datasets.JavaTensorDataset}. */
-    public org.bytedeco.pytorch.data.dataframe.dataset.DataFrameJavaTensorDataset asJavaTensorDataset()
+    public DataFrameJavaTensorDataset asJavaTensorDataset()
             throws Exception {
         return asDataFrameDataset().asJavaTensorDataset();
     }
 
     /**
-     * Pure-Java multi-feature {@link org.bytedeco.pytorch.data.dataframe.dataset.DataFrameDataLoader}
+     * Pure-Java multi-feature {@link DataFrameDataLoader}
      * builder (named batches, shuffle, dropLast).
      */
-    public org.bytedeco.pytorch.data.dataframe.dataset.DataFrameDataLoader.Builder dataloader()
+    public DataFrameDataLoader.Builder dataloader()
             throws Exception {
         return asDataFrameDataset().dataloader();
     }
 
-    public org.bytedeco.pytorch.data.dataframe.dataset.DataFrameDataLoader dataloader(int batchSize)
+    public DataFrameDataLoader dataloader(int batchSize)
             throws Exception {
         return asDataFrameDataset().dataloader(batchSize);
     }
@@ -721,7 +727,7 @@ public final class HfDataset implements Iterable<Map<String, Object>> {
      * SequentialDataLoader loader = ds.nativeDataLoader().batchSize(32).buildSequential();
      * }</pre>
      */
-    public org.bytedeco.pytorch.data.dataframe.dataset.NativeDataLoaderBuilder nativeDataLoader()
+    public NativeDataLoaderBuilder nativeDataLoader()
             throws Exception {
         return asDataFrameDataset().nativeDataLoader();
     }
@@ -823,7 +829,7 @@ public final class HfDataset implements Iterable<Map<String, Object>> {
     private static HfDataset fromDataFrameReflect(Object df, String info) throws Exception {
         if (df == null) return empty();
         // Prefer typed path when the concrete class is already loaded.
-        if (df instanceof org.bytedeco.pytorch.data.dataframe.DataFrame typed) {
+        if (df instanceof DataFrame typed) {
             return fromDataFrame(typed, info);
         }
         List<String> cols = (List<String>) df.getClass().getMethod("getColumnNames").invoke(df);

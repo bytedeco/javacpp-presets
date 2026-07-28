@@ -23,7 +23,7 @@ package org.bytedeco.pytorch.utils.audio.utils;
 
 import org.bytedeco.javacpp.FloatPointer;
 import org.bytedeco.pytorch.Tensor;
-import org.bytedeco.pytorch.data.dataframe.dtype.AudioData;
+import org.bytedeco.pytorch.dataframe.dtype.AudioData;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.global.torch.ScalarType;
 

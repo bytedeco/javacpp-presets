@@ -1,16 +1,29 @@
 package org.bytedeco.pytorch.geometric.nn.kge;
-import org.bytedeco.pytorch.nn.options.*;
 
-import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.Scalar;
+import org.bytedeco.pytorch.ScalarOptional;
+import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.nn.options.NormalizeFuncOptions;
 
+/**
+ * TransE (Bordes et al.): {@code score = −‖h + r − t‖_p}.
+ * Entity embeddings are L2-normalized before scoring.
+ */
 public class TransE extends KGEModel {
-    private long p; // L1 or L2 norm
+
+    private final long pNorm;
+
+    public TransE(long numNodes, long numRels, long hiddenChannels) {
+        this(numNodes, numRels, hiddenChannels, 1);
+    }
 
     public TransE(long numNodes, long numRels, long hiddenChannels, long p) {
         super(numNodes, numRels, hiddenChannels);
-        this.p = p;
+        if (p != 1 && p != 2) {
+            throw new IllegalArgumentException("TransE p-norm must be 1 or 2, got " + p);
+        }
+        this.pNorm = p;
     }
 
     @Override
@@ -19,15 +32,18 @@ public class TransE extends KGEModel {
         Tensor r = relEmb.forward(relation);
         Tensor t = nodeEmb.forward(tail);
 
-        // TransE 也经常对 Embedding 归一化 (|h|=1)
         NormalizeFuncOptions normOpts = new NormalizeFuncOptions();
         normOpts.p().put(2);
         normOpts.dim().put(1);
         h = torch.normalize(h, normOpts);
         t = torch.normalize(t, normOpts);
 
-        // score = - || h + r - t ||
-        Tensor dist = h.add(r).sub(t).norm(new ScalarOptional(new Scalar(p)), new long[]{1}, false);
-        return dist.neg(); // 返回负距离，使得 loss 函数逻辑统一（越大越好）
+        Tensor dist = h.add(r).sub(t)
+                .norm(new ScalarOptional(new Scalar(pNorm)), new long[]{1}, false);
+        return dist.neg(); // higher = better
+    }
+
+    public long getPNorm() {
+        return pNorm;
     }
 }

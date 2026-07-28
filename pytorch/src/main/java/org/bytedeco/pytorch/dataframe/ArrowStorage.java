@@ -1,0 +1,102 @@
+package org.bytedeco.pytorch.dataframe;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.apache.arrow.memory.BufferAllocator;
+import org.apache.arrow.vector.FieldVector;
+import org.bytedeco.pytorch.data.arrow.ArrowComplexVectors;
+
+/**
+ * Zero-copy Arrow-backed column storage. Mutations trigger copy-on-write into {@link ListStorage}.
+ */
+public final class ArrowStorage implements ColumnStorage {
+    private final Column.DType dtype;
+    private FieldVector vector;
+    private final BufferAllocator allocator;
+    private final boolean ownVector;
+    private boolean closed;
+    private ListStorage cow;
+
+    public ArrowStorage(Column.DType dtype, FieldVector vector, BufferAllocator allocator) {
+        this(dtype, vector, allocator, true);
+    }
+
+    public ArrowStorage(Column.DType dtype, FieldVector vector, BufferAllocator allocator, boolean ownVector) {
+        this.dtype = dtype;
+        this.vector = vector;
+        this.allocator = allocator;
+        this.ownVector = ownVector;
+        this.closed = false;
+    }
+
+    @Override public boolean isArrowBacked() { return cow == null && vector != null; }
+
+    @Override public FieldVector arrowVectorOrNull() {
+        return cow == null ? vector : null;
+    }
+
+    @Override public int size() {
+        if (cow != null) return cow.size();
+        return vector.getValueCount();
+    }
+
+    @Override public Object get(int index) {
+        if (cow != null) return cow.get(index);
+        if (index < 0) index = size() + index;
+        if (vector.isNull(index)) return null;
+        return readValue(vector, index, dtype);
+    }
+
+    @Override public void set(int index, Object value) {
+        ensureMutable().set(index, value);
+    }
+
+    @Override public void add(Object value) {
+        ensureMutable().add(value);
+    }
+
+    @Override public void addAll(Collection<?> values) {
+        ensureMutable().addAll(values);
+    }
+
+    @Override public Column.DType dtype() { return dtype; }
+
+    @Override public ColumnStorage copy() {
+        if (cow != null) return cow.copy();
+        return new ListStorage(dtype, materialize());
+    }
+
+    @Override public List<Object> materialize() {
+        if (cow != null) return cow.materialize();
+        int n = size();
+        List<Object> out = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) out.add(get(i));
+        return out;
+    }
+
+    @Override public void close() {
+        if (closed) return;
+        closed = true;
+        if (cow == null && vector != null && ownVector) {
+            try { vector.close(); } catch (Exception ignored) {}
+            vector = null;
+        }
+    }
+
+    private ListStorage ensureMutable() {
+        if (cow != null) return cow;
+        cow = new ListStorage(dtype, materialize());
+        if (ownVector) {
+            try { if (vector != null) vector.close(); } catch (Exception ignored) {}
+        }
+        vector = null;
+        return cow;
+    }
+
+    public static Object readValue(FieldVector vec, int index, Column.DType dtype) {
+        // Nested-aware path (LIST / MAP / STRUCT / VECTOR / BINARY / …)
+        return ArrowComplexVectors.readValue(vec, index, dtype);
+    }
+}

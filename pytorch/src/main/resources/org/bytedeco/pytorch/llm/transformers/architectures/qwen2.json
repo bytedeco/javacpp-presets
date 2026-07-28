@@ -1,0 +1,12 @@
+{
+  "model_type": "qwen2",
+  "java_class": "org.bytedeco.pytorch.utils.transformers.modeling.Qwen2ForCausalLM",
+  "norm": "rmsnorm",
+  "mlp": "swiglu",
+  "attention": "gqa",
+  "position": "rope",
+  "qkv_bias": true,
+  "tie_word_embeddings_default": true,
+  "param_prefix": "",
+  "notes": "HF-identical parameter names under model.* and lm_head.*"
+}

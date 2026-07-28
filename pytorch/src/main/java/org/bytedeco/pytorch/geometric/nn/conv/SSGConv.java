@@ -1,95 +1,118 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
-import org.bytedeco.pytorch.nn.modules.*;
 
-import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.Scalar;
+import org.bytedeco.pytorch.ScalarTypeOptional;
+import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.TensorOptions;
+import org.bytedeco.pytorch.nn.Parameter;
+import org.bytedeco.pytorch.geometric.utils.GraphUtils;
 import org.bytedeco.pytorch.global.torch;
-import org.bytedeco.pytorch.geometric.utils.Scatter;
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 
 /**
- * 实现 torch_geometric.nn.conv.SSGConv
- * 简单的谱图卷积，引入 alpha 参数解决过平滑问题。
+ * Simple Spectral Graph Convolution (Zhu & Koniusz, AAAI 2021) — SSGC.
+ *
+ * <pre>
+ *   Z = Σ_{k=0}^{K} α (1-α)^k  Ã^k X     (PyG: closed form via iteration)
+ *   Y = Z Θ + b
+ * </pre>
+ * Common practical form used by PyG:
+ * {@code out = (1-α) Ã^K X + α X} then linear.
  */
 public class SSGConv extends MessagePassing {
-    private LinearImpl lin;
-    private double alpha;
-    private int K;
-    private Tensor bias;
 
-    public SSGConv(long inChannels, long outChannels, double alpha, int K, boolean hasBias) {
-        super("add");
+    private final LinearImpl lin;
+    private final Parameter bias;
+    private final double alpha;
+    private final int K;
+    private final boolean addSelfLoops;
+    private final long inChannels;
+    private final long outChannels;
+
+    public SSGConv(long inChannels, long outChannels, double alpha, int K) {
+        this(inChannels, outChannels, alpha, K, true, true);
+    }
+
+    public SSGConv(long inChannels, long outChannels, double alpha, int K,
+                   boolean hasBias) {
+        this(inChannels, outChannels, alpha, K, hasBias, true);
+    }
+
+    public SSGConv(long inChannels, long outChannels, double alpha, int K,
+                   boolean hasBias, boolean addSelfLoops) {
+        super("sum");
+        if (inChannels <= 0 || outChannels <= 0 || K < 1) {
+            throw new IllegalArgumentException("invalid SSGConv dims / K");
+        }
+        if (alpha < 0.0 || alpha > 1.0) {
+            throw new IllegalArgumentException("alpha must be in [0,1]");
+        }
+        this.inChannels = inChannels;
+        this.outChannels = outChannels;
         this.alpha = alpha;
         this.K = K;
-
-        // SSGConv 只有一层线性变换 W
-        this.lin = new LinearImpl(inChannels, outChannels);
-        register_module("lin", lin);
-
+        this.addSelfLoops = addSelfLoops;
+        this.lin = register_module("lin", new LinearImpl(inChannels, outChannels));
         if (hasBias) {
-            this.bias = torch.zeros(new long[]{outChannels});
-            register_parameter("bias", bias);
+            Tensor b = torch.zeros(new long[]{outChannels},
+                    new TensorOptions().dtype(new ScalarTypeOptional(torch.ScalarType.Float)));
+            this.bias = new Parameter(b, true);
+            register_parameter("bias", this.bias);
+        } else {
+            this.bias = null;
         }
     }
 
     @Override
     public Tensor forward(Tensor x, Tensor edge_index) {
-        return forward(x, edge_index, (Tensor)null);
+        return forward(x, edge_index, (Tensor) null);
     }
-    
+
+    @Override
     public Tensor forward(Tensor x, Tensor edge_index, Tensor edge_weight) {
-        long N = x.size(0);
-
-        // 1. 预先计算归一化的邻接矩阵权重 (Symmetrical Normalization)
-        // 这里的 norm 对应公式中的 D^-1/2 * A * D^-1/2
-        Tensor norm = compute_normalization(edge_index, edge_weight, N);
-
-        // 2. 初始特征
-        Tensor x0 = x;
-        Tensor out = x.mul(new Scalar(alpha));
-
-        // 3. 递归传播 K 步
-        // 公式: x^(k) = (1 - alpha) * (A_hat @ x^(k-1)) + alpha * x^(0)
-        // 注意：SSGConv 的变体通常简化为先做 K 步传播，最后再处理 alpha
-        // 标准 SSG 论文逻辑：
-        Tensor x_k = x0;
-        for (int k = 0; k < K; k++) {
-            // 聚合邻居
-            x_k = propagate(edge_index, x_k, norm);
-            // 累加带权重的特征
-            // 这里遵循公式：out = alpha * x_0 + (1 - alpha) * A_hat^k * x_0
-            // 递归中每一层都保留 alpha 比例
+        if (x == null || edge_index == null) {
+            throw new NullPointerException("x and edge_index must not be null");
         }
+        long N = x.size(0);
+        torch.ScalarType dtype = x.scalar_type().intern();
+        Tensor[] normed = GraphUtils.gcn_norm(edge_index, edge_weight, N, addSelfLoops, dtype);
+        Tensor ei = normed[0];
+        Tensor norm = normed[1];
 
-        // 4. 应用线性变换
-        // 标准实现通常是先传播再线性，或者先线性再传播 (取决于实现流派)
-        // 根据 PyG 定义：先聚合 K 步，最后 Wx
-        Tensor result = lin.forward(x_k.mul(new Scalar(1 - alpha)).add(out));
-
+        Tensor x0 = x;
+        Tensor xk = x;
+        for (int k = 0; k < K; k++) {
+            xk = propagate(ei, xk, norm);
+        }
+        // (1-α) Ã^K X + α X
+        Tensor mixed = xk.mul(new Scalar(1.0 - alpha)).add(x0.mul(new Scalar(alpha)));
+        Tensor result = lin.forward(mixed);
         if (bias != null) {
             result = result.add(bias);
         }
-
         return result;
-    }
-
-    private Tensor compute_normalization(Tensor edge_index, Tensor edge_weight, long numNodes) {
-        // 实现对称归一化: D^-1/2 * A_hat * D^-1/2
-        if (edge_weight == null) {
-            edge_weight = torch.ones(new long[]{edge_index.size(1)}, edge_index.options());
-        }
-
-        Tensor row = edge_index.select(0, 0);
-        Tensor col = edge_index.select(0, 1);
-
-        Tensor deg = Scatter.scatter(edge_weight, row, numNodes, "add");
-        Tensor degInvSqrt = deg.pow(new Scalar(-0.5)); //-0.5
-        degInvSqrt.masked_fill_(degInvSqrt.isinf(), new Scalar(0));
-
-        return degInvSqrt.index_select(0, row).mul(edge_weight).mul(degInvSqrt.index_select(0, col));
     }
 
     @Override
     public Tensor message(Tensor x_j, Tensor x_i, Tensor edge_index, Tensor edge_attr, long numNodes) {
-        // edge_attr 存储归一化后的系数
-        return x_j.mul(edge_attr.view(-1, 1));
+        if (edge_attr != null) {
+            if (edge_attr.dim() == 1) {
+                return x_j.mul(edge_attr.view(new long[]{-1, 1}));
+            }
+            return x_j.mul(edge_attr);
+        }
+        return x_j;
+    }
+
+    public double getAlpha() {
+        return alpha;
+    }
+
+    public int getK() {
+        return K;
+    }
+
+    public long getOutChannels() {
+        return outChannels;
     }
 }

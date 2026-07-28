@@ -4,7 +4,7 @@ import org.bytedeco.pytorch.nn.modules.*;
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.nn.modules.LinearImpl;
-import org.bytedeco.pytorch.geometric.nn.Parameter;
+import org.bytedeco.pytorch.nn.Parameter;
 import org.bytedeco.pytorch.geometric.utils.TensorToolkit;
 import java.util.List;
 import java.util.Map;

@@ -21,9 +21,9 @@
  */
 package org.bytedeco.pytorch.utils.duckdb;
 
-import org.bytedeco.pytorch.data.dataframe.DataFrame;
-import org.bytedeco.pytorch.data.dataframe.sql.SqlReader;
-import org.bytedeco.pytorch.data.dataframe.sql.SqlWriter;
+import org.bytedeco.pytorch.dataframe.DataFrame;
+import org.bytedeco.pytorch.dataframe.sql.SqlReader;
+import org.bytedeco.pytorch.dataframe.sql.SqlOptions;
 
 import java.io.Closeable;
 import java.nio.file.Files;
@@ -160,8 +160,8 @@ public final class DuckDB implements Closeable {
         Objects.requireNonNull(table, "table");
         Objects.requireNonNull(df, "df");
         // REPLACE drops+recreates; works for DuckDB and SQLite dialect paths in SqlWriter
-        var opts = org.bytedeco.pytorch.data.dataframe.sql.SqlOptions.builder()
-                .ifExists(org.bytedeco.pytorch.data.dataframe.sql.SqlOptions.IfExists.REPLACE)
+        var opts = SqlOptions.builder()
+                .ifExists(SqlOptions.IfExists.REPLACE)
                 .quoteIdentifiers(true)
                 .index(false)
                 .build();
@@ -328,12 +328,12 @@ public final class DuckDB implements Closeable {
 
     /** Write DataFrame into a named table with SqlOptions (REPLACE/APPEND/FAIL). */
     public void writeTable(String table, DataFrame df,
-                           org.bytedeco.pytorch.data.dataframe.sql.SqlOptions options) throws Exception {
+                           SqlOptions options) throws Exception {
         Objects.requireNonNull(table, "table");
         Objects.requireNonNull(df, "df");
         df.toSql(connection, table, options == null
-                ? org.bytedeco.pytorch.data.dataframe.sql.SqlOptions.builder()
-                    .ifExists(org.bytedeco.pytorch.data.dataframe.sql.SqlOptions.IfExists.REPLACE)
+                ? SqlOptions.builder()
+                    .ifExists(SqlOptions.IfExists.REPLACE)
                     .build()
                 : options);
         registered.put(table, "dataframe rows=" + df.rowCount());

@@ -197,78 +197,106 @@ public final class AudioFile implements AutoCloseable {
      * @return tensor {@code [channels, time]}, dtype float32
      */
     public Tensor read() {
-        while (hasNext()) {
-            next();
-        }
-        return bufferToTensor();
+        drainAll();
+        return bufferToTensor(readPos, sampleBuffer.size());
     }
 
     /**
-     * Read a slice of samples.
+     * Read a slice of samples (sample index is per multi-channel frame, i.e. time steps).
      *
-     * @param offsetSamples number of samples to skip from start
-     * @param countSamples  max number of samples to return (-1 = all remaining)
+     * @param offsetSamples number of time-steps to skip from start
+     * @param countSamples  max number of time-steps to return (-1 = all remaining)
      * @return tensor {@code [channels, min(count, remaining)]}, dtype float32
      */
     public Tensor read(long offsetSamples, long countSamples) {
         if (offsetSamples < 0) offsetSamples = 0;
         if (countSamples < 0) countSamples = Long.MAX_VALUE;
 
-        while (hasNext() && (long) sampleBuffer.size() < offsetSamples + countSamples) {
-            next();
+        long needFloats = (offsetSamples + countSamples) * channels;
+        while (!flushed && sampleBuffer.size() < needFloats) {
+            if (fillBuffer() == 0 && flushed) break;
         }
 
-        int start = (int) Math.min(offsetSamples, sampleBuffer.size());
-        int end = (int) Math.min(sampleBuffer.size(), offsetSamples + countSamples);
-        int n = Math.max(0, end - start);
+        int start = (int) Math.min(offsetSamples * channels, sampleBuffer.size());
+        int end;
+        if (countSamples == Long.MAX_VALUE) {
+            end = sampleBuffer.size();
+        } else {
+            end = (int) Math.min(sampleBuffer.size(),
+                    offsetSamples * channels + countSamples * channels);
+        }
+        // align to channel boundary
+        start = (start / channels) * channels;
+        end = (end / channels) * channels;
+        return bufferToTensor(start, end);
+    }
 
-        float[] flat = new float[n * channels];
-        for (int i = 0; i < n; i++) {
+    /** Decode the entire stream into {@link #sampleBuffer} (idempotent). */
+    private void drainAll() {
+        while (!flushed) {
+            if (fillBuffer() == 0 && flushed) break;
+        }
+    }
+
+    /**
+     * Build {@code [C, T]} tensor from planar-ish buffer range {@code [start, end)}.
+     * Buffer layout from {@link #appendChunk} is channel-first planar concatenated per chunk;
+     * across chunks we store each chunk as C*T floats in channel-first order, so the global
+     * buffer is a sequence of planar chunks. For simplicity and correctness we re-pack by
+     * treating the whole buffer as planar only when a single chunk was written; otherwise
+     * we store interleaved floats in appendChunk (see below).
+     */
+    private Tensor bufferToTensor(int start, int end) {
+        int nFloats = Math.max(0, end - start);
+        int n = channels <= 0 ? 0 : nFloats / channels;
+        nFloats = n * channels;
+        float[] flat = new float[nFloats];
+        for (int i = 0; i < nFloats; i++) {
+            flat[i] = sampleBuffer.get(start + i);
+        }
+        // flat is interleaved LRLR… from appendChunk; de-interleave to [C,T]
+        float[] planar = new float[nFloats];
+        for (int t = 0; t < n; t++) {
             for (int c = 0; c < channels; c++) {
-                flat[i * channels + c] = sampleBuffer.get(start + i);
+                planar[c * n + t] = flat[t * channels + c];
             }
         }
         Tensor t = torch.empty(new long[]{channels, n},
                 new TensorOptions(ScalarType.Float), null);
-        t.copy_(torch.tensor(flat).reshape(channels, n));
-        return t;
-    }
-
-    private Tensor bufferToTensor() {
-        int n = sampleBuffer.size() / channels;
-        float[] flat = new float[sampleBuffer.size()];
-        for (int i = 0; i < sampleBuffer.size(); i++) {
-            flat[i] = sampleBuffer.get(i);
+        if (nFloats > 0) {
+            t.copy_(torch.tensor(planar).reshape(channels, n));
         }
-        Tensor t = torch.empty(new long[]{channels, n},
-                new TensorOptions(ScalarType.Float), null);
-        t.copy_(torch.tensor(flat).reshape(channels, n));
         return t;
     }
 
-    private Float currentSample;
+    private int readPos = 0; // index into sampleBuffer for streaming next()
 
-    /** @return true if there are more samples available */
+    /** @return true if there are more interleaved samples available via {@link #next()} */
     public boolean hasNext() {
-        return flushed || currentSample != null || fillBuffer() > 0;
+        if (readPos < sampleBuffer.size()) return true;
+        if (flushed) return false;
+        return fillBuffer() > 0;
     }
 
     /**
-     * Advance and return the next sample value (interleaved, all channels).
-     * Prefer {@link #read()} for batch access.
+     * Advance and return the next interleaved sample value (channel-major over time:
+     * L0,R0,L1,R1,…). Prefer {@link #read()} for batch access.
      */
     public float next() {
-        if (currentSample != null) {
-            float s = currentSample;
-            currentSample = null;
-            return s;
+        if (!hasNext()) {
+            throw new java.util.NoSuchElementException("end of audio: " + filePath);
         }
-        if (fillBuffer() == 0) throw new java.util.NoSuchElementException("end of audio: " + filePath);
-        return next();
+        return sampleBuffer.get(readPos++);
     }
 
+    /**
+     * Pull more decoded samples into {@link #sampleBuffer}.
+     *
+     * @return number of float samples newly appended (0 if nothing new / EOF)
+     */
     private int fillBuffer() {
         if (flushed) return 0;
+        int before = sampleBuffer.size();
 
         while (av_read_frame(fmtCtx, packet) >= 0) {
             if (packet.stream_index() != audioStreamIdx) {
@@ -281,35 +309,52 @@ public final class AudioFile implements AutoCloseable {
                 if (recv == FF_AVERROR_EAGAIN) break;
                 if (recv < 0) {
                     av_packet_unref(packet);
-                    return 0;
+                    // hard error — treat as end
+                    flushed = true;
+                    return sampleBuffer.size() - before;
                 }
                 Tensor chunk = decoder.frameToTensor(frame);
                 appendChunk(chunk);
                 av_frame_unref(frame);
             }
             av_packet_unref(packet);
+            int added = sampleBuffer.size() - before;
+            if (added > 0) return added; // return promptly so streaming can consume
         }
 
-        // Flush
+        // Flush decoder
         avcodec_send_packet(codecCtx, null);
         while (true) {
             int recv = avcodec_receive_frame(codecCtx, frame);
-            if (recv == FF_AVERROR_EAGAIN) break;
-            if (recv < 0) break;
+            if (recv == FF_AVERROR_EAGAIN || recv < 0) break;
             Tensor chunk = decoder.frameToTensor(frame);
             appendChunk(chunk);
             av_frame_unref(frame);
         }
         flushed = true;
-        return 0;
+        return sampleBuffer.size() - before;
     }
 
+    /** Append frame tensor {@code [C,T]} as interleaved floats into {@link #sampleBuffer}. */
     private void appendChunk(Tensor chunk) {
-        Tensor cpu = chunk.contiguous().cpu();
+        Tensor cpu = chunk.contiguous().cpu().to(ScalarType.Float);
+        long[] shape = new long[(int) cpu.dim()];
+        for (int i = 0; i < shape.length; i++) shape[i] = cpu.size(i);
         org.bytedeco.javacpp.FloatPointer fp = cpu.data_ptr_float();
-        long n = cpu.numel();
-        for (int i = 0; i < n; i++) {
-            sampleBuffer.add(fp.get(i));
+        if (shape.length == 2) {
+            int c = (int) shape[0];
+            int t = (int) shape[1];
+            // de-planar → interleaved
+            for (int i = 0; i < t; i++) {
+                for (int ch = 0; ch < c; ch++) {
+                    sampleBuffer.add(fp.get((long) ch * t + i));
+                }
+            }
+        } else {
+            long n = cpu.numel();
+            for (int i = 0; i < n; i++) {
+                sampleBuffer.add(fp.get(i));
+            }
         }
     }
 

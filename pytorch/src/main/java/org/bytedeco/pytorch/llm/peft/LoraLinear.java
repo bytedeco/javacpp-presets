@@ -217,8 +217,19 @@ public class LoraLinear extends Module {
         }
         Tensor deltaW = mm(loraB, loraA).mul(new Scalar(scaling)); // [out, in]
         mergedDelta = deltaW.clone().detach();
+        // In-place on a leaf that requires_grad is rejected even under NoGradGuard
+        // on recent libtorch — temporarily clear the flag (HF peft does the same).
         try (org.bytedeco.pytorch.NoGradGuard g = new org.bytedeco.pytorch.NoGradGuard()) {
-            base.weight().add_(deltaW);
+            Tensor w = base.weight();
+            boolean rg = false;
+            try { rg = w.requires_grad(); } catch (Exception ignored) {}
+            if (rg) {
+                try { w.requires_grad_(false); } catch (Exception ignored) {}
+            }
+            w.add_(deltaW);
+            if (rg) {
+                try { w.requires_grad_(true); } catch (Exception ignored) {}
+            }
         }
         merged = true;
     }
@@ -230,7 +241,16 @@ public class LoraLinear extends Module {
         }
         if (mergedDelta != null && mergedDelta.defined()) {
             try (org.bytedeco.pytorch.NoGradGuard g = new org.bytedeco.pytorch.NoGradGuard()) {
-                base.weight().sub_(mergedDelta);
+                Tensor w = base.weight();
+                boolean rg = false;
+                try { rg = w.requires_grad(); } catch (Exception ignored) {}
+                if (rg) {
+                    try { w.requires_grad_(false); } catch (Exception ignored) {}
+                }
+                w.sub_(mergedDelta);
+                if (rg) {
+                    try { w.requires_grad_(true); } catch (Exception ignored) {}
+                }
             }
             mergedDelta = null;
         }

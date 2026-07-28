@@ -5,7 +5,7 @@ import org.bytedeco.pytorch.optim.*;
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.distribution.Distribution;
 import org.bytedeco.pytorch.optim.Adam;
-import org.bytedeco.pytorch.optim.AdamOptions;
+import org.bytedeco.pytorch.optim.options.AdamOptions;
 import org.bytedeco.pytorch.optim.Optimizer;
 import org.bytedeco.pytorch.rl.GAE;
 import org.bytedeco.pytorch.rl.ReplayBuffer;

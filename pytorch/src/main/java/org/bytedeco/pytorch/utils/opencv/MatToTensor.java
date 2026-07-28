@@ -247,11 +247,19 @@ public final class MatToTensor {
         FloatPointer fp = cpu.data_ptr_float();
         BytePointer dst = mat.data();
         int dstStep = (int) mat.step1();
+        // Tensor is RGB CHW; OpenCV Mat for color images is BGR interleaved.
+        boolean swapRB = (c == 3);
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 int dstBase = y * dstStep + x * c;
                 for (int ch = 0; ch < c; ch++) {
-                    long srcIdx = (long) ch * h * w + y * w + x;
+                    int srcCh = swapRB ? (2 - ch) : ch; // 0↔2 for RGB→BGR
+                    // For c==3: dst B=src R(ch0), dst G=src G(ch1), dst R=src B(ch2)
+                    // wait: OpenCV BGR means byte0=B, byte1=G, byte2=R
+                    // src tensor ch0=R, ch1=G, ch2=B
+                    // so dst byte0 (B) ← src ch2, byte1 (G) ← src ch1, byte2 (R) ← src ch0
+                    // i.e. srcCh = (ch==0?2 : ch==2?0 : 1) which is 2-ch for ch in {0,2}
+                    long srcIdx = (long) srcCh * h * w + y * w + x;
                     float v = fp.get(srcIdx);
                     dst.put(dstBase + ch, (byte) Math.max(0, Math.min(255, Math.round(v))));
                 }

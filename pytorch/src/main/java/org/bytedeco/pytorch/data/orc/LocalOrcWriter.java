@@ -1,6 +1,6 @@
 package org.bytedeco.pytorch.data.orc;
 
-import org.bytedeco.pytorch.data.dataframe.DataFrame;
+import org.bytedeco.pytorch.dataframe.DataFrame;
 import org.bytedeco.pytorch.utils.duckdb.DuckDB;
 
 import java.nio.file.Files;

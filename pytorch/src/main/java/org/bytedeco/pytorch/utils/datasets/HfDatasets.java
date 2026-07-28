@@ -21,8 +21,8 @@
  */
 package org.bytedeco.pytorch.utils.datasets;
 
-import org.bytedeco.pytorch.utils.hub.HfHub;
-import org.bytedeco.pytorch.utils.hub.HfToken;
+import org.bytedeco.pytorch.llm.hub.HfHub;
+import org.bytedeco.pytorch.llm.hub.HfToken;
 
 import java.io.IOException;
 import java.nio.file.Files;

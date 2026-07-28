@@ -1,6 +1,6 @@
 package org.bytedeco.pytorch.data.avro;
 
-import org.bytedeco.pytorch.data.dataframe.Column;
+import org.bytedeco.pytorch.dataframe.Column;
 
 import java.util.*;
 

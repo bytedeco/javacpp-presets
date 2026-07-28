@@ -21,8 +21,8 @@
  */
 package org.bytedeco.pytorch.utils.orm.dataframe;
 
-import org.bytedeco.pytorch.data.dataframe.Column;
-import org.bytedeco.pytorch.data.dataframe.DataFrame;
+import org.bytedeco.pytorch.dataframe.Column;
+import org.bytedeco.pytorch.dataframe.DataFrame;
 import org.bytedeco.pytorch.utils.orm.mapping.BeanToMapMapper;
 import org.bytedeco.pytorch.utils.orm.mapping.MapToBeanMapper;
 import org.bytedeco.pytorch.utils.orm.mapping.TypeUtils;

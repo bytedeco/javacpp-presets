@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.HashMap;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.global.torch;
-import org.bytedeco.pytorch.geometric.nn.Parameter;
+import org.bytedeco.pytorch.nn.Parameter;
 /**
  * Jumping Knowledge: 融合多层 GNN 的输出
  * mode: "cat", "max", "lstm"

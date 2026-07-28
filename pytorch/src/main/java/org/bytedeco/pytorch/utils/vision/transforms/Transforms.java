@@ -20,8 +20,7 @@
  * limitations under the License.
  */
 package org.bytedeco.pytorch.utils.vision.transforms;
-import org.bytedeco.pytorch.data.transforms.*;
-import org.bytedeco.pytorch.jit.*;
+import org.bytedeco.pytorch.dataframe.dtype.ImageData;
 
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.utils.vision.transforms.functional.F;
@@ -33,7 +32,7 @@ import java.util.Random;
 
 /**
  * Common torchvision.transforms classes.
- * Image ops accept {@link BufferedImage} / {@link org.bytedeco.pytorch.data.dataframe.dtype.ImageData} / {@link Tensor}.
+ * Image ops accept {@link BufferedImage} / {@link ImageData} / {@link Tensor}.
  */
 public final class Transforms {
     private Transforms() {}

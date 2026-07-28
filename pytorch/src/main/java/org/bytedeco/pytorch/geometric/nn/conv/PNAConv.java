@@ -167,29 +167,3 @@ public class PNAConv extends MessagePassing {
         }
     }
 }
-//public class PNAConv extends MessagePassing {
-//    private LinearImpl lin;
-//
-//    public PNAConv(long inChannels, long outChannels, DegreeScalerAggregation aggr) {
-/// /        this(aggr); // 使用 PNA 聚合器
-//        // PNA 聚合后的维度通常会膨胀 (aggregators * scalers)，需要投影回 outChannels
-//        // 假设 aggr 内部已经知道膨胀倍数，或者我们在外部计算好。
-//        // 这里假设输入维度已经是膨胀后的，或者简单的线性变换。
-//        // PNA 论文中: Linear -> ReLU -> Linear
-//        this.lin = new LinearImpl(inChannels, outChannels);
-//        register_module("lin", lin);
-//    }
-//
-//    public Tensor forward(Tensor x, Tensor edge_index) {
-//        // x: [N, In]
-//        // aggregate 会调用 org.bytedeco.pytorch.geometric.aggr.DegreeScalerAggregation, 输出 [N, In * Aggregators * Scalers]
-//        // 这里简化逻辑，假设调用者处理好了维度匹配
-//        Tensor out = propagate(edge_index, x);
-//        return lin.forward(out);
-//    }
-//
-//    @Override
-//    public Tensor message(Tensor x_j) {
-//        return x_j;
-//    }
-//}

@@ -3,7 +3,7 @@ package org.bytedeco.pytorch.geometric.nn.norm;
 import org.bytedeco.pytorch.Scalar;
 import org.bytedeco.pytorch.ScalarTypeOptional;
 import org.bytedeco.pytorch.Tensor;
-import org.bytedeco.pytorch.geometric.nn.Parameter;
+import org.bytedeco.pytorch.nn.Parameter;
 import org.bytedeco.pytorch.geometric.utils.AggrUtils;
 
 import static org.bytedeco.pytorch.global.torch.*;

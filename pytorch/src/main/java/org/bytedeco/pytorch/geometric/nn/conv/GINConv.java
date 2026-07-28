@@ -5,14 +5,10 @@ import org.bytedeco.pytorch.nn.modules.*;
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.global.torch;
-//import org.gnn.framework.nn.org.bytedeco.pytorch.geometric.nn.conv.MessagePassing;
-//import java.lang.reflect.Parameter;
-//package org.bytedeco.pytorch.geometric.nn.conv;
-
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.global.torch;
-import org.bytedeco.pytorch.geometric.nn.Parameter; // 引入自定义 Parameter
+import org.bytedeco.pytorch.nn.Parameter; // 引入自定义 Parameter
 
 import static org.bytedeco.pytorch.global.torch.*;
 

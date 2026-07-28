@@ -1,106 +1,111 @@
 package org.bytedeco.pytorch.geometric.attention;
-import org.bytedeco.pytorch.jit.*;
-import org.bytedeco.pytorch.enumtype.*;
-import org.bytedeco.pytorch.nn.modules.*;
 
-import org.bytedeco.pytorch.*;
-import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.Scalar;
+import org.bytedeco.pytorch.ScalarTypeOptional;
+import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.geometric.utils.AttentionUtils;
+import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 
 /**
- * Performer Attention (FAVOR+)
- * 线性复杂度 O(N * D * M)
+ * Performer attention (FAVOR+, Choromanski et al.) — linear-complexity attention
+ * via positive orthogonal random features.
+ *
+ * <pre>
+ *   φ(x) = exp(x Ω − ‖x‖²/2)           // random feature map
+ *   y    = φ(Q) (φ(K)ᵀ V) / (φ(Q) (φ(K)ᵀ 1))
+ * </pre>
+ * Complexity O(N · D · M) with M = {@code numFeatures}.
  */
 public class PerformerAttention extends Module {
-    private LinearImpl linQ, linK, linV, linOut;
-    private Tensor projectionMatrix; // 随机投影矩阵 (Buffer, 不参与梯度更新)
-    private long numHeads;
-    private long headDim;
-    private long numFeatures; // 随机特征数量 (m)
+
+    private final LinearImpl linQ;
+    private final LinearImpl linK;
+    private final LinearImpl linV;
+    private final LinearImpl linOut;
+    private final Tensor projectionMatrix; // [D, M] buffer
+    private final long numHeads;
+    private final long headDim;
+    private final long numFeatures;
+    private final long inChannels;
 
     public PerformerAttention(long inChannels, long numHeads, long numFeatures) {
         super();
+        if (inChannels <= 0 || numHeads <= 0 || numFeatures <= 0) {
+            throw new IllegalArgumentException("inChannels/numHeads/numFeatures must be > 0");
+        }
+        if (inChannels % numHeads != 0) {
+            throw new IllegalArgumentException("inChannels must be divisible by numHeads");
+        }
+        this.inChannels = inChannels;
         this.numHeads = numHeads;
         this.headDim = inChannels / numHeads;
         this.numFeatures = numFeatures;
 
-        this.linQ = new LinearImpl(inChannels, inChannels);
-        this.linK = new LinearImpl(inChannels, inChannels);
-        this.linV = new LinearImpl(inChannels, inChannels);
-        this.linOut = new LinearImpl(inChannels, inChannels);
+        this.linQ = register_module("linQ", new LinearImpl(inChannels, inChannels));
+        this.linK = register_module("linK", new LinearImpl(inChannels, inChannels));
+        this.linV = register_module("linV", new LinearImpl(inChannels, inChannels));
+        this.linOut = register_module("linOut", new LinearImpl(inChannels, inChannels));
 
-        register_module("linQ", linQ);
-        register_module("linK", linK);
-        register_module("linV", linV);
-        register_module("linOut", linOut);
-
-        // 初始化随机投影矩阵 [HeadDim, M]
-        // 注册为 buffer，这样 to(device) 时会一起移动
-        Tensor proj = AttentionUtils.create_projection_matrix(numFeatures, headDim, true);
+        // Orthogonal random features [headDim, M] as non-trainable buffer
+        Tensor proj = AttentionUtils.create_projection_matrix(numFeatures, headDim, true).contiguous();
         this.projectionMatrix = proj;
-        register_buffer("projectionMatrix", projectionMatrix);
+        register_buffer("projectionMatrix", this.projectionMatrix);
     }
 
+    /**
+     * @param x [N, C] node/token features
+     * @return [N, C]
+     */
     public Tensor forward(Tensor x) {
+        if (x == null || x.dim() != 2) {
+            throw new IllegalArgumentException("x must be [N, C]");
+        }
+        if (x.size(1) != inChannels) {
+            throw new IllegalArgumentException(
+                    "x.size(1)=" + x.size(1) + " != inChannels=" + inChannels);
+        }
         long N = x.size(0);
-        long C = x.size(1);
+        long C = inChannels;
 
-        // 1. Projections [N, Heads, Dim]
         Tensor q = linQ.forward(x).view(N, numHeads, headDim);
         Tensor k = linK.forward(x).view(N, numHeads, headDim);
         Tensor v = linV.forward(x).view(N, numHeads, headDim);
 
-        // 2. Kernel Feature Map phi(.)
-        // 由于 Performer Kernel 通常针对每个 Head 独立投影，或者共享投影
-        // 这里简化为所有 Head 共享投影矩阵
+        // Kernel feature maps shared across heads: [N*H, D] → [N*H, M]
+        // Use reshape (not view) — kernel output may be non-contiguous after exp.
+        Tensor qPrime = AttentionUtils.kernel_performer(
+                q.reshape(N * numHeads, headDim), projectionMatrix, true)
+                .reshape(N, numHeads, numFeatures);
+        Tensor kPrime = AttentionUtils.kernel_performer(
+                k.reshape(N * numHeads, headDim), projectionMatrix, false)
+                .reshape(N, numHeads, numFeatures);
 
-        // Q, K: [N, H, D] -> Reshape -> [N*H, D]
-        Tensor qFlat = q.reshape(N * numHeads, headDim);
-        Tensor kFlat = k.reshape(N * numHeads, headDim);
+        // φ(K)ᵀ V : [H, M, N] @ [H, N, D] → [H, M, D]
+        Tensor kT = kPrime.permute(1, 2, 0);   // [H, M, N]
+        Tensor vP = v.permute(1, 0, 2);        // [H, N, D]
+        Tensor kv = kT.matmul(vP);             // [H, M, D]
 
-        // Apply Kernel: [N*H, M]
-        Tensor qPrime = AttentionUtils.kernel_performer(qFlat, projectionMatrix, true);
-        Tensor kPrime = AttentionUtils.kernel_performer(kFlat, projectionMatrix, false);
+        // Normalization: φ(K)ᵀ 1 → [H, M, 1]
+        Tensor kSum = kT.sum(new long[]{2}, true, new ScalarTypeOptional());
+        Tensor qP = qPrime.permute(1, 0, 2);   // [H, N, M]
+        Tensor norm = qP.matmul(kSum).add(new Scalar(1e-6)); // [H, N, 1]
 
-        // Reshape back: [N, H, M]
-        qPrime = qPrime.view(N, numHeads, numFeatures);
-        kPrime = kPrime.view(N, numHeads, numFeatures);
-
-        // 3. Efficient Attention: Q' (K'^T V)
-        // K': [N, H, M], V: [N, H, D]
-        // K'^T V -> Einsum('nhm, nhd -> hmd')
-        // JavaCPP 中用 permute + matmul 模拟
-
-        // kPrime: [H, N, M]
-        Tensor kPrimeT = kPrime.permute(1, 0, 2); // [H, N, M] -> transpose N,M for matmul -> [H, M, N]
-        Tensor kPrimeTrans = kPrime.permute(1, 2, 0); // [H, M, N]
-
-        Tensor vPerm = v.permute(1, 0, 2); // [H, N, D]
-
-        // KV_Global = [H, M, N] @ [H, N, D] -> [H, M, D]
-        Tensor kvGlobal = kPrimeTrans.matmul(vPerm);
-
-        // 4. Denominator (Normalization)
-        // D = Q' (K'^T 1)
-        Tensor kSum = kPrimeTrans.sum(new long[]{2}, true,new ScalarTypeOptional()); // [H, M, 1]
-        // Q': [H, N, M]
-        Tensor qPrimePerm = qPrime.permute(1, 0, 2); // [H, N, M]
-
-        // Norm = [H, N, M] @ [H, M, 1] -> [H, N, 1]
-        Tensor norm = qPrimePerm.matmul(kSum);
-        // Prevent div 0
-        norm = norm.add(new Scalar(1e-6));
-
-        // 5. Numerator
-        // Out = [H, N, M] @ [H, M, D] -> [H, N, D]
-        Tensor out = qPrimePerm.matmul(kvGlobal);
-
-        // 6. Final: Out / Norm
-        out = out.div(norm);
-
-        // [H, N, D] -> [N, H, D] -> [N, C]
+        // Numerator: φ(Q) (φ(K)ᵀ V)
+        Tensor out = qP.matmul(kv).div(norm);  // [H, N, D]
         out = out.permute(1, 0, 2).reshape(N, C);
-
         return linOut.forward(out);
+    }
+
+    public long getNumHeads() {
+        return numHeads;
+    }
+
+    public long getNumFeatures() {
+        return numFeatures;
+    }
+
+    public long getInChannels() {
+        return inChannels;
     }
 }

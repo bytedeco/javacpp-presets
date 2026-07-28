@@ -45,6 +45,7 @@ public class ChunkTensorDataReader extends Pointer {
     }
 
 
+
   /** Read an entire chunk. */
   @Virtual(true) public native @ByVal @Cast("torch::data::datasets::ChunkDataReader<torch::data::Example<torch::Tensor,torch::data::example::NoTarget>,std::vector<torch::data::Example<torch::Tensor,torch::data::example::NoTarget> > >::ChunkType*") TensorExampleVector read_chunk(@Cast("size_t") long chunk_index);
 

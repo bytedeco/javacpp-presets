@@ -4,8 +4,7 @@
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
  * the Free Software Foundation (subject to the "Classpath" exception),
- * either version 2, or (at your option)
- * any later version (collectively, the "License");
+ * either version 2, or any later version (collectively, the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -23,27 +22,56 @@
 package org.bytedeco.pytorch.utils.ffmpeg;
 
 import java.nio.file.Path;
+import java.util.Map;
 
 /**
- * Static factory for opening FFmpeg-backed media files.
+ * Static factory for opening FFmpeg-backed media.
  *
- * <p>This class ensures native FFmpeg libraries are loaded before use.
+ * <p>Two layers:
+ * <ul>
+ *   <li><b>Convenience tensor IO</b> — {@link #openVideo}/{@link #openAudio} ({@link VideoFile}/{@link AudioFile})</li>
+ *   <li><b>PyAV-parity</b> — {@link #open}/{@link Av#open} → {@link Container}</li>
+ * </ul>
  *
  * <pre>{@code
- * // Video
+ * // Simple tensor decode (torchaudio/torchvision style)
  * try (VideoFile vf = FFmpegLoader.openVideo("video.mp4")) {
  *     Tensor frames = vf.read();  // [N, 3, H, W]
  * }
  *
- * // Audio
- * try (AudioFile af = FFmpegLoader.openAudio("audio.flac")) {
- *     Tensor wave = af.read();    // [C, T]
+ * // PyAV-style container
+ * try (Container c = FFmpegLoader.open("video.mp4")) {
+ *     for (Frame f : c.decodeVideo(0)) {
+ *         var rgb = ((VideoFrame) f).toNdarray("rgb24");
+ *     }
  * }
  * }</pre>
  */
 public final class FFmpegLoader {
 
     private FFmpegLoader() {}
+
+    // ── PyAV-parity ───────────────────────────────────────────────────────
+
+    /** {@link Av#open(String)} — read container. */
+    public static Container open(String path) {
+        return Av.open(path);
+    }
+
+    public static Container open(Path path) {
+        return Av.open(path);
+    }
+
+    /** {@link Av#open(String, String)} — {@code mode} is {@code "r"} or {@code "w"}. */
+    public static Container open(String path, String mode) {
+        return Av.open(path, mode);
+    }
+
+    public static Container open(String path, String mode, Map<String, String> options) {
+        return Av.open(path, mode, options);
+    }
+
+    // ── Convenience tensor readers (existing) ─────────────────────────────
 
     /**
      * Open a video file for reading frames as tensors.

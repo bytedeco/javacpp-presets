@@ -14,6 +14,9 @@ import org.bytedeco.pytorch.nn.modules.container.*;
 import org.bytedeco.pytorch.nn.functions.*;
 import org.bytedeco.pytorch.jit.*;
 import org.bytedeco.pytorch.optim.*;
+import org.bytedeco.pytorch.optim.options.*;
+import org.bytedeco.pytorch.optim.state.*;
+import org.bytedeco.pytorch.optim.schedulers.*;
 import org.bytedeco.pytorch.serialize.*;
 import org.bytedeco.pytorch.distributed.*;
 import org.bytedeco.pytorch.inductor.*;
@@ -574,6 +577,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../ShortSet.java
+
+
+// Targeting ../RecordScopeSet.java
 
 
 // Targeting ../InputMetadataOptional.java
@@ -75515,9 +75521,9 @@ apis for specific fusers.
 // #define CAFFE2_STATIC_LINK_CUDA() 0
 // #define AT_BUILD_WITH_BLAS() 1
 // #define AT_BUILD_WITH_LAPACK() 1
-public static final int AT_PARALLEL_OPENMP = 1;
-public static final int AT_PARALLEL_NATIVE = 0;
-// #define AT_BLAS_F2C() 1
+public static final int AT_PARALLEL_OPENMP = 0;
+public static final int AT_PARALLEL_NATIVE = 1;
+// #define AT_BLAS_F2C() 0
 // #define AT_BLAS_USE_CBLAS_DOT() 1
 // #define AT_KLEIDIAI_ENABLED() 1
 // #define AT_USE_EIGEN_SPARSE() 0
@@ -75965,15 +75971,11 @@ body of your function, only data pointers.
 
 
 
-// Targeting ../Result.java
-
-
  // namespace kineto
  // namespace profiler::impl
+// Targeting ../ProfilerResult.java
 
-// Consolidating events returned directly from Kineto
-// with events manually created by us (e.g. start/stop marks,
-// memory allocation events)
+
 
 /*
  * This API is used by backends to record latency of events that
@@ -76011,7 +76013,13 @@ body of your function, only data pointers.
     @StdString String event_name,
     @StdString String backend_name);
 
-
+@Namespace("torch::autograd::profiler") public static native void enableProfiler(
+    @Const @ByRef ProfilerConfig config,
+    @Const @ByRef ActivityTypeSet activities,
+    @Const @ByRef(nullValue = "std::unordered_set<at::RecordScope>{}") RecordScopeSet scopes);
+@Namespace("torch::autograd::profiler") public static native void enableProfiler(
+    @Const @ByRef ProfilerConfig config,
+    @Const @ByRef ActivityTypeSet activities);
 
 /*
  * Same as enableProfiler but with callback to do post-processing of
@@ -76032,6 +76040,8 @@ body of your function, only data pointers.
  * done.
  */
 
+
+@Namespace("torch::autograd::profiler") public static native @UniquePtr @ByVal ProfilerResult disableProfiler();
 @Namespace("torch::autograd::profiler") public static native void prepareProfiler(
     @Const @ByRef ProfilerConfig config,
     @Const @ByRef ActivityTypeSet activities,
@@ -83917,6 +83927,24 @@ body of your function, only data pointers.
 // Targeting ../OptimizerCloneableSGDParamState.java
 
 
+// Targeting ../OptimizerCloneableAdadeltaParamState.java
+
+
+// Targeting ../OptimizerCloneableAdamaxParamState.java
+
+
+// Targeting ../OptimizerCloneableASGDParamState.java
+
+
+// Targeting ../OptimizerCloneableNAdamParamState.java
+
+
+// Targeting ../OptimizerCloneableRAdamParamState.java
+
+
+// Targeting ../OptimizerCloneableRpropParamState.java
+
+
 // Targeting ../OptimizerOptions.java
 
 
@@ -83938,6 +83966,24 @@ body of your function, only data pointers.
 
 
 // Targeting ../OptimizerCloneableSGDOptions.java
+
+
+// Targeting ../OptimizerCloneableAdadeltaOptions.java
+
+
+// Targeting ../OptimizerCloneableAdamaxOptions.java
+
+
+// Targeting ../OptimizerCloneableASGDOptions.java
+
+
+// Targeting ../OptimizerCloneableNAdamOptions.java
+
+
+// Targeting ../OptimizerCloneableRAdamOptions.java
+
+
+// Targeting ../OptimizerCloneableRpropOptions.java
 
 
 // Targeting ../OptimizerParamGroup.java
@@ -88375,6 +88421,28 @@ public static final int C10D_ENV_NOT_SET = -2;
 // #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
+// Parsed from torch/csrc/distributed/c10d/ProcessGroupWrapper.hpp
+
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+// #pragma once
+
+// #ifdef USE_C10D_GLOO
+
+// #include <torch/csrc/distributed/c10d/ProcessGroupGloo.hpp>
+// #include <torch/csrc/distributed/c10d/Types.hpp>
+// #include <torch/csrc/distributed/c10d/Utils.hpp>
+// Targeting ../ProcessGroupNativeWrapper.java
+
+
+ // namespace c10d
+
+// #endif // USE_C10D_GLOO
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
+
 // Parsed from torch/csrc/distributed/c10d/PrefixStore.hpp
 
 // #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
@@ -90264,6 +90332,217 @@ public static final int C10D_ENV_NOT_SET = -2;
 
  // namespace detail
  // namespace at
+
+
+// Parsed from python_optim_java.h
+
+/*
+ * Python torch.optim algorithms missing from C++ LibTorch, implemented as
+ * real subclasses of torch::optim::Optimizer so JavaCPP peers
+ * `extends org.bytedeco.pytorch.optim.Optimizer` and reuse
+ * OptimizerParamGroup / OptimizerParamGroupVector.
+ *
+ * Algorithms follow the single-tensor functionals in torch/optim single-tensor functionals.
+ * Header-only: symbols are compiled into the JavaCPP JNI library.
+ */
+// #pragma once
+
+// #include <torch/arg.h>
+// #include <torch/optim/optimizer.h>
+// #include <torch/optim/serialize.h>
+// #include <torch/serialize/archive.h>
+// #include <torch/utils.h>
+
+// #include <c10/util/irange.h>
+
+// #include <cmath>
+// #include <tuple>
+// #include <utility>
+// #include <vector>
+ // namespace serialize
+ // namespace torch
+// Targeting ../AdadeltaOptions.java
+
+
+
+@Namespace("torch::optim") public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef AdadeltaOptions lhs, @Const @ByRef AdadeltaOptions rhs);
+// Targeting ../AdadeltaParamState.java
+
+
+
+@Namespace("torch::optim") public static native @Cast("bool") @Name("operator ==") boolean equals(
+    @Const @ByRef AdadeltaParamState lhs,
+    @Const @ByRef AdadeltaParamState rhs);
+// Targeting ../Adadelta.java
+
+
+// Targeting ../AdamaxOptions.java
+
+
+
+@Namespace("torch::optim") public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef AdamaxOptions lhs, @Const @ByRef AdamaxOptions rhs);
+// Targeting ../AdamaxParamState.java
+
+
+
+@Namespace("torch::optim") public static native @Cast("bool") @Name("operator ==") boolean equals(
+    @Const @ByRef AdamaxParamState lhs,
+    @Const @ByRef AdamaxParamState rhs);
+// Targeting ../Adamax.java
+
+
+// Targeting ../ASGDOptions.java
+
+
+
+@Namespace("torch::optim") public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef ASGDOptions lhs, @Const @ByRef ASGDOptions rhs);
+// Targeting ../ASGDParamState.java
+
+
+
+@Namespace("torch::optim") public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef ASGDParamState lhs, @Const @ByRef ASGDParamState rhs);
+// Targeting ../ASGD.java
+
+
+// Targeting ../NAdamOptions.java
+
+
+
+@Namespace("torch::optim") public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef NAdamOptions lhs, @Const @ByRef NAdamOptions rhs);
+// Targeting ../NAdamParamState.java
+
+
+
+@Namespace("torch::optim") public static native @Cast("bool") @Name("operator ==") boolean equals(
+    @Const @ByRef NAdamParamState lhs,
+    @Const @ByRef NAdamParamState rhs);
+// Targeting ../NAdam.java
+
+
+// Targeting ../RAdamOptions.java
+
+
+
+@Namespace("torch::optim") public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef RAdamOptions lhs, @Const @ByRef RAdamOptions rhs);
+// Targeting ../RAdamParamState.java
+
+
+
+@Namespace("torch::optim") public static native @Cast("bool") @Name("operator ==") boolean equals(
+    @Const @ByRef RAdamParamState lhs,
+    @Const @ByRef RAdamParamState rhs);
+// Targeting ../RAdam.java
+
+
+// Targeting ../RpropOptions.java
+
+
+
+@Namespace("torch::optim") public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef RpropOptions lhs, @Const @ByRef RpropOptions rhs);
+// Targeting ../RpropParamState.java
+
+
+
+@Namespace("torch::optim") public static native @Cast("bool") @Name("operator ==") boolean equals(
+    @Const @ByRef RpropParamState lhs,
+    @Const @ByRef RpropParamState rhs);
+// Targeting ../Rprop.java
+
+
+
+ // namespace torch::optim
+
+
+// Parsed from python_lr_scheduler_java.h
+
+/*
+ * Python torch.optim.lr_scheduler classes missing from C++ LibTorch, implemented
+ * as real subclasses of torch::optim::LRScheduler so JavaCPP peers
+ * `extends org.bytedeco.pytorch.optim.schedulers.LRScheduler`.
+ *
+ * Also exposes protected LRScheduler APIs needed from Java (get_current_lrs,
+ * step_count) via public accessors on each concrete class / free helpers.
+ *
+ * Formulas follow torch/optim/lr_scheduler.py (eager path).
+ */
+// #pragma once
+
+// #include <torch/optim/optimizer.h>
+// #include <torch/optim/schedulers/lr_scheduler.h>
+
+// #include <algorithm>
+// #include <cmath>
+// #include <set>
+// #include <string>
+// #include <utility>
+// #include <vector>
+// Targeting ../MultiplicativeLR.java
+
+
+// Targeting ../MultiStepLR.java
+
+
+// Targeting ../ConstantLR.java
+
+
+// Targeting ../LinearLR.java
+
+
+// Targeting ../ExponentialLR.java
+
+
+// Targeting ../PolynomialLR.java
+
+
+// Targeting ../CosineAnnealingLR.java
+
+
+// Targeting ../CosineAnnealingWarmRestarts.java
+
+
+// Targeting ../CyclicLR.java
+
+
+
+
+ // namespace torch::optim
+
+
+// Parsed from python_samplers_java.h
+
+/*
+ * Python torch.utils.data.Sampler classes missing from C++ LibTorch, implemented
+ * as real subclasses of torch::data::samplers::Sampler<> so JavaCPP peers
+ * `extends org.bytedeco.pytorch.data.sampler.Sampler`.
+ *
+ * API is the C++ Sampler contract: reset / next(batch_size) / save / load
+ * (not Python's __iter__ of single indices — DataLoader already batches via next).
+ *
+ * - SubsetRandomSampler: shuffle a fixed index list each epoch
+ * - WeightedRandomSampler: multinomial over weights
+ * - BatchSampler: wrap another Sampler with drop_last semantics
+ */
+// #pragma once
+
+// #include <torch/data/samplers/base.h>
+// #include <torch/serialize/archive.h>
+// #include <torch/types.h>
+
+// #include <algorithm>
+// #include <cstddef>
+// #include <memory>
+// #include <vector>
+// Targeting ../SubsetRandomSampler.java
+
+
+// Targeting ../WeightedRandomSampler.java
+
+
+// Targeting ../BatchSampler.java
+
+
+
+ // namespace torch::data::samplers
 
 
 }

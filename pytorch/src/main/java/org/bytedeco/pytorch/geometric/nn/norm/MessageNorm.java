@@ -1,42 +1,60 @@
 package org.bytedeco.pytorch.geometric.nn.norm;
-import org.bytedeco.pytorch.data.transforms.*;
-import org.bytedeco.pytorch.jit.*;
 
-import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.Scalar;
+import org.bytedeco.pytorch.ScalarOptional;
+import org.bytedeco.pytorch.ScalarTypeOptional;
+import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.TensorOptions;
+import org.bytedeco.pytorch.nn.Parameter;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.nn.Module;
-import org.bytedeco.pytorch.global.torch;
-import org.bytedeco.pytorch.geometric.nn.Parameter;
+
 /**
- * MessageNorm
- * 归一化消息向量 m，使其模长与节点特征 x 保持一致，并乘以可学习系数。
+ * MessageNorm (Li et al., DeepGCNs): scale aggregated messages to match node feature norms.
+ *
+ * <pre>
+ *   m' = s · m · (‖x‖₂ / (‖m‖₂ + ε))
+ * </pre>
+ * {@code s} is a learnable scalar.
  */
 public class MessageNorm extends Module {
-    private Parameter scale; // Learnable scale factor
+
+    private final Parameter scale;
+    private final double eps;
+
+    public MessageNorm() {
+        this(1.0);
+    }
 
     public MessageNorm(double initScale) {
+        this(initScale, 1e-6);
+    }
+
+    public MessageNorm(double initScale, double eps) {
         super();
-        this.scale = new Parameter(torch.tensor(initScale));
-        register_parameter("scale", scale);
+        this.eps = eps;
+        TensorOptions fOpt = new TensorOptions()
+                .dtype(new ScalarTypeOptional(torch.ScalarType.Float));
+        Tensor s = torch.tensor(new float[]{(float) initScale}, fOpt).clone().requires_grad_(true);
+        this.scale = new Parameter(s, true);
+        register_parameter("scale", this.scale);
     }
 
     /**
-     * @param x 节点自身特征 [N, C]
-     * @param msg 聚合后的消息 [N, C]
+     * @param x   node features [N, C] (provides target norm)
+     * @param msg aggregated messages [N, C]
+     * @return scaled messages [N, C]
      */
     public Tensor forward(Tensor x, Tensor msg) {
-        // 1. Compute L2 Norm (dim=1)
-        // norm_x: [N, 1]
+        if (x == null || msg == null) {
+            throw new NullPointerException("x and msg must not be null");
+        }
+        if (x.dim() != msg.dim() || x.size(0) != msg.size(0)) {
+            throw new IllegalArgumentException("x and msg must share rank and size(0)");
+        }
         Tensor normX = x.norm(new ScalarOptional(new Scalar(2)), new long[]{1}, true);
         Tensor normMsg = msg.norm(new ScalarOptional(new Scalar(2)), new long[]{1}, true);
-
-        // 2. Normalize Message
-        // m' = m * (norm_x / (norm_m + eps))
-        Tensor ratio = normX.div(normMsg.add(new Scalar(1e-6)));
-
-        Tensor out = msg.mul(ratio);
-
-        // 3. Apply Learnable Scale
-        return out.mul(scale);
+        Tensor ratio = normX.div(normMsg.add(new Scalar(eps)));
+        return msg.mul(ratio).mul(scale);
     }
 }

@@ -1,5 +1,4 @@
 package org.bytedeco.pytorch.data.avro;
-import org.bytedeco.pytorch.nn.options.*;
 
 import org.apache.avro.Schema;
 import org.apache.avro.file.DataFileReader;
@@ -7,10 +6,10 @@ import org.apache.avro.file.FileReader;
 import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
-import org.bytedeco.pytorch.data.dataframe.Column;
-import org.bytedeco.pytorch.data.dataframe.DataFrame;
-import org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec;
-import org.bytedeco.pytorch.data.dataframe.io.IoTypeCoercion;
+import org.bytedeco.pytorch.dataframe.Column;
+import org.bytedeco.pytorch.dataframe.DataFrame;
+import org.bytedeco.pytorch.dataframe.io.ComplexCellCodec;
+import org.bytedeco.pytorch.dataframe.io.IoTypeCoercion;
 
 import java.io.File;
 import java.nio.ByteBuffer;

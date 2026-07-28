@@ -20,10 +20,9 @@
  * limitations under the License.
  */
 package org.bytedeco.pytorch.utils.vision.transforms.functional;
-import org.bytedeco.pytorch.nn.*;
 
 import org.bytedeco.pytorch.Tensor;
-import org.bytedeco.pytorch.data.dataframe.dtype.ImageData;
+import org.bytedeco.pytorch.dataframe.dtype.ImageData;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.utils.vision.utils.ImageTensors;
 

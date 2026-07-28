@@ -13,9 +13,9 @@ import org.apache.arrow.vector.types.TimeUnit;
 import org.apache.arrow.vector.types.pojo.ArrowType;
 import org.apache.arrow.vector.types.pojo.Field;
 import org.apache.arrow.vector.types.pojo.FieldType;
-import org.bytedeco.pytorch.data.dataframe.Column;
-import org.bytedeco.pytorch.data.dataframe.dtype.EmbeddingData;
-import org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec;
+import org.bytedeco.pytorch.dataframe.Column;
+import org.bytedeco.pytorch.dataframe.dtype.EmbeddingData;
+import org.bytedeco.pytorch.dataframe.io.ComplexCellCodec;
 
 /**
  * Maps between DataFrame {@link Column.DType} and Apache Arrow field types.

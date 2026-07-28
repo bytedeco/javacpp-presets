@@ -28,15 +28,15 @@ import org.apache.arrow.vector.complex.FixedSizeListVector;
 import org.apache.arrow.vector.complex.ListVector;
 import org.apache.arrow.vector.complex.MapVector;
 import org.apache.arrow.vector.complex.StructVector;
-import org.apache.arrow.vector.complex.impl.UnionListWriter;
 import org.apache.arrow.vector.complex.impl.UnionMapWriter;
-import org.bytedeco.pytorch.data.dataframe.Column;
-import org.bytedeco.pytorch.data.dataframe.dtype.EmbeddingData;
-import org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec;
+import org.bytedeco.pytorch.dataframe.ArrowStorage;
+import org.bytedeco.pytorch.dataframe.Column;
+import org.bytedeco.pytorch.dataframe.dtype.EmbeddingData;
+import org.bytedeco.pytorch.dataframe.io.ComplexCellCodec;
 
 /**
  * Shared fill / read helpers for Arrow nested vectors used by
- * {@link LocalArrowIpcWriter}, {@link ArrowBridge} and {@link org.bytedeco.pytorch.data.dataframe.ArrowStorage}.
+ * {@link LocalArrowIpcWriter}, {@link ArrowBridge} and {@link ArrowStorage}.
  */
 public final class ArrowComplexVectors {
     private ArrowComplexVectors() {}

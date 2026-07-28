@@ -1,0 +1,11 @@
+{
+  "model_type": "mistral",
+  "java_class": "org.bytedeco.pytorch.utils.transformers.modeling.LlamaForCausalLM",
+  "norm": "rmsnorm",
+  "mlp": "swiglu",
+  "attention": "gqa",
+  "position": "rope",
+  "qkv_bias": false,
+  "sliding_window": true,
+  "notes": "Uses LlamaForCausalLM backbone; sliding window ignored for short context"
+}

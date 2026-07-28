@@ -1,0 +1,12 @@
+{
+  "model_type": "llama",
+  "java_class": "org.bytedeco.pytorch.utils.transformers.modeling.LlamaForCausalLM",
+  "norm": "rmsnorm",
+  "mlp": "swiglu",
+  "attention": "gqa",
+  "position": "rope",
+  "qkv_bias": false,
+  "tie_word_embeddings_default": false,
+  "param_prefix": "",
+  "notes": "HF-identical parameter names; also used for mistral-family short-context"
+}

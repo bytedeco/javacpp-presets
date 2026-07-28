@@ -1,6 +1,4 @@
 package org.bytedeco.pytorch.rl.critic;
-import org.bytedeco.pytorch.nn.modules.*;
-import org.bytedeco.pytorch.jit.*;
 
 import org.bytedeco.pytorch.Scalar;
 import org.bytedeco.pytorch.ScalarOptional;
@@ -9,8 +7,8 @@ import org.bytedeco.pytorch.distribution.Categorical;
 import org.bytedeco.pytorch.distribution.Distribution;
 import org.bytedeco.pytorch.llm.peft.LoraConfig;
 import org.bytedeco.pytorch.nn.modules.LinearImpl;
-import org.bytedeco.pytorch.utils.transformers.CausalLM;
-import org.bytedeco.pytorch.utils.transformers.PretrainedConfig;
+import org.bytedeco.pytorch.llm.transformers.CausalLM;
+import org.bytedeco.pytorch.llm.transformers.PretrainedConfig;
 
 import static org.bytedeco.pytorch.global.torch.kFloat;
 import static org.bytedeco.pytorch.global.torch.relu;

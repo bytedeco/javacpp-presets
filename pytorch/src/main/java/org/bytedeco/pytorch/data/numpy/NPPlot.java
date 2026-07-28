@@ -1,22 +1,19 @@
 package org.bytedeco.pytorch.data.numpy;
 
-import org.bytedeco.pytorch.data.dataframe.plot.AreaChart;
-import org.bytedeco.pytorch.data.dataframe.plot.BarChart;
-import org.bytedeco.pytorch.data.dataframe.plot.BaseChart;
-import org.bytedeco.pytorch.data.dataframe.plot.BoxChart;
-import org.bytedeco.pytorch.data.dataframe.plot.HeatmapChart;
-import org.bytedeco.pytorch.data.dataframe.plot.HistogramChart;
-import org.bytedeco.pytorch.data.dataframe.plot.LineChart;
-import org.bytedeco.pytorch.data.dataframe.plot.Matplotlib;
-import org.bytedeco.pytorch.data.dataframe.plot.PieChart;
-import org.bytedeco.pytorch.data.dataframe.plot.ScatterChart;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.bytedeco.pytorch.utils.plot.AreaChart;
+import org.bytedeco.pytorch.utils.plot.BarChart;
+import org.bytedeco.pytorch.utils.plot.BaseChart;
+import org.bytedeco.pytorch.utils.plot.BoxChart;
+import org.bytedeco.pytorch.utils.plot.HeatmapChart;
+import org.bytedeco.pytorch.utils.plot.HistogramChart;
+import org.bytedeco.pytorch.utils.plot.LineChart;
+import org.bytedeco.pytorch.utils.plot.Matplotlib;
+import org.bytedeco.pytorch.utils.plot.PieChart;
+import org.bytedeco.pytorch.utils.plot.ScatterChart;
 
 /**
- * Matplotlib-style plotting for {@link NDArray} — delegates to dataframe AWT charts.
- * Supports legends via series labels; {@link #show()} / {@link #savefig(String)}.
+ * Matplotlib-style plotting for {@link NDArray} — thin wrapper that delegates to
+ * {@link Matplotlib} so numpy / DataFrame / Tensor entry points share one AWT backend.
  *
  * <pre>
  *   NP.Plot.plot(x, y, "sin").setTitle("Demo").show();
@@ -25,79 +22,33 @@ import java.util.List;
  * </pre>
  */
 public final class NPPlot {
-    private static BaseChart last;
-
     private NPPlot() {}
 
-    public static BaseChart last() { return last; }
-
-    private static <T extends BaseChart> T remember(T c) {
-        last = c;
-        return c;
-    }
-
-    private static double[] flat(NDArray a) {
-        return NPShape.ravel(a).asDoubleArray();
-    }
-
-    private static double[] idx(int n) {
-        double[] x = new double[n];
-        for (int i = 0; i < n; i++) x[i] = i;
-        return x;
-    }
+    public static BaseChart last() { return Matplotlib.last(); }
 
     // ---- line / plot --------------------------------------------------------
 
     public static LineChart plot(NDArray y) {
-        double[] yy = flat(y);
-        return remember(new LineChart("Line Plot", idx(yy.length), yy, "y"));
+        return Matplotlib.plot(y);
     }
 
     public static LineChart plot(NDArray x, NDArray y) {
-        return remember(new LineChart("Line Plot", flat(x), flat(y), "y"));
+        return Matplotlib.plot(x, y);
     }
 
     public static LineChart plot(NDArray x, NDArray y, String label) {
-        return remember(new LineChart("Line Plot", flat(x), flat(y), label == null ? "y" : label));
+        return Matplotlib.plot(x, y, label);
     }
 
     /** Multi-series: each column of {@code Y} (2D) is a series against {@code x}. */
     public static LineChart plot(NDArray x, NDArray Y, String[] labels) {
-        if (Y.shape.length != 2) throw new IllegalArgumentException("Y must be 2D for multi-series");
-        double[] xx = flat(x);
-        int cols = (int) Y.shape[1];
-        int rows = (int) Y.shape[0];
-        if (xx.length != rows) throw new IllegalArgumentException("x length must match Y rows");
-        // LineChart multi via first series then — use first column API; build by concatenating labels
-        // Fall back: plot first series with legend labels encoded; for full multi use dataframe path.
-        // Construct by plotting column 0 and set title noting series count; better: use Area-like multi.
-        double[] y0 = new double[rows];
-        for (int i = 0; i < rows; i++) y0[i] = Y.getDouble(i * cols);
-        String lab0 = labels != null && labels.length > 0 ? labels[0] : "y0";
-        LineChart chart = new LineChart("Line Plot", xx, y0, lab0);
-        // LineChart may only hold one series in simple ctor — add remaining via repeated plot merge if supported.
-        // Use Matplotlib multi by building synthetic: draw all series into one chart if LineChart supports list.
-        // Practical approach: create chart from first, document that multi-series uses plotMany.
-        return remember(plotMany(x, Y, labels));
+        return plotMany(x, Y, labels);
     }
 
-    /**
-     * Plot each column of Y as a labeled series. Implemented as sequential LineChart overlays
-     * by packing into a single multi-line chart through repeated y arrays in LineChart when possible;
-     * otherwise returns a chart of the first series and stores all series in title metadata.
-     */
     public static LineChart plotMany(NDArray x, NDArray Y, String[] labels) {
         if (Y.shape.length == 1) return plot(x, Y, labels != null && labels.length > 0 ? labels[0] : "y");
         if (Y.shape.length != 2) throw new IllegalArgumentException("Y must be 1D or 2D");
-        double[] xx = flat(x);
-        int rows = (int) Y.shape[0], cols = (int) Y.shape[1];
-        // Build combined by using LineChart(x,y,label) for col0; for extra series use a custom multi ctor if any.
-        // Read LineChart for multi support — use double[][] approach via reflection-free packing:
-        // Create one LineChart per docs: many LineCharts support (x, ys[][], labels).
-        return remember(buildMultiLine(xx, Y, labels));
-    }
-
-    private static LineChart buildMultiLine(double[] xx, NDArray Y, String[] labels) {
+        double[] xx = Y.shape.length >= 1 ? flat(x) : flat(x);
         int rows = (int) Y.shape[0], cols = (int) Y.shape[1];
         double[] y0 = new double[rows];
         for (int r = 0; r < rows; r++) y0[r] = Y.getDouble(r * cols);
@@ -110,56 +61,50 @@ public final class NPPlot {
             chart.addSeries(yc, lab);
         }
         chart.setShowLegend(true);
+        // keep last chart in Matplotlib state
+        Matplotlib.plot(xx, y0, lab0); // sets last; then we return richer multi chart
         return chart;
     }
 
     public static ScatterChart scatter(NDArray x, NDArray y) {
-        return remember(new ScatterChart("Scatter Plot", flat(x), flat(y)));
+        return Matplotlib.scatter(x, y);
     }
 
     public static ScatterChart scatter(NDArray x, NDArray y, String title) {
-        ScatterChart c = new ScatterChart(title == null ? "Scatter Plot" : title, flat(x), flat(y));
-        return remember(c);
+        ScatterChart c = Matplotlib.scatter(x, y);
+        if (title != null) c.setTitle(title);
+        return c;
     }
 
     public static HistogramChart hist(NDArray data, int bins) {
-        return remember(new HistogramChart("Histogram", flat(data), bins));
+        return Matplotlib.hist(data, bins);
     }
 
     public static HistogramChart hist(NDArray data) { return hist(data, 10); }
 
     public static BarChart bar(NDArray values) {
-        double[] v = flat(values);
-        String[] cats = new String[v.length];
-        for (int i = 0; i < v.length; i++) cats[i] = String.valueOf(i);
-        return remember(new BarChart("Bar Chart", cats, v));
+        return Matplotlib.bar(values);
     }
 
     public static BarChart bar(String[] categories, NDArray values) {
-        return remember(new BarChart("Bar Chart", categories, flat(values)));
+        return Matplotlib.bar(categories, values);
     }
 
     public static PieChart pie(String[] labels, NDArray values) {
-        return remember(new PieChart("Pie Chart", labels, flat(values)));
+        return Matplotlib.pie(labels, values);
     }
 
     public static BoxChart boxplot(NDArray values) {
-        return remember(new BoxChart("Box Plot", flat(values)));
+        return Matplotlib.boxplot(values);
     }
 
     public static AreaChart area(NDArray x, NDArray y) {
-        return remember(new AreaChart("Area Chart", flat(x), flat(y), "y"));
+        return Matplotlib.area(x, y, "y");
     }
 
     /** Heatmap / imshow for 2D array. */
     public static HeatmapChart imshow(NDArray a) {
-        if (a.shape.length != 2) throw new IllegalArgumentException("imshow expects 2D");
-        int rows = (int) a.shape[0], cols = (int) a.shape[1];
-        double[][] m = new double[rows][cols];
-        for (int i = 0; i < rows; i++)
-            for (int j = 0; j < cols; j++)
-                m[i][j] = a.getDouble(i * cols + j);
-        return remember(new HeatmapChart("Imshow", m, null, null));
+        return Matplotlib.imshow(a);
     }
 
     public static HeatmapChart heatmap(NDArray a) { return imshow(a); }
@@ -174,45 +119,25 @@ public final class NPPlot {
 
     // ---- pyplot-style state -------------------------------------------------
 
-    public static void show() {
-        if (last != null) last.show();
-        else System.out.println("[NP.Plot] nothing to show");
-    }
+    /** Block until the plot window is closed. */
+    public static void show() { Matplotlib.show(true); }
 
-    public static void savefig(String path) throws Exception {
-        if (last == null) throw new IllegalStateException("no figure");
-        last.savefig(path);
-    }
+    /** @param block true = wait for close; false = non-blocking open window */
+    public static void show(boolean block) { Matplotlib.show(block); }
 
-    public static BaseChart title(String t) {
-        if (last != null) last.setTitle(t);
-        return last;
-    }
+    public static void savefig(String path) throws Exception { Matplotlib.savefig(path); }
 
-    public static BaseChart xlabel(String s) {
-        if (last != null) last.setXAxisLabel(s);
-        return last;
-    }
+    public static BaseChart title(String t) { return Matplotlib.title(t); }
 
-    public static BaseChart ylabel(String s) {
-        if (last != null) last.setYAxisLabel(s);
-        return last;
-    }
+    public static BaseChart xlabel(String s) { return Matplotlib.xlabel(s); }
 
-    public static BaseChart legend(boolean on) {
-        if (last != null) last.setShowLegend(on);
-        return last;
-    }
+    public static BaseChart ylabel(String s) { return Matplotlib.ylabel(s); }
 
-    public static BaseChart grid(boolean on) {
-        if (last != null) last.setShowGrid(on);
-        return last;
-    }
+    public static BaseChart legend(boolean on) { return Matplotlib.legend(on); }
 
-    public static BaseChart figsize(int w, int h) {
-        if (last != null) last.setSize(w, h);
-        return last;
-    }
+    public static BaseChart grid(boolean on) { return Matplotlib.grid(on); }
+
+    public static BaseChart figsize(int w, int h) { return Matplotlib.figsize(w, h); }
 
     /** Convenience: plot polynomial fit curve + scatter of data. */
     public static BaseChart polyfitPlot(NDArray x, NDArray y, int deg, int samples) {
@@ -220,9 +145,12 @@ public final class NPPlot {
         double xmin = NPReduce.min(x), xmax = NPReduce.max(x);
         NDArray xs = NP.linspace(xmin, xmax, samples);
         NDArray ys = NPPoly.polyval(coef, xs);
-        ScatterChart sc = scatter(x, y, "data");
-        // also draw fit via line chart as last
+        scatter(x, y, "data");
         plot(xs, ys, "poly deg " + deg).setTitle("Polyfit deg=" + deg);
-        return last;
+        return last();
+    }
+
+    private static double[] flat(NDArray a) {
+        return NPShape.ravel(a).asDoubleArray();
     }
 }

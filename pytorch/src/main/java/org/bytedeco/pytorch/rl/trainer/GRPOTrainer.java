@@ -5,7 +5,7 @@ import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.distribution.Distribution;
 import org.bytedeco.pytorch.llm.trl.loss.GRPOLoss;
 import org.bytedeco.pytorch.optim.Adam;
-import org.bytedeco.pytorch.optim.AdamOptions;
+import org.bytedeco.pytorch.optim.options.AdamOptions;
 import org.bytedeco.pytorch.optim.Optimizer;
 import org.bytedeco.pytorch.rl.ReplayBuffer;
 import org.bytedeco.pytorch.rl.critic.AbstractActorCritic;
