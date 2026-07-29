@@ -17,6 +17,9 @@
   <properties>
     <!-- Set -Dpytorch.relocate.skip=true to skip post-parse package relocation -->
     <pytorch.relocate.skip>false</pytorch.relocate.skip>
+    <!-- Unpack macosx-arm64 dylibs into target/classes for IDE Application runs.
+         Set -Dpytorch.ide.natives.skip=true to skip (e.g. CI package-only builds). -->
+    <pytorch.ide.natives.skip>false</pytorch.ide.natives.skip>
   </properties>
 
   <dependencies>
@@ -24,11 +27,49 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
     </dependency>
+    <!-- Local IDE / sample runs need the platform native jars on the classpath.
+         Do NOT depend on *-platform (pulls every OS). Mirror ffmpeg/opencv below:
+         Java API jar + optional current-host classifier only.
+         javacpp version must be ${project.parent.version} (== 1.5.14-SNAPSHOT),
+         NOT 1.5.14-${project.parent.version} (expands to invalid 1.5.14-1.5.14-SNAPSHOT). -->
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>javacpp</artifactId>
+      <version>${project.parent.version}</version>
+      <classifier>macosx-arm64</classifier>
+      <optional>true</optional>
+    </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas</artifactId>
       <version>0.3.33-${project.parent.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>openblas</artifactId>
+      <version>0.3.33-${project.parent.version}</version>
+      <classifier>macosx-arm64</classifier>
+      <optional>true</optional>
+    </dependency>
+    <!-- "junit" % "junit" % "4.13.2" ,// % Test -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+<!--      <scope>test</scope>-->
+    </dependency>
+    <!-- Own platform jar from local m2 (after mvn install). Needed for IDE runs when
+         target/ was cleaned: Make only recompiles .class, not libjnitorch.dylib.
+         optional + runtime so it is not a published transitive; consumers use pytorch-platform. -->
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>pytorch</artifactId>
+      <version>${project.version}</version>
+      <classifier>macosx-arm64</classifier>
+      <optional>true</optional>
+      <scope>runtime</scope>
+    </dependency>
+
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cuda</artifactId>
@@ -217,6 +258,14 @@
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>2.12.1</version>
+    </dependency>
+    <!-- Apache Kafka clients: streaming feature logs / online training / DataFrame source-sink -->
+    <!-- Source: https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka-clients</artifactId>
+      <version>4.3.1</version>
+      <scope>compile</scope>
     </dependency>
     <!-- FFmpeg JavaCPP: video / audio decode-encode via libav -->
     <dependency>
@@ -538,6 +587,14 @@
                 <exclude>org/bytedeco/${javacpp.packageName}/include/</exclude>
                 <exclude>org/bytedeco/${javacpp.packageName}/presets/**/*.h</exclude>
                 <exclude>org/bytedeco/${javacpp.packageName}/presets/*.h</exclude>
+                <!-- Platform dylibs live in the classifier jar (and optionally
+                     target/classes for IDE). Never pack them into the main jar. -->
+                <exclude>org/bytedeco/${javacpp.packageName}/macosx-*/</exclude>
+                <exclude>org/bytedeco/${javacpp.packageName}/linux-*/</exclude>
+                <exclude>org/bytedeco/${javacpp.packageName}/windows-*/</exclude>
+                <exclude>org/bytedeco/${javacpp.packageName}/android-*/</exclude>
+                <exclude>org/bytedeco/${javacpp.packageName}/ios-*/</exclude>
+                <exclude>META-INF/native-image/</exclude>
               </excludes>
             </configuration>
           </execution>
@@ -560,6 +617,33 @@
               <outputDirectory>${project.build.directory}/dependency</outputDirectory>
               <includeScope>compile</includeScope>
               <excludeTransitive>false</excludeTransitive>
+            </configuration>
+          </execution>
+          <!-- IDE Application runs use module output (target/classes) as classpath root.
+               After mvn clean / IDEA rebuild, platform dylibs are gone and Loader fails:
+               UnsatisfiedLinkError: no jnitorch. Unpack last-installed classifier jar
+               so libjnitorch.dylib is visible without putting a self-dep on the run CP.
+               Skip with -Dpytorch.ide.natives.skip=true. Requires prior mvn install once. -->
+          <execution>
+            <id>unpack-ide-platform-natives</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <skip>${pytorch.ide.natives.skip}</skip>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>${project.artifactId}</artifactId>
+                  <version>${project.version}</version>
+                  <classifier>macosx-arm64</classifier>
+                  <type>jar</type>
+                  <overWrite>false</overWrite>
+                  <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                  <includes>org/bytedeco/pytorch/macosx-arm64/**,META-INF/native-image/macosx-arm64/**</includes>
+                </artifactItem>
+              </artifactItems>
             </configuration>
           </execution>
         </executions>
