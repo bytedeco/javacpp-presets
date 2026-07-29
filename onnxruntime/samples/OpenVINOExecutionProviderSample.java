@@ -28,7 +28,7 @@ public class OpenVINOExecutionProviderSample {
             "CAgSFmphdmFjcHAtcHJlc2V0cy1zYW1wbGU6VgoZCgVpbnB1dBIGb3V0cHV0IghJZGVudGl0eRIOaWRlbnRpdHlfZ3JhcGhaEwoFaW5wdXQSCgoICAESBAoCCANiFAoGb3V0cHV0EgoKCAgBEgQKAggDQgIQDQ==";
 
     public static void main(String[] args) throws Exception {
-        String deviceType = args.length > 0 ? args[0] : "CPU";
+        String deviceType = args.length > 0 ? args[0] : "AUTO";
 
         // Loading the ONNX Runtime preset also preloads the OpenVINO runtime inherited by it,
         // which lets the OpenVINO execution provider resolve its bundled native dependencies.
