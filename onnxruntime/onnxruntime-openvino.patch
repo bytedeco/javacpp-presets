@@ -194,3 +194,19 @@ index dd43f856e0..6a34827b1a 100644
 +#elif __GNUC__
 +#pragma GCC diagnostic pop
 +#endif
+diff --git a/onnxruntime/core/providers/openvino/backends/basic_backend.cc b/onnxruntime/core/providers/openvino/backends/basic_backend.cc
+index b39db2be12..8cbded29ce 100644
+--- a/onnxruntime/core/providers/openvino/backends/basic_backend.cc
++++ b/onnxruntime/core/providers/openvino/backends/basic_backend.cc
+@@ -89,7 +89,10 @@ BasicBackend::BasicBackend(std::unique_ptr<onnx::ModelProto>& model_proto,
+ #if defined(OPENVINO_DISABLE_NPU_FALLBACK)
+     eligible_for_cpu_fallback = false;
+ #endif
+-    auto auto_unified_compile = (hw_target.find("AUTO") == std::string::npos);
++    // OpenVINO 2026.2 cannot compile an ONNX model directly from its serialized
++    // string. Use the frontend's read/convert path for all device types instead.
++    // This is already the path used by the AUTO device and other special cases.
++    auto auto_unified_compile = false;
+
+     // Unified compile is efficient with cahce_dir cached model loading that bypass Read Model
+     // Does not support model with exteral weights, dynamic input shape, Epctx onnx cached model,
