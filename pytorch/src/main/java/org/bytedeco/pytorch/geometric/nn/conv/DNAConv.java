@@ -1,5 +1,7 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
 
+import org.bytedeco.pytorch.NoGradGuard;
+
 import org.bytedeco.pytorch.Scalar;
 import org.bytedeco.pytorch.ScalarTypeOptional;
 import org.bytedeco.pytorch.Tensor;
@@ -154,7 +156,9 @@ public class DNAConv extends MessagePassing {
         linK.reset_parameters();
         linV.reset_parameters();
         if (bias != null) {
-            bias.fill_(new Scalar(0));
+            try (NoGradGuard guard = new NoGradGuard()) {
+                bias.fill_(new Scalar(0));
+            }
         }
     }
 
@@ -168,5 +172,22 @@ public class DNAConv extends MessagePassing {
 
     public int getGroups() {
         return groups;
+    }
+
+    /** Per-head key/query dimension (= channels / heads). */
+    public long getDk() {
+        return d_k;
+    }
+
+    public LinearImpl getLinQ() {
+        return linQ;
+    }
+
+    public LinearImpl getLinK() {
+        return linK;
+    }
+
+    public LinearImpl getLinV() {
+        return linV;
     }
 }

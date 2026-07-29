@@ -5,8 +5,8 @@ import org.bytedeco.pytorch.ScalarTypeOptional;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.global.torch;
 
-// Decoder
-class InnerProductDecoder extends Module {
+/** Inner-product edge decoder used by {@link GAE}/{@link VGAE}. */
+public class InnerProductDecoder extends Module {
 
     public Tensor forward(Tensor z, Tensor edge_index, boolean sigmoid) {
         // value = (z[u] * z[v]).sum()

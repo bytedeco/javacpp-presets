@@ -4,7 +4,6 @@ import org.bytedeco.pytorch.dataframe.Column;
 import org.bytedeco.pytorch.dataframe.DataFrame;
 import org.bytedeco.pytorch.dataframe.DataValues;
 import org.bytedeco.pytorch.dataframe.feature.BaseTransformer;
-import org.bytedeco.pytorch.dataframe.feature.util.FeatureMatrices;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +14,9 @@ import java.util.Map;
 /**
  * Robust scaler using median and inter-quantile range (sklearn RobustScaler).
  * Supports custom {@code quantile_range} e.g. (2.5, 97.5).
+ *
+ * <p>Self-contained percentile helpers (no FeatureMatrices dependency) so the
+ * class loads in minimal classpath environments used by feature-platform benches.
  */
 public class RobustScaler extends BaseTransformer {
     private static final long serialVersionUID = 2L;
@@ -47,7 +49,7 @@ public class RobustScaler extends BaseTransformer {
     public BaseTransformer fit(DataFrame X) {
         centers.clear();
         scales.clear();
-        List<String> cols = columns.isEmpty() ? FeatureMatrices.numericColumnNames(X) : columns;
+        List<String> cols = columns.isEmpty() ? numericColumnNames(X) : columns;
         if (columns.isEmpty()) this.columns = new ArrayList<>(cols);
 
         for (String col : cols) {
@@ -65,9 +67,9 @@ public class RobustScaler extends BaseTransformer {
                 continue;
             }
             Collections.sort(values);
-            double median = FeatureMatrices.percentileSorted(values, 0.5);
-            double lo = FeatureMatrices.percentileSorted(values, qLow / 100.0);
-            double hi = FeatureMatrices.percentileSorted(values, qHigh / 100.0);
+            double median = percentileSorted(values, 0.5);
+            double lo = percentileSorted(values, qLow / 100.0);
+            double hi = percentileSorted(values, qHigh / 100.0);
             double scale = hi - lo;
             if (scale == 0.0 || Double.isNaN(scale)) scale = 1.0;
             centers.put(col, median);
@@ -104,4 +106,29 @@ public class RobustScaler extends BaseTransformer {
     public Map<String, Double> getMedians() { return centers; }
     public Map<String, Double> getIQRs() { return scales; }
     public double[] getQuantileRange() { return new double[]{qLow, qHigh}; }
+
+    private static List<String> numericColumnNames(DataFrame X) {
+        List<String> out = new ArrayList<>();
+        for (String name : X.getColumnNames()) {
+            Column.DType dt = X.column(name).dtype();
+            if (dt == Column.DType.INT32 || dt == Column.DType.INT64
+                    || dt == Column.DType.FLOAT32 || dt == Column.DType.FLOAT64) {
+                out.add(name);
+            }
+        }
+        return out;
+    }
+
+    /** Linear-interpolation percentile on a sorted list; q in [0,1]. */
+    private static double percentileSorted(List<Double> sorted, double q) {
+        if (sorted == null || sorted.isEmpty()) return Double.NaN;
+        if (q <= 0) return sorted.get(0);
+        if (q >= 1) return sorted.get(sorted.size() - 1);
+        double pos = q * (sorted.size() - 1);
+        int lo = (int) Math.floor(pos);
+        int hi = (int) Math.ceil(pos);
+        if (lo == hi) return sorted.get(lo);
+        double w = pos - lo;
+        return sorted.get(lo) * (1.0 - w) + sorted.get(hi) * w;
+    }
 }

@@ -72,8 +72,9 @@ public class PointGNNConv extends MessagePassing {
         this._pos = pos;
         this._deltaPos = forwardMlp(mlpH, x);
         try {
-            Tensor aggrOut = propagate(edge_index, x);
-            return update(aggrOut, x);
+            // propagateImpl already invokes update() — do not call it again
+            // (would feed mlpG a post-projection tensor and break Linear shapes).
+            return propagate(edge_index, x);
         } finally {
             this._pos = null;
             this._deltaPos = null;
@@ -85,6 +86,7 @@ public class PointGNNConv extends MessagePassing {
         if (_pos == null || _deltaPos == null) {
             throw new IllegalStateException("PointGNNConv message requires active forward(pos)");
         }
+        // source_to_target: index_j = row (source), index_i = col (target)
         Tensor index_j = _index_j != null ? _index_j : edge_index.select(0, 0);
         Tensor index_i = _index_i != null ? _index_i : edge_index.select(0, 1);
         index_j = AggrUtils.asLongIndex(index_j);

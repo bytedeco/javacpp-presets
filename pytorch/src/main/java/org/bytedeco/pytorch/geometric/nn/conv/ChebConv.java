@@ -1,13 +1,11 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
-import org.bytedeco.pytorch.nn.modules.*;
-
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.nn.Parameter;
 
 import java.util.Arrays;
 import java.util.List;
-
 
 /**
  * 最终适配版 ChebConv：完全匹配你的 JavaCPP/PyTorch API 环境
@@ -247,7 +245,6 @@ public class ChebConv extends MessagePassing {
         return x_j;
     }
 }
-
 
 /**
  * 终极修复版 ChebConv：不依赖父类 MessagePassing 的 propagate，直接实现谱卷积逻辑
@@ -752,7 +749,6 @@ public class ChebConv extends MessagePassing {
 //    public String getNormalization() { return normalization; }
 //    public boolean isReleased() { return isReleased; }
 //}
-
 
 //public class ChebConv extends MessagePassing {
 //    private long inChannels;

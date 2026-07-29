@@ -1,7 +1,6 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 import org.bytedeco.pytorch.autograd.*;
-import org.bytedeco.pytorch.nn.modules.*;
-
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.global.torch;
 
@@ -195,8 +194,6 @@ public class PDNConv extends MessagePassing {
 //        return degInvSqrt.index_select(0, row); // 返回源节点的归一化系数
 //    }
 //}
-
-
 
 //    @Override
 //    public Tensor message(Tensor x_j, Tensor x_i, Tensor edge_index, Tensor edge_attr, long numNodes) {

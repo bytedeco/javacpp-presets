@@ -1,6 +1,5 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
-import org.bytedeco.pytorch.nn.modules.*;
-
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.*;
@@ -309,7 +308,6 @@ public class HypergraphConv extends MessagePassing {
     public boolean isConcat() { return concat; }
     public boolean isReleased() { return isReleased; }
 }
-
 
 //public class HypergraphConv extends MessagePassing {
 //    private LinearImpl lin;

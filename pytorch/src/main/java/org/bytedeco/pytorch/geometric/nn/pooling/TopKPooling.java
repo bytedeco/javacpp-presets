@@ -1,5 +1,6 @@
 package org.bytedeco.pytorch.geometric.nn.pooling;
 
+import org.bytedeco.pytorch.DeviceOptional;
 import org.bytedeco.pytorch.Scalar;
 import org.bytedeco.pytorch.ScalarTypeOptional;
 import org.bytedeco.pytorch.T_TensorTensor_T;
@@ -87,11 +88,13 @@ public class TopKPooling extends Module {
         }
 
         long numNodes = x.size(0);
+        TensorOptions longOnX = new TensorOptions()
+                .dtype(new ScalarTypeOptional(torch.ScalarType.Long))
+                .device(new DeviceOptional(x.device()));
         if (batch == null) {
-            batch = torch.zeros(new long[]{numNodes},
-                    new TensorOptions().dtype(new ScalarTypeOptional(torch.ScalarType.Long)));
+            batch = torch.zeros(new long[]{numNodes}, longOnX);
         } else {
-            batch = batch.to(torch.ScalarType.Long);
+            batch = batch.to(x.device(), torch.ScalarType.Long);
         }
 
         Tensor score = calculateScore(x, edge_index); // [N]
@@ -125,8 +128,11 @@ public class TopKPooling extends Module {
 
         // Build keep-mask by iterating graphs (N typically modest for pooling demos;
         // vectorized segmented topk needs custom kernels not available here).
-        Tensor keepMask = torch.zeros(new long[]{numNodes},
-                new TensorOptions().dtype(new ScalarTypeOptional(torch.ScalarType.Bool)));
+        // Keep mask / ones MUST live on the same device as score/batch (MPS/CUDA).
+        TensorOptions boolOpts = new TensorOptions()
+                .dtype(new ScalarTypeOptional(torch.ScalarType.Bool))
+                .device(new DeviceOptional(score.device()));
+        Tensor keepMask = torch.zeros(new long[]{numNodes}, boolOpts);
 
         for (long g = 0; g < numGraphs; g++) {
             Tensor gMask = batch.eq(new Scalar(g));
@@ -140,10 +146,9 @@ public class TopKPooling extends Module {
             Tensor gScore = score.index_select(0, gIdx);
             Tensor localPerm = torch.topk(gScore, kG).get1(); // indices into gIdx
             Tensor globalPerm = gIdx.index_select(0, localPerm);
-            // scatter true into keepMask
-            Tensor ones = torch.ones(new long[]{globalPerm.size(0)},
-                    new TensorOptions().dtype(new ScalarTypeOptional(torch.ScalarType.Bool)));
-            keepMask.scatter_(0, globalPerm, ones);
+            // Prefer index_fill_ (scalar) over scatter_ of a Bool source tensor —
+            // more robust across CPU / MPS / CUDA.
+            keepMask.index_fill_(0, globalPerm, new Scalar(1));
         }
         return keepMask.nonzero().view(-1).contiguous();
     }
@@ -164,11 +169,12 @@ public class TopKPooling extends Module {
         Tensor xNew = x.index_select(0, perm).mul(gate);
         Tensor batchNew = batch.index_select(0, perm);
 
-        // map[old] = new index, -1 if dropped
-        Tensor map = torch.full(new long[]{numNodes}, new Scalar(-1),
-                new TensorOptions().dtype(new ScalarTypeOptional(torch.ScalarType.Long)));
-        Tensor newIdxRange = torch.arange(new Scalar(0), new Scalar(k),
-                new TensorOptions().dtype(new ScalarTypeOptional(torch.ScalarType.Long)));
+        // map[old] = new index, -1 if dropped — same device as x/perm (MPS/CUDA-safe)
+        TensorOptions longOpts = new TensorOptions()
+                .dtype(new ScalarTypeOptional(torch.ScalarType.Long))
+                .device(new DeviceOptional(x.device()));
+        Tensor map = torch.full(new long[]{numNodes}, new Scalar(-1), longOpts);
+        Tensor newIdxRange = torch.arange(new Scalar(0), new Scalar(k), longOpts);
         map.scatter_(0, perm, newIdxRange);
 
         Tensor row = edge_index.select(0, 0);

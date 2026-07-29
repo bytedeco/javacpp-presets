@@ -1,6 +1,5 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
-import org.bytedeco.pytorch.nn.modules.*;
-
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 import org.bytedeco.pytorch.*;
 
 import static org.bytedeco.pytorch.global.torch.relu;
@@ -43,7 +42,6 @@ public class SAGEConvV2 extends MessagePassing {
 
     // 显式告诉 propagate 目标节点的数量是 xDst.size(0)
 //        return propagate(edge_index, xSrc, xDst, xDst.size(0));
-
 
     @Override
     public Tensor forward(Tensor x, Tensor edge_index) {

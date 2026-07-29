@@ -82,40 +82,40 @@ public class PNA extends GenericModule {
     }
 
     /**
-     * @param inputs inputs[0] 是 x (Features), inputs[1] 是 edge_index
+     * Standard (x, edge_index) entry — required so {@code Module.forward(Tensor,Tensor)}
+     * dispatches to Java via {@code ModuleAsHelper.hasForwardOverride}.
+     */
+    public Tensor forward(Tensor x, Tensor edge_index) {
+        return forwardImpl(x, edge_index);
+    }
+
+    /**
+     * @param inputs inputs[0] is x (features), inputs[1] is edge_index
      */
     @Override
     public Tensor forward(Tensor... inputs) {
-        Tensor x = inputs[0];
-        Tensor edge_index = inputs[1];
+        if (inputs == null || inputs.length < 2) {
+            throw new IllegalArgumentException("PNA.forward expects [x, edge_index]");
+        }
+        return forwardImpl(inputs[0], inputs[1]);
+    }
 
+    private Tensor forwardImpl(Tensor x, Tensor edge_index) {
         for (int i = 0; i < numLayers; i++) {
-            Tensor xIn = x; // 用于 Residual Connection (如果维度匹配)
-// 关键修复：从 Java 数组中获取对象，避开 ClassCastException
-            // 不再使用 convs.get(i)
+            Tensor xIn = x; // residual when dims match
+            // Prefer Java array of typed layers — avoids ClassCastException on ModuleList
             x = convLayers[i].forward(x, edge_index);
             x = normLayers[i].forward(x);
-            // 1. 卷积层
-//            x = ((PNAConv) convs.get(i)).forward(x, edge_index);
-//            // 2. 标准化层
-//            x = ((BatchNorm) norms.get(i)).forward(x);
-            // 3. 激活函数 (最后一层通常不加激活，或者根据具体需求)
-
-//            PNAConv conv = new PNAConv(convs.get(i));
-//            BatchNorm norm = new BatchNorm(normLayers[i]);
-//            x = conv.forward(x, edge_index);
-//            x = norm.forward(x);
 
             if (i != numLayers - 1) {
                 x = relu(x);
             }
 
-            // 4. Skip Connection (仅在维度一致时，PyG 逻辑)
+            // Skip connection only when channel dims agree (PyG-style)
             if (xIn.size(-1) == x.size(-1)) {
                 x = x.add(xIn);
             }
         }
-
         return x;
     }
 }

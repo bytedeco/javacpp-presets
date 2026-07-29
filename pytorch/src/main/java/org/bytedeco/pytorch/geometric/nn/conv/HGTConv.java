@@ -1,6 +1,5 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
-import org.bytedeco.pytorch.nn.modules.*;
-
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.global.torch;
@@ -70,7 +69,6 @@ public class HGTConv extends Module {
     public Map<String, Tensor> forward(Map<String, Tensor> xDict, Map<String[], Tensor> edgeIndexDict) {
         // 1. 使用 TensorVector 来暂存聚合后的消息，避免 ArrayList 转换时的指针丢失
         Map<String, Tensor> msgSumDict = new HashMap<>();
-
 
         for (Map.Entry<String[], Tensor> entry : edgeIndexDict.entrySet()) {
 //            try (PointerScope innerScope = new PointerScope()) {

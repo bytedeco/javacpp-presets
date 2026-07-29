@@ -1,60 +1,74 @@
 package org.bytedeco.pytorch.geometric.aggr;
-import org.bytedeco.pytorch.jit.*;
-import org.bytedeco.pytorch.c10.*;
 
-import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.LongOptional;
+import org.bytedeco.pytorch.Scalar;
+import org.bytedeco.pytorch.T_TensorTensor_T;
+import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.global.torch;
+import org.bytedeco.pytorch.geometric.utils.AggrUtils;
 
 /**
- * 10. org.bytedeco.pytorch.geometric.aggr.SortAggregation (SortPool)
- * 对特征进行排序，保留 Top-K 个值。通常用于图分类的 Global Pooling。
- * 输出形状: [Batch, k * Channels]
+ * SortAggregation (SortPool-style).
+ *
+ * <p>For each group defined by {@code index}, sort members by the last feature
+ * channel (descending), keep the top-{@code k} rows, zero-pad when a group has
+ * fewer than {@code k} members, then flatten to {@code [dimSize, k * C]}.
+ *
+ * <p>Aligned with PyG {@code SortAggregation} / SortPooling for graph-level
+ * pooling when {@code index} is a batch vector; also works as a neighborhood
+ * aggregator when {@code index} is a target-node index.
  */
 public class SortAggregation extends Aggregation {
-    private long k;
+    private final long k;
 
     public SortAggregation(long k) {
+        if (k <= 0) {
+            throw new IllegalArgumentException("k must be > 0, got " + k);
+        }
         this.k = k;
+    }
+
+    public long k() {
+        return k;
     }
 
     @Override
     public Tensor forward(Tensor x, Tensor index, long dimSize) {
-        // x: [N, C], index: [N] (batch index)
-        // 注意：这是 Global Pooling 的逻辑。
-        // 如果要做 Neighborhood org.bytedeco.pytorch.geometric.aggr.Aggregation (SAGE/org.bytedeco.pytorch.geometric.nn.model.GAT)，需要 per-edge 排序，
-        // 在没有 segmented_sort 的情况下非常慢。这里实现标准的 Graph Classification SortPool。
-
+        // x: [E, C], index: [E]
         long C = x.size(1);
 
-        // 1. 根据最后一列特征进行排序 (PyG 默认行为)
-        // 或者对每个特征通道独立排序
-        // 这里演示：对最后一列特征排序，然后排列整个 tensor
-        Tensor lastDim = x.select(1, -1);
-        T_TensorTensor_T sortRet = torch.sort(lastDim, 0l, true); // descending T_TT_T  
-        Tensor perm = sortRet.get1().indices(); // [N]
+        // Pack neighbors into dense [N, maxDeg, C] with boolean mask.
+        // fillValue=0 so padded slots contribute zeros after selection.
+        Tensor[] packed = AggrUtils.to_dense_batch(x, index, dimSize, 0f);
+        Tensor dense = packed[0]; // [N, L, C]
+        Tensor mask = packed[1];  // [N, L] bool
+        long L = dense.size(1);
 
-        // 2. 重排 x 和 index
-        Tensor xSorted = x.index_select(0, perm);
-        Tensor indexSorted = index.index_select(0, perm);
+        // Score = last feature channel; invalid (padded) positions get -inf so
+        // they sort to the end under descending order.
+        Tensor score = dense.select(2, C - 1).clone(); // [N, L]
+        Tensor negInf = torch.full(score.shape(), new Scalar(Float.NEGATIVE_INFINITY), score.options());
+        score = torch.where(mask, score, negInf);
 
-        // 3. 填充逻辑 (这在纯 Tensor API 下很难做 batch 并行)
-        // 简化实现：我们假设 dimSize 是 Batch Size，我们需要把 x 填入 [Batch, K, C]
+        // torch.sort returns (values, indices); get1() is already the perm.
+        T_TensorTensor_T sortRet = torch.sort(score, 1L, true);
+        Tensor perm = sortRet.get1(); // [N, L]
 
-        Tensor out = torch.zeros(new long[]{dimSize, k * C}, x.options());
-        Tensor counts = torch.zeros(new long[]{dimSize}, index.options());
+        // Gather rows along degree dim using expanded permutation.
+        Tensor permExp = perm.unsqueeze(2).expand(new long[]{dimSize, L, C});
+        Tensor sorted = dense.gather(1, permExp); // [N, L, C]
 
-        // 这是一个极简实现，实际高性能 SortPool 需要 CUDA Kernel
-        // 或者使用 Masked Select + Pad
-        // 由于 Java 循环太慢，这里暂留一个基于 CPU 循环的实现作为功能性展示
-        // (生产环境建议写 C++ 自定义算子)
+        // Keep top-k (pad with zeros if L < k).
+        Tensor topk;
+        if (L >= k) {
+            topk = sorted.slice(1, new LongOptional(0), new LongOptional(k), 1L); // [N, k, C]
+        } else {
+            Tensor pad = torch.zeros(new long[]{dimSize, k - L, C}, x.options());
+            topk = torch.cat(new TensorVector(sorted, pad), 1); // [N, k, C]
+        }
 
-        // TODO: 高性能实现需引入 torch.nn.utils.rnn.pad_sequence 逻辑
-        // 这里仅抛出异常或返回 Mean 以防止误用，或者实现一个简单的 Top-1 (Max)
-        // 为了代码能跑，我们暂时回退到 org.bytedeco.pytorch.geometric.aggr.MaxAggregation 的逻辑，并在文档中注明
-        System.err.println("Warning: org.bytedeco.pytorch.geometric.aggr.SortAggregation pure Java implementation is slow. Using Max fallback for demo.");
-        return new MaxAggregation().forward(x, index, dimSize);
+        // Flatten feature dim: [N, k * C]
+        return topk.reshape(dimSize, k * C).contiguous();
     }
 }
-
-// Median 和 Quantile 在没有底层 Kernel 支持下极难实现高效版本
-// 建议在工程中使用 PNA 时，用 Max/Min/Mean/Std 替代 Median

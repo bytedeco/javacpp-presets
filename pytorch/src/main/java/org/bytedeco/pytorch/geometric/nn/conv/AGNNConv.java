@@ -6,6 +6,7 @@ import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.nn.Parameter;
 import org.bytedeco.pytorch.geometric.utils.AggrUtils;
 import org.bytedeco.pytorch.global.torch;
+import org.bytedeco.pytorch.NoGradGuard;
 
 /**
  * Attention-based Graph Neural Network convolution (Thekumparampil et al.).
@@ -88,7 +89,9 @@ public class AGNNConv extends MessagePassing {
     public void resetParameters() {
         Tensor b = beta();
         if (b != null) {
-            b.fill_(new Scalar(1.0));
+            try (NoGradGuard guard = new NoGradGuard()) {
+                b.fill_(new Scalar(1.0));
+            }
         }
     }
 

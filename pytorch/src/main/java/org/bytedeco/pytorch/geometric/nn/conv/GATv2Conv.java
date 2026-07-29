@@ -3,6 +3,7 @@ package org.bytedeco.pytorch.geometric.nn.conv;
 import org.bytedeco.pytorch.Scalar;
 import org.bytedeco.pytorch.ScalarTypeOptional;
 import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.TensorOptions;
 import org.bytedeco.pytorch.nn.Parameter;
 import org.bytedeco.pytorch.geometric.utils.AggrUtils;
@@ -95,8 +96,18 @@ public class GATv2Conv extends MessagePassing {
         }
         long N = x.size(0);
         Tensor ei = edge_index;
+        Tensor ea = edge_attr;
         if (addSelfLoops) {
+            long E0 = ei.size(1);
             ei = org.bytedeco.pytorch.geometric.utils.GraphUtils.add_self_loops(ei, N);
+            // Pad edge_attr with zeros for newly added self-loop edges so message()
+            // can safely broadcast edge features over all E edges.
+            if (ea != null && linEdge != null && ei.size(1) > E0) {
+                long added = ei.size(1) - E0;
+                long edgeDim = ea.size(ea.dim() - 1);
+                Tensor pad = torch.zeros(new long[]{added, edgeDim}, ea.options());
+                ea = torch.cat(new TensorVector(ea, pad), 0);
+            }
         }
 
         // Independent projections → [N, H, C]
@@ -104,7 +115,7 @@ public class GATv2Conv extends MessagePassing {
         Tensor xDst = linDst.forward(x).view(N, heads, outChannels);
 
         // Bipartite-style propagate: different lifted features for j and i
-        Tensor out = super.propagate(ei, xSrc, xDst, edge_attr);
+        Tensor out = super.propagate(ei, xSrc, xDst, ea);
 
         if (concat) {
             out = out.view(N, heads * outChannels);

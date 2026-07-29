@@ -6,7 +6,6 @@
  */
 package org.bytedeco.pytorch.geometric.nn.pooling;
 
-import org.bytedeco.javacpp.indexer.LongIndexer;
 import org.bytedeco.pytorch.AbstractTensor;
 import org.bytedeco.pytorch.Device;
 import org.bytedeco.pytorch.DeviceOptional;
@@ -39,7 +38,7 @@ import org.bytedeco.pytorch.nn.modules.LinearImpl;
  * <h2>Design notes (enterprise / JavaCPP)</h2>
  * <ul>
  *   <li>Greedy matching is inherently sequential — runs on a CPU long copy of
- *       {@code edge_index}/{@code score} via {@link LongIndexer}. Feature
+ *       {@code edge_index}/{@code score} via {@code data_ptr_long()}. Feature
  *       pooling and edge coarsening stay on the input device so gradients flow
  *       through {@code lin} and the mean-pool path.</li>
  *   <li>Batch-aware: matching is independent per graph (nodes of graph g only
@@ -308,37 +307,48 @@ public class EdgePooling extends Module {
         final long numEdges = edgeIndex.size(1);
         // Host-side boolean[] / long[] require N fit in int — true for any
         // graph EdgePooling is practical on (CPU greedy match is O(E log E)).
-        if (numNodes > Integer.MAX_VALUE) {
+        if (numNodes > Integer.MAX_VALUE || numEdges > Integer.MAX_VALUE) {
             throw new IllegalArgumentException(
-                    "EdgePooling greedy match supports at most Integer.MAX_VALUE nodes, got "
-                            + numNodes);
+                    "EdgePooling greedy match supports at most Integer.MAX_VALUE nodes/edges, got N="
+                            + numNodes + " E=" + numEdges);
         }
         final int n = (int) numNodes;
+        final int E = (int) numEdges;
 
         // Sort edges by score descending. argsort returns int64 indices.
-        Tensor order = score.detach().argsort(/*dim=*/0, /*descending=*/true)
-                .cpu().contiguous().to(torch.ScalarType.Long);
-        // Force row-major [2,E] so flat index r*E+c is valid.
-        Tensor eiCpu = edgeIndex.detach().cpu().contiguous().to(torch.ScalarType.Long);
-        Tensor batchCpu = batch.detach().cpu().contiguous().to(torch.ScalarType.Long);
+        // Flatten to 1-D contiguous CPU long buffers and read via data_ptr_long —
+        // LongIndexer on multi-dim tensors is not reliable for flat get(i).
+        Tensor orderT = score.detach().argsort(/*dim=*/0, /*descending=*/true)
+                .cpu().contiguous().to(torch.ScalarType.Long).view(-1);
+        Tensor rowT = edgeIndex.select(0, 0).detach().cpu().contiguous()
+                .to(torch.ScalarType.Long).view(-1);
+        Tensor colT = edgeIndex.select(0, 1).detach().cpu().contiguous()
+                .to(torch.ScalarType.Long).view(-1);
+        Tensor batchT = batch.detach().cpu().contiguous()
+                .to(torch.ScalarType.Long).view(-1);
 
-        LongIndexer orderIdx = order.createIndexer();
-        LongIndexer eiIdx = eiCpu.createIndexer();
-        LongIndexer batchIdx = batchCpu.createIndexer();
+        long[] order = new long[E];
+        long[] row = new long[E];
+        long[] col = new long[E];
+        long[] batchArr = new long[n];
+        orderT.data_ptr_long().get(order);
+        rowT.data_ptr_long().get(row);
+        colT.data_ptr_long().get(col);
+        batchT.data_ptr_long().get(batchArr);
 
         boolean[] matched = new boolean[n];
         long[] clusterArr = new long[n];
         java.util.Arrays.fill(clusterArr, -1L);
         long newNumNodes = 0;
 
-        for (long i = 0; i < numEdges; i++) {
-            long e = orderIdx.get(i);
-            if (e < 0 || e >= numEdges) {
+        for (int i = 0; i < E; i++) {
+            long e = order[i];
+            if (e < 0 || e >= E) {
                 continue;
             }
-            // element (r, c) at flat index r * E + c
-            long u = eiIdx.get(e);
-            long v = eiIdx.get(numEdges + e);
+            int ei = (int) e;
+            long u = row[ei];
+            long v = col[ei];
             if (u < 0 || v < 0 || u >= numNodes || v >= numNodes) {
                 continue;
             }
@@ -348,7 +358,7 @@ public class EdgePooling extends Module {
             int ui = (int) u;
             int vi = (int) v;
             // Batch restriction: only contract within the same graph
-            if (batchIdx.get(ui) != batchIdx.get(vi)) {
+            if (batchArr[ui] != batchArr[vi]) {
                 continue;
             }
             if (!matched[ui] && !matched[vi]) {

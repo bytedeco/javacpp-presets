@@ -125,4 +125,20 @@ public class FeaStConv extends MessagePassing {
     public long getOutChannelsPerHead() {
         return outChannels;
     }
+
+    public LinearImpl getLinWeights() {
+        return linWeights;
+    }
+
+    public LinearImpl getLinSrc() {
+        return linSrc;
+    }
+
+    public LinearImpl getLinDst() {
+        return linDst;
+    }
+
+    public Parameter getBias() {
+        return bias;
+    }
 }

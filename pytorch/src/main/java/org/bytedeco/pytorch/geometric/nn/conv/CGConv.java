@@ -102,7 +102,7 @@ public class CGConv extends MessagePassing {
     @Override
     public Tensor forward(Tensor x, Tensor edge_index, Tensor edge_attr) {
         if (x == null || edge_index == null) {
-            throw new NullPointerException("x and edge_index must not be null");
+            throw new IllegalArgumentException("x and edge_index must not be null");
         }
         if (x.dim() != 2 || x.size(1) != channels) {
             throw new IllegalArgumentException(

@@ -1,8 +1,7 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 import org.bytedeco.pytorch.jit.*;
 import org.bytedeco.pytorch.autograd.*;
-import org.bytedeco.pytorch.nn.modules.*;
-
 import org.bytedeco.javacpp.LongPointer;
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.nn.Module;
@@ -299,7 +298,6 @@ public class CuGraphGATConv extends Module implements AutoCloseable {
         if (bias != null) bias.close();
     }
 }
-
 
 /**
  * 模拟 CuGraphGATConv

@@ -37,15 +37,16 @@ public class GraphUNet extends Module {
         // 2. Bottom
         xPool = downConv2.forward(xPool, edgePool).relu();
 
-        // 3. Up (Unpooling)
-        // Unpool logic: Create zero tensor [N, C], scatter xPool back using perm
+        // 3. Unpool: scatter pooled features back into full node set via perm.
+        // index_copy_(dim, index[K], source[K,C]) is robust under JavaCPP;
+        // index_put_(TensorIndexVector(perm), …) SIGSEGVs with 1-D Long perm.
         Tensor xUp = torch.zeros_like(x1); // [N, hidden]
-        xUp.index_put_(new TensorIndexVector(perm), xPool);
+        xUp.index_copy_(0, perm, xPool);
 
-        // Skip connection (Concat or Add)
-        xUp = torch.cat(new TensorVector(xUp, x1), 1);
+        // Skip connection (concat)
+        xUp = torch.cat(new TensorVector(xUp, x1), 1); // [N, 2*hidden]
 
-        // 4. Output
+        // 4. Output on original topology
         return upConv1.forward(xUp, edge_index);
     }
 }

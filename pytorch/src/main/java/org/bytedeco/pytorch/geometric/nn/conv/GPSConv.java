@@ -1,6 +1,8 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
+import org.bytedeco.pytorch.nn.modules.LayerNormImpl;
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
+import org.bytedeco.pytorch.nn.modules.MultiheadAttentionImpl;
 import org.bytedeco.pytorch.nn.options.*;
-import org.bytedeco.pytorch.nn.modules.*;
 import org.bytedeco.pytorch.nn.options.LayerNormOptions;
 
 import org.bytedeco.javacpp.LongPointer;

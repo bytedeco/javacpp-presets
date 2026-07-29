@@ -33,10 +33,13 @@ import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.global.torch;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.bytedeco.opencv.global.opencv_core.*;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
 import static org.bytedeco.opencv.global.opencv_imgproc.*;
+import static org.bytedeco.opencv.global.opencv_video.*;
 
 /**
  * Torchio/torchvision-style image I/O and transforms via OpenCV (javacpp-opencv).
@@ -383,7 +386,8 @@ public final class OpenCVIO {
         Mat mat = MatToTensor.toMat(tensor);
         try {
             Mat rotated = new Mat();
-            rotate(mat, rotated, ROTATE_90_CLOCKWISE);
+            // Fully-qualify: local rotate(Tensor,double) shadows static-imported imgproc.rotate
+            org.bytedeco.opencv.global.opencv_core.rotate(mat, rotated, ROTATE_90_CLOCKWISE);
             return ensureCHW(MatToTensor.fromMat(rotated));
         } finally {
             if (mat != null) mat.close();
@@ -423,7 +427,520 @@ public final class OpenCVIO {
         return tCpu;
     }
 
+    // ---- Vertical flip / extra rotates ----
+
+    /** Vertically flip {@code [C,H,W]}. */
+    public static Tensor vflip(Tensor tensor) {
+        Mat mat = MatToTensor.toMat(tensor);
+        try {
+            Mat flipped = new Mat();
+            flip(mat, flipped, 0); // flipCode=0 → vertical
+            return ensureCHW(MatToTensor.fromMat(flipped));
+        } finally {
+            if (mat != null) mat.close();
+        }
+    }
+
+    /** Rotate 180°. */
+    public static Tensor rotate180(Tensor tensor) {
+        Mat mat = MatToTensor.toMat(tensor);
+        try {
+            Mat rotated = new Mat();
+            org.bytedeco.opencv.global.opencv_core.rotate(mat, rotated, ROTATE_180);
+            return ensureCHW(MatToTensor.fromMat(rotated));
+        } finally {
+            if (mat != null) mat.close();
+        }
+    }
+
+    /** Rotate 90° counter-clockwise (270° clockwise). */
+    public static Tensor rotate90ccw(Tensor tensor) {
+        Mat mat = MatToTensor.toMat(tensor);
+        try {
+            Mat rotated = new Mat();
+            org.bytedeco.opencv.global.opencv_core.rotate(mat, rotated, ROTATE_90_COUNTERCLOCKWISE);
+            return ensureCHW(MatToTensor.fromMat(rotated));
+        } finally {
+            if (mat != null) mat.close();
+        }
+    }
+
+    /**
+     * Arbitrary-angle rotation (degrees, clockwise positive via getRotationMatrix2D).
+     * Output canvas same size; corners may be cropped.
+     */
+    public static Tensor rotate(Tensor tensor, double angleDeg) {
+        Mat mat = MatToTensor.toMat(tensor);
+        try {
+            org.bytedeco.opencv.opencv_core.Point2f center =
+                    new org.bytedeco.opencv.opencv_core.Point2f(mat.cols() / 2.0f, mat.rows() / 2.0f);
+            Mat M = getRotationMatrix2D(center, -angleDeg, 1.0); // OpenCV: positive = CCW
+            Mat out = new Mat();
+            warpAffine(mat, out, M, new Size(mat.cols(), mat.rows()));
+            return ensureCHW(MatToTensor.fromMat(out));
+        } finally {
+            if (mat != null) mat.close();
+        }
+    }
+
+    // ---- Blur / filter ----
+
+    /** Gaussian blur; {@code ksize} must be odd positive. */
+    public static Tensor gaussianBlur(Tensor tensor, int ksize, double sigma) {
+        int k = normalizeOddKernel(ksize, 3);
+        Mat mat = MatToTensor.toMat(tensor);
+        try {
+            Mat out = new Mat();
+            GaussianBlur(mat, out, new Size(k, k), sigma <= 0 ? 0 : sigma);
+            return ensureCHW(MatToTensor.fromMat(out));
+        } finally {
+            if (mat != null) mat.close();
+        }
+    }
+
+    public static Tensor gaussianBlur(Tensor tensor, int ksize) {
+        return gaussianBlur(tensor, ksize, 0);
+    }
+
+    /** Median blur; {@code ksize} odd. */
+    public static Tensor medianBlur(Tensor tensor, int ksize) {
+        int k = normalizeOddKernel(ksize, 3);
+        Mat mat = MatToTensor.toMat(tensor);
+        try {
+            Mat out = new Mat();
+            org.bytedeco.opencv.global.opencv_imgproc.medianBlur(mat, out, k);
+            return ensureCHW(MatToTensor.fromMat(out));
+        } finally {
+            if (mat != null) mat.close();
+        }
+    }
+
+    /** Bilateral filter (edge-preserving denoise). */
+    public static Tensor bilateralFilter(Tensor tensor, int d, double sigmaColor, double sigmaSpace) {
+        Mat mat = MatToTensor.toMat(tensor);
+        try {
+            Mat out = new Mat();
+            org.bytedeco.opencv.global.opencv_imgproc.bilateralFilter(
+                    mat, out, d <= 0 ? 9 : d, sigmaColor, sigmaSpace);
+            return ensureCHW(MatToTensor.fromMat(out));
+        } finally {
+            if (mat != null) mat.close();
+        }
+    }
+
+    // ---- Edges ----
+
+    /**
+     * Canny edge detector.
+     * @return {@code [1,H,W]} edge map in {@code [0,255]}
+     */
+    public static Tensor canny(Tensor tensor, double threshold1, double threshold2) {
+        Mat mat = MatToTensor.toMat(tensor);
+        try {
+            Mat gray = toGrayMat(mat);
+            Mat edges = new Mat();
+            Canny(gray, edges, threshold1, threshold2);
+            if (gray != mat) gray.close();
+            return ensureCHW(MatToTensor.fromMat(edges));
+        } finally {
+            if (mat != null) mat.close();
+        }
+    }
+
+    public static Tensor canny(Tensor tensor) {
+        return canny(tensor, 50, 150);
+    }
+
+    /**
+     * Sobel magnitude edge map.
+     * @return {@code [1,H,W]} float32 approx magnitude scaled to {@code [0,255]}
+     */
+    public static Tensor sobel(Tensor tensor) {
+        Mat mat = MatToTensor.toMat(tensor);
+        try {
+            Mat gray = toGrayMat(mat);
+            Mat gx = new Mat();
+            Mat gy = new Mat();
+            Sobel(gray, gx, CV_32F, 1, 0, 3, 1, 0, BORDER_DEFAULT);
+            Sobel(gray, gy, CV_32F, 0, 1, 3, 1, 0, BORDER_DEFAULT);
+            Mat mag = new Mat();
+            magnitude(gx, gy, mag);
+            Mat out8 = new Mat();
+            mag.convertTo(out8, CV_8U, 1.0, 0); // rough scale; ok for viz / features
+            if (gray != mat) gray.close();
+            gx.close(); gy.close(); mag.close();
+            return ensureCHW(MatToTensor.fromMat(out8));
+        } finally {
+            if (mat != null) mat.close();
+        }
+    }
+
+    // ---- Morphology ----
+
+    public static Tensor dilate(Tensor tensor, int ksize, int iterations) {
+        return morph(tensor, MORPH_DILATE, ksize, iterations);
+    }
+
+    public static Tensor erode(Tensor tensor, int ksize, int iterations) {
+        return morph(tensor, MORPH_ERODE, ksize, iterations);
+    }
+
+    public static Tensor morphologyOpen(Tensor tensor, int ksize) {
+        return morph(tensor, MORPH_OPEN, ksize, 1);
+    }
+
+    public static Tensor morphologyClose(Tensor tensor, int ksize) {
+        return morph(tensor, MORPH_CLOSE, ksize, 1);
+    }
+
+    private static Tensor morph(Tensor tensor, int op, int ksize, int iterations) {
+        int k = normalizeOddKernel(ksize, 3);
+        int it = Math.max(1, iterations);
+        Mat mat = MatToTensor.toMat(tensor);
+        try {
+            Mat kernel = getStructuringElement(MORPH_RECT, new Size(k, k));
+            Mat out = new Mat();
+            morphologyEx(mat, out, op, kernel, new org.bytedeco.opencv.opencv_core.Point(-1, -1), it,
+                    BORDER_CONSTANT, morphologyDefaultBorderValue());
+            kernel.close();
+            return ensureCHW(MatToTensor.fromMat(out));
+        } finally {
+            if (mat != null) mat.close();
+        }
+    }
+
+    // ---- Histogram / contrast ----
+
+    /** Per-channel histogram equalization (on Y if color via YCrCb). */
+    public static Tensor equalizeHist(Tensor tensor) {
+        Mat mat = MatToTensor.toMat(tensor);
+        try {
+            if (mat.channels() == 1) {
+                Mat out = new Mat();
+                org.bytedeco.opencv.global.opencv_imgproc.equalizeHist(mat, out);
+                return ensureCHW(MatToTensor.fromMat(out));
+            }
+            Mat ycrcb = new Mat();
+            cvtColor(mat, ycrcb, COLOR_BGR2YCrCb);
+            org.bytedeco.opencv.opencv_core.MatVector ch = new org.bytedeco.opencv.opencv_core.MatVector();
+            split(ycrcb, ch);
+            org.bytedeco.opencv.global.opencv_imgproc.equalizeHist(ch.get(0), ch.get(0));
+            merge(ch, ycrcb);
+            Mat out = new Mat();
+            cvtColor(ycrcb, out, COLOR_YCrCb2BGR);
+            ycrcb.close();
+            return ensureCHW(MatToTensor.fromMat(out));
+        } finally {
+            if (mat != null) mat.close();
+        }
+    }
+
+    /**
+     * CLAHE (Contrast Limited Adaptive Histogram Equalization) — enterprise OCR / low-light.
+     *
+     * @param clipLimit      e.g. 2.0
+     * @param tileGridSize   e.g. 8
+     */
+    public static Tensor clahe(Tensor tensor, double clipLimit, int tileGridSize) {
+        Mat mat = MatToTensor.toMat(tensor);
+        try {
+            int g = Math.max(2, tileGridSize);
+            org.bytedeco.opencv.opencv_imgproc.CLAHE clahe =
+                    createCLAHE(clipLimit <= 0 ? 2.0 : clipLimit, new Size(g, g));
+            if (mat.channels() == 1) {
+                Mat out = new Mat();
+                clahe.apply(mat, out);
+                clahe.close();
+                return ensureCHW(MatToTensor.fromMat(out));
+            }
+            Mat lab = new Mat();
+            cvtColor(mat, lab, COLOR_BGR2Lab);
+            org.bytedeco.opencv.opencv_core.MatVector ch = new org.bytedeco.opencv.opencv_core.MatVector();
+            split(lab, ch);
+            clahe.apply(ch.get(0), ch.get(0));
+            merge(ch, lab);
+            Mat out = new Mat();
+            cvtColor(lab, out, COLOR_Lab2BGR);
+            lab.close();
+            clahe.close();
+            return ensureCHW(MatToTensor.fromMat(out));
+        } finally {
+            if (mat != null) mat.close();
+        }
+    }
+
+    public static Tensor clahe(Tensor tensor) {
+        return clahe(tensor, 2.0, 8);
+    }
+
+    // ---- Color spaces ----
+
+    /**
+     * Convert RGB tensor to HSV. Returns {@code [3,H,W]} with channels (H, S, V)
+     * (OpenCV scale: H∈[0,180], S/V∈[0,255] as float).
+     *
+     * <p>Does <em>not</em> go through the BGR↔RGB swap path of {@link MatToTensor#fromMat}
+     * so channel order stays H,S,V.
+     */
+    public static Tensor rgbToHsv(Tensor tensor) {
+        return toHsv(tensor);
+    }
+
+    /**
+     * Convert RGB tensor to HSV without the BGR↔RGB channel-swap heuristic.
+     * Returns {@code [3,H,W]} with channels (H, S, V).
+     */
+    public static Tensor toHsv(Tensor tensor) {
+        Mat bgr = MatToTensor.toMat(tensor);
+        try {
+            Mat hsv = new Mat();
+            cvtColor(bgr, hsv, COLOR_BGR2HSV);
+            // Split channels then cat — fromMat on 1-ch is identity (no RB swap).
+            org.bytedeco.opencv.opencv_core.MatVector ch = new org.bytedeco.opencv.opencv_core.MatVector();
+            split(hsv, ch);
+            Tensor h = ensureCHW(MatToTensor.fromMat(ch.get(0)));
+            Tensor s = ensureCHW(MatToTensor.fromMat(ch.get(1)));
+            Tensor v = ensureCHW(MatToTensor.fromMat(ch.get(2)));
+            hsv.close();
+            return torch.cat(new org.bytedeco.pytorch.TensorVector(h, s, v), 0);
+        } finally {
+            if (bgr != null) bgr.close();
+        }
+    }
+
+    // ---- Geometry for multimodal (letterbox / center crop / pad) ----
+
+    /**
+     * Letterbox resize keeping aspect ratio, pad to {@code outH x outW} with {@code padValue}
+     * (YOLO / DETR / many VLM preprocessors).
+     *
+     * @return {@code [C, outH, outW]}
+     */
+    public static Tensor letterbox(Tensor tensor, int outH, int outW, double padValue) {
+        long[] s = sizes(tensor);
+        if (s.length != 3) throw new IllegalArgumentException("expected [C,H,W]");
+        int h = (int) s[1], w = (int) s[2];
+        if (h <= 0 || w <= 0) throw new IllegalArgumentException("invalid HxW");
+        double scale = Math.min(outH / (double) h, outW / (double) w);
+        int nh = Math.max(1, (int) Math.round(h * scale));
+        int nw = Math.max(1, (int) Math.round(w * scale));
+        Tensor resized = resize(tensor, nh, nw);
+        int padT = (outH - nh) / 2;
+        int padB = outH - nh - padT;
+        int padL = (outW - nw) / 2;
+        int padR = outW - nw - padL;
+        return pad(resized, padT, padB, padL, padR, padValue);
+    }
+
+    public static Tensor letterbox(Tensor tensor, int outH, int outW) {
+        return letterbox(tensor, outH, outW, 114.0); // YOLO default gray
+    }
+
+    /**
+     * Constant-value pad around a {@code [C,H,W]} tensor.
+     */
+    public static Tensor pad(Tensor tensor, int top, int bottom, int left, int right, double value) {
+        Mat mat = MatToTensor.toMat(tensor);
+        try {
+            Mat out = new Mat();
+            copyMakeBorder(mat, out, Math.max(0, top), Math.max(0, bottom),
+                    Math.max(0, left), Math.max(0, right), BORDER_CONSTANT,
+                    new org.bytedeco.opencv.opencv_core.Scalar(value, value, value, 0));
+            return ensureCHW(MatToTensor.fromMat(out));
+        } finally {
+            if (mat != null) mat.close();
+        }
+    }
+
+    /** Center crop to {@code cropH x cropW} (clamped to image). */
+    public static Tensor centerCrop(Tensor tensor, int cropH, int cropW) {
+        long[] s = sizes(tensor);
+        if (s.length != 3) throw new IllegalArgumentException("expected [C,H,W]");
+        int h = (int) s[1], w = (int) s[2];
+        int ch = Math.min(cropH, h), cw = Math.min(cropW, w);
+        int y = Math.max(0, (h - ch) / 2);
+        int x = Math.max(0, (w - cw) / 2);
+        return crop(tensor, y, x, ch, cw);
+    }
+
+    /**
+     * torchvision-style resize shorter side to {@code size} keeping aspect, then center-crop square.
+     */
+    public static Tensor resizeShortCenterCrop(Tensor tensor, int size) {
+        long[] s = sizes(tensor);
+        if (s.length != 3) throw new IllegalArgumentException("expected [C,H,W]");
+        int h = (int) s[1], w = (int) s[2];
+        double scale = size / (double) Math.min(h, w);
+        int nh = Math.max(1, (int) Math.round(h * scale));
+        int nw = Math.max(1, (int) Math.round(w * scale));
+        Tensor resized = resize(tensor, nh, nw);
+        return centerCrop(resized, size, size);
+    }
+
+    // ---- Brightness / contrast / threshold ----
+
+    /**
+     * {@code out = tensor * alpha + beta} clipped conceptually via convertScale on Mat.
+     * {@code alpha} contrast, {@code beta} brightness (OpenCV convertScaleAbs style on 8u path).
+     */
+    public static Tensor adjustBrightnessContrast(Tensor tensor, double alpha, double beta) {
+        Mat mat = MatToTensor.toMat(tensor);
+        try {
+            Mat out = new Mat();
+            mat.convertTo(out, -1, alpha, beta);
+            return ensureCHW(MatToTensor.fromMat(out));
+        } finally {
+            if (mat != null) mat.close();
+        }
+    }
+
+    /** Binary threshold on grayscale projection. Returns {@code [1,H,W]}. */
+    public static Tensor threshold(Tensor tensor, double thresh, double maxVal) {
+        Mat mat = MatToTensor.toMat(tensor);
+        try {
+            Mat gray = toGrayMat(mat);
+            Mat out = new Mat();
+            org.bytedeco.opencv.global.opencv_imgproc.threshold(
+                    gray, out, thresh, maxVal, THRESH_BINARY);
+            if (gray != mat) gray.close();
+            return ensureCHW(MatToTensor.fromMat(out));
+        } finally {
+            if (mat != null) mat.close();
+        }
+    }
+
+    public static Tensor adaptiveThreshold(Tensor tensor, int blockSize, double C) {
+        int b = normalizeOddKernel(blockSize, 11);
+        Mat mat = MatToTensor.toMat(tensor);
+        try {
+            Mat gray = toGrayMat(mat);
+            Mat out = new Mat();
+            org.bytedeco.opencv.global.opencv_imgproc.adaptiveThreshold(
+                    gray, out, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, b, C);
+            if (gray != mat) gray.close();
+            return ensureCHW(MatToTensor.fromMat(out));
+        } finally {
+            if (mat != null) mat.close();
+        }
+    }
+
+    /** Blend two same-shaped images: {@code α*a + (1-α)*b}. */
+    public static Tensor blend(Tensor a, Tensor b, double alpha) {
+        Mat ma = MatToTensor.toMat(a);
+        Mat mb = MatToTensor.toMat(b);
+        try {
+            Mat out = new Mat();
+            double al = Math.max(0, Math.min(1, alpha));
+            addWeighted(ma, al, mb, 1.0 - al, 0, out);
+            return ensureCHW(MatToTensor.fromMat(out));
+        } finally {
+            if (ma != null) ma.close();
+            if (mb != null) mb.close();
+        }
+    }
+
+    // ---- Batch helpers ----
+
+    /** Resize every tensor in the list to the same HxW. */
+    public static List<Tensor> batchResize(List<Tensor> images, int height, int width) {
+        if (images == null) return List.of();
+        List<Tensor> out = new ArrayList<>(images.size());
+        for (Tensor t : images) out.add(resize(t, height, width));
+        return out;
+    }
+
+    /**
+     * Letterbox each frame then stack to {@code [N,C,H,W]} — VLM video preprocessor core.
+     */
+    public static Tensor batchLetterboxStack(List<Tensor> images, int outH, int outW) {
+        if (images == null || images.isEmpty()) {
+            return torch.empty(new long[]{0, 3, outH, outW},
+                    new org.bytedeco.pytorch.TensorOptions(
+                            org.bytedeco.pytorch.global.torch.ScalarType.Float), null);
+        }
+        List<Tensor> boxed = new ArrayList<>(images.size());
+        for (Tensor t : images) boxed.add(letterbox(t, outH, outW));
+        org.bytedeco.pytorch.TensorVector tv =
+                new org.bytedeco.pytorch.TensorVector(boxed.toArray(new Tensor[0]));
+        return torch.stack(tv);
+    }
+
+    // ---- Image hash (perceptual near-duplicate) ----
+
+    /**
+     * Average hash (aHash) 64-bit as long — fast near-duplicate key for DataFrame dedup.
+     * Pipeline: gray → resize 8x8 → mean threshold → bits.
+     */
+    public static long averageHash(Tensor tensor) {
+        Mat mat = MatToTensor.toMat(tensor);
+        try {
+            Mat gray = toGrayMat(mat);
+            Mat small = new Mat();
+            org.bytedeco.opencv.global.opencv_imgproc.resize(gray, small, new Size(8, 8), 0, 0, INTER_AREA);
+            // mean
+            org.bytedeco.opencv.opencv_core.Scalar meanSc = mean(small);
+            double m = meanSc.get(0);
+            long hash = 0L;
+            byte[] buf = new byte[64];
+            small.data().get(buf);
+            for (int i = 0; i < 64; i++) {
+                int v = buf[i] & 0xFF;
+                if (v >= m) hash |= (1L << i);
+            }
+            if (gray != mat) gray.close();
+            small.close();
+            return hash;
+        } finally {
+            if (mat != null) mat.close();
+        }
+    }
+
+    /** Hamming distance between two 64-bit hashes. */
+    public static int hamming64(long a, long b) {
+        return Long.bitCount(a ^ b);
+    }
+
+    // ---- Optical flow (2-frame) ----
+
+    /**
+     * Farneback dense optical flow between two frames.
+     * @return {@code [2,H,W]} float32 flow (dx, dy) — values are displacement, not 0-255
+     */
+    public static Tensor opticalFlowFarneback(Tensor prev, Tensor next) {
+        Mat m0 = MatToTensor.toMat(prev);
+        Mat m1 = MatToTensor.toMat(next);
+        try {
+            Mat g0 = toGrayMat(m0);
+            Mat g1 = toGrayMat(m1);
+            Mat flow = new Mat();
+            // pyr_scale=0.5, levels=3, winsize=15, iterations=3, poly_n=5, poly_sigma=1.2, flags=0
+            calcOpticalFlowFarneback(g0, g1, flow, 0.5, 3, 15, 3, 5, 1.2, 0);
+            // flow is HxW CV_32FC2 → MatToTensor.fromFloatMat yields [2,H,W]
+            Tensor out = MatToTensor.fromMat(flow);
+            if (g0 != m0) g0.close();
+            if (g1 != m1) g1.close();
+            flow.close();
+            return ensureCHW(out);
+        } finally {
+            if (m0 != null) m0.close();
+            if (m1 != null) m1.close();
+        }
+    }
+
     // ---- helpers ----
+
+    private static Mat toGrayMat(Mat mat) {
+        if (mat.channels() == 1) return mat;
+        Mat gray = new Mat();
+        cvtColor(mat, gray, COLOR_BGR2GRAY);
+        return gray;
+    }
+
+    private static int normalizeOddKernel(int ksize, int defaultOdd) {
+        int k = ksize <= 0 ? defaultOdd : ksize;
+        if ((k & 1) == 0) k++;
+        return Math.max(1, k);
+    }
 
     /** Ensure channel-first layout: {@code [H,W]} → {@code [1,H,W]}; pass through {@code [C,H,W]}. */
     private static Tensor ensureCHW(Tensor t) {

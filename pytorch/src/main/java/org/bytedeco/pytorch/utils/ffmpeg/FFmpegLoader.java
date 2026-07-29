@@ -122,4 +122,42 @@ public final class FFmpegLoader {
     public static org.bytedeco.pytorch.Tensor decodeAudio(String filePath) {
         return AudioTensorsFFmpeg.decodeAllSamples(filePath);
     }
+
+    // ── Enterprise VideoOps facades (Daft / torchcodec / VLM style) ───────
+
+    /** {@link VideoOps#probe(String)} */
+    public static VideoFile.VideoMeta probeVideo(String path) {
+        return VideoOps.probe(path);
+    }
+
+    /** Uniform sample {@code count} frames — LLaVA / Qwen-VL style. */
+    public static java.util.List<org.bytedeco.pytorch.Tensor> extractUniform(String path, int count) {
+        return VideoOps.extractUniform(path, count);
+    }
+
+    /** Uniform sample stacked to {@code [N,3,H,W]}. */
+    public static org.bytedeco.pytorch.Tensor extractUniformStacked(String path, int count) {
+        return VideoOps.extractUniformStacked(path, count);
+    }
+
+    /** Frame nearest to {@code seconds}. */
+    public static org.bytedeco.pytorch.Tensor frameAt(String path, double seconds) {
+        return VideoOps.frameAt(path, seconds);
+    }
+
+    /** First decodable frame (thumbnail / poster). */
+    public static org.bytedeco.pytorch.Tensor thumbnail(String path) {
+        return VideoOps.thumbnail(path);
+    }
+
+    /** Sample at target fps (capped). */
+    public static java.util.List<org.bytedeco.pytorch.Tensor> extractAtFps(
+            String path, double targetFps, int maxFrames) {
+        return VideoOps.extractAtFps(path, targetFps, maxFrames);
+    }
+
+    /** Capability map for native libav + CLI ffmpeg. */
+    public static java.util.Map<String, Object> videoCapabilities() {
+        return VideoOps.capabilities();
+    }
 }

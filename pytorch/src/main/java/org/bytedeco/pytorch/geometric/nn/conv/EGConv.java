@@ -199,41 +199,35 @@ public class EGConv extends MessagePassing {
         return aggrResult;
     }
 
-    private Tensor maxAggregate(Tensor x, Tensor edge_index) {
+        private Tensor maxAggregate(Tensor x, Tensor edge_index) {
+        // Per-destination max over neighbors. Avoid Tensor.put (numel mismatch).
         long[] xShape = x.sizes().vec().get();
         long N = xShape[0];
-        Tensor row = edge_index.select(0, 0);
-        Tensor col = edge_index.select(0, 1);
-        Tensor x_j = x.index_select(0, col);
+        long C = xShape[1];
+        Tensor row = edge_index.select(0, 0); // target [E]
+        Tensor col = edge_index.select(0, 1); // source [E]
+        Tensor x_j = x.index_select(0, col);  // [E, C]
 
-        Scalar negInf = torch.tensor(-Float.MAX_VALUE).item();
-        TensorOptions floatOptions = new TensorOptions()
+        TensorOptions opt = new TensorOptions()
                 .dtype(new ScalarTypeOptional(torch.ScalarType.Float))
-                .device(new DeviceOptional(new Device(torch.kCPU())));
-        long[] maxShape = new long[]{N, xShape[1]};
-        Tensor maxVals = torch.full(maxShape, negInf, floatOptions);
+                .device(new DeviceOptional(x.device()));
+        Tensor maxVals = torch.full(new long[]{N, C}, new Scalar(-Float.MAX_VALUE), opt);
 
-        for (long i = 0; i < N; i++) {
-            Tensor iTensor = torch.tensor(i, new TensorOptions()
-                    .dtype(new ScalarTypeOptional(torch.ScalarType.Long))
-                    .device(new DeviceOptional(new Device(torch.kCPU()))));
-            Tensor mask = row.eq(iTensor);
-            if (torch.any(mask).item_bool()) {
-                Tensor nodeFeatures = x_j.masked_select(mask.unsqueeze(1))
-                        .view(-1, xShape[1]);
-                Tensor maxFeat = torch.max(nodeFeatures, 0, false).get0();
-                maxVals = maxVals.put(iTensor, maxFeat); // 非原地操作
-            }
-            iTensor.close();
+        long E = row.size(0);
+        for (long e = 0; e < E; e++) {
+            long ti = row.select(0, e).item_long();
+            Tensor feat = x_j.select(0, e); // [C]
+            Tensor cur = maxVals.select(0, ti);
+            maxVals.select(0, ti).copy_(torch.maximum(cur, feat));
         }
 
-        // 替换负无穷为0（非原地）
-        Tensor zeroTensor = torch.tensor(0.0f, floatOptions);
-        Tensor maskNegInf = maxVals.eq(torch.tensor(-Float.MAX_VALUE, floatOptions));
-        maxVals = maxVals.masked_fill(maskNegInf, zeroTensor.item());
-
-        zeroTensor.close();
-        maskNegInf.close();
+        // Isolated nodes (still -inf) -> zeros
+        for (long i = 0; i < N; i++) {
+            Tensor rowMax = maxVals.select(0, i);
+            if (rowMax.select(0, 0).item_float() == -Float.MAX_VALUE) {
+                rowMax.zero_();
+            }
+        }
         return maxVals;
     }
 

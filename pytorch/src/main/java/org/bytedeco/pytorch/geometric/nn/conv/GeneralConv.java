@@ -1,6 +1,6 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 import org.bytedeco.pytorch.nn.options.*;
-import org.bytedeco.pytorch.nn.modules.*;
 import org.bytedeco.pytorch.nn.options.NormalizeFuncOptions;
 
 import org.bytedeco.pytorch.*;

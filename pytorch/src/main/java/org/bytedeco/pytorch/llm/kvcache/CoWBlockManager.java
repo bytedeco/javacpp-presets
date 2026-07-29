@@ -1,6 +1,7 @@
 package org.bytedeco.pytorch.llm.kvcache;
 
 import org.bytedeco.pytorch.Device;
+import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.global.torch;
 
 import java.util.ArrayList;
@@ -367,6 +368,66 @@ public class CoWBlockManager implements AutoCloseable {
             @Override public void release(int blockId) { pool.release(blockId); }
             @Override public int refCount(int blockId) { return pool.refCount(blockId); }
         };
+    }
+
+
+    /**
+     * Legacy demo overload: allocate {@code count} free blocks without a session buffer.
+     * The second argument is ignored (block size comes from the pool).
+     */
+    public List<Integer> allocateBlocks(int count, int blockSizeIgnored) {
+        return pool.allocateBlocks(count);
+    }
+
+    /**
+     * Legacy demo overload: release all blocks charged to {@code sessionId}.
+     */
+    public void releaseBlocks(String sessionId) {
+        releaseSession(sessionId);
+    }
+
+    /**
+     * Legacy demo overload without explicit buffer — allocates a free block only.
+     * Prefer {@link #getOrAllocateBlock(long, String, PagedKvBuffer)}.
+     */
+    public int getOrAllocateBlock(long currentHash, String sessionId) {
+        // No buffer to bind content-addressed reuse; just allocate a free block.
+        List<Integer> ids = pool.allocateBlocks(1);
+        return ids.isEmpty() ? -1 : ids.get(0);
+    }
+
+    /** Demo alias: true if block is shared (refCount > 1). */
+    public boolean isShared(int blockId) {
+        return pool.refCount(blockId) > 1;
+    }
+
+    /** Demo alias for pool.getBlock. */
+    public Tensor getBlock(int blockId) {
+        return pool.getBlock(blockId);
+    }
+
+    /** Demo alias: allocate a single exclusive block (no session). */
+    public int allocateBlock() {
+        return pool.allocateBlock();
+    }
+
+    /** Demo alias: free a single block back to pool. */
+    public void freeBlock(int blockId) {
+        pool.release(blockId);
+    }
+
+    /** Demo alias used by older tests. */
+    public void freeBlock(Integer blockId) {
+        if (blockId != null) pool.release(blockId);
+    }
+
+    /** Demo alias for getFreeBlockCount. */
+    public int freePoolSize() {
+        return getFreeBlockCount();
+    }
+
+    public ReentrantLock getGlobalLock() {
+        return lock;
     }
 
     @Override

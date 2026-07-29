@@ -1,6 +1,5 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
-import org.bytedeco.pytorch.nn.modules.*;
-
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.global.torch;
 
@@ -233,7 +232,6 @@ public class DirGNNConv extends MessagePassing {
 
 //package org.bytedeco.pytorch.geometric.nn.conv;
 //
-
 
 //import org.bytedeco.pytorch.*;
 //import org.bytedeco.pytorch.nn.Module;

@@ -1,9 +1,8 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
+import org.bytedeco.pytorch.nn.modules.container.SequentialImpl;
 import org.bytedeco.pytorch.nn.options.*;
 import org.bytedeco.pytorch.autograd.*;
-import org.bytedeco.pytorch.nn.modules.container.*;
-import org.bytedeco.pytorch.nn.modules.*;
-
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.global.torch;
@@ -361,7 +360,6 @@ public class GINEConv extends MessagePassing {
 //        return Scatter.scatter(inputs, index, dimSize, "add");
 //    }
 //}
-
 
 //public class GINEConv extends MessagePassing {
 //    private Module nn;              // 核心 MLP 网络

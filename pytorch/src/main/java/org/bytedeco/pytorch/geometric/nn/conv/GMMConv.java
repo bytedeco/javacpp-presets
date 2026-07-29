@@ -186,4 +186,16 @@ public class GMMConv extends MessagePassing {
     public Parameter getSigma() {
         return sigma;
     }
+
+    public LinearImpl getLin() {
+        return lin;
+    }
+
+    public LinearImpl getLinRoot() {
+        return linRoot;
+    }
+
+    public Parameter getBias() {
+        return bias;
+    }
 }

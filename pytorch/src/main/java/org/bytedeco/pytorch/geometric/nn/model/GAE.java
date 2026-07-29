@@ -46,9 +46,19 @@ public class GAE extends org.bytedeco.pytorch.nn.Module {
     }
 
     public Tensor encode(Tensor x, Tensor edge_index) {
-        // 调用编码器（通常是 GCNConv 或 PNAConv）
-        // 假设 encoder 有 forward(Tensor x, Tensor edge_index)
-        return ((GCNConv)encoder).forward(x, edge_index);
+        // Dispatch via Module.forward(Tensor,Tensor) so Java subclasses
+        // (GCNEncoder, GCNConv, …) with a two-arg override are used.
+        // Do NOT cast to GCNConv — encoders are often multi-layer modules.
+        if (encoder instanceof GCNEncoder) {
+            return ((GCNEncoder) encoder).forward(x, edge_index);
+        }
+        if (encoder instanceof GCNConv) {
+            return ((GCNConv) encoder).forward(x, edge_index);
+        }
+        if (encoder instanceof GenericModule) {
+            return ((GenericModule) encoder).forward(new Tensor[]{x, edge_index});
+        }
+        return encoder.forward(x, edge_index);
     }
 
     public Tensor decode(Tensor z, Tensor edge_index, boolean sigmoid) {

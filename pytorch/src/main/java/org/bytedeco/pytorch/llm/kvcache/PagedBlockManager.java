@@ -145,6 +145,8 @@ public class PagedBlockManager implements AutoCloseable {
     public int maxBlocks() { return maxBlocks; }
     public int numLayers() { return numLayers; }
     public int blockSize() { return blockSize; }
+    /** Demo alias. */
+    public int getBlockSize() { return blockSize; }
     public int numHeads() { return numHeads; }
     public int headDim() { return headDim; }
     public double lowWatermark() { return lowWatermark; }
@@ -285,6 +287,9 @@ public class PagedBlockManager implements AutoCloseable {
      * Drop one reference. When refCount hits 0 the block returns to the free list
      * (storage is kept; marked dirty for lazy zero on next alloc).
      */
+    /** Demo alias for {@link #release(int)}. */
+    public void freeBlock(int blockId) { release(blockId); }
+
     public void release(int blockId) {
         lock.lock();
         try {

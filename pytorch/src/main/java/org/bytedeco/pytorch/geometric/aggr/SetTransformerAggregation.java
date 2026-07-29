@@ -1,29 +1,43 @@
 package org.bytedeco.pytorch.geometric.aggr;
-import org.bytedeco.pytorch.autograd.*;
-import org.bytedeco.pytorch.nn.modules.*;
 
-import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.Scalar;
+import org.bytedeco.pytorch.ScalarTypeOptional;
+import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.geometric.utils.AggrUtils;
-//import org.gnn.framework.utils.org.bytedeco.pytorch.geometric.utils.AggrUtils;
-
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 
 /**
- * Set Transformer org.bytedeco.pytorch.geometric.aggr.Aggregation (PMA)
- * Q = Seed, K = X, V = X
+ * Set Transformer Aggregation (PMA-style).
+ *
+ * <p>{@code numSeeds == 1}: efficient scatter-softmax attention over neighbors.
+ * <p>{@code numSeeds  > 1}: pack neighbors via {@link AggrUtils#to_dense_batch},
+ * run multi-seed attention per group, then mean-pool seeds → {@code [dimSize, outChannels]}.
  */
 public class SetTransformerAggregation extends Aggregation {
-    private Tensor seed;
-    private LinearImpl linQ, linK, linV, linOut;
-    private long numHeads;
-    private long outChannels;
+    private final Tensor seed;
+    private final LinearImpl linQ, linK, linV, linOut;
+    private final long numHeads;
+    private final long outChannels;
+    private final long numSeeds;
 
     public SetTransformerAggregation(long inChannels, long outChannels, long numHeads, long numSeeds) {
+        if (numSeeds <= 0) {
+            throw new IllegalArgumentException("numSeeds must be > 0, got " + numSeeds);
+        }
+        if (numHeads <= 0) {
+            throw new IllegalArgumentException("numHeads must be > 0, got " + numHeads);
+        }
+        if (outChannels % numHeads != 0) {
+            throw new IllegalArgumentException(
+                    "outChannels (" + outChannels + ") must be divisible by numHeads (" + numHeads + ")");
+        }
         this.numHeads = numHeads;
         this.outChannels = outChannels;
+        this.numSeeds = numSeeds;
 
-        // Seed: [NumSeeds, Out]
-        this.seed = new Tensor(torch.randn(new long[]{numSeeds, outChannels})); //Parameter
+        // Keep a strong handle: register_parameter is ByRef and must not drop the leaf.
+        this.seed = torch.randn(new long[]{numSeeds, outChannels}).clone();
         register_parameter("seed", seed);
 
         this.linQ = new LinearImpl(outChannels, outChannels);
@@ -37,38 +51,79 @@ public class SetTransformerAggregation extends Aggregation {
         register_module("linOut", linOut);
     }
 
+    public long numSeeds() {
+        return numSeeds;
+    }
+
     @Override
     public Tensor forward(Tensor x, Tensor index, long dimSize) {
-        // 注意：标准 SetTransformer 是全局的。
-        // 在 GNN 中做局部聚合时，需要对每个子图（Target Node）单独应用 Attention。
-        // 这在 org.bytedeco.pytorch.geometric.utils.Scatter 操作中比较难高效实现（需要 Segmented MatMul）。
-        // 这里我们实现简化版：Global Pooling 模式，或者假设 numSeeds=1 且使用 org.bytedeco.pytorch.geometric.utils.Scatter Softmax 模拟。
-
-        // 如果是 numSeeds=1，退化为 Global Attention Pooling (org.bytedeco.pytorch.geometric.aggr.AttentionalAggregation 的变体)
-        // 下面实现 numSeeds=1 的高效 org.bytedeco.pytorch.geometric.utils.Scatter 版本。如果 numSeeds > 1，通常只能用于 Global Pooling。
-
-        if (seed.size(0) != 1) {
-            throw new UnsupportedOperationException("Local SetTransformer currently supports numSeeds=1 via scatter.");
+        if (numSeeds == 1) {
+            return forwardSingleSeed(x, index, dimSize);
         }
+        return forwardMultiSeed(x, index, dimSize);
+    }
 
-        // 1. Q = Seed [1, Out] -> 映射后
-        Tensor Q = linQ.forward(seed); // [1, Out]
+    /** Scatter-softmax attention with a single learnable seed (local / global). */
+    private Tensor forwardSingleSeed(Tensor x, Tensor index, long dimSize) {
+        Tensor Q = linQ.forward(seed);          // [1, Out]
+        Tensor K = linK.forward(x);             // [E, Out]
+        Tensor V = linV.forward(x);             // [E, Out]
 
-        // 2. K, V
-        Tensor K = linK.forward(x); // [N, Out]
-        Tensor V = linV.forward(x); // [N, Out]
-
-        // 3. Attention Score = (K * Q^T) / sqrt(d)
-        // [N, Out] * [Out, 1] -> [N, 1]
-        Tensor scores = K.matmul(Q.t());
+        Tensor scores = K.matmul(Q.t());        // [E, 1]
         scores = scores.mul(new Scalar(1.0 / Math.sqrt(outChannels)));
-
-        // 4. Softmax
         Tensor alpha = AggrUtils.scatter_softmax(scores, index, dimSize);
-
-        // 5. Weighted Sum
         Tensor agg = AggrUtils.scatter(V.mul(alpha), index, dimSize, "sum");
-
         return linOut.forward(agg);
+    }
+
+    /**
+     * Multi-seed PMA over dense-packed neighborhoods.
+     * Output is mean-pooled over seeds → [dimSize, outChannels].
+     */
+    private Tensor forwardMultiSeed(Tensor x, Tensor index, long dimSize) {
+        Tensor[] packed = AggrUtils.to_dense_batch(x, index, dimSize, 0f);
+        Tensor denseX = packed[0]; // [N, L, Fin]
+        Tensor mask = packed[1];   // [N, L] bool
+        long L = denseX.size(1);
+        long H = numHeads;
+        long D = outChannels / H;
+
+        // Project keys/values from node features; project queries from seeds.
+        // Flatten N*L for linear, then reshape back.
+        Tensor flatX = denseX.reshape(dimSize * L, denseX.size(2));
+        Tensor K = linK.forward(flatX).view(dimSize, L, H, D).transpose(1, 2); // [N, H, L, D]
+        Tensor V = linV.forward(flatX).view(dimSize, L, H, D).transpose(1, 2); // [N, H, L, D]
+        Tensor Q = linQ.forward(seed)                                          // [S, Out]
+                .view(numSeeds, H, D)
+                .unsqueeze(0)
+                .expand(new long[]{dimSize, numSeeds, H, D})
+                .transpose(1, 2);                                              // [N, H, S, D]
+
+        // scores: [N, H, S, L]
+        Tensor scores = Q.matmul(K.transpose(-2, -1))
+                .mul(new Scalar(1.0 / Math.sqrt(D)));
+
+        // Mask padded positions with -inf before softmax over L.
+        Tensor maskExp = mask.unsqueeze(1).unsqueeze(2); // [N, 1, 1, L]
+        Tensor negInf = torch.full(scores.shape(), new Scalar(Float.NEGATIVE_INFINITY), scores.options());
+        scores = torch.where(maskExp, scores, negInf);
+
+        // Groups with zero degree: mask is all-false → softmax of -inf is NaN.
+        // Replace all-false rows with zeros after softmax.
+        Tensor alpha = torch.softmax(scores, -1); // [N, H, S, L]
+        // any(dim, keepdim) — no ScalarTypeOptional overload
+        Tensor valid = mask.any(new long[]{1}, true); // [N, 1]
+        alpha = torch.where(valid.unsqueeze(1).unsqueeze(2), alpha, torch.zeros_like(alpha));
+
+        // attn @ V → [N, H, S, D] → [N, S, Out]
+        Tensor out = alpha.matmul(V)                         // [N, H, S, D]
+                .transpose(1, 2)                             // [N, S, H, D]
+                .contiguous()
+                .view(dimSize, numSeeds, outChannels);
+
+        // Mean-pool seeds (PyG often flattens; mean keeps [N, Out] for drop-in use).
+        Tensor pooled = out.mean(new long[]{1}, false,
+                new ScalarTypeOptional(torch.ScalarType.Float)); // [N, Out]
+        return linOut.forward(pooled);
     }
 }

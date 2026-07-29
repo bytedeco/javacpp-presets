@@ -1,11 +1,9 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 import org.bytedeco.pytorch.jit.*;
-import org.bytedeco.pytorch.nn.modules.*;
-
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.geometric.utils.Scatter;
-
 
 /**
  * 修复后的 RGATConv (关系图注意力网络)

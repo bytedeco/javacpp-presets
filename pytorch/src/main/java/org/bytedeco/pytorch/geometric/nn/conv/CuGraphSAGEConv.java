@@ -1,9 +1,7 @@
 package org.bytedeco.pytorch.geometric.nn.conv;
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 import org.bytedeco.pytorch.jit.*;
 import org.bytedeco.pytorch.autograd.*;
-import org.bytedeco.pytorch.nn.modules.*;
-
-
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.global.torch;

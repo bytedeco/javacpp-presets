@@ -1,29 +1,53 @@
 package org.bytedeco.pytorch.geometric.transforms;
 
+import org.bytedeco.pytorch.Scalar;
 import org.bytedeco.pytorch.Tensor;
-import org.bytedeco.pytorch.TensorIndex;
-import org.bytedeco.pytorch.TensorIndexVector;
 import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.geometric.data.GraphData;
+import org.bytedeco.pytorch.geometric.utils.AggrUtils;
 
-import static org.bytedeco.pytorch.global.torch.*;
+import static org.bytedeco.pytorch.global.torch.cat;
+import static org.bytedeco.pytorch.global.torch.stack;
 
 /**
- * LocalDegreeProfile (LDP): 提取局部度分布特征
- * 包含：节点度、邻居度的 (min, max, mean, std)
+ * LocalDegreeProfile (LDP): append per-node degree statistics.
+ *
+ * <p>Features concatenated onto {@code x}:
+ * {@code [deg, min(deg_nbr), max(deg_nbr), mean(deg_nbr), std(deg_nbr)]}
+ * (5 columns). Isolated nodes get neighbor stats = 0.
+ *
+ * <p>Aligned with PyG {@code LocalDegreeProfile}.
  */
 public class LocalDegreeProfile implements BaseTransform {
     @Override
     public GraphData apply(GraphData data) {
-        long N = data.x.size(0);
-        // 1. 计算度
-        Tensor deg = zeros(new long[]{N}, data.x.options());
-        deg.scatter_add_(0, data.edge_index.index(new TensorIndexVector(new TensorIndex(tensor(1)))), ones(new long[]{data.edge_index.size(1)}, data.x.options()));
+        Tensor x = TransformUtils.requireX(data);
+        Tensor ei = TransformUtils.requireEdgeIndex(data);
+        long N = x.size(0);
 
-        // 2. 聚合邻居的度特征 (使用之前实现的 avg_pool_neighbor_x 类似逻辑)
-        // 这里简化为只追加度数本身，实际需计算 min/max/std
-        Tensor degAgg = deg.view(-1, 1);
-        data.x = cat(new TensorVector(data.x, degAgg), 1);
+        // Degree from target (col) indices — same convention as GCNNorm / TransformUtils.degree
+        Tensor col = TransformUtils.col(ei);
+        Tensor deg = TransformUtils.degree(col, N, x); // [N], float-like
+
+        // Neighbor degree messages: for each edge j→i, message = deg[j]
+        Tensor row = TransformUtils.row(ei);
+        Tensor degSrc = deg.index_select(0, row); // [E]
+
+        // min / max / mean / std of neighbor degrees via scatter
+        Tensor degMin = AggrUtils.scatter(degSrc, col, N, "min");
+        Tensor degMax = AggrUtils.scatter(degSrc, col, N, "max");
+        Tensor degMean = AggrUtils.scatter(degSrc, col, N, "mean");
+        // std = sqrt(mean(x^2) - mean(x)^2), clamp for numerical stability
+        Tensor degSqMean = AggrUtils.scatter(degSrc.mul(degSrc), col, N, "mean");
+        Tensor degVar = degSqMean.sub(degMean.mul(degMean)).clamp_min(new Scalar(0.0));
+        Tensor degStd = degVar.sqrt();
+
+        // Isolated nodes: AggrUtils leaves 0 for sum/mean; min/max also 0 after our policy.
+        Tensor profile = stack(new TensorVector(
+                deg, degMin, degMax, degMean, degStd
+        ), 1); // [N, 5]
+
+        data.x = cat(new TensorVector(x, profile.to(x.dtype())), 1);
         return data;
     }
 }

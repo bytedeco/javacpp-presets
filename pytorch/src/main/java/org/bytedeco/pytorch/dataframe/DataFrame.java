@@ -50,6 +50,9 @@ import org.bytedeco.pytorch.dataframe.pickle.PandasDataFramePickle;
 import org.bytedeco.pytorch.dataframe.pickle.PickleOptions;
 import org.bytedeco.pytorch.dataframe.redis.Redis;
 import org.bytedeco.pytorch.dataframe.redis.RedisOptions;
+import org.bytedeco.pytorch.utils.kafka.Kafka;
+import org.bytedeco.pytorch.utils.kafka.KafkaFile;
+import org.bytedeco.pytorch.utils.kafka.KafkaOptions;
 import org.bytedeco.pytorch.dataframe.sql.SqlOptions;
 import org.bytedeco.pytorch.dataframe.sql.SqlReader;
 import org.bytedeco.pytorch.dataframe.sql.SqlWriter;
@@ -82,7 +85,7 @@ import org.bytedeco.pytorch.utils.plot.DataFramePlot;
  *
  * <p>Supports reading and writing: parquet, numpy/npz, pickle, safetensors,
  * GGUF, CSV/TSV, JSON/JSONL, Arrow IPC/Feather, Excel, SQL (SQLite/JDBC),
- * HDF5, Avro, ORC, and torch {@link Tensor} columns.
+ * HDF5, Avro, ORC, Redis, Kafka (stream + offline dump), and torch {@link Tensor} columns.
  *
  * <p>Example:
  * <pre>
@@ -1676,6 +1679,157 @@ public final class DataFrame implements AutoCloseable, Serializable {
     public static DataFrame readRedisKeys(Redis redis,
                                           java.util.Collection<String> keys) {
         return redis.readHashes(keys);
+    }
+
+    // ---- I/O: Kafka (stream + offline dump) ----
+
+    /**
+     * Open a Kafka façade (producer / consumer / admin lazy-init).
+     *
+     * <pre>{@code
+     * try (Kafka k = DataFrame.openKafka("kafka-1:9092,kafka-2:9092")) {
+     *     k.createTopic("rec.feature.log", 64, (short) 3);
+     *     df.toKafka(k, KafkaOptions.builder().topic("rec.feature.log").keyColumn("user_id").build());
+     * }
+     * }</pre>
+     */
+    public static Kafka openKafka(String bootstrapServers) {
+        return Kafka.connect(bootstrapServers);
+    }
+
+    public static Kafka openKafka(KafkaOptions options) {
+        return Kafka.connect(options);
+    }
+
+    /** Parse {@code kafka://host:9092?group=g&topic=t}. */
+    public static Kafka openKafkaUri(String uri) {
+        return Kafka.connectUri(uri);
+    }
+
+    /**
+     * Write this DataFrame to Kafka (one JSON object per row by default).
+     *
+     * @return number of rows acknowledged
+     */
+    public int toKafka(Kafka kafka, KafkaOptions options) {
+        return kafka.writeDataFrame(this, options);
+    }
+
+    public int toKafka(Kafka kafka, String topic) {
+        return toKafka(kafka, KafkaOptions.builder().topic(topic).build());
+    }
+
+    public int toKafka(Kafka kafka, String topic, String keyColumn) {
+        return toKafka(kafka, KafkaOptions.builder().topic(topic).keyColumn(keyColumn).build());
+    }
+
+    /**
+     * One-shot: connect → produce → close.
+     *
+     * <pre>{@code
+     * df.toKafka("kafka-1:9092", "rec.feature.log", "user_id");
+     * }</pre>
+     */
+    public int toKafka(String bootstrapServers, String topic) {
+        try (Kafka k = Kafka.connect(bootstrapServers)) {
+            return toKafka(k, topic);
+        }
+    }
+
+    public int toKafka(String bootstrapServers, String topic, String keyColumn) {
+        try (Kafka k = Kafka.connect(bootstrapServers)) {
+            return toKafka(k, topic, keyColumn);
+        }
+    }
+
+    public int toKafka(String bootstrapServers, KafkaOptions options) {
+        try (Kafka k = Kafka.connect(bootstrapServers)) {
+            return toKafka(k, options);
+        }
+    }
+
+    /**
+     * Poll one Kafka batch into a DataFrame (may be empty).
+     * Metadata columns {@code __topic}/{@code __partition}/… included when
+     * {@link KafkaOptions#includeMetadata()} is true (default).
+     */
+    public static DataFrame readKafka(Kafka kafka, KafkaOptions options) {
+        return kafka.readDataFrame(options);
+    }
+
+    public static DataFrame readKafka(Kafka kafka) {
+        return kafka.readDataFrame();
+    }
+
+    /**
+     * One-shot: connect → poll up to {@code maxRecords} → close.
+     */
+    public static DataFrame readKafka(String bootstrapServers, String topic,
+                                      String groupId, int maxRecords) {
+        KafkaOptions opts = KafkaOptions.consumer(bootstrapServers, topic, groupId);
+        try (Kafka k = Kafka.connect(opts)) {
+            return k.readDataFrame(opts, maxRecords);
+        }
+    }
+
+    public static DataFrame readKafka(String bootstrapServers, String topic, String groupId) {
+        return readKafka(bootstrapServers, topic, groupId, 2000);
+    }
+
+    /**
+     * Continuous consume → handler. Returns total rows delivered.
+     * Commits after each batch by default (manual-commit consumer).
+     *
+     * <pre>{@code
+     * DataFrame.streamKafka(opts, 2048, batch -> {
+     *     Tensor x = batch.toTensor("f1", "f2");
+     *     // online train / rank
+     * });
+     * }</pre>
+     */
+    public static long streamKafka(Kafka kafka, KafkaOptions options, int batchRows,
+                                   java.util.function.Consumer<DataFrame> consumer) {
+        return kafka.streamDataFrame(options, batchRows, consumer);
+    }
+
+    public static long streamKafka(KafkaOptions options, int batchRows,
+                                   java.util.function.Consumer<DataFrame> consumer) {
+        try (Kafka k = Kafka.connect(options)) {
+            return k.streamDataFrame(options, batchRows, consumer);
+        }
+    }
+
+    public static long streamKafka(String bootstrapServers, String topic, String groupId,
+                                   int batchRows,
+                                   java.util.function.Consumer<DataFrame> consumer) {
+        return streamKafka(KafkaOptions.consumer(bootstrapServers, topic, groupId),
+                batchRows, consumer);
+    }
+
+    /** Read an offline Kafka dump (JSONL / JSON / CSV / console / binary by extension). */
+    public static DataFrame readKafkaFile(String path) {
+        return KafkaFile.read(java.nio.file.Path.of(path));
+    }
+
+    public static DataFrame readKafkaFile(java.nio.file.Path path) {
+        return KafkaFile.read(path);
+    }
+
+    public static DataFrame readKafkaJsonl(String path) {
+        return KafkaFile.readJsonl(java.nio.file.Path.of(path));
+    }
+
+    /** Write this frame as a Kafka offline dump (format by extension, default JSONL). */
+    public void toKafkaFile(String path) {
+        KafkaFile.write(this, java.nio.file.Path.of(path));
+    }
+
+    public void toKafkaFile(java.nio.file.Path path) {
+        KafkaFile.write(this, path);
+    }
+
+    public void toKafkaJsonl(String path) {
+        KafkaFile.writeJsonl(this, java.nio.file.Path.of(path));
     }
 
     public static DataFrame readHdf(String path, String key) throws Exception {

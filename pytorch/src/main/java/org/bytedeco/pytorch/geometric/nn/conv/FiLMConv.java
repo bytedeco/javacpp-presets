@@ -152,4 +152,16 @@ public class FiLMConv extends MessagePassing {
     public int getNumRelations() {
         return numRelations;
     }
+
+    public LinearImpl[] getLins() {
+        return lins;
+    }
+
+    public LinearImpl getFilmLin() {
+        return filmLin;
+    }
+
+    public Module getAct() {
+        return act;
+    }
 }
