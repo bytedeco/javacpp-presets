@@ -9,7 +9,7 @@ import org.bytedeco.pytorch.data.datasets.*;
 import org.bytedeco.pytorch.data.dataloader.*;
 import org.bytedeco.pytorch.data.sampler.*;
 import org.bytedeco.pytorch.data.transforms.*;
-import org.bytedeco.pytorch.options.*;
+import org.bytedeco.pytorch.nn.options.*;
 
 import org.bytedeco.pytorch.data.options.*;
 

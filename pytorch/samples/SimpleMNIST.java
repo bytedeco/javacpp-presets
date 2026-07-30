@@ -18,9 +18,11 @@ import org.bytedeco.pytorch.data.datasets.*;
 import org.bytedeco.pytorch.data.dataloader.*;
 import org.bytedeco.pytorch.data.sampler.*;
 import org.bytedeco.pytorch.data.transforms.*;
-import org.bytedeco.pytorch.options.*;
+import org.bytedeco.pytorch.nn.options.*;
 
 import org.bytedeco.pytorch.data.options.*;
+
+import org.bytedeco.pytorch.optim.options.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -36,7 +38,7 @@ public class SimpleMNIST {
         }
 
         // Implement the Net's algorithm.
-        Tensor forward(Tensor x) {
+        public Tensor forward(Tensor x) {
             // Use one of many tensor manipulation functions.
             x = relu(fc1.forward(x.reshape(x.size(0), 784)));
             x = dropout(x, /*p=*/0.5, /*train=*/is_training());
