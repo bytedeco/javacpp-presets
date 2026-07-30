@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 DISABLE="--disable-iconv --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf --disable-xlib"
-ENABLE="--enable-shared --enable-version3 --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvo-amrwbenc --enable-openssl --enable-libopenh264 --enable-libvpx --enable-libfreetype --enable-libharfbuzz --enable-libopus --enable-libxml2 --enable-libsrt --enable-libwebp --enable-libaom --enable-libsvtav1 --enable-libzimg"
+ENABLE="--enable-shared --enable-version3 --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvo-amrwbenc --enable-openssl --enable-libopenh264 --enable-libvpx --enable-libfreetype --enable-libharfbuzz --enable-libopus --enable-libxml2 --enable-libsrt --enable-libwebp --enable-libaom --enable-libsvtav1 --enable-libzimg --enable-libkvazaar"
 ENABLE_VULKAN="--enable-vulkan --enable-hwaccel=h264_vulkan --enable-hwaccel=hevc_vulkan --enable-hwaccel=av1_vulkan"
 
 if [[ "$EXTENSION" == *gpl ]]; then
@@ -50,6 +50,7 @@ WEBP_VERSION=1.6.0
 AOMAV1_VERSION=3.14.1
 SVTAV1_VERSION=4.1.0
 ZIMG_VERSION=3.0.6
+KVAZAAR_VERSION=2.3.2
 FFMPEG_VERSION=8.1.1
 
 # Vendored snapshot of https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/20847.patch
@@ -78,6 +79,7 @@ download https://github.com/webmproject/libwebp/archive/refs/tags/v$WEBP_VERSION
 download https://storage.googleapis.com/aom-releases/libaom-$AOMAV1_VERSION.tar.gz aom-$AOMAV1_VERSION.tar.gz
 download https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v$SVTAV1_VERSION/SVT-AV1-v$SVTAV1_VERSION.tar.gz SVT-AV1-$SVTAV1_VERSION.tar.gz
 download https://github.com/sekrit-twc/zimg/archive/refs/tags/release-$ZIMG_VERSION.tar.gz zimg-release-$ZIMG_VERSION.tar.gz
+download https://github.com/ultravideo/kvazaar/archive/refs/tags/v$KVAZAAR_VERSION.tar.gz kvazaar-$KVAZAAR_VERSION.tar.gz
 download https://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 mkdir -p $PLATFORM$EXTENSION
@@ -106,6 +108,7 @@ tar --totals -xzf ../libwebp-$WEBP_VERSION.tar.gz
 tar --totals -xzf ../aom-$AOMAV1_VERSION.tar.gz
 tar --totals -xzf ../SVT-AV1-$SVTAV1_VERSION.tar.gz
 tar --totals -xzf ../zimg-release-$ZIMG_VERSION.tar.gz
+tar --totals -xzf ../kvazaar-$KVAZAAR_VERSION.tar.gz
 tar --totals -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
@@ -308,6 +311,11 @@ EOF
         make -j $MAKEJ
         make install
         cd ..
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
+        CFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --with-pic --host=arm-linux
+        make -j $MAKEJ V=0
+        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
         LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --cxx="$CXX" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=arm --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver  --pkg-config=/usr/bin/pkg-config || cat ffbuild/config.log
@@ -482,6 +490,11 @@ EOF
         make -j $MAKEJ
         make install
         cd ..
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
+        CFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --with-pic --host=aarch64-linux
+        make -j $MAKEJ V=0
+        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
         LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --cxx="$CXX" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=aarch64 --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver --pkg-config=/usr/bin/pkg-config || cat ffbuild/config.log
@@ -653,6 +666,11 @@ EOF
         make -j $MAKEJ
         make install
         cd ..
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
+        CFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --with-pic --host=i686-linux
+        make -j $MAKEJ V=0
+        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
         LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --cxx="$CXX" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver --pkg-config=/usr/bin/pkg-config || cat ffbuild/config.log
@@ -823,6 +841,11 @@ EOF
         make -j $MAKEJ
         make install
         cd ..
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
+        CFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --with-pic --host=x86_64-linux
+        make -j $MAKEJ V=0
+        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
         LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --cxx="$CXX" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver --pkg-config=/usr/bin/pkg-config || cat ffbuild/config.log
@@ -979,6 +1002,11 @@ EOF
         make -j $MAKEJ
         make install
         cd ..
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
+        CC="gcc -m32" CFLAGS="-m32 -fPIC" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --with-pic --host=i686-linux
+        make -j $MAKEJ V=0
+        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-libdrm --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --enable-libpulse --cc="gcc -m32 -D__ILP32__" --cxx="g++ -m32 -D__ILP32__" --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $LIBS" || cat ffbuild/config.log
         make -j $MAKEJ
@@ -1135,6 +1163,11 @@ EOF
         make -j $MAKEJ
         make install
         cd ..
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
+        CC="gcc -m64" CFLAGS="-m64 -fPIC" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --with-pic --host=x86_64-linux
+        make -j $MAKEJ V=0
+        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-libdrm --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --enable-libpulse --cc="gcc -m64" --cxx="g++ -m64" --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $LIBS" || cat ffbuild/config.log
         make -j $MAKEJ
@@ -1371,6 +1404,11 @@ EOF
         make -j $MAKEJ
         make install
         cd ..
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
+        CFLAGS="$CFLAGS -fPIC" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --with-pic --host=arm-linux-gnueabihf
+        make -j $MAKEJ V=0
+        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         if [ $CROSSCOMPILE -eq 1 ]
         then
@@ -1552,6 +1590,11 @@ EOF
         make -j $MAKEJ
         make install
         cd ..
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
+        CFLAGS="$CFLAGS -fPIC" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --with-pic --host=aarch64-linux-gnu
+        make -j $MAKEJ V=0
+        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         if [[ ! -d $USERLAND_PATH ]]; then
           USERLAND_PATH="$(which aarch64-linux-gnu-gcc | grep -o '.*/tools/')../userland"
@@ -1800,6 +1843,15 @@ EOF
         make -j $MAKEJ
         make install
         cd ..
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+            CC="gcc -m64" CFLAGS="-m64 -fPIC" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --with-pic
+        else
+            CFLAGS="-m64 -fPIC" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --with-pic --host=powerpc64le-linux-gnu
+        fi
+        make -j $MAKEJ V=0
+        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --enable-libpulse --cc="gcc -m64" --cxx="g++ -m64" --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm" --disable-altivec || cat ffbuild/config.log
@@ -1968,6 +2020,11 @@ EOF
         make -j $MAKEJ
         make install
         cd ..
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
+        CC="clang -arch arm64" CFLAGS="-arch arm64 -fPIC" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --with-pic --host=aarch64-apple-darwin
+        make -j $MAKEJ V=0
+        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-macosx.patch
         LDEXEFLAGS='-Wl,-rpath,@loader_path/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-pthreads --enable-indev=avfoundation --disable-libxcb --cc="clang -arch arm64" --cxx="clang++ -arch arm64" --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm" --enable-cross-compile --arch=arm64 --target-os=darwin || cat ffbuild/config.log
@@ -2108,6 +2165,11 @@ EOF
         make -j $MAKEJ
         make install
         cd ..
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
+        CC="clang" CFLAGS="-fPIC" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --with-pic
+        make -j $MAKEJ V=0
+        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-macosx.patch
         LDEXEFLAGS='-Wl,-rpath,@loader_path/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-pthreads --enable-indev=avfoundation --disable-libxcb --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm" || cat ffbuild/config.log
@@ -2262,8 +2324,13 @@ EOF
         make -j $MAKEJ
         make install
         cd ..
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
+        CC="gcc -m32" CFLAGS="-m32 -DKVZ_STATIC_LIB" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --host=i686-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --cxx="g++ -m32" --extra-cflags="-DLIBXML_STATIC -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic -lole32 -luuid" || cat ffbuild/config.log
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --cxx="g++ -m32" --extra-cflags="-DLIBXML_STATIC -DKVZ_STATIC_LIB -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic -lole32 -luuid" || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -2415,8 +2482,13 @@ EOF
         make -j $MAKEJ
         make install
         cd ..
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
+        CC="gcc -m64" CFLAGS="-m64 -DKVZ_STATIC_LIB" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --host=x86_64-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --cxx="g++ -m64" --extra-cflags="-DLIBXML_STATIC -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic -lole32 -luuid" || cat ffbuild/config.log
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --cxx="g++ -m64" --extra-cflags="-DLIBXML_STATIC -DKVZ_STATIC_LIB -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic -lole32 -luuid" || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
