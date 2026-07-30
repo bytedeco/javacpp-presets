@@ -1,0 +1,359 @@
+# Multi-platform native builds + Central publish for io.github.mullerhai
+# Pattern follows bytedeco/javacpp-presets workflows, rebranded to mullerhai.
+#
+# Required GitHub secrets (repo Settings → Secrets → Actions):
+#   CENTRAL_USERNAME          Sonatype Central user token name
+#   CENTRAL_PASSWORD          Sonatype Central user token password
+#   GPG_PRIVATE_KEY           ASCII-armored secret key (optional if key already on runner)
+#   GPG_PASSPHRASE            GPG passphrase (empty if unprotected)
+#   GPG_KEY_ID                e.g. 7AD293084072FD9F
+#
+# Usage:
+#   - workflow_dispatch: pick modules + version suffix (beta-05, beta-06, …)
+#   - Each platform job builds classifier jars and uploads them as artifacts
+#   - "assemble-and-publish" downloads all platform jars, rewrites GAV to
+#     io.github.mullerhai, GPG-signs, and uploads one Central Portal bundle
+#
+# Note: full pytorch + cuda from-source builds are heavy (hours). Start with
+# lighter modules (openblas/ffmpeg/opencv/cpython/numpy/javacpp/cuda) and
+# enable pytorch once CI capacity is confirmed.
+
+name: mullerhai-multiplatform
+
+on:
+  workflow_dispatch:
+    inputs:
+      modules:
+        description: "Comma-separated modules (openblas,ffmpeg,opencv,cpython,numpy,javacpp,cuda,pytorch)"
+        required: true
+        default: "javacpp,openblas,ffmpeg,opencv,cpython,numpy,cuda"
+      publish_suffix:
+        description: "Version suffix (e.g. beta-05). Must be NEW — Central versions are immutable."
+        required: true
+        default: "beta-05"
+      build_pytorch_gpu:
+        description: "Also build pytorch -gpu extension on linux/windows"
+        type: boolean
+        default: false
+      publish:
+        description: "Upload to Maven Central after assemble"
+        type: boolean
+        default: true
+
+env:
+  PUBLISH_GROUP_ID: io.github.mullerhai
+  PUBLISH_SUFFIX: ${{ inputs.publish_suffix }}
+  CI_DEPLOY_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+  CI_DEPLOY_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
+  GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+  GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+jobs:
+  # ─────────────────────────────────────────────────────────────
+  # Per-platform native builds (bytedeco-style matrix)
+  # ─────────────────────────────────────────────────────────────
+  linux-x86_64:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+      - name: Free disk + install toolchain
+        run: |
+          sudo rm -rf /opt/az /opt/google /opt/hostedtoolcache /usr/share/dotnet /usr/local/lib/android || true
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq build-essential ccache cmake ninja-build \
+            openjdk-17-jdk ant pkg-config autoconf automake libtool \
+            libssl-dev zlib1g-dev yasm nasm
+          echo "JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64" >> $GITHUB_ENV
+          echo "MAKEJ=$(nproc)" >> $GITHUB_ENV
+      - name: Optional CUDA (for cuda module / pytorch-gpu)
+        if: contains(inputs.modules, 'cuda') || (inputs.build_pytorch_gpu && contains(inputs.modules, 'pytorch'))
+        run: |
+          echo "CUDA install is large; using prebuilt redist path when available."
+          # Full CUDA toolkit install can be enabled later; for cuda JavaCPP presets
+          # the cppbuild downloads NVIDIA redists itself on many platforms.
+          echo "CI_DEPLOY_NEED_CUDA=1" >> $GITHUB_ENV
+      - name: Build selected modules (linux-x86_64)
+        env:
+          CI_DEPLOY_PLATFORM: linux-x86_64
+        run: |
+          set -euo pipefail
+          IFS=',' read -ra MODS <<< "${{ inputs.modules }}"
+          for m in "${MODS[@]}"; do
+            m=$(echo "$m" | xargs)
+            [[ -z "$m" ]] && continue
+            echo "======== BUILD $m linux-x86_64 ========"
+            if [[ ! -d "$m" ]]; then
+              echo "skip missing module dir: $m"; continue
+            fi
+            # Native cppbuild + package classifier jar (skip tests)
+            mvn -B -U -f "$m/pom.xml" clean install \
+              -DskipTests \
+              -Djavacpp.platform=linux-x86_64 \
+              -Djavacpp.platform.extension= \
+              || { echo "FAILED $m"; exit 1; }
+            if [[ "${{ inputs.build_pytorch_gpu }}" == "true" && "$m" == "pytorch" ]]; then
+              echo "======== BUILD pytorch linux-x86_64-gpu ========"
+              mvn -B -U -f pytorch/pom.xml clean install \
+                -DskipTests \
+                -Djavacpp.platform=linux-x86_64 \
+                -Djavacpp.platform.extension=-gpu \
+                || { echo "FAILED pytorch-gpu"; exit 1; }
+            fi
+          done
+      - name: Upload linux-x86_64 m2 classifiers
+        uses: actions/upload-artifact@v4
+        with:
+          name: m2-linux-x86_64
+          path: |
+            ~/.m2/repository/org/bytedeco/**
+          retention-days: 5
+          if-no-files-found: warn
+          compression-level: 0
+
+  linux-arm64:
+    runs-on: ubuntu-22.04-arm
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install toolchain (arm64)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq build-essential ccache cmake ninja-build \
+            openjdk-17-jdk ant pkg-config autoconf automake libtool \
+            libssl-dev zlib1g-dev yasm nasm
+          echo "JAVA_HOME=/usr/lib/jvm/java-17-openjdk-arm64" >> $GITHUB_ENV
+          echo "MAKEJ=$(nproc)" >> $GITHUB_ENV
+      - name: Build selected modules (linux-arm64)
+        run: |
+          set -euo pipefail
+          IFS=',' read -ra MODS <<< "${{ inputs.modules }}"
+          for m in "${MODS[@]}"; do
+            m=$(echo "$m" | xargs)
+            [[ -z "$m" || ! -d "$m" ]] && continue
+            # Skip cuda redist-heavy modules on arm if disk tight — still try
+            echo "======== BUILD $m linux-arm64 ========"
+            mvn -B -U -f "$m/pom.xml" clean install \
+              -DskipTests -Djavacpp.platform=linux-arm64 || exit 1
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: m2-linux-arm64
+          path: ~/.m2/repository/org/bytedeco/**
+          retention-days: 5
+          if-no-files-found: warn
+          compression-level: 0
+
+  windows-x86_64:
+    runs-on: windows-2022
+    timeout-minutes: 360
+    env:
+      TEMP: D:\temp
+      TMP: D:\temp
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Build selected modules (windows-x86_64)
+        shell: bash
+        run: |
+          set -euo pipefail
+          export MAKEJ=$(nproc 2>/dev/null || echo 4)
+          IFS=',' read -ra MODS <<< "${{ inputs.modules }}"
+          for m in "${MODS[@]}"; do
+            m=$(echo "$m" | xargs)
+            [[ -z "$m" || ! -d "$m" ]] && continue
+            echo "======== BUILD $m windows-x86_64 ========"
+            mvn -B -U -f "$m/pom.xml" clean install \
+              -DskipTests -Djavacpp.platform=windows-x86_64 \
+              || exit 1
+            if [[ "${{ inputs.build_pytorch_gpu }}" == "true" && "$m" == "pytorch" ]]; then
+              mvn -B -U -f pytorch/pom.xml clean install \
+                -DskipTests -Djavacpp.platform=windows-x86_64 \
+                -Djavacpp.platform.extension=-gpu || exit 1
+            fi
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: m2-windows-x86_64
+          path: ~/.m2/repository/org/bytedeco/**
+          retention-days: 5
+          if-no-files-found: warn
+          compression-level: 0
+
+  macosx-arm64:
+    runs-on: macos-15
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Build selected modules (macosx-arm64)
+        run: |
+          set -euo pipefail
+          export MAKEJ=$(sysctl -n hw.ncpu)
+          # OpenMPI optional for pytorch MPI
+          brew list open-mpi &>/dev/null || brew install open-mpi || true
+          export MPI_HOME="$(brew --prefix open-mpi 2>/dev/null || true)"
+          export USE_MPI=1
+          IFS=',' read -ra MODS <<< "${{ inputs.modules }}"
+          for m in "${MODS[@]}"; do
+            m=$(echo "$m" | xargs)
+            [[ -z "$m" || ! -d "$m" ]] && continue
+            # cuda is not a macOS target in bytedeco
+            if [[ "$m" == "cuda" ]]; then
+              echo "skip cuda on macosx-arm64"; continue
+            fi
+            echo "======== BUILD $m macosx-arm64 ========"
+            mvn -B -U -f "$m/pom.xml" clean install \
+              -DskipTests -Djavacpp.platform=macosx-arm64 || exit 1
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: m2-macosx-arm64
+          path: ~/.m2/repository/org/bytedeco/**
+          retention-days: 5
+          if-no-files-found: warn
+          compression-level: 0
+
+  macosx-x86_64:
+    runs-on: macos-15-intel
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Build selected modules (macosx-x86_64)
+        run: |
+          set -euo pipefail
+          export MAKEJ=$(sysctl -n hw.ncpu)
+          IFS=',' read -ra MODS <<< "${{ inputs.modules }}"
+          for m in "${MODS[@]}"; do
+            m=$(echo "$m" | xargs)
+            [[ -z "$m" || ! -d "$m" || "$m" == "cuda" ]] && continue
+            echo "======== BUILD $m macosx-x86_64 ========"
+            mvn -B -U -f "$m/pom.xml" clean install \
+              -DskipTests -Djavacpp.platform=macosx-x86_64 || exit 1
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: m2-macosx-x86_64
+          path: ~/.m2/repository/org/bytedeco/**
+          retention-days: 5
+          if-no-files-found: warn
+          compression-level: 0
+
+  # ─────────────────────────────────────────────────────────────
+  # Assemble all platform jars → rewrite GAV → Central Portal
+  # ─────────────────────────────────────────────────────────────
+  assemble-and-publish:
+    needs: [linux-x86_64, linux-arm64, windows-x86_64, macosx-arm64, macosx-x86_64]
+    if: always() && inputs.publish
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Import GPG key
+        if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
+        run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+          gpg --list-secret-keys --keyid-format LONG
+      - name: Download all platform artifacts into local m2
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/m2-parts
+          pattern: m2-*
+          merge-multiple: false
+      - name: Merge m2 classifier jars
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.m2/repository"
+          # Each artifact is a full org/bytedeco tree from one runner
+          for d in /tmp/m2-parts/m2-*; do
+            echo "Merging $d"
+            rsync -a "$d/" "$HOME/.m2/repository/" || cp -a "$d/." "$HOME/.m2/repository/"
+          done
+          echo "=== sample openblas ==="
+          ls "$HOME/.m2/repository/org/bytedeco/openblas/"*/ 2>/dev/null | head -40 || true
+          echo "=== sample cuda ==="
+          ls "$HOME/.m2/repository/org/bytedeco/cuda/"*/ 2>/dev/null | head -40 || true
+          echo "=== sample pytorch ==="
+          ls "$HOME/.m2/repository/org/bytedeco/pytorch/"*/ 2>/dev/null | head -40 || true
+      - name: Rewrite + sign + bundle (io.github.mullerhai)
+        env:
+          PUBLISH_SUFFIX: ${{ inputs.publish_suffix }}
+          PUBLISH_GROUP_ID: io.github.mullerhai
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          set -euo pipefail
+          cd pytorch/scripts/publish
+          # Ensure config suffix matches dispatch input
+          sed -i "s/^export PUBLISH_SUFFIX=.*/export PUBLISH_SUFFIX=\"${PUBLISH_SUFFIX}\"/" config.env
+          source config.env
+          ./publish.sh all
+          ls -lh bundles/
+      - name: Upload bundle to Central Portal (AUTOMATIC)
+        env:
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
+        run: |
+          set -euo pipefail
+          BUNDLE=$(ls pytorch/scripts/publish/bundles/mullerhai-javacpp-stack-*.zip | sort | tail -1)
+          echo "Uploading $BUNDLE ($(du -h "$BUNDLE" | cut -f1))"
+          AUTH=$(python3 -c "import base64,os; print(base64.b64encode(f'{os.environ[\"CENTRAL_USERNAME\"]}:{os.environ[\"CENTRAL_PASSWORD\"]}'.encode()).decode())")
+          curl -sS --connect-timeout 60 --max-time 3600 --retry 2 --retry-delay 15 \
+            -o /tmp/central-upload.txt -w "HTTP %{http_code}\n" \
+            -X POST "https://central.sonatype.com/api/v1/publisher/upload?publishingType=AUTOMATIC&name=mullerhai-${{ inputs.publish_suffix }}" \
+            -H "Authorization: Bearer $AUTH" \
+            -F "bundle=@${BUNDLE};type=application/zip"
+          echo "deploymentId=$(cat /tmp/central-upload.txt)"
+          echo "DEP_ID=$(cat /tmp/central-upload.txt)" >> $GITHUB_ENV
+      - name: Poll Central deployment
+        env:
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
+        run: |
+          set -euo pipefail
+          AUTH=$(python3 -c "import base64,os; print(base64.b64encode(f'{os.environ[\"CENTRAL_USERNAME\"]}:{os.environ[\"CENTRAL_PASSWORD\"]}'.encode()).decode())")
+          DEP="${DEP_ID}"
+          for i in $(seq 1 60); do
+            sleep 15
+            RESP=$(curl -sS "https://central.sonatype.com/api/v1/publisher/deployments" -H "Authorization: Bearer $AUTH")
+            STATE=$(echo "$RESP" | python3 -c "
+          import sys,json
+          data=json.load(sys.stdin)
+          for d in data.get('deployments',[]):
+            if d.get('deploymentId')=='$DEP':
+              print(d.get('deploymentState')); break
+          ")
+            echo "[$i] $STATE"
+            case "$STATE" in
+              PUBLISHED) echo "OK published"; exit 0 ;;
+              FAILED) echo "$RESP" | python3 -m json.tool | head -80; exit 1 ;;
+            esac
+          done
+          echo "Timed out still in $STATE"; exit 1
+      - name: Upload publish bundle as CI artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: central-bundle-${{ inputs.publish_suffix }}
+          path: pytorch/scripts/publish/bundles/*.zip
+          retention-days: 14

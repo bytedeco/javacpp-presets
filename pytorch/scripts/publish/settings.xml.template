@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copy to ~/.m2/settings.xml (or merge with your existing file).
+
+  1) Create a Sonatype Central Portal account: https://central.sonatype.com/
+  2) Generate a user token: https://central.sonatype.com/account
+  3) Replace CENTRAL_USERNAME / CENTRAL_PASSWORD below (or use env vars).
+  4) Claim namespace io.github.mullerhai (requires github.com/mullerhai ownership).
+
+  Server id MUST be "central" — matches central-publishing-maven-plugin
+  and the Central Portal Publisher API used by publish scripts.
+-->
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 https://maven.apache.org/xsd/settings-1.2.0.xsd">
+
+  <servers>
+    <server>
+      <id>central</id>
+      <!-- Prefer User Token: token name as username, token value as password -->
+      <username>${env.CENTRAL_USERNAME}</username>
+      <password>${env.CENTRAL_PASSWORD}</password>
+    </server>
+  </servers>
+
+  <profiles>
+    <profile>
+      <id>gpg-signing</id>
+      <properties>
+        <!-- GPG key created for mullerhai Maven Central publishing -->
+        <gpg.keyname>7AD293084072FD9F</gpg.keyname>
+        <!-- Empty if key was generated with %no-protection -->
+        <gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
+      </properties>
+    </profile>
+  </profiles>
+
+  <activeProfiles>
+    <activeProfile>gpg-signing</activeProfile>
+  </activeProfiles>
+</settings>
