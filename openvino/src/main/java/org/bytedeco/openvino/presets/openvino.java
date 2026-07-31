@@ -34,98 +34,98 @@ import org.bytedeco.opencl.presets.OpenCL;
  * @author Barry Pitman
  */
 @Properties(
-        inherit = OpenCL.class,
-        value = {
-                @Platform(
-                        value = {"linux-x86_64"},
-                        include = {
-                                "openvino/c/openvino.h"
-                        },
-                        link = {"openvino_c@.2621#", "openvino@.2621#"},
-                        preloadresource = {"runtime/lib/intel64/"},
-                        preload = {
-                                "tbb:runtime/3rdparty/tbb/lib/libtbb.so.12",
-                                "openvino:runtime/lib/intel64/libopenvino.so.2621",
-                                "openvino_c:runtime/lib/intel64/libopenvino_c.so.2621",
-                                "openvino_auto_batch_plugin:runtime/lib/intel64/libopenvino_auto_batch_plugin.so",
-                                "openvino_auto_plugin:runtime/lib/intel64/libopenvino_auto_plugin.so",
-                                "openvino_hetero_plugin:runtime/lib/intel64/libopenvino_hetero_plugin.so",
-                                "openvino_intel_cpu_plugin:runtime/lib/intel64/libopenvino_intel_cpu_plugin.so",
-                                "openvino_intel_gpu_plugin:runtime/lib/intel64/libopenvino_intel_gpu_plugin.so",
-                                "openvino_intel_npu_plugin:runtime/lib/intel64/libopenvino_intel_npu_plugin.so",
-                                "openvino_ir_frontend:runtime/lib/intel64/libopenvino_ir_frontend.so.2621",
-                                "openvino_onnx_frontend:runtime/lib/intel64/libopenvino_onnx_frontend.so.2621",
-                                "openvino_paddle_frontend:runtime/lib/intel64/libopenvino_paddle_frontend.so.2621",
-                                "openvino_pytorch_frontend:runtime/lib/intel64/libopenvino_pytorch_frontend.so.2621",
-                                "openvino_tensorflow_frontend:runtime/lib/intel64/libopenvino_tensorflow_frontend.so.2621",
-                                "openvino_tensorflow_lite_frontend:runtime/lib/intel64/libopenvino_tensorflow_lite_frontend.so.2621"
-                        },
-                        resource = {"runtime"}
-                ),
-                @Platform(
-                        value = {"macosx-arm64"},
-                        include = {
-                                "openvino/c/openvino.h"
-                        },
-                        link = {"openvino_c@.2610", "openvino@.2610"},
-                        preloadresource = {
-                                "runtime/lib/arm64/Release/",
-                                "runtime/3rdparty/tbb/lib/"
-                        },
-                        preload = {
-                                "openvino_auto_batch_plugin",
-                                "openvino_auto_plugin",
-                                "openvino_hetero_plugin",
-                                "openvino_arm_cpu_plugin",
-                                "openvino_ir_frontend@.2610",
-                                "openvino_onnx_frontend@.2610",
-                                "openvino_paddle_frontend@.2610",
-                                "openvino_pytorch_frontend@.2610",
-                                "openvino_tensorflow_frontend@.2610",
-                                "openvino_tensorflow_lite_frontend@.2610",
-                                "tbb@.12"
-                        },
-                        resource = {"runtime"}
-                ),
-                @Platform(
-                        value = {"windows-x86_64"},
-                        include = {
-                                "openvino/c/openvino.h"
-                        },
-                        link = {"openvino_c", "openvino"},
-                        preloadresource = {
-                                "runtime/bin/intel64/Release/",
-                                "runtime/3rdparty/tbb/bin/"
-                        },
-                        preload = {
-                                "openvino_auto_batch_plugin",
-                                "openvino_auto_plugin",
-                                "openvino_hetero_plugin",
-                                "openvino_intel_cpu_plugin",
-                                "openvino_intel_gpu_plugin",
-                                "openvino_intel_npu_plugin",
-                                "openvino_ir_frontend",
-                                "openvino_onnx_frontend",
-                                "openvino_paddle_frontend",
-                                "openvino_pytorch_frontend",
-                                "openvino_tensorflow_frontend",
-                                "openvino_tensorflow_lite_frontend",
-                                "tbb12"
-                        },
-                        resource = {"runtime"}
-                ),
-        },
-        target = "org.bytedeco.openvino",
-        global = "org.bytedeco.openvino.global.openvino"
+    inherit = OpenCL.class,
+    value = {
+        @Platform(
+            value = {"linux-x86_64"},
+            include = {
+                "openvino/c/openvino.h"
+            },
+            link = {"openvino_c@.2621#", "openvino@.2621#"},
+            preloadresource = {"runtime/lib/intel64/"},
+            preload = {
+                "tbb:runtime/3rdparty/tbb/lib/libtbb.so.12",
+                "openvino:runtime/lib/intel64/libopenvino.so.2621",
+                "openvino_c:runtime/lib/intel64/libopenvino_c.so.2621",
+                "openvino_auto_batch_plugin:runtime/lib/intel64/libopenvino_auto_batch_plugin.so",
+                "openvino_auto_plugin:runtime/lib/intel64/libopenvino_auto_plugin.so",
+                "openvino_hetero_plugin:runtime/lib/intel64/libopenvino_hetero_plugin.so",
+                "openvino_intel_cpu_plugin:runtime/lib/intel64/libopenvino_intel_cpu_plugin.so",
+                "openvino_intel_gpu_plugin:runtime/lib/intel64/libopenvino_intel_gpu_plugin.so",
+                "openvino_intel_npu_plugin:runtime/lib/intel64/libopenvino_intel_npu_plugin.so",
+                "openvino_ir_frontend:runtime/lib/intel64/libopenvino_ir_frontend.so.2621",
+                "openvino_onnx_frontend:runtime/lib/intel64/libopenvino_onnx_frontend.so.2621",
+                "openvino_paddle_frontend:runtime/lib/intel64/libopenvino_paddle_frontend.so.2621",
+                "openvino_pytorch_frontend:runtime/lib/intel64/libopenvino_pytorch_frontend.so.2621",
+                "openvino_tensorflow_frontend:runtime/lib/intel64/libopenvino_tensorflow_frontend.so.2621",
+                "openvino_tensorflow_lite_frontend:runtime/lib/intel64/libopenvino_tensorflow_lite_frontend.so.2621"
+            },
+            resource = {"runtime"}
+        ),
+        @Platform(
+            value = {"macosx-arm64"},
+            include = {
+                "openvino/c/openvino.h"
+            },
+            link = {"openvino_c@.2610", "openvino@.2610"},
+            preloadresource = {
+                "runtime/lib/arm64/Release/",
+                "runtime/3rdparty/tbb/lib/"
+            },
+            preload = {
+                "openvino_auto_batch_plugin",
+                "openvino_auto_plugin",
+                "openvino_hetero_plugin",
+                "openvino_arm_cpu_plugin",
+                "openvino_ir_frontend@.2610",
+                "openvino_onnx_frontend@.2610",
+                "openvino_paddle_frontend@.2610",
+                "openvino_pytorch_frontend@.2610",
+                "openvino_tensorflow_frontend@.2610",
+                "openvino_tensorflow_lite_frontend@.2610",
+                "tbb@.12"
+            },
+            resource = {"runtime"}
+        ),
+        @Platform(
+            value = {"windows-x86_64"},
+            include = {
+                "openvino/c/openvino.h"
+            },
+            link = {"openvino_c", "openvino"},
+            preloadresource = {
+                "runtime/bin/intel64/Release/",
+                "runtime/3rdparty/tbb/bin/"
+            },
+            preload = {
+                "openvino_auto_batch_plugin",
+                "openvino_auto_plugin",
+                "openvino_hetero_plugin",
+                "openvino_intel_cpu_plugin",
+                "openvino_intel_gpu_plugin",
+                "openvino_intel_npu_plugin",
+                "openvino_ir_frontend",
+                "openvino_onnx_frontend",
+                "openvino_paddle_frontend",
+                "openvino_pytorch_frontend",
+                "openvino_tensorflow_frontend",
+                "openvino_tensorflow_lite_frontend",
+                "tbb12"
+            },
+            resource = {"runtime"}
+        ),
+    },
+    target = "org.bytedeco.openvino",
+    global = "org.bytedeco.openvino.global.openvino"
 )
 public class openvino implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "openvino"); }
 
     @Override public void map(InfoMap infoMap) {
         infoMap.put(new org.bytedeco.javacpp.tools.Info("extern", "__cdecl").cppTypes().annotations())
-                .put(new org.bytedeco.javacpp.tools.Info("OPENVINO_C_API_EXTERN", "OPENVINO_C_API_CALLBACK").skip())
-                .put(new org.bytedeco.javacpp.tools.Info("OV_BOOLEAN", "BOOLEAN").skip())
-                .put(new org.bytedeco.javacpp.tools.Info("ov_rank_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
-                .put(new org.bytedeco.javacpp.tools.Info("ov_dimension_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"));
+               .put(new org.bytedeco.javacpp.tools.Info("OPENVINO_C_API_EXTERN", "OPENVINO_C_API_CALLBACK").skip())
+               .put(new org.bytedeco.javacpp.tools.Info("OV_BOOLEAN", "BOOLEAN").skip())
+               .put(new org.bytedeco.javacpp.tools.Info("ov_rank_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
+               .put(new org.bytedeco.javacpp.tools.Info("ov_dimension_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"));
     }
 }
