@@ -30,8 +30,8 @@ import org.bytedeco.pytorch.dataframe.dtype.VideoData;
 import org.bytedeco.pytorch.dataframe.tensor.TensorBridge;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.global.torch.ScalarType;
-import org.bytedeco.pytorch.utils.audio.utils.AudioTensors;
-import org.bytedeco.pytorch.utils.vision.utils.ImageTensors;
+import org.bytedeco.pytorch.audio.utils.AudioTensors;
+import org.bytedeco.pytorch.vision.utils.ImageTensors;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -92,7 +92,7 @@ public final class MediaBridge {
             boolean ok = false;
             try {
                 // Our pure-Java glue must be present
-                Class.forName("org.bytedeco.pytorch.utils.opencv.OpenCVIO");
+                Class.forName("org.bytedeco.pytorch.vision.opencv.OpenCVIO");
                 Class.forName("org.bytedeco.opencv.global.opencv_imgcodecs");
                 // touch a cheap global so natives actually resolve
                 Class<?> g = Class.forName("org.bytedeco.opencv.global.opencv_core");
@@ -114,7 +114,7 @@ public final class MediaBridge {
             if (FFMPEG_OK.get() != null) return FFMPEG_OK.get();
             boolean ok = false;
             try {
-                Class.forName("org.bytedeco.pytorch.utils.ffmpeg.FFmpegLoader");
+                Class.forName("org.bytedeco.pytorch.vision.ffmpeg.FFmpegLoader");
                 Class.forName("org.bytedeco.ffmpeg.global.avformat");
                 ok = true;
             } catch (Throwable t) {
@@ -313,7 +313,7 @@ public final class MediaBridge {
      * Values are scaled to [0,1] ImageTensors convention when building ImageData.
      */
     public static ImageData loadImageOpenCv(String path, boolean gray) throws Exception {
-        Class<?> io = Class.forName("org.bytedeco.pytorch.utils.opencv.OpenCVIO");
+        Class<?> io = Class.forName("org.bytedeco.pytorch.vision.opencv.OpenCVIO");
         Tensor t;
         if (gray) {
             t = (Tensor) io.getMethod("readImageGray", String.class).invoke(null, path);
@@ -378,7 +378,7 @@ public final class MediaBridge {
      */
     public static ImageData matToImage(Object mat) throws Exception {
         Objects.requireNonNull(mat, "mat");
-        Class<?> mtt = Class.forName("org.bytedeco.pytorch.utils.opencv.MatToTensor");
+        Class<?> mtt = Class.forName("org.bytedeco.pytorch.vision.opencv.MatToTensor");
         Tensor t = (Tensor) mtt.getMethod("fromMat",
                 Class.forName("org.bytedeco.opencv.opencv_core.Mat")).invoke(null, mat);
         return tensorToImage(scale255ToUnit(t));
@@ -387,7 +387,7 @@ public final class MediaBridge {
     /** ImageData → OpenCV Mat (BGR). */
     public static Object imageToMat(ImageData image) throws Exception {
         Tensor t255 = imageToTensor255(image);
-        Class<?> mtt = Class.forName("org.bytedeco.pytorch.utils.opencv.MatToTensor");
+        Class<?> mtt = Class.forName("org.bytedeco.pytorch.vision.opencv.MatToTensor");
         return mtt.getMethod("toMat", Tensor.class).invoke(null, t255);
     }
 
@@ -465,7 +465,7 @@ public final class MediaBridge {
     }
 
     public static AudioData loadAudioFFmpeg(String path, int targetSr, boolean mono) throws Exception {
-        Class<?> loader = Class.forName("org.bytedeco.pytorch.utils.ffmpeg.FFmpegLoader");
+        Class<?> loader = Class.forName("org.bytedeco.pytorch.vision.ffmpeg.FFmpegLoader");
         try (AutoCloseable af = (AutoCloseable) loader.getMethod("openAudio", String.class).invoke(null, path)) {
             Class<?> afClass = af.getClass();
             int nativeSr = ((Number) afClass.getMethod("sampleRate").invoke(af)).intValue();
@@ -593,7 +593,7 @@ public final class MediaBridge {
     }
 
     public static VideoData loadVideoFFmpeg(String path, VideoOptions opts) throws Exception {
-        Class<?> loader = Class.forName("org.bytedeco.pytorch.utils.ffmpeg.FFmpegLoader");
+        Class<?> loader = Class.forName("org.bytedeco.pytorch.vision.ffmpeg.FFmpegLoader");
         try (AutoCloseable vf = (AutoCloseable) loader.getMethod("openVideo", String.class).invoke(null, path)) {
             Class<?> vfClass = vf.getClass();
             int width = ((Number) vfClass.getMethod("width").invoke(vf)).intValue();

@@ -3,10 +3,10 @@ package org.bytedeco.pytorch.utils.kafka;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.dataframe.Column;
 import org.bytedeco.pytorch.dataframe.DataFrame;
-import org.bytedeco.pytorch.utils.recommend.basic.features.DenseFeature;
-import org.bytedeco.pytorch.utils.recommend.basic.features.Feature;
-import org.bytedeco.pytorch.utils.recommend.basic.features.SequenceFeature;
-import org.bytedeco.pytorch.utils.recommend.basic.features.SparseFeature;
+import org.bytedeco.pytorch.recommend.basic.features.DenseFeature;
+import org.bytedeco.pytorch.recommend.basic.features.Feature;
+import org.bytedeco.pytorch.recommend.basic.features.SequenceFeature;
+import org.bytedeco.pytorch.recommend.basic.features.SparseFeature;
 
 import java.util.ArrayList;
 import java.util.Collection;

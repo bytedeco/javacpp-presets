@@ -110,7 +110,7 @@ public final class MultimodalPreprocess {
         float[] s = std != null ? std : new float[]{0.229f, 0.224f, 0.225f};
         // Prefer OpenCVIO.normalize when available (works on CHW [0,255] or [0,1])
         try {
-            Class<?> io = Class.forName("org.bytedeco.pytorch.utils.opencv.OpenCVIO");
+            Class<?> io = Class.forName("org.bytedeco.pytorch.vision.opencv.OpenCVIO");
             return (Tensor) io.getMethod("normalize", Tensor.class, float[].class, float[].class)
                     .invoke(null, batch, m, s);
         } catch (Throwable ignored) {}

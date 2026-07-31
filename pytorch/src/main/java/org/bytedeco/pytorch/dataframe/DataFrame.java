@@ -78,7 +78,7 @@ import org.bytedeco.pytorch.dataframe.csv.CsvWriter;
 import org.bytedeco.pytorch.dataframe.json.JsonOptions;
 import org.bytedeco.pytorch.dataframe.json.JsonReader;
 import org.bytedeco.pytorch.dataframe.json.JsonWriter;
-import org.bytedeco.pytorch.utils.plot.DataFramePlot;
+import org.bytedeco.pytorch.plot.DataFramePlot;
 
 /**
  * Pandas-like DataFrame for PyTorch with Polars-style lazy expressions.

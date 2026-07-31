@@ -1,0 +1,20 @@
+{"text": "", "add_special_tokens": false, "ids": [], "decoded": "", "decoded_skip_special": ""}
+{"text": "", "add_special_tokens": true, "ids": [1], "decoded": "</s>", "decoded_skip_special": ""}
+{"text": " ", "add_special_tokens": false, "ids": [], "decoded": "", "decoded_skip_special": ""}
+{"text": " ", "add_special_tokens": true, "ids": [1], "decoded": "</s>", "decoded_skip_special": ""}
+{"text": "Hello world", "add_special_tokens": false, "ids": [8774, 296], "decoded": "Hello world", "decoded_skip_special": "Hello world"}
+{"text": "Hello world", "add_special_tokens": true, "ids": [8774, 296, 1], "decoded": "Hello world</s>", "decoded_skip_special": "Hello world"}
+{"text": "I'm fine.", "add_special_tokens": false, "ids": [27, 31, 51, 1399, 5], "decoded": "I'm fine.", "decoded_skip_special": "I'm fine."}
+{"text": "I'm fine.", "add_special_tokens": true, "ids": [27, 31, 51, 1399, 5, 1], "decoded": "I'm fine.</s>", "decoded_skip_special": "I'm fine."}
+{"text": "你好世界", "add_special_tokens": false, "ids": [3, 2], "decoded": "<unk>", "decoded_skip_special": ""}
+{"text": "你好世界", "add_special_tokens": true, "ids": [3, 2, 1], "decoded": "<unk></s>", "decoded_skip_special": ""}
+{"text": "def foo(x):\n    return x + 1", "add_special_tokens": false, "ids": [20, 89, 5575, 32, 599, 226, 61, 10, 1205, 3, 226, 1768, 209], "decoded": "def foo(x): return x + 1", "decoded_skip_special": "def foo(x): return x + 1"}
+{"text": "def foo(x):\n    return x + 1", "add_special_tokens": true, "ids": [20, 89, 5575, 32, 599, 226, 61, 10, 1205, 3, 226, 1768, 209, 1], "decoded": "def foo(x): return x + 1</s>", "decoded_skip_special": "def foo(x): return x + 1"}
+{"text": "{\"a\": 1, \"b\": [2, 3]}", "add_special_tokens": false, "ids": [3, 2, 121, 9, 121, 10, 1914, 96, 115, 121, 10, 784, 4482, 220, 908, 2], "decoded": "<unk>\"a\": 1, \"b\": [2, 3]<unk>", "decoded_skip_special": "\"a\": 1, \"b\": [2, 3]"}
+{"text": "{\"a\": 1, \"b\": [2, 3]}", "add_special_tokens": true, "ids": [3, 2, 121, 9, 121, 10, 1914, 96, 115, 121, 10, 784, 4482, 220, 908, 2, 1], "decoded": "<unk>\"a\": 1, \"b\": [2, 3]<unk></s>", "decoded_skip_special": "\"a\": 1, \"b\": [2, 3]"}
+{"text": "Hello 世界 🌍", "add_special_tokens": false, "ids": [8774, 3, 2, 3, 2], "decoded": "Hello <unk> <unk>", "decoded_skip_special": "Hello  "}
+{"text": "Hello 世界 🌍", "add_special_tokens": true, "ids": [8774, 3, 2, 3, 2, 1], "decoded": "Hello <unk> <unk></s>", "decoded_skip_special": "Hello  "}
+{"text": "The quick brown fox jumps over the lazy dog.", "add_special_tokens": false, "ids": [37, 1704, 4216, 3, 20400, 4418, 7, 147, 8, 19743, 1782, 5], "decoded": "The quick brown fox jumps over the lazy dog.", "decoded_skip_special": "The quick brown fox jumps over the lazy dog."}
+{"text": "The quick brown fox jumps over the lazy dog.", "add_special_tokens": true, "ids": [37, 1704, 4216, 3, 20400, 4418, 7, 147, 8, 19743, 1782, 5, 1], "decoded": "The quick brown fox jumps over the lazy dog.</s>", "decoded_skip_special": "The quick brown fox jumps over the lazy dog."}
+{"text": "12345 98.6%", "add_special_tokens": false, "ids": [3, 14574, 2128, 3, 3916, 5, 6370], "decoded": "12345 98.6%", "decoded_skip_special": "12345 98.6%"}
+{"text": "12345 98.6%", "add_special_tokens": true, "ids": [3, 14574, 2128, 3, 3916, 5, 6370, 1], "decoded": "12345 98.6%</s>", "decoded_skip_special": "12345 98.6%"}

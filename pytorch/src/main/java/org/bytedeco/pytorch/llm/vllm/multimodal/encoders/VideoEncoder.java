@@ -53,7 +53,7 @@ public final class VideoEncoder implements MediaEncoder {
     static {
         Method m = null;
         try {
-            Class<?> cls = Class.forName("org.bytedeco.pytorch.utils.ffmpeg.VideoTensors");
+            Class<?> cls = Class.forName("org.bytedeco.pytorch.vision.ffmpeg.VideoTensors");
             m = cls.getMethod("decodeAllFrames", String.class);
         } catch (Throwable ignored) {
             // FFmpeg utils not on classpath — image fallback only

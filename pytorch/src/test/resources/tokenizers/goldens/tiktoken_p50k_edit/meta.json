@@ -1,0 +1,26 @@
+{
+  "name": "p50k_edit",
+  "n_vocab": 50284,
+  "max_token_value": 50283,
+  "eot_token": 50256,
+  "special_tokens_set": [
+    "<|endoftext|>",
+    "<|fim_middle|>",
+    "<|fim_prefix|>",
+    "<|fim_suffix|>"
+  ],
+  "special_tokens": {
+    "<|endoftext|>": 50256,
+    "<|fim_prefix|>": 50281,
+    "<|fim_middle|>": 50282,
+    "<|fim_suffix|>": 50283
+  },
+  "throughput_ref": {
+    "chars": 4000,
+    "tokens": 3200,
+    "iters": 50,
+    "seconds": 0.01403691599261947,
+    "chars_per_sec": 14248143.973017924,
+    "tokens_per_sec": 11398515.17841434
+  }
+}

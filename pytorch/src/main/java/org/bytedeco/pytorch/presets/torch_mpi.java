@@ -475,8 +475,6 @@ public class torch_mpi implements LoadEnabled, InfoMapper {
             .put(new Info("c10::intrusive_ptr<c10d::Work>")
                     .annotations("@IntrusivePtr(\"c10d::Work\")")
                     .valueTypes("Work").pointerTypes("Work"))
-            // Qualify c10d:: defaults so jnitorch_mpi.cpp compiles without
-            // `using namespace c10d` (standalone MPI library, not full jnitorch).
             .put(new Info("c10d::kUnsetTimeout")
                     .javaText("@MemberGetter public static native @ByVal Milliseconds kUnsetTimeout();"))
             .put(new Info("std::chrono::milliseconds(kUnsetTimeout)")

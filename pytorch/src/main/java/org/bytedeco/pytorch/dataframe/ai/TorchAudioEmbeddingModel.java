@@ -6,8 +6,8 @@ import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.dataframe.dtype.AudioData;
 import org.bytedeco.pytorch.dataframe.media.MediaBridge;
 import org.bytedeco.pytorch.nn.Module;
-import org.bytedeco.pytorch.utils.audio.models.AudioModels;
-import org.bytedeco.pytorch.utils.audio.utils.AudioTensors;
+import org.bytedeco.pytorch.audio.models.AudioModels;
+import org.bytedeco.pytorch.audio.utils.AudioTensors;
 
 import java.util.List;
 import java.util.Locale;

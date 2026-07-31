@@ -1,0 +1,20 @@
+{
+  "name": "gpt2",
+  "n_vocab": 50257,
+  "max_token_value": 50256,
+  "eot_token": 50256,
+  "special_tokens_set": [
+    "<|endoftext|>"
+  ],
+  "special_tokens": {
+    "<|endoftext|>": 50256
+  },
+  "throughput_ref": {
+    "chars": 4000,
+    "tokens": 3200,
+    "iters": 50,
+    "seconds": 0.014663542009657249,
+    "chars_per_sec": 13639269.411734367,
+    "tokens_per_sec": 10911415.529387493
+  }
+}

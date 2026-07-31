@@ -1,0 +1,20 @@
+{
+  "name": "p50k_base",
+  "n_vocab": 50281,
+  "max_token_value": 50280,
+  "eot_token": 50256,
+  "special_tokens_set": [
+    "<|endoftext|>"
+  ],
+  "special_tokens": {
+    "<|endoftext|>": 50256
+  },
+  "throughput_ref": {
+    "chars": 4000,
+    "tokens": 3200,
+    "iters": 50,
+    "seconds": 0.014074292004806921,
+    "chars_per_sec": 14210306.275562009,
+    "tokens_per_sec": 11368245.020449607
+  }
+}

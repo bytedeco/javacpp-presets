@@ -1,0 +1,18 @@
+{"text": "", "add_special_tokens": false, "ids": [], "decoded": "", "decoded_skip_special": ""}
+{"text": "", "add_special_tokens": true, "ids": [128000], "decoded": "<|begin_of_text|>", "decoded_skip_special": ""}
+{"text": " ", "add_special_tokens": false, "ids": [220], "decoded": " ", "decoded_skip_special": " "}
+{"text": " ", "add_special_tokens": true, "ids": [128000, 220], "decoded": "<|begin_of_text|> ", "decoded_skip_special": " "}
+{"text": "Hello world", "add_special_tokens": false, "ids": [9906, 1917], "decoded": "Hello world", "decoded_skip_special": "Hello world"}
+{"text": "Hello world", "add_special_tokens": true, "ids": [128000, 9906, 1917], "decoded": "<|begin_of_text|>Hello world", "decoded_skip_special": "Hello world"}
+{"text": "I'm fine.", "add_special_tokens": false, "ids": [40, 2846, 7060, 13], "decoded": "I'm fine.", "decoded_skip_special": "I'm fine."}
+{"text": "I'm fine.", "add_special_tokens": true, "ids": [128000, 40, 2846, 7060, 13], "decoded": "<|begin_of_text|>I'm fine.", "decoded_skip_special": "I'm fine."}
+{"text": "你好世界", "add_special_tokens": false, "ids": [57668, 53901, 102616], "decoded": "你好世界", "decoded_skip_special": "你好世界"}
+{"text": "你好世界", "add_special_tokens": true, "ids": [128000, 57668, 53901, 102616], "decoded": "<|begin_of_text|>你好世界", "decoded_skip_special": "你好世界"}
+{"text": "def foo(x):\n    return x + 1", "add_special_tokens": false, "ids": [755, 15586, 2120, 997, 262, 471, 865, 489, 220, 16], "decoded": "def foo(x):\n    return x + 1", "decoded_skip_special": "def foo(x):\n    return x + 1"}
+{"text": "def foo(x):\n    return x + 1", "add_special_tokens": true, "ids": [128000, 755, 15586, 2120, 997, 262, 471, 865, 489, 220, 16], "decoded": "<|begin_of_text|>def foo(x):\n    return x + 1", "decoded_skip_special": "def foo(x):\n    return x + 1"}
+{"text": "{\"a\": 1, \"b\": [2, 3]}", "add_special_tokens": false, "ids": [5018, 64, 794, 220, 16, 11, 330, 65, 794, 510, 17, 11, 220, 18, 14316], "decoded": "{\"a\": 1, \"b\": [2, 3]}", "decoded_skip_special": "{\"a\": 1, \"b\": [2, 3]}"}
+{"text": "{\"a\": 1, \"b\": [2, 3]}", "add_special_tokens": true, "ids": [128000, 5018, 64, 794, 220, 16, 11, 330, 65, 794, 510, 17, 11, 220, 18, 14316], "decoded": "<|begin_of_text|>{\"a\": 1, \"b\": [2, 3]}", "decoded_skip_special": "{\"a\": 1, \"b\": [2, 3]}"}
+{"text": "Hello 世界 🌍", "add_special_tokens": false, "ids": [9906, 127365, 11410, 234, 235], "decoded": "Hello 世界 🌍", "decoded_skip_special": "Hello 世界 🌍"}
+{"text": "Hello 世界 🌍", "add_special_tokens": true, "ids": [128000, 9906, 127365, 11410, 234, 235], "decoded": "<|begin_of_text|>Hello 世界 🌍", "decoded_skip_special": "Hello 世界 🌍"}
+{"text": "<|im_start|>user\nHello<|im_end|>\n<|im_start|>assistant\n", "add_special_tokens": false, "ids": [27, 91, 318, 5011, 91, 29, 882, 198, 9906, 27, 91, 318, 6345, 91, 397, 27, 91, 318, 5011, 91, 29, 78191, 198], "decoded": "<|im_start|>user\nHello<|im_end|>\n<|im_start|>assistant\n", "decoded_skip_special": "<|im_start|>user\nHello<|im_end|>\n<|im_start|>assistant\n"}
+{"text": "<|im_start|>user\nHello<|im_end|>\n<|im_start|>assistant\n", "add_special_tokens": true, "ids": [128000, 27, 91, 318, 5011, 91, 29, 882, 198, 9906, 27, 91, 318, 6345, 91, 397, 27, 91, 318, 5011, 91, 29, 78191, 198], "decoded": "<|begin_of_text|><|im_start|>user\nHello<|im_end|>\n<|im_start|>assistant\n", "decoded_skip_special": "<|im_start|>user\nHello<|im_end|>\n<|im_start|>assistant\n"}

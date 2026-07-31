@@ -1,0 +1,44 @@
+{
+  "bert_uncased": {
+    "model_id": "bert-base-uncased",
+    "kind": "WordPiece",
+    "hf_backend": "WordPiece",
+    "vocab_size": 30522,
+    "cases": "/Users/muller/Documents/code/rust/javacpp-presets/pytorch/src/test/resources/tokenizers/goldens/bert_uncased/cases.jsonl"
+  },
+  "bert_chinese": {
+    "model_id": "bert-base-chinese",
+    "kind": "WordPiece",
+    "hf_backend": "WordPiece",
+    "vocab_size": 21128,
+    "cases": "/Users/muller/Documents/code/rust/javacpp-presets/pytorch/src/test/resources/tokenizers/goldens/bert_chinese/cases.jsonl"
+  },
+  "t5_small": {
+    "model_id": "t5-small",
+    "kind": "Unigram",
+    "hf_backend": "Unigram",
+    "vocab_size": 32100,
+    "cases": "/Users/muller/Documents/code/rust/javacpp-presets/pytorch/src/test/resources/tokenizers/goldens/t5_small/cases.jsonl"
+  },
+  "xlm_roberta": {
+    "model_id": "xlm-roberta-base",
+    "kind": "Unigram",
+    "hf_backend": "Unigram",
+    "vocab_size": 250002,
+    "cases": "/Users/muller/Documents/code/rust/javacpp-presets/pytorch/src/test/resources/tokenizers/goldens/xlm_roberta/cases.jsonl"
+  },
+  "glm4_chat": {
+    "model_id": "THUDM/glm-4-9b-chat",
+    "kind": "TiktokenBPE",
+    "hf_backend": "TiktokenBPE",
+    "vocab_size": 151329,
+    "cases": "/Users/muller/Documents/code/rust/javacpp-presets/pytorch/src/test/resources/tokenizers/goldens/glm4_chat/cases.jsonl"
+  },
+  "gpt2": {
+    "model_id": "gpt2",
+    "kind": "BPE",
+    "hf_backend": "BPE",
+    "vocab_size": 50257,
+    "cases": "/Users/muller/Documents/code/rust/javacpp-presets/pytorch/src/test/resources/tokenizers/goldens/gpt2/cases.jsonl"
+  }
+}

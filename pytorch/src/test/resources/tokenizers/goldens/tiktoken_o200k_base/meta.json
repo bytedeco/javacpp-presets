@@ -1,0 +1,22 @@
+{
+  "name": "o200k_base",
+  "n_vocab": 200019,
+  "max_token_value": 200018,
+  "eot_token": 199999,
+  "special_tokens_set": [
+    "<|endofprompt|>",
+    "<|endoftext|>"
+  ],
+  "special_tokens": {
+    "<|endoftext|>": 199999,
+    "<|endofprompt|>": 200018
+  },
+  "throughput_ref": {
+    "chars": 4000,
+    "tokens": 1800,
+    "iters": 50,
+    "seconds": 0.00848595799470786,
+    "chars_per_sec": 23568346.6881084,
+    "tokens_per_sec": 10605756.009648781
+  }
+}

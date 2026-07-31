@@ -34,8 +34,8 @@ import org.bytedeco.pytorch.nn.modules.LayerNormImpl;
 import org.bytedeco.pytorch.nn.modules.LinearImpl;
 import org.bytedeco.pytorch.nn.options.Conv1dOptions;
 import org.bytedeco.pytorch.nn.options.LinearOptions;
-import org.bytedeco.pytorch.utils.audio.functional.F;
-import org.bytedeco.pytorch.utils.audio.io.AudioIO;
+import org.bytedeco.pytorch.audio.functional.F;
+import org.bytedeco.pytorch.audio.io.AudioIO;
 import org.bytedeco.pytorch.llm.vllm.multimodal.MediaInput;
 import org.bytedeco.pytorch.llm.vllm.multimodal.MediaType;
 

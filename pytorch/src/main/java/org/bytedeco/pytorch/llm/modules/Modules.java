@@ -89,8 +89,8 @@ package org.bytedeco.pytorch.llm.modules;
  * ({@code KvCache}, {@code KvCaches}, TokenLru / H2O / Snap / TOVA / Quantized / Compressed…).
  *
  * <p>Multi-dim accuracy benches:
- * {@code samples.BenchmarkLlmAttention}, {@code samples.BenchmarkLlmKvCache},
- * {@code samples.BenchmarkLlmModules}.
+ * {@code distribute.BenchmarkLlmAttention}, {@code distribute.BenchmarkLlmKvCache},
+ * {@code distribute.BenchmarkLlmModules}.
  */
 public final class Modules {
 

@@ -28,8 +28,8 @@ import org.bytedeco.pytorch.dataframe.dtype.AudioData;
 import org.bytedeco.pytorch.dataframe.dtype.ImageData;
 import org.bytedeco.pytorch.dataframe.dtype.VideoData;
 import org.bytedeco.pytorch.dataframe.tensor.TensorBridge;
-import org.bytedeco.pytorch.utils.audio.utils.AudioTensors;
-import org.bytedeco.pytorch.utils.vision.utils.ImageTensors;
+import org.bytedeco.pytorch.audio.utils.AudioTensors;
+import org.bytedeco.pytorch.vision.utils.ImageTensors;
 
 import java.util.ArrayList;
 import java.util.List;

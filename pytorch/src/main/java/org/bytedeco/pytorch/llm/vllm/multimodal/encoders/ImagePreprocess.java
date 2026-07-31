@@ -25,7 +25,7 @@ import org.bytedeco.javacpp.indexer.FloatIndexer;
 import org.bytedeco.pytorch.Scalar;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorOptions;
-import org.bytedeco.pytorch.utils.opencv.OpenCVIO;
+import org.bytedeco.pytorch.vision.opencv.OpenCVIO;
 import org.bytedeco.pytorch.llm.vllm.multimodal.MediaInput;
 
 import java.nio.file.Files;

@@ -1,0 +1,20 @@
+{"text": "", "add_special_tokens": false, "ids": [], "decoded": "", "decoded_skip_special": ""}
+{"text": "", "add_special_tokens": true, "ids": [0, 2], "decoded": "<s></s>", "decoded_skip_special": ""}
+{"text": " ", "add_special_tokens": false, "ids": [], "decoded": "", "decoded_skip_special": ""}
+{"text": " ", "add_special_tokens": true, "ids": [0, 2], "decoded": "<s></s>", "decoded_skip_special": ""}
+{"text": "Hello world", "add_special_tokens": false, "ids": [35378, 8999], "decoded": "Hello world", "decoded_skip_special": "Hello world"}
+{"text": "Hello world", "add_special_tokens": true, "ids": [0, 35378, 8999, 2], "decoded": "<s> Hello world</s>", "decoded_skip_special": "Hello world"}
+{"text": "I'm fine.", "add_special_tokens": false, "ids": [87, 25, 39, 5885, 5], "decoded": "I'm fine.", "decoded_skip_special": "I'm fine."}
+{"text": "I'm fine.", "add_special_tokens": true, "ids": [0, 87, 25, 39, 5885, 5, 2], "decoded": "<s> I'm fine.</s>", "decoded_skip_special": "I'm fine."}
+{"text": "你好世界", "add_special_tokens": false, "ids": [6, 124084, 3221], "decoded": "你好世界", "decoded_skip_special": "你好世界"}
+{"text": "你好世界", "add_special_tokens": true, "ids": [0, 6, 124084, 3221, 2], "decoded": "<s> 你好世界</s>", "decoded_skip_special": "你好世界"}
+{"text": "def foo(x):\n    return x + 1", "add_special_tokens": false, "ids": [8, 420, 5775, 31, 132, 425, 2077, 30646, 1022, 997, 106], "decoded": "def foo(x): return x + 1", "decoded_skip_special": "def foo(x): return x + 1"}
+{"text": "def foo(x):\n    return x + 1", "add_special_tokens": true, "ids": [0, 8, 420, 5775, 31, 132, 425, 2077, 30646, 1022, 997, 106, 2], "decoded": "<s> def foo(x): return x + 1</s>", "decoded_skip_special": "def foo(x): return x + 1"}
+{"text": "{\"a\": 1, \"b\": [2, 3]}", "add_special_tokens": false, "ids": [10666, 58, 11, 58, 12, 106, 4, 44, 275, 58, 12, 378, 304, 4, 138, 268, 8152], "decoded": "{\"a\": 1, \"b\": [2, 3]}", "decoded_skip_special": "{\"a\": 1, \"b\": [2, 3]}"}
+{"text": "{\"a\": 1, \"b\": [2, 3]}", "add_special_tokens": true, "ids": [0, 10666, 58, 11, 58, 12, 106, 4, 44, 275, 58, 12, 378, 304, 4, 138, 268, 8152, 2], "decoded": "<s> {\"a\": 1, \"b\": [2, 3]}</s>", "decoded_skip_special": "{\"a\": 1, \"b\": [2, 3]}"}
+{"text": "Hello 世界 🌍", "add_special_tokens": false, "ids": [35378, 6, 3221, 6, 247290], "decoded": "Hello 世界 🌍", "decoded_skip_special": "Hello 世界 🌍"}
+{"text": "Hello 世界 🌍", "add_special_tokens": true, "ids": [0, 35378, 6, 3221, 6, 247290, 2], "decoded": "<s> Hello 世界 🌍</s>", "decoded_skip_special": "Hello 世界 🌍"}
+{"text": "The quick brown fox jumps over the lazy dog.", "add_special_tokens": false, "ids": [581, 63773, 119455, 6, 147797, 88203, 7, 645, 70, 21, 3285, 10269, 5], "decoded": "The quick brown fox jumps over the lazy dog.", "decoded_skip_special": "The quick brown fox jumps over the lazy dog."}
+{"text": "The quick brown fox jumps over the lazy dog.", "add_special_tokens": true, "ids": [0, 581, 63773, 119455, 6, 147797, 88203, 7, 645, 70, 21, 3285, 10269, 5, 2], "decoded": "<s> The quick brown fox jumps over the lazy dog.</s>", "decoded_skip_special": "The quick brown fox jumps over the lazy dog."}
+{"text": "12345 98.6%", "add_special_tokens": false, "ids": [427, 96060, 16193, 5, 12187], "decoded": "12345 98.6%", "decoded_skip_special": "12345 98.6%"}
+{"text": "12345 98.6%", "add_special_tokens": true, "ids": [0, 427, 96060, 16193, 5, 12187, 2], "decoded": "<s> 12345 98.6%</s>", "decoded_skip_special": "12345 98.6%"}

@@ -1,0 +1,20 @@
+{"text": "", "add_special_tokens": false, "ids": [], "decoded": "", "decoded_skip_special": ""}
+{"text": "", "add_special_tokens": true, "ids": [101, 102], "decoded": "[CLS] [SEP]", "decoded_skip_special": ""}
+{"text": " ", "add_special_tokens": false, "ids": [], "decoded": "", "decoded_skip_special": ""}
+{"text": " ", "add_special_tokens": true, "ids": [101, 102], "decoded": "[CLS] [SEP]", "decoded_skip_special": ""}
+{"text": "Hello world", "add_special_tokens": false, "ids": [100, 8572], "decoded": "[UNK] world", "decoded_skip_special": "world"}
+{"text": "Hello world", "add_special_tokens": true, "ids": [101, 100, 8572, 102], "decoded": "[CLS] [UNK] world [SEP]", "decoded_skip_special": "world"}
+{"text": "I'm fine.", "add_special_tokens": false, "ids": [100, 112, 155, 8533, 8354, 119], "decoded": "[UNK] ' m fine.", "decoded_skip_special": "' m fine."}
+{"text": "I'm fine.", "add_special_tokens": true, "ids": [101, 100, 112, 155, 8533, 8354, 119, 102], "decoded": "[CLS] [UNK] ' m fine. [SEP]", "decoded_skip_special": "' m fine."}
+{"text": "你好世界", "add_special_tokens": false, "ids": [872, 1962, 686, 4518], "decoded": "你 好 世 界", "decoded_skip_special": "你 好 世 界"}
+{"text": "你好世界", "add_special_tokens": true, "ids": [101, 872, 1962, 686, 4518, 102], "decoded": "[CLS] 你 好 世 界 [SEP]", "decoded_skip_special": "你 好 世 界"}
+{"text": "def foo(x):\n    return x + 1", "add_special_tokens": false, "ids": [8363, 8189, 148, 8902, 113, 166, 114, 131, 12330, 166, 116, 122], "decoded": "def foo ( x ) : return x + 1", "decoded_skip_special": "def foo ( x ) : return x + 1"}
+{"text": "def foo(x):\n    return x + 1", "add_special_tokens": true, "ids": [101, 8363, 8189, 148, 8902, 113, 166, 114, 131, 12330, 166, 116, 122, 102], "decoded": "[CLS] def foo ( x ) : return x + 1 [SEP]", "decoded_skip_special": "def foo ( x ) : return x + 1"}
+{"text": "{\"a\": 1, \"b\": [2, 3]}", "add_special_tokens": false, "ids": [169, 107, 143, 107, 131, 122, 117, 107, 144, 107, 131, 138, 123, 117, 124, 140, 171], "decoded": "{ \" a \" : 1, \" b \" : [ 2, 3 ] }", "decoded_skip_special": "{ \" a \" : 1, \" b \" : [ 2, 3 ] }"}
+{"text": "{\"a\": 1, \"b\": [2, 3]}", "add_special_tokens": true, "ids": [101, 169, 107, 143, 107, 131, 122, 117, 107, 144, 107, 131, 138, 123, 117, 124, 140, 171, 102], "decoded": "[CLS] { \" a \" : 1, \" b \" : [ 2, 3 ] } [SEP]", "decoded_skip_special": "{ \" a \" : 1, \" b \" : [ 2, 3 ] }"}
+{"text": "Hello 世界 🌍", "add_special_tokens": false, "ids": [100, 686, 4518, 100], "decoded": "[UNK] 世 界 [UNK]", "decoded_skip_special": "世 界"}
+{"text": "Hello 世界 🌍", "add_special_tokens": true, "ids": [101, 100, 686, 4518, 100, 102], "decoded": "[CLS] [UNK] 世 界 [UNK] [SEP]", "decoded_skip_special": "世 界"}
+{"text": "The quick brown fox jumps over the lazy dog.", "add_special_tokens": false, "ids": [100, 12345, 10699, 10872, 10331, 8118, 10047, 8174, 8515, 9748, 13030, 119], "decoded": "[UNK] quick brown fox jumps over the lazy dog.", "decoded_skip_special": "quick brown fox jumps over the lazy dog."}
+{"text": "The quick brown fox jumps over the lazy dog.", "add_special_tokens": true, "ids": [101, 100, 12345, 10699, 10872, 10331, 8118, 10047, 8174, 8515, 9748, 13030, 119, 102], "decoded": "[CLS] [UNK] quick brown fox jumps over the lazy dog. [SEP]", "decoded_skip_special": "quick brown fox jumps over the lazy dog."}
+{"text": "12345 98.6%", "add_special_tokens": false, "ids": [9700, 8327, 119, 127, 110], "decoded": "12345 98. 6 %", "decoded_skip_special": "12345 98. 6 %"}
+{"text": "12345 98.6%", "add_special_tokens": true, "ids": [101, 9700, 8327, 119, 127, 110, 102], "decoded": "[CLS] 12345 98. 6 % [SEP]", "decoded_skip_special": "12345 98. 6 %"}

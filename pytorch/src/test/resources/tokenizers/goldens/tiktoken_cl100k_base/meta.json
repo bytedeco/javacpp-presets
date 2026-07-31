@@ -1,0 +1,28 @@
+{
+  "name": "cl100k_base",
+  "n_vocab": 100277,
+  "max_token_value": 100276,
+  "eot_token": 100257,
+  "special_tokens_set": [
+    "<|endofprompt|>",
+    "<|endoftext|>",
+    "<|fim_middle|>",
+    "<|fim_prefix|>",
+    "<|fim_suffix|>"
+  ],
+  "special_tokens": {
+    "<|endoftext|>": 100257,
+    "<|fim_prefix|>": 100258,
+    "<|fim_middle|>": 100259,
+    "<|fim_suffix|>": 100260,
+    "<|endofprompt|>": 100276
+  },
+  "throughput_ref": {
+    "chars": 4000,
+    "tokens": 2600,
+    "iters": 50,
+    "seconds": 0.012641875000554137,
+    "chars_per_sec": 15820438.027684446,
+    "tokens_per_sec": 10283284.71799489
+  }
+}

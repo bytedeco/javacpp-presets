@@ -7,8 +7,8 @@ import org.bytedeco.pytorch.dataframe.dtype.ImageData;
 import org.bytedeco.pytorch.dataframe.dtype.VideoData;
 import org.bytedeco.pytorch.dataframe.media.MediaBridge;
 import org.bytedeco.pytorch.nn.Module;
-import org.bytedeco.pytorch.utils.vision.models.Models;
-import org.bytedeco.pytorch.utils.vision.utils.ImageTensors;
+import org.bytedeco.pytorch.vision.models.Models;
+import org.bytedeco.pytorch.vision.utils.ImageTensors;
 
 import java.util.ArrayList;
 import java.util.List;

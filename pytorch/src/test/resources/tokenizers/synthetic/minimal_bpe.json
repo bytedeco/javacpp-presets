@@ -1,0 +1,60 @@
+{
+  "version": "1.0",
+  "truncation": null,
+  "padding": null,
+  "added_tokens": [
+    {"id": 0, "content": "<|endoftext|>", "single_word": false, "lstrip": false, "rstrip": false, "normalized": false, "special": true}
+  ],
+  "normalizer": null,
+  "pre_tokenizer": {
+    "type": "ByteLevel",
+    "add_prefix_space": false,
+    "trim_offsets": true,
+    "use_regex": true
+  },
+  "post_processor": null,
+  "decoder": {
+    "type": "ByteLevel",
+    "add_prefix_space": false,
+    "trim_offsets": true,
+    "use_regex": true
+  },
+  "model": {
+    "type": "BPE",
+    "dropout": null,
+    "unk_token": null,
+    "continuing_subword_prefix": null,
+    "end_of_word_suffix": null,
+    "fuse_unk": false,
+    "byte_fallback": false,
+    "vocab": {
+      "H": 1,
+      "e": 2,
+      "l": 3,
+      "o": 4,
+      "Ġ": 5,
+      "w": 6,
+      "r": 7,
+      "d": 8,
+      "He": 9,
+      "ll": 10,
+      "llo": 11,
+      "Hello": 12,
+      "Ġw": 13,
+      "orld": 14,
+      "Ġworld": 15,
+      "<|endoftext|>": 0
+    },
+    "merges": [
+      "H e",
+      "l l",
+      "ll o",
+      "He llo",
+      "Ġ w",
+      "o r",
+      "or l",
+      "orl d",
+      "Ġw orld"
+    ]
+  }
+}
