@@ -12,12 +12,12 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>22.1.7-1.5.14-SNAPSHOT</version>
+            <version>22.1.8-1.5.14-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>libffi-platform</artifactId>
-            <version>3.5.2-1.5.14-SNAPSHOT</version>
+            <version>3.7.1-1.5.14-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <repositories>

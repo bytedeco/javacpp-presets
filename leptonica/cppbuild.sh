@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-NASM_VERSION=2.14
+NASM_VERSION=3.02
 ZLIB=zlib-1.3.2
 GIFLIB=giflib-5.2.2
 LIBJPEG=libjpeg-turbo-3.0.1
@@ -16,9 +16,9 @@ LIBTIFF=tiff-4.7.1
 LIBWEBP=libwebp-1.6.0
 OPENJPEG_VERSION=2.5.4
 LEPTONICA_VERSION=1.87.0
-download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
+download https://www.nasm.us/pub/nasm/releasebuilds/$NASM_VERSION/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
-download http://downloads.sourceforge.net/project/giflib/$GIFLIB.tar.gz $GIFLIB.tar.gz
+download http://downloads.sourceforge.net/project/giflib/giflib-5.x/$GIFLIB.tar.gz $GIFLIB.tar.gz
 download http://downloads.sourceforge.net/project/libjpeg-turbo/3.0.1/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
 download https://sourceforge.net/projects/libpng/files/libpng16/1.6.53/$LIBPNG.tar.gz $LIBPNG.tar.gz
 download http://download.osgeo.org/libtiff/$LIBTIFF.tar.gz $LIBTIFF.tar.gz
@@ -109,7 +109,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF -Dlerc=OFF -Dlerc=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -154,7 +154,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF -Dlerc=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -198,7 +198,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF -Dlerc=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -242,7 +242,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF -Dlerc=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -283,7 +283,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF -Dlerc=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -324,7 +324,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF -Dlerc=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -369,7 +369,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF -Dlerc=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -411,7 +411,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF -Dlerc=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -453,7 +453,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF -Dlerc=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -494,7 +494,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF -Dlerc=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -534,7 +534,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF -Dlerc=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -574,7 +574,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF -Dlerc=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -614,7 +614,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dlibdeflate=OFF -Djbig=OFF -Dlzma=OFF -Dzstd=OFF -Dlerc=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION

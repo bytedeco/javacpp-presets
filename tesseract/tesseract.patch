@@ -1,7 +1,7 @@
-diff -ruN tesseract-5.5.1/src/api/baseapi.cpp tesseract-5.5.1-patch/src/api/baseapi.cpp
---- tesseract-5.5.1/src/api/baseapi.cpp	2025-05-25 18:48:40.000000000 +0900
-+++ tesseract-5.5.1-patch/src/api/baseapi.cpp	2025-06-13 18:46:41.712533982 +0900
-@@ -64,7 +64,6 @@
+diff -ruN tesseract-5.5.3/src/api/baseapi.cpp tesseract-5.5.3-patch/src/api/baseapi.cpp
+--- tesseract-5.5.3/src/api/baseapi.cpp	2026-07-25 03:27:02.000000000 +0900
++++ tesseract-5.5.3-patch/src/api/baseapi.cpp	2026-07-31 20:50:43.522948243 +0900
+@@ -65,7 +65,6 @@
  #include <cmath>    // for round, M_PI
  #include <cstdint>  // for int32_t
  #include <cstring>  // for strcmp, strcpy
@@ -9,7 +9,7 @@ diff -ruN tesseract-5.5.1/src/api/baseapi.cpp tesseract-5.5.1-patch/src/api/base
  #include <fstream>  // for size_t
  #include <iostream> // for std::cin
  #include <locale>   // for std::locale::classic
-@@ -83,9 +82,15 @@
+@@ -84,9 +83,15 @@
  #endif
  
  #if defined(_WIN32)
@@ -28,7 +28,7 @@ diff -ruN tesseract-5.5.1/src/api/baseapi.cpp tesseract-5.5.1-patch/src/api/base
  
  namespace tesseract {
  
-@@ -144,17 +149,61 @@
+@@ -148,17 +153,61 @@
  
  /* Add all available languages recursively.
   */
@@ -98,7 +98,7 @@ diff -ruN tesseract-5.5.1/src/api/baseapi.cpp tesseract-5.5.1-patch/src/api/base
  }
  
  TessBaseAPI::TessBaseAPI()
-@@ -395,7 +444,7 @@
+@@ -399,7 +448,7 @@
  void TessBaseAPI::GetAvailableLanguagesAsVector(std::vector<std::string> *langs) const {
    langs->clear();
    if (tesseract_ != nullptr) {
@@ -107,9 +107,9 @@ diff -ruN tesseract-5.5.1/src/api/baseapi.cpp tesseract-5.5.1-patch/src/api/base
      std::sort(langs->begin(), langs->end());
    }
  }
-diff -ruN tesseract-5.5.1/src/ccutil/ccutil.cpp tesseract-5.5.1-patch/src/ccutil/ccutil.cpp
---- tesseract-5.5.1/src/ccutil/ccutil.cpp	2025-05-25 18:48:40.000000000 +0900
-+++ tesseract-5.5.1-patch/src/ccutil/ccutil.cpp	2025-06-13 18:46:22.788651795 +0900
+diff -ruN tesseract-5.5.3/src/ccutil/ccutil.cpp tesseract-5.5.3-patch/src/ccutil/ccutil.cpp
+--- tesseract-5.5.3/src/ccutil/ccutil.cpp	2026-07-25 03:27:02.000000000 +0900
++++ tesseract-5.5.3-patch/src/ccutil/ccutil.cpp	2026-07-31 20:50:43.524157570 +0900
 @@ -10,12 +10,15 @@
  // See the License for the specific language governing permissions and
  // limitations under the License.
@@ -159,10 +159,10 @@ diff -ruN tesseract-5.5.1/src/ccutil/ccutil.cpp tesseract-5.5.1-patch/src/ccutil
            datadir = subdir;
          }
        }
-diff -ruN tesseract-5.5.1/unittest/pagesegmode_test.cc tesseract-5.5.1-patch/unittest/pagesegmode_test.cc
---- tesseract-5.5.1/unittest/pagesegmode_test.cc	2025-05-25 18:48:40.000000000 +0900
-+++ tesseract-5.5.1-patch/unittest/pagesegmode_test.cc	2025-06-13 18:46:22.789253868 +0900
-@@ -9,9 +9,13 @@
+diff -ruN tesseract-5.5.3/unittest/pagesegmode_test.cc tesseract-5.5.3-patch/unittest/pagesegmode_test.cc
+--- tesseract-5.5.3/unittest/pagesegmode_test.cc	2026-07-25 03:27:02.000000000 +0900
++++ tesseract-5.5.3-patch/unittest/pagesegmode_test.cc	2026-07-31 20:51:25.274856499 +0900
+@@ -9,8 +9,12 @@
  // See the License for the specific language governing permissions and
  // limitations under the License.
  
@@ -171,13 +171,12 @@ diff -ruN tesseract-5.5.1/unittest/pagesegmode_test.cc tesseract-5.5.1-patch/uni
 +#else
 +#  include <unistd.h> // for access
 +#endif
- #include <allheaders.h>
  #include <tesseract/baseapi.h>
 -#include <filesystem>
  #include <string>
  #include "helpers.h"
  #include "include_gunit.h"
-@@ -20,6 +24,15 @@
+@@ -19,6 +23,15 @@
  
  namespace tesseract {
  
@@ -193,7 +192,7 @@ diff -ruN tesseract-5.5.1/unittest/pagesegmode_test.cc tesseract-5.5.1-patch/uni
  // The fixture for testing Tesseract.
  class PageSegModeTest : public testing::Test {
  protected:
-@@ -73,7 +86,7 @@
+@@ -72,7 +85,7 @@
  // and differently to line and block mode.
  TEST_F(PageSegModeTest, WordTest) {
    std::string filename = file::JoinPath(TESTING_DIR, "segmodeimg.tif");
@@ -202,9 +201,9 @@ diff -ruN tesseract-5.5.1/unittest/pagesegmode_test.cc tesseract-5.5.1-patch/uni
      LOG(INFO) << "Skip test because of missing " << filename << '\n';
      GTEST_SKIP();
    } else {
-diff -ruN tesseract-5.5.1/unittest/tatweel_test.cc tesseract-5.5.1-patch/unittest/tatweel_test.cc
---- tesseract-5.5.1/unittest/tatweel_test.cc	2025-05-25 18:48:40.000000000 +0900
-+++ tesseract-5.5.1-patch/unittest/tatweel_test.cc	2025-06-13 18:46:22.789846301 +0900
+diff -ruN tesseract-5.5.3/unittest/tatweel_test.cc tesseract-5.5.3-patch/unittest/tatweel_test.cc
+--- tesseract-5.5.3/unittest/tatweel_test.cc	2026-07-25 03:27:02.000000000 +0900
++++ tesseract-5.5.3-patch/unittest/tatweel_test.cc	2026-07-31 20:50:43.525592580 +0900
 @@ -9,7 +9,12 @@
  // See the License for the specific language governing permissions and
  // limitations under the License.

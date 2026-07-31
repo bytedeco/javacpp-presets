@@ -61,7 +61,7 @@ public class ffi implements InfoMapper {
         infoMap.put(new Info("FFI_EXTRA_CIF_FIELDS", "FFI_NATIVE_RAW_API", "_CET_NOTRACK",
                              "FFI_LONG_LONG_MAX", "FFI_API", "FFI_EXTERN").cppTypes().annotations())
                .put(new Info("defined (POWERPC64)", "LONG_LONG_MAX", "1").define(true))
-               .put(new Info("FFI_GO_CLOSURES", "!FFI_NATIVE_RAW_API", "FFI_TARGET_HAS_COMPLEX_TYPE",
+               .put(new Info("FFI_GO_CLOSURES", "!FFI_NATIVE_RAW_API", "FFI_TARGET_HAS_COMPLEX_TYPE", "FFI_TARGET_HAS_INT128",
                              "defined(_WIN32)", "defined(X86_WIN32)", "defined(X86_WIN64)", "X86_WIN64",
                              "defined(_MSC_VER) && defined(_M_IX86)",
                              "defined __x86_64__ && defined __ILP32__",
@@ -82,6 +82,7 @@ public class ffi implements InfoMapper {
                .put(new Info("FFI_FIRST_ABI", "FFI_SYSV", "FFI_THISCALL", "FFI_FASTCALL",
                              "FFI_STDCALL", "FFI_PASCAL", "FFI_REGISTER", "FFI_MS_CDECL",
                              "FFI_LAST_ABI", "FFI_DEFAULT_ABI", "FFI_TYPE_UINT128",
+                             "FFI_TYPE_LAST", "FFI_TYPE_UINT128", "FFI_TYPE_SINT128",
                              "FFI_SYSV_TYPE_SMALL_STRUCT", "FFI_V2_TYPE_VECTOR",
                              "FFI_V2_TYPE_VECTOR_HOMOG", "FFI_V2_TYPE_FLOAT_HOMOG",
                              "FFI_V2_TYPE_DOUBLE_HOMOG", "FFI_V2_TYPE_SMALL_STRUCT").skip())
