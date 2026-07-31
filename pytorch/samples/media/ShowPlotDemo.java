@@ -2,10 +2,10 @@ package media;
 
 import org.bytedeco.pytorch.data.numpy.NDArray;
 import org.bytedeco.pytorch.data.numpy.NP;
-import org.bytedeco.pytorch.plot.BaseChart;
-import org.bytedeco.pytorch.plot.LineChart;
-import org.bytedeco.pytorch.plot.Matplotlib;
-import org.bytedeco.pytorch.plot.Seaborn;
+import org.bytedeco.pytorch.plot.chart.BaseChart;
+import org.bytedeco.pytorch.plot.chart.LineChart;
+import org.bytedeco.pytorch.plot.matplot.Matplotlib;
+import org.bytedeco.pytorch.plot.seaborn.Seaborn;
 
 /**
  * Interactive demo: each chart {@code show()} <b>blocks</b> until you close the

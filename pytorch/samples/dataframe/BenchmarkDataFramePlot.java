@@ -2,9 +2,9 @@ package dataframe;
 
 import org.bytedeco.pytorch.dataframe.Column;
 import org.bytedeco.pytorch.dataframe.DataFrame;
-import org.bytedeco.pytorch.plot.LineChart;
-import org.bytedeco.pytorch.plot.Matplotlib;
-import org.bytedeco.pytorch.plot.Seaborn;
+import org.bytedeco.pytorch.plot.chart.LineChart;
+import org.bytedeco.pytorch.plot.matplot.Matplotlib;
+import org.bytedeco.pytorch.plot.seaborn.Seaborn;
 
 import java.nio.file.*;
 import java.util.*;

@@ -13,8 +13,8 @@ import org.bytedeco.pytorch.dataframe.ml.classification.LogisticRegression;
 import org.bytedeco.pytorch.dataframe.ml.classification.RandomForestClassifier;
 import org.bytedeco.pytorch.dataframe.ml.cluster.KMeans;
 import org.bytedeco.pytorch.dataframe.ml.anomaly.IsolationForest;
-import org.bytedeco.pytorch.plot.Matplotlib;
-import org.bytedeco.pytorch.plot.Seaborn;
+import org.bytedeco.pytorch.plot.matplot.Matplotlib;
+import org.bytedeco.pytorch.plot.seaborn.Seaborn;
 
 /**
  * Multi-dimensional correctness benchmark for the expanded DataFrame stack:

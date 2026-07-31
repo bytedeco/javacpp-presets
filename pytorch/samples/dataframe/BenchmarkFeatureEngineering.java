@@ -29,7 +29,7 @@ import org.bytedeco.pytorch.dataframe.feature.util.FeatureMatrices;
 import org.bytedeco.pytorch.dataframe.ml.classification.LogisticRegression;
 import org.bytedeco.pytorch.dataframe.ml.classification.RandomForestClassifier;
 import org.bytedeco.pytorch.dataframe.ml.regression.Ridge;
-import org.bytedeco.pytorch.plot.Seaborn;
+import org.bytedeco.pytorch.plot.seaborn.Seaborn;
 
 import java.nio.file.*;
 import java.util.*;

@@ -7,6 +7,8 @@ import org.bytedeco.pytorch.dataframe.Column;
 import org.bytedeco.pytorch.dataframe.DataFrame;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.plot.*;
+import org.bytedeco.pytorch.plot.chart.*;
+import org.bytedeco.pytorch.plot.seaborn.Seaborn;
 
 import java.awt.image.BufferedImage;
 import java.nio.file.*;
