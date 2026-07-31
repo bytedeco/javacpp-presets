@@ -133,6 +133,14 @@ PUBLISHED_ARTIFACTS = {
     "cuda-redist-npp",
     "cuda-redist-nccl",
     "cuda-redist-nvcomp",
+    "cuda-platform-redist",
+    "cuda-platform-redist-cublas",
+    "cuda-platform-redist-cudnn",
+    "cuda-platform-redist-cusolver",
+    "cuda-platform-redist-cusparse",
+    "cuda-platform-redist-npp",
+    "cuda-platform-redist-nccl",
+    "cuda-platform-redist-nvcomp",
     "ffmpeg",
     "ffmpeg-platform",
     "opencv",
@@ -156,6 +164,16 @@ CUDA_REDIST_IDS = [
     "cuda-redist-npp",
     "cuda-redist-nccl",
     "cuda-redist-nvcomp",
+]
+CUDA_PLATFORM_REDIST_IDS = [
+    "cuda-platform-redist",
+    "cuda-platform-redist-cublas",
+    "cuda-platform-redist-cudnn",
+    "cuda-platform-redist-cusolver",
+    "cuda-platform-redist-cusparse",
+    "cuda-platform-redist-npp",
+    "cuda-platform-redist-nccl",
+    "cuda-platform-redist-nvcomp",
 ]
 CUDA_REDIST_CLASSIFIERS = [
     "linux-arm64",
@@ -406,6 +424,21 @@ if os.environ.get("PUBLISH_CUDA_REDIST", "").strip().lower() in ("1", "true", "y
             for rid in CUDA_REDIST_IDS
         ]
     )
+    # cuda-platform-redist packages (platform aggregators, no native classifiers needed)
+    ARTIFACTS.extend(
+        [
+            Artifact(
+                artifact_id=rid,
+                old_version=f"{CUDA_LIB}-{JAVACPP_BASE}-SNAPSHOT",
+                new_version=CUDA_VERSION,
+                description=f"JavaCPP Presets Platform Redistributable for CUDA ({rid}) (mullerhai fork release)",
+                classifiers=[],
+                require_javadoc=False,
+                require_sources=True,
+            )
+            for rid in CUDA_PLATFORM_REDIST_IDS
+        ]
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -485,14 +518,32 @@ def staged_dir(art: Artifact, stage: Path) -> Path:
 
 
 def find_file(base: Path, artifact_id: str, version: str, classifier: str | None, ext: str) -> Path | None:
-    """Find SNAPSHOT or timestamped equivalent."""
+    """Find SNAPSHOT or timestamped equivalent. Skips corrupted/incomplete files."""
     if classifier:
         name = f"{artifact_id}-{version}-{classifier}.{ext}"
     else:
         name = f"{artifact_id}-{version}.{ext}"
-    candidate = base / name
-    if candidate.exists():
-        return candidate
+
+    def is_valid_jar(path: Path) -> bool:
+        """Check if file is a valid (non-empty, non-corrupt) JAR."""
+        if not path.exists() or path.stat().st_size == 0:
+            return False
+        # For JARs, check if it's at least a minimal size (empty javadoc is ~2KB, real ones are bigger)
+        # But we can't do full ZIP validation here without being too slow
+        # Just check size > 100 bytes as a basic sanity check
+        if path.stat().st_size < 100:
+            return False
+        return True
+
+    # For SNAPSHOT version, only use if valid
+    if classifier:
+        snapshot_name = f"{artifact_id}-{version}-{classifier}.{ext}"
+    else:
+        snapshot_name = f"{artifact_id}-{version}.{ext}"
+    snapshot_candidate = base / snapshot_name
+    if snapshot_candidate.exists() and is_valid_jar(snapshot_candidate):
+        return snapshot_candidate
+
     # timestamped: artifact-1.5.14-20260714.002819-98-sources.jar
     if classifier:
         pattern = re.compile(
@@ -502,7 +553,7 @@ def find_file(base: Path, artifact_id: str, version: str, classifier: str | None
         pattern = re.compile(
             rf"^{re.escape(artifact_id)}-{re.escape(version.replace('-SNAPSHOT', ''))}-\d{{8}}\.\d{{6}}-\d+\.{re.escape(ext)}$"
         )
-    matches = [p for p in base.iterdir() if p.is_file() and pattern.match(p.name)]
+    matches = [p for p in base.iterdir() if p.is_file() and pattern.match(p.name) and is_valid_jar(p)]
     if not matches:
         return None
     # pick newest by mtime
@@ -510,7 +561,7 @@ def find_file(base: Path, artifact_id: str, version: str, classifier: str | None
 
 
 def minimal_javadoc_jar(artifact_id: str, version: str, out: Path) -> None:
-    """Central requires -javadoc.jar; generate a tiny valid jar if missing."""
+    """Central requires -javadoc.jar; generate a valid jar with Maven metadata if missing."""
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", compression=zipfile.ZIP_DEFLATED) as zf:
         readme = (
@@ -522,6 +573,21 @@ def minimal_javadoc_jar(artifact_id: str, version: str, out: Path) -> None:
         zf.writestr(
             "META-INF/MANIFEST.MF",
             "Manifest-Version: 1.0\nCreated-By: mullerhai-publish\n\n",
+        )
+        # Add Maven metadata structure like real javadoc jars have
+        pom_xml = f"""<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.bytedeco</groupId>
+  <artifactId>{artifact_id}</artifactId>
+  <version>{version}</version>
+</project>"""
+        zf.writestr("META-INF/maven/org.bytedeco/" + artifact_id + "/pom.xml", pom_xml)
+        zf.writestr(
+            "META-INF/maven/org.bytedeco/" + artifact_id + "/pom.properties",
+            f"version={version}\n"
+            f"groupId=org.bytedeco\n"
+            f"artifactId={artifact_id}\n"
         )
     out.write_bytes(buf.getvalue())
 
@@ -708,6 +774,8 @@ def rewrite_pom_xml(src_pom: Path, art: Artifact) -> str:
         "pytorch-platform-gpu": PYTORCH_VERSION,
     }
     for rid in CUDA_REDIST_IDS:
+        ver_map[rid] = CUDA_VERSION
+    for rid in CUDA_PLATFORM_REDIST_IDS:
         ver_map[rid] = CUDA_VERSION
 
     # Collect dependency parents so we can remove nodes safely
@@ -1048,7 +1116,8 @@ def stage_artifact(art: Artifact, stage: Path) -> list[Path]:
     src_sources = (
         find_file(src_base, art.artifact_id, art.old_version, "sources", "jar") if src_base.exists() else None
     )
-    if src_sources and src_sources.exists():
+    # Only copy if file exists AND is not empty
+    if src_sources and src_sources.exists() and src_sources.stat().st_size > 0:
         shutil.copy2(src_sources, sources_out)
     else:
         # Central Portal requires -sources.jar for every component
@@ -1062,7 +1131,8 @@ def stage_artifact(art: Artifact, stage: Path) -> list[Path]:
     src_javadoc = (
         find_file(src_base, art.artifact_id, art.old_version, "javadoc", "jar") if src_base.exists() else None
     )
-    if src_javadoc and src_javadoc.exists():
+    # Only copy if file exists AND is not empty (0 bytes = corrupted/incomplete)
+    if src_javadoc and src_javadoc.exists() and src_javadoc.stat().st_size > 0:
         shutil.copy2(src_javadoc, javadoc_out)
     elif art.require_javadoc or True:
         # Central Portal requires javadoc for all jars in most validations
@@ -1203,37 +1273,101 @@ def central_auth_header() -> str:
 
 
 def upload_bundle(zip_path: Path, publishing_type: str = "USER_MANAGED") -> str:
-    """Upload deployment bundle. Returns deploymentId.
+    """Upload deployment bundle via curl subprocess. Returns deploymentId.
 
     publishing_type:
       USER_MANAGED - upload only; publish manually in UI or via API
       AUTOMATIC    - validate and publish automatically
     """
-    auth = central_auth_header()
-    boundary = f"----mullerhai{int(time.time())}"
-    url = f"{CENTRAL_UPLOAD}?publishingType={publishing_type}&name={zip_path.stem}"
+    import subprocess
 
-    file_bytes = zip_path.read_bytes()
-    body = (
-        f"--{boundary}\r\n"
-        f'Content-Disposition: form-data; name="bundle"; filename="{zip_path.name}"\r\n'
-        f"Content-Type: application/zip\r\n\r\n"
-    ).encode("utf-8") + file_bytes + f"\r\n--{boundary}--\r\n".encode("utf-8")
+    user, pwd = None, None
+    settings = Path.home() / ".m2" / "settings.xml"
+    if settings.exists():
+        try:
+            tree = ET.parse(settings)
+            for server in tree.getroot().iter():
+                sid = text_child(server, "id")
+                if sid == "central":
+                    user = text_child(server, "username")
+                    pwd = text_child(server, "password")
+        except Exception:
+            pass
 
-    req = urllib.request.Request(url, data=body, method="POST")
-    req.add_header("Authorization", auth)
-    req.add_header("Content-Type", f"multipart/form-data; boundary={boundary}")
-    req.add_header("Content-Length", str(len(body)))
+    if not user or not pwd:
+        user = os.environ.get("CENTRAL_USERNAME") or os.environ.get("SONATYPE_USERNAME")
+        pwd = os.environ.get("CENTRAL_PASSWORD") or os.environ.get("SONATYPE_PASSWORD")
 
-    log(f"Uploading {zip_path.name} ({len(file_bytes)/(1<<20):.1f} MiB) to Central Portal ...")
-    try:
-        with urllib.request.urlopen(req, timeout=800, context=ssl_ctx) as resp:
-            deployment_id = resp.read().decode("utf-8").strip()
-            log(f"Upload OK. deploymentId = {deployment_id}")
-            return deployment_id
-    except urllib.error.HTTPError as e:
-        err = e.read().decode("utf-8", errors="replace")
-        raise SystemExit(f"Upload failed HTTP {e.code}: {err}") from e
+    if not user or not pwd:
+        raise SystemExit("Missing Central credentials")
+
+    file_size = zip_path.stat().st_size
+    log(f"Uploading {zip_path.name} ({file_size/(1<<20):.1f} MiB) to Central Portal ...")
+    log(f"  (using curl subprocess for reliable large file transfer)")
+
+    # Build curl command with streaming upload (-T flag)
+    # First create a .netrc file for auth (more reliable than -u for large files)
+    netrc_path = Path(tempfile.gettempdir()) / "muller_netrc"
+    netrc_path.write_text(f"machine central.sonatype.com login {user} password {pwd}\n", encoding="utf-8")
+
+    cmd = [
+        "curl", "-s", "-X", "POST",
+        "-n",  # use .netrc for auth
+        "--netrc-file", str(netrc_path),
+        "-F", f"bundle=@{zip_path};type=application/zip",
+        f"https://central.sonatype.com/api/v1/publisher/upload?publishingType={publishing_type}&name={zip_path.stem}",
+        "--connect-timeout", "60",
+        "--max-time", "3600",
+        "-v",
+    ]
+
+    log(f"  running: curl -F bundle=@{zip_path.name} ...")
+
+    start_time = time.time()
+    proc = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+
+    # Stream stderr to capture progress output
+    import select
+    stderr_lines = []
+    while True:
+        # Use select for non-blocking read
+        r, _, _ = select.select([proc.stderr], [], [], 1)
+        if r:
+            line = proc.stderr.readline()
+            if line:
+                stderr_lines.append(line.decode("utf-8", errors="replace"))
+                # Print progress lines
+                if b"%" in line or b"MiB" in line:
+                    print(f"  curl: {line.decode('utf-8', errors='replace').strip()}", end="", flush=True)
+            elif proc.poll() is not None:
+                break
+        else:
+            # Timeout, check if process ended
+            if proc.poll() is not None:
+                break
+
+    stdout, _ = proc.communicate()
+    elapsed = time.time() - start_time
+    netrc_path.unlink(missing_ok=True)
+
+    log(f"  upload completed in {elapsed:.1f}s")
+
+    if proc.returncode != 0:
+        log(f"  curl stderr: {''.join(stderr_lines[-10:])}")
+        raise SystemExit(f"Upload failed with return code {proc.returncode}")
+
+    deployment_id = stdout.decode("utf-8", errors="replace").strip()
+    if not deployment_id or "{" in deployment_id:
+        # Might be JSON error response
+        log(f"  unexpected response: {deployment_id[:500]}")
+        raise SystemExit(f"Upload failed: {deployment_id[:200]}")
+
+    log(f"Upload OK. deploymentId = {deployment_id}")
+    return deployment_id
 
 
 def poll_status(deployment_id: str, timeout_s: int = 1800) -> dict:
