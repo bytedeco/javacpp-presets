@@ -1,5 +1,0 @@
-=== 启动点云仿射变换测试 ===
-✅ RandomFlip 测试通过 (X轴翻转成功)
-✅ RandomScale 测试通过 (放大2倍成功)
-✅ RandomRotate 测试通过 (维度正确)
-所有仿射变换测试 PASS！

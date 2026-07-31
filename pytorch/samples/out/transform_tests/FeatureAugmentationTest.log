@@ -1,6 +1,0 @@
-=== 启动特征补全与图上采样测试 ===
-补全后 2 号节点特征 (由 0、1 号扩散而来):
-Tensor[shape=[1, 2], dtype=Float, device=cpu, numel=2, values=
-  [[2.5000, 2.5000]]]
-Half-Hop 处理后节点总数: 9
-✅ 特征补全与 Half-Hop 验证成功！

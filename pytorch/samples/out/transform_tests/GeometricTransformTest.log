@@ -1,8 +1,0 @@
-=== 启动几何变换 (Vision Transforms) 联合测试 ===
-✅ Distance 测试通过: 1.7320508
-✅ Cartesian 结果维度: [1, 3]
-✅ LocalCartesian 测试通过
-✅ Polar 测试通过: r=1.0, theta=0.5
-✅ Spherical 测试通过: r=1.0, theta_elev=0.0
-
-恭喜！所有几何变换测试全部 PASS！🚀

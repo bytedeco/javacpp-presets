@@ -4,7 +4,6 @@ import org.bytedeco.pytorch.nn.modules.*;
 
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.geometric.nn.conv.GINConv;
-import org.bytedeco.pytorch.geometric.nn.conv.SAGEConv;
 import org.bytedeco.pytorch.geometric.nn.conv.SAGEConvV2;
 import org.bytedeco.pytorch.geometric.nn.conv.TransformerConv;
 import org.bytedeco.pytorch.geometric.nn.norm.InstanceNorm;
@@ -57,7 +56,7 @@ public class MaterialGNN extends org.bytedeco.pytorch.nn.Module {
         register_module("norm3", norm3);
 //        register_module("bn", bn);
         register_module("fc1", fc1);
-        register_module("out", out);
+        register_module("platform/out", out);
 
     }
 

@@ -1,5 +1,4 @@
 package samples.demo.trainer;
-import org.bytedeco.pytorch.nn.options.*;
 import org.bytedeco.pytorch.nn.modules.container.*;
 import org.bytedeco.pytorch.nn.modules.*;
 
@@ -84,7 +83,7 @@ public class GraphDTANet extends org.bytedeco.pytorch.nn.Module {
         register_module("proteinEncoder", proteinEncoder);
         register_module("fc1", fc1);
         register_module("fc2", fc2);
-        register_module("out", out);
+        register_module("platform/out", out);
     }
 
     public Tensor forward(Tensor drugX, Tensor drugedge_index, Tensor proteinSeq) {

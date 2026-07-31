@@ -1,5 +1,0 @@
-=== 启动点云标准化与增强测试 ===
-✅ Center 测试通过: 均值趋于0
-✅ NormalizeScale 测试通过: 范围已限制在 [-1, 1]
-✅ PointPairFeatures 测试通过: 维度为 4
-所有点云变换测试 PASS！
