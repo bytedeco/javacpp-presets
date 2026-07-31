@@ -1,0 +1,24 @@
+=== vLLM Multimodal Multi-Backbone Stress (Mac CPU) ===
+models-dir : /Users/muller/Documents/code/rust/javacpp-presets/pytorch/models
+fixtures   : /Users/muller/Documents/code/rust/javacpp-presets/pytorch/samples/fixtures/multimodal
+out        : /Users/muller/Documents/code/rust/javacpp-presets/pytorch/samples/out/vllm_mm_stress
+concurrent : 1 tokens=16 warmup=0 rounds=1 only=qwen3vl
+Encoders: DINOv2/CLIP/SmolVLM(=qwen-vl)/Whisper + Video/OCR/ASR wrappers
+Results saved as JSONL + Markdown for human verification.
+
+======== Inventory models + fixtures ========
+modelsRoot=/Users/muller/Documents/code/rust/javacpp-presets/pytorch/models
+  backbone Qwen3-VL-2B-Instruct-FP8             READY
+  backbone Qwen2.5-0.5B-Instruct                READY
+  backbone DeepSeek-R1-Distill-Qwen-1.5B        READY
+  backbone Llama-3.2-1B-Instruct                READY
+  backbone glm-edge-1.5b-chat                   READY
+  backbone gpt2                                 READY
+Exception in thread "main" java.lang.NoClassDefFoundError: org/bytedeco/pytorch/utils/vllm/multimodal/MediaType
+	at org.bytedeco.pytorch.utils.vllm.multimodal.encoders.MediaEncoderRegistry.loadDefault(MediaEncoderRegistry.java:69)
+	at distribute.BenchmarkVllmMultimodalStress.inventory(BenchmarkVllmMultimodalStress.java:271)
+	at distribute.BenchmarkVllmMultimodalStress.main(BenchmarkVllmMultimodalStress.java:822)
+Caused by: java.lang.ClassNotFoundException: org.bytedeco.pytorch.utils.vllm.multimodal.MediaType
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:580)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:502)
+	... 3 more

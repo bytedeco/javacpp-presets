@@ -1,0 +1,136 @@
+══════════════════════════════════════════════════
+ BenchmarkVideoOpsOpenCVEnterprise
+══════════════════════════════════════════════════
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.bytedeco.javacpp.Loader in an unnamed module (file:/Users/muller/.m2/repository/org/bytedeco/javacpp/1.5.14-SNAPSHOT/javacpp-1.5.14-SNAPSHOT.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+VideoOps caps: {nativeLibav=true, cliFfmpeg=true, cliBinary=ffmpeg, ops=[probe, extractUniform, extractAtFps, extractEveryN, extractRange, frameAt, thumbnail, decodeAll, sampleForVlm, clip, trim, transcode, scale, concat, toGif, extractAudio, extractFramesToDir, setFps, stripAudio, writeTensorVideo, probeAll, extractUniformBatch]}
+OpenCVOps pipelines: [preprocessImagenet, preprocessClip, preprocessLetterbox, preprocessVlmFrames, preprocessVlmFramesNorm, ocrBinarize, enhanceLowLight, denoise, ahash, isNearDuplicate, opticalFlow, frameDiffEnergy, motionProfile, augmentBasic, edges, stackResized]
+fixture video=samples/fixtures/multimodal/test_video.mp4 present=true
+fixture image=samples/fixtures/multimodal/test_image.jpg present=true
+
+── D1 Video probe / metadata ──
+    CHECK nativeOrCli: OK
+    CHECK width>0: OK
+    CHECK height>0: OK
+    CHECK fps>0: OK
+    CHECK duration>=0: OK
+    CHECK isReadable: OK
+    CHECK !isReadable(missing): OK
+    meta=VideoMeta{320x240 @15.0fps dur=125.93333333333334s frames≈1889 codec=h264 br=282823}
+  OK  D1 Video probe / metadata (132 ms)
+
+── D2 Frame extraction ──
+Warning: Loader.putMemberOffset(): java.lang.ClassNotFoundException: org.bytedeco.pytorch.BackendMetaPtr
+Warning: Loader.putMemberOffset(): java.lang.ClassNotFoundException: org.bytedeco.pytorch.ExampleBatchMapper
+Warning: Loader.putMemberOffset(): java.lang.ClassNotFoundException: org.bytedeco.pytorch.ExampleMapper
+Warning: Loader.putMemberOffset(): java.lang.ClassNotFoundException: org.bytedeco.pytorch.OperationCreator
+Warning: Loader.putMemberOffset(): java.lang.ClassNotFoundException: org.bytedeco.pytorch.TensorValueMapper
+    CHECK thumbnail non-null: OK
+    CHECK thumbnail rank3: OK (3)
+    CHECK thumbnail C=3: OK (3)
+    CHECK frameAt non-null: OK
+    CHECK frameAt C=3: OK (3)
+    CHECK uniform8 size in 1..8: OK
+    CHECK stacked rank4: OK (4)
+    CHECK stacked N in 1..4: OK
+    CHECK stacked C=3: OK (3)
+    CHECK atFps capped <=8: OK
+    CHECK atFps >=1: OK
+    CHECK everyN capped <=5: OK
+    CHECK range <=6: OK
+    CHECK vlm count matches frames: OK (4)
+    CHECK vlm stacked Tensor: OK
+    CHECK loader.probe: OK
+    CHECK loader.uniform: OK
+  OK  D2 Frame extraction (1287 ms)
+
+── D3 VideoFile seek / rewind ──
+    CHECK open w>0: OK
+    CHECK meta(): OK
+    CHECK hasNext after seek0: OK
+    CHECK f0 C: OK (3)
+    CHECK readFrames(3) <=3: OK
+    CHECK stack rank4: OK (4)
+    CHECK stack N: OK (3)
+  OK  D3 VideoFile seek / rewind (11 ms)
+
+── D4 CLI FFmpeg ops ──
+    CHECK FFmpeg.isAvailable reported: OK
+    CHECK clip exists: OK
+    CHECK frames dumped >=1: OK
+  OK  D4 CLI FFmpeg ops (324 ms)
+
+── D5 OpenCVIO extended ops ──
+    CHECK img rank3: OK (3)
+    CHECK img C=3: OK (3)
+    CHECK gray C=1: OK (1)
+    CHECK blur shape: OK ([3, 480, 640])
+    CHECK median shape: OK ([3, 480, 640])
+    CHECK bilateral shape: OK ([3, 480, 640])
+    CHECK canny C=1: OK (1)
+    CHECK sobel C=1: OK (1)
+    CHECK dilate shape: OK ([3, 480, 640])
+    CHECK erode shape: OK ([3, 480, 640])
+    CHECK open shape: OK ([3, 480, 640])
+    CHECK equalize shape: OK ([3, 480, 640])
+    CHECK clahe shape: OK ([3, 480, 640])
+    CHECK hsv C=3: OK (3)
+    CHECK letterbox H: OK (128)
+    CHECK letterbox W: OK (128)
+    CHECK centerCrop H<=32: OK
+    CHECK rsc square: OK (64)
+    CHECK rsc 64: OK (64)
+    CHECK vflip shape: OK ([3, 480, 640])
+    CHECK rotate shape: OK ([3, 480, 640])
+    CHECK bc shape: OK ([3, 480, 640])
+    CHECK thr C=1: OK (1)
+    CHECK ath C=1: OK (1)
+    CHECK blend shape: OK ([3, 480, 640])
+    CHECK hamming identical 0: OK (0)
+    CHECK hash is long: OK
+    ahash=e2ffe6e0e0d070f0 vs blur dist=0
+    CHECK flow C=2: OK (2)
+    CHECK flow H: OK (480)
+    CHECK flow W: OK (640)
+    CHECK batchResize n: OK (2)
+    CHECK batchResize H: OK (48)
+    CHECK batchLetterbox N: OK (2)
+    CHECK batchLetterbox H: OK (64)
+  OK  D5 OpenCVIO extended ops (8460 ms)
+
+── D6 OpenCVOps pipelines ──
+    CHECK imagenet shape: OK ([3, 224, 224])
+    CHECK clip shape: OK ([3, 224, 224])
+    CHECK letterbox unit H: OK (320)
+    CHECK ocr C=1: OK (1)
+    CHECK lowlight shape: OK ([3, 480, 640])
+    CHECK denoise shape: OK ([3, 480, 640])
+    CHECK near-dup self: OK
+    CHECK near-dup blur thr15: OK
+    CHECK frameDiff >=0: OK
+    frameDiffEnergy(hflip)=75.759
+    CHECK motionProfile len: OK (2)
+    CHECK aug shape: OK ([3, 480, 640])
+    CHECK edges C=1: OK (1)
+    CHECK path imagenet 128: OK ([3, 128, 128])
+    CHECK path ahash: OK
+    CHECK caps has pipelines: OK
+  OK  D6 OpenCVOps pipelines (578 ms)
+
+── D7 E2E video→VLM batch throughput ──
+    CHECK extract n>=1: OK
+    CHECK batch N: OK (8)
+    CHECK batch 224: OK (224)
+    CHECK normed N: OK (8)
+    extractUniform(8): 60.8 ms (7.6 ms/frame)
+    letterbox stack:   59.1 ms
+    +CLIP norm:        73.5 ms
+    total E2E:         193.4 ms
+  OK  D7 E2E video→VLM batch throughput (210 ms)
+
+══════════════════════════════════════════════════
+ RESULT: passed=87 failed=0
+ ALL CHECKS PASSED

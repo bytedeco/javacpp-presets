@@ -1,0 +1,32 @@
+passed=28 failed=0 skipped=1 records=30
+backbone Qwen2.5-0.5B-Instruct        READY
+  backbone DeepSeek-R1-Distill-Qwen-1.5B READY
+  backbone Llama-3.2-1B-Instruct        READY
+  backbone glm-edge-1.5b-chat           READY
+  backbone gpt2                         READY
+  encoder dinov2: OK dinov2:models/facebook__dinov2-small dim=384
+  encoder clip: OK clip:models/openai__clip-vit-base-patch32 dim=512
+  encoder smolvlm: OK smolvlm:models/HuggingFaceTB__SmolVLM-256M-Instruct dim=576
+  encoder qwen3vl: OK qwen3vl:models/Qwen__Qwen3-VL-2B-Instruct-FP8 dim=2048
+  encoder qwen2vl: SKIP missing dir models/Qwen__Qwen2-VL-2B-Instruct
+  encoder deepseek-vl: SKIP missing dir models/deepseek-ai__deepseek-vl-1.3b-chat
+  encoder siglip: SKIP no weights in google__siglip-base-patch16-224
+  encoder whisper: OK whisper:models/openai__whisper-tiny dim=384
+  encoder qwen-vl: ALIAS qwen3vl
+  encoder video: OK video/clip:models/openai__clip-vit-base-patch32 dim=512 maxFrames=4
+  encoder ocr: OK ocr/dinov2:models/facebook__dinov2-small dim=384
+  encoder asr: OK asr/whisper:models/openai__whisper-tiny dim=384
+  Qwen2.5-0.5B-Instruct        image  30744ms  The colors you see are: red, blue, green, yellow,…
+  Qwen2.5-0.5B-Instruct        audio  46625ms  The text is discussing the use of a specific soft…
+  Qwen2.5-0.5B-Instruct        video  54876ms  1. The scene is a bustling city street, with peop…
+  Qwen2.5-0.5B-Instruct        ocr    17897ms  100% accuracy. 100% reliability. 100% speed. 10
+  Qwen2.5-0.5B-Instruct        asr    30471ms  The speech is in Korean and is about a character …
+  Qwen2.5-0.5B-Instruct        stress tokens=96 tps=0.3 c=2
+  DeepSeek-R1-Distill-Qwen-1.5B image  392747ms  Based on your description, what is the probabilit…
+  DeepSeek-R1-Distill-Qwen-1.5B audio  452390ms  One word. One word. One word. One word. One word.…
+  DeepSeek-R1-Distill-Qwen-1.5B video  190074ms  2023-08-05 14:23:00 UTC+00
+  DeepSeek-R1-Distill-Qwen-1.5B ocr    151373ms  It seems that you are referring to a specific pie…
+  DeepSeek-R1-Distill-Qwen-1.5B asr    134731ms  2023-03-23 14:23:00 14:
+  DeepSeek-R1-Distill-Qwen-1.5B stress tokens=96 tps=0.2 c=2
+
+passed=28 failed=0 skipped=1 records=30

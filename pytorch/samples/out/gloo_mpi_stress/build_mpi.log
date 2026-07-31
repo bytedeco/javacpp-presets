@@ -1,0 +1,4 @@
+platform=macosx-arm64
+MPI_HOME=/opt/homebrew/opt/open-mpi
+ERROR: cppbuild/macosx-arm64/lib/libtorch_cpu.dylib does not export createProcessGroupMPI
+  Rebuild libtorch first: USE_MPI=1 bash scripts/rebuild_distributed_backends.sh

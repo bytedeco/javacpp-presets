@@ -1,0 +1,198 @@
+=== Spacy multi-dimensional full-API stress ===
+
+=== D1 Spacy factory ===
+  PASS  VERSION non-empty
+  PASS  version() matches
+  PASS  info() mentions spacy
+  PASS  blank lang=en
+  PASS  blank pipes empty
+  PASS  blank vocab non-null
+  PASS  empty lang=xx
+  PASS  load strips to en
+  PASS  load adds sentencizer
+  PASS  load meta name
+  PASS  blank zh
+  PASS  blank null → en
+  PASS  load null → en
+
+=== D2 Language call / apply / process / pipe ===
+  PASS  call tokens > 0
+  PASS  call text preserved
+  PASS  apply alias
+  PASS  process alias
+  PASS  process collection size=3
+  PASS  process[0] has tokens
+  PASS  pipe stream size=3
+  PASS  pipe batchSize size=2
+  PASS  info non-empty
+  PASS  config non-null
+  PASS  meta has lang
+  PASS  null process → empty
+  PASS  null pipe → empty
+
+=== D3 Pipeline CRUD ===
+  PASS  addPipe tagger
+  PASS  getPipe tagger
+  PASS  pipeline size=1
+  PASS  createPipe sentencizer
+  PASS  pipes has sentencizer
+  PASS  createPipe matcher
+  PASS  createPipe unknown null
+  PASS  createPipe null null
+  PASS  replacePipe mutates POS
+  PASS  renamePipe
+  PASS  disablePipe keeps pipe registered
+  PASS  enablePipe restores
+  PASS  removePipe returns component
+  PASS  removePipe gone
+  PASS  call after remove works
+  PASS  disabled doc still tokenized
+
+=== D4 Doc surface ===
+  PASS  getText
+  PASS  length > 0
+  PASS  charLength == text.length
+  PASS  get(0) == getToken(0)
+  PASS  getTokens size
+  PASS  slice length
+  PASS  slice text non-empty
+  PASS  sents non-empty (sentencizer)
+  PASS  ents list non-null
+  PASS  charSpan labeled
+  PASS  charSpan bare
+  PASS  setEnts round-trip
+  PASS  isNered after setEnts or flag
+  PASS  toJson has text
+  PASS  toArray callable
+  PASS  toArray stub or value
+  PASS  countBy non-null
+  PASS  hasAnnotation callable
+  PASS  vocab non-null
+  PASS  language non-null
+  PASS  iterable tokens == length
+  PASS  similarity finite
+  PASS  self-ish similarity >= 0
+  PASS  nounChunks iterable
+  PASS  isTagged/isParsed/isNered callable
+
+=== D5 Token attributes + mutators ===
+  PASS  tokenized mixed text
+  PASS  text()
+  PASS  lower_()
+  PASS  i() == 0
+  PASS  idx() >= 0
+  PASS  isAlpha Hello
+  PASS  shape non-empty
+  PASS  whitespace non-null
+  PASS  doc() backref
+  PASS  vector dim >= 0
+  PASS  similarity self finite
+  PASS  saw punct
+  PASS  saw digit/likeNum
+  PASS  likeEmail detected or token present
+  PASS  likeUrl detected or token present
+  PASS  isSpace callable
+  PASS  setPos
+  PASS  setTag
+  PASS  setLemma
+  PASS  setDep
+  PASS  setEntType
+  PASS  setEntIob
+  PASS  isStop callable
+  PASS  toString non-empty
+
+=== D6 Span + retokenize/merge ===
+  PASS  doc len >= 4
+  PASS  span text alias
+  PASS  span start/end
+  PASS  span startChar/endChar
+  PASS  span length
+  PASS  span doc backref
+  PASS  span tokens size
+  PASS  span getToken(0)
+  PASS  span label/label_
+  PASS  span iterable
+  PASS  span self similarity finite
+  PASS  retokenizer non-null
+  PASS  after merge length <= before
+  PASS  after split length >= before
+  PASS  Doc.merge returns token
+
+=== D7 Vocab / Lexeme ===
+  PASS  default vocab size >= 0
+  PASS  default stop the
+  PASS  addStopWord
+  PASS  stopWords contains fooish
+  PASS  getLexeme orth
+  PASS  lower
+  PASS  shape
+  PASS  isOov default or settable
+  PASS  setOov false
+  PASS  lexeme setStop
+  PASS  setCluster
+  PASS  hasVector
+  PASS  getVector length
+  PASS  vocab setVector
+  PASS  resetVectors width
+  PASS  addString id >= 0
+  PASS  strings store non-null
+  PASS  get(Object) works
+  PASS  custom stop ctor
+  PASS  nlp.vocab size >= 0
+
+=== D8 Matcher + Sentencizer ===
+  PASS  sentencizer name
+  PASS  sentencizer sents >= 2
+  PASS  custom sentencizer apply
+  PASS  patterns registered
+  PASS  matcher name
+  PASS  matcher finds >= 1
+  PASS  match toString
+  PASS  matcher as pipe sets ents or runs
+  PASS  remove pattern
+  PASS  map pattern match runs
+
+=== D9 Example + update/evaluate ===
+  PASS  initialize ok
+  PASS  Example predicted
+  PASS  Example reference
+  PASS  Example text
+  PASS  Example toString
+  PASS  Example with annots
+  PASS  fromDict
+  PASS  fromText
+  PASS  update returns loss
+  PASS  evaluate has score
+
+=== D10 DocBin / toDisk / fromDisk ===
+  PASS  DocBin size=2
+  PASS  getDocs size
+  PASS  get(0) text
+  PASS  toString
+  PASS  ctor iterable size=2
+  PASS  toBytes non-empty
+  PASS  fromBytes size=2
+  PASS  fromDisk size=2
+  PASS  fromLines size>=1
+  PASS  model marker exists
+  PASS  fromDisk ok
+  PASS  Doc.toDisk wrote file
+
+=== D11 Batch stress + edges ===
+  PASS  empty string tokenizes
+  PASS  whitespace tokenizes
+  PASS  unicode tokenizes
+  PASS  batch 200 size
+  PASS  batch 200 all non-null
+  INFO  batch200 took 6 ms
+  PASS  pipe count=200
+  PASS  SimpleTokenizer tokenize
+  PASS  tokenizeToStrings
+  PASS  tokenizer vocab
+  PASS  SimpleTokenizer with vocab
+  PASS  deterministic length
+
+============================================================
+Spacy  passed=169  failed=0
+============================================================
+ALL DIMENSIONS GREEN

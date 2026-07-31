@@ -1,0 +1,6 @@
+=== 启动高级 Graph Transforms 测试 ===
+训练集节点数: 700
+验证集节点数: 100
+✅ 成功转换 edge_index 为 SparseTensor (adj_t)
+训练边数量: 3500
+✅ 高级流水线全部验证通过！

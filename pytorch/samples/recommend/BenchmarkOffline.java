@@ -5,10 +5,10 @@
  */
 package samples.recommend;
 
-import org.bytedeco.pytorch.utils.recommend.offline.AATestRunner;
-import org.bytedeco.pytorch.utils.recommend.offline.CalibrationChecker;
-import org.bytedeco.pytorch.utils.recommend.offline.HoldoutSplitter;
-import org.bytedeco.pytorch.utils.recommend.offline.OfflineEvaluator;
+import org.bytedeco.pytorch.deploy.offline.AATestRunner;
+import org.bytedeco.pytorch.deploy.offline.CalibrationChecker;
+import org.bytedeco.pytorch.deploy.offline.HoldoutSplitter;
+import org.bytedeco.pytorch.deploy.offline.OfflineEvaluator;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -4,13 +4,14 @@
 package samples.recommend;
 
 import org.bytedeco.pytorch.Tensor;
-import org.bytedeco.pytorch.utils.recommend.DeviceSupport;
-import org.bytedeco.pytorch.utils.recommend.Recommend;
-import org.bytedeco.pytorch.utils.recommend.TensorHelpers;
-import org.bytedeco.pytorch.utils.recommend.basic.features.Features;
-import org.bytedeco.pytorch.utils.recommend.basic.features.SparseFeature;
-import org.bytedeco.pytorch.utils.recommend.basic.features.DenseFeature;
-import org.bytedeco.pytorch.utils.recommend.basic.features.SequenceFeature;
+import org.bytedeco.pytorch.recommend.basic.features.Feature;
+import org.bytedeco.pytorch.recommend.DeviceSupport;
+import org.bytedeco.pytorch.recommend.Recommend;
+import org.bytedeco.pytorch.recommend.TensorHelpers;
+import org.bytedeco.pytorch.recommend.basic.features.Features;
+import org.bytedeco.pytorch.recommend.basic.features.SparseFeature;
+import org.bytedeco.pytorch.recommend.basic.features.DenseFeature;
+import org.bytedeco.pytorch.recommend.basic.features.SequenceFeature;
 
 import java.util.Arrays;
 import java.util.List;
@@ -72,7 +73,7 @@ public class SmokeFoundation {
             SparseFeature u = Features.sparse("user_id", 1000, 8);
             DenseFeature age = Features.dense("age", 1);
             SequenceFeature hist = Features.sequence("item_hist", 5000, 8, "mean");
-            List<org.bytedeco.pytorch.utils.recommend.basic.features.Feature> feats =
+            List<Feature> feats =
                     Arrays.asList(u, age, hist);
             long sparseDim = Features.calcSparseDim(feats);
             if (sparseDim != 8) {

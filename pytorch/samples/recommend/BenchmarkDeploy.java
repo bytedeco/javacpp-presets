@@ -6,9 +6,9 @@
  */
 package samples.recommend;
 
-import org.bytedeco.pytorch.utils.recommend.abtest.TrafficSplitter;
-import org.bytedeco.pytorch.utils.recommend.serving.deploy.DeploymentController;
-import org.bytedeco.pytorch.utils.recommend.serving.deploy.ReplicaScaler;
+import org.bytedeco.pytorch.deploy.abtest.TrafficSplitter;
+import org.bytedeco.pytorch.deploy.serving.deploy.DeploymentController;
+import org.bytedeco.pytorch.deploy.serving.deploy.ReplicaScaler;
 
 import java.util.ArrayList;
 import java.util.List;

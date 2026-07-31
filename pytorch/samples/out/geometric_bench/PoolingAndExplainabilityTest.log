@@ -1,0 +1,14 @@
+=== 启动 GNN 高级算子联合测试 ===
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::loadLibrary has been called by org.bytedeco.javacpp.Loader in an unnamed module (file:/Users/muller/.m2/repository/org/bytedeco/javacpp/1.5.14-SNAPSHOT/javacpp-1.5.14-SNAPSHOT.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+PANPooling 完成: 原始节点 32 -> 池化后节点 16
+MemPooling 完成: 节点 32 -> 聚类簇数 8
+✅ 联合损失反向传播成功！
+Gini 分数: 0.4474
+BRO 惩罚值: 8.0751
+✅ 原始输入 x 的梯度已成功计算。
+Gini 正则化计算成功: 0.4474
+✅ 所有高级算子测试通过！

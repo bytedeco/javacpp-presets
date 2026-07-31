@@ -1,0 +1,72 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::loadLibrary has been called by org.bytedeco.javacpp.Loader in an unnamed module (file:/Users/muller/.m2/repository/org/bytedeco/javacpp/1.5.14-SNAPSHOT/javacpp-1.5.14-SNAPSHOT.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+=== Aggregation Benchmark ===
+nodes=64 edges=256 features=16 warmup=2 iters=8
+
+PASS  SumAggregation
+PASS  MeanAggregation
+[W729 15:15:33.909797000 TensorAdvancedIndexing.cpp:1524] Warning: index_reduce() is in beta and the API may change at any time. (function operator())
+PASS  MaxAggregation
+PASS  MinAggregation
+PASS  MulAggregation
+PASS  StdAggregation
+PASS  VarAggregation
+PASS  MedianAggregation
+PASS  VariancePreservingAggregation
+PASS  SumAggregation.correctness
+PASS  MeanAggregation.correctness
+PASS  SoftmaxAggregation
+PASS  PowerMeanAggregation
+PASS  PowerMeanAggregation.p1_equals_mean
+PASS  QuantileAggregation
+PASS  SortAggregation
+PASS  MLPAggregation
+PASS  AttentionalAggregation
+PASS  LSTMAggregation
+PASS  GRUAggregation
+PASS  Set2Set
+PASS  GraphMultisetTransformer
+PASS  SetTransformerAggregation
+PASS  PatchTransformerAggregation
+PASS  LCMAggregation
+PASS  EquilibriumAggregation
+PASS  DeepSetsAggregation
+PASS  DegreeScalerAggregation
+PASS  MultiAggregation
+
+----- Results -----
+name                                     status      ms/iter notes
+SumAggregation                             PASS      0.013  shape=[64, 16]
+MeanAggregation                            PASS      0.060  shape=[64, 16]
+MaxAggregation                             PASS      0.061  shape=[64, 16]
+MinAggregation                             PASS      0.069  shape=[64, 16]
+MulAggregation                             PASS      0.017  shape=[64, 16]
+StdAggregation                             PASS      0.087  shape=[64, 16]
+VarAggregation                             PASS      0.067  shape=[64, 16]
+MedianAggregation                          PASS      0.150  shape=[64, 16]
+VariancePreservingAggregation              PASS      0.044  shape=[64, 16]
+SumAggregation.correctness                 PASS          -  ok
+MeanAggregation.correctness                PASS          -  ok
+SoftmaxAggregation                         PASS      0.146  shape=[64, 16]
+PowerMeanAggregation                       PASS      0.072  shape=[64, 16]
+PowerMeanAggregation.p1_equals_mean        PASS          -  ok
+QuantileAggregation                        PASS      0.142  shape=[64, 16]
+SortAggregation                            PASS      0.172  shape=[64, 64]
+MLPAggregation                             PASS      0.035  shape=[64, 16]
+AttentionalAggregation                     PASS      0.062  shape=[64, 16]
+LSTMAggregation                            PASS      0.454  shape=[64, 16]
+GRUAggregation                             PASS      0.887  shape=[64, 16]
+Set2Set                                    PASS      0.238  shape=[64, 32]
+GraphMultisetTransformer                   PASS      0.203  shape=[64, 16]
+SetTransformerAggregation                  PASS      0.788  shape=[64, 16]
+PatchTransformerAggregation                PASS      2.556  shape=[64, 16]
+LCMAggregation                             PASS      0.120  shape=[64, 16]
+EquilibriumAggregation                     PASS      0.312  shape=[64, 16]
+DeepSetsAggregation                        PASS      0.026  shape=[64, 16]
+DegreeScalerAggregation                    PASS      0.079  shape=[64, 48]
+MultiAggregation                           PASS      0.081  shape=[64, 48]
+
+PASSED=29 FAILED=0 TOTAL=29

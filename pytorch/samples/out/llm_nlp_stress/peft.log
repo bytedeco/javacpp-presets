@@ -1,0 +1,132 @@
+=== PEFT multi-dimensional full-API stress ===
+
+=== D1 LoraConfig builder ===
+  PASS  r=8
+  PASS  alpha=16
+  PASS  dropout
+  PASS  targets q/v
+  PASS  freezeBase
+  PASS  useRslora false
+  PASS  bias none
+  PASS  scaling = alpha/r
+  PASS  lora_alpha alias
+  PASS  lora_dropout alias
+  PASS  target_modules list
+  PASS  use_rslora
+  PASS  rslora scaling
+  PASS  camel loraAlpha
+  PASS  cfg3 r default > 0
+
+=== D2 QLoRA / IA3 / PeftType ===
+  PASS  PeftType values
+  PASS  PeftType.LORA
+  PASS  PeftType.QLORA
+  PASS  PeftType.IA3
+  PASS  QLoRA r
+  PASS  QLoRA alpha
+  PASS  QLoRA scaling
+  PASS  QLoRA loadIn4bit
+  PASS  QLoRA quantType
+  PASS  QLoRA doubleQuant
+  PASS  QLoRA computeDtype
+  PASS  QLoRA.lora() non-null
+  PASS  IA3 targets
+  PASS  IA3 ff modules
+  PASS  IA3 init
+  PASS  PeftModel(QLoRA) config r
+
+=== D3 LoraLinear create / forward ===
+  PASS  inFeatures=16
+  PASS  outFeatures=32
+  PASS  scaling=2
+  PASS  config r
+  PASS  base non-null
+  PASS  loraA shape [r,in]
+  PASS  loraB shape [out,r]
+  PASS  not merged initially
+  PASS  forward shape [2,32]
+  PASS  forward finite
+  PASS  wrap LinearImpl forward
+  PASS  borrowBase in/out
+  PASS  borrowBase forward
+
+=== D4 merge / unmerge / deltaWeight ===
+  PASS  deltaWeight defined
+  PASS  deltaWeight shape [out,in]
+  PASS  loraParameters size>=2
+  PASS  isMerged after merge
+  PASS  merge with zero-B ~same
+  PASS  not merged after unmerge
+  PASS  unmerge restores
+
+=== D5 PeftModel wrapLinear / add / forward ===
+  PASS  empty adapters
+  PASS  numAdapters=0
+  PASS  not merged
+  PASS  config
+  PASS  numAdapters=1
+  PASS  adapters contains fc1
+  PASS  numAdapters=2
+  PASS  maybeWrap non-target returns linear
+  PASS  maybeWrap target returns null (replaced)
+  PASS  maybeWrap registered adapter
+  PASS  forward named fc1
+  PASS  trainable > 0
+  PASS  total >= trainable
+  INFO  trainable=352 total=352
+  PASS  trainableParameters non-empty
+  PASS  toString
+
+=== D6 mergeAll / state dict ===
+  PASS  state dict non-empty
+  PASS  state has lora-ish keys
+  PASS  mergeAll → isMerged
+  PASS  all adapters merged
+  PASS  unmergeAll
+  PASS  all adapters unmerged
+  PASS  loadAdapterStateDict ok
+
+=== D7 save / load pretrained + adapter ===
+  PASS  savePretrained dir has files
+  PASS  save_pretrained string ok
+  PASS  saveAdapter file exists
+  PASS  loadAdapter ok
+  PASS  fromPretrained non-CLM
+  PASS  from_pretrained snake
+  PASS  all save overloads
+
+=== D8 PeftModelHelper ===
+  PASS  matches q_proj
+  PASS  matches v_proj
+  PASS  no match mlp
+  PASS  matches list API
+  PASS  leafName
+  PASS  leafName plain
+  PASS  filterTargets has q and v
+  PASS  adapterKey A
+  PASS  adapterKey B
+
+=== D9 getPeftModel shell + print ===
+  PASS  getPeftModel root set
+  PASS  getPeftModel config
+  PASS  get_peft_model
+  PASS  root setter
+trainable params: 64 || all params: 136 || trainable%: 47.0588
+trainable params: 64 || all params: 136 || trainable%: 47.0588
+  PASS  print trainable ran
+  PASS  mergeAndUnload non-null
+  PASS  merge_and_unload
+  PASS  applyLoraToStateDict callable
+
+=== D10 batch stress + numerical stability ===
+  INFO  100x forward(16,64→128) took 5 ms
+  PASS  stress 100 forwards finite
+  PASS  stress 100 forwards ok
+  PASS  10 merge/unmerge cycles
+  PASS  5 adapters
+  PASS  multi adapter merge cycle
+
+============================================================
+PEFT  passed=102  failed=0
+============================================================
+ALL DIMENSIONS GREEN

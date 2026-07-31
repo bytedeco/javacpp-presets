@@ -1,0 +1,368 @@
+=== VerifyHfDatasetParse ===
+token=hf_s****aRli endpoint=https://hf-mirror.com take=6
+tmp=/var/folders/2s/b306kwk113n8y4pp5l6sf04c0000gn/T/hf_verify_7204443002756536923
+
+── 1. Local multi-format loaders (incl. orc/avro/ipc) ──
+• csv
+HfDataset{rows=3, cols=[text, label], info=csv:a.csv}
+  [0] {text="hello world", label=0}
+  [1] {text="foo bar", label=1}
+  [2] {text="a,b", label=2}
+  → ok
+• tsv
+HfDataset{rows=2, cols=[text, label], info=csv:a.tsv}
+  [0] {text="x", label=1}
+  [1] {text="y", label=0}
+  → ok
+• jsonl nested
+HfDataset{rows=2, cols=[text, label, tags], info=jsonl:a.jsonl}
+  [0] {text="hi", label=0, tags=[a, b]}
+  [1] {text="yo", label=1, meta={n=3}}
+  → ok
+• json array
+HfDataset{rows=2, cols=[text, label], info=json:a.json}
+  [0] {text="p", label=0}
+  [1] {text="q", label=1}
+  → ok
+• text
+HfDataset{rows=2, cols=[text, line], info=text:a.txt}
+  [0] {text="line1", line=0}
+  [1] {text="line2", line=1}
+  → ok
+• parquet write+read
+log4j:WARN No appenders could be found for logger (org.apache.parquet.column.values.rle.RunLengthBitPackingHybridEncoder).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+HfDataset{rows=2, cols=[text, label], info=parquet:a.parquet}
+  [0] {text="alpha", label=0}
+  [1] {text="beta", label=1}
+  → ok
+• orc write+read
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/Users/muller/Documents/code/rust/javacpp-presets/pytorch/target/dependency/protobuf-java-3.25.5.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+HfDataset{rows=2, cols=[text, label], info=orc:a.orc}
+  [0] {text="orc-a", label=0}
+  [1] {text="orc-b", label=1}
+  → ok
+• avro write+read
+HfDataset{rows=2, cols=[text, label], info=avro:a.avro}
+  [0] {text="orc-a", label=0}
+  [1] {text="orc-b", label=1}
+  → ok
+• arrow ipc write+read
+  → FAIL java.lang.IllegalStateException: Apache Arrow (used by DataFrame Arrow IPC / Feather / Lance bridge) requires reflective access to java.nio.Buffer.address.
+Start the JVM with either:
+  --add-opens=java.base/java.nio=ALL-UNNAMED --enable-native-access=ALL-UNNAMED
+or (single flag, agent bundled in this jar):
+  -javaagent:/path/to/pytorch.jar
+When using java -jar on a main jar that depends on pytorch, put Add-Opens: java.base/java.nio and Enable-Native-Access: ALL-UNNAMED in that main jar's META-INF/MANIFEST.MF (dependency manifests are ignored).
+Maven Surefire/Failsafe example:
+  <argLine>--add-opens=java.base/java.nio=ALL-UNNAMED --enable-native-access=ALL-UNNAMED</argLine>
+agentApplied=false java.version=26.0.1
+java.lang.IllegalStateException: Apache Arrow (used by DataFrame Arrow IPC / Feather / Lance bridge) requires reflective access to java.nio.Buffer.address.
+Start the JVM with either:
+  --add-opens=java.base/java.nio=ALL-UNNAMED --enable-native-access=ALL-UNNAMED
+or (single flag, agent bundled in this jar):
+  -javaagent:/path/to/pytorch.jar
+When using java -jar on a main jar that depends on pytorch, put Add-Opens: java.base/java.nio and Enable-Native-Access: ALL-UNNAMED in that main jar's META-INF/MANIFEST.MF (dependency manifests are ignored).
+Maven Surefire/Failsafe example:
+  <argLine>--add-opens=java.base/java.nio=ALL-UNNAMED --enable-native-access=ALL-UNNAMED</argLine>
+agentApplied=false java.version=26.0.1
+	at org.bytedeco.pytorch.JvmModuleSupport.ensureNioBufferAccess(JvmModuleSupport.java:142)
+	at org.bytedeco.pytorch.data.arrow.LocalArrowIpcWriter.write(LocalArrowIpcWriter.java:31)
+	at distribute.VerifyHfDatasetParse.lambda$main$8(VerifyHfDatasetParse.java:169)
+	at distribute.VerifyHfDatasetParse.check(VerifyHfDatasetParse.java:363)
+	at distribute.VerifyHfDatasetParse.main(VerifyHfDatasetParse.java:168)
+• HfDatasets.load format dispatch
+  → FAIL java.io.IOException: Failed to read arrow: /var/folders/2s/b306kwk113n8y4pp5l6sf04c0000gn/T/hf_verify_7204443002756536923/local/a.arrow
+java.io.IOException: Failed to read arrow: /var/folders/2s/b306kwk113n8y4pp5l6sf04c0000gn/T/hf_verify_7204443002756536923/local/a.arrow
+	at org.bytedeco.pytorch.utils.datasets.HfDataset.fromArrow(HfDataset.java:236)
+	at org.bytedeco.pytorch.utils.datasets.HfDatasets.load(HfDatasets.java:224)
+	at distribute.VerifyHfDatasetParse.lambda$main$9(VerifyHfDatasetParse.java:183)
+	at distribute.VerifyHfDatasetParse.check(VerifyHfDatasetParse.java:363)
+	at distribute.VerifyHfDatasetParse.main(VerifyHfDatasetParse.java:176)
+Caused by: java.lang.IllegalStateException: Apache Arrow (used by DataFrame Arrow IPC / Feather / Lance bridge) requires reflective access to java.nio.Buffer.address.
+Start the JVM with either:
+  --add-opens=java.base/java.nio=ALL-UNNAMED --enable-native-access=ALL-UNNAMED
+or (single flag, agent bundled in this jar):
+  -javaagent:/path/to/pytorch.jar
+When using java -jar on a main jar that depends on pytorch, put Add-Opens: java.base/java.nio and Enable-Native-Access: ALL-UNNAMED in that main jar's META-INF/MANIFEST.MF (dependency manifests are ignored).
+Maven Surefire/Failsafe example:
+  <argLine>--add-opens=java.base/java.nio=ALL-UNNAMED --enable-native-access=ALL-UNNAMED</argLine>
+agentApplied=false java.version=26.0.1
+	at org.bytedeco.pytorch.JvmModuleSupport.ensureNioBufferAccess(JvmModuleSupport.java:142)
+	at org.bytedeco.pytorch.data.arrow.LocalArrowIpcReader.read(LocalArrowIpcReader.java:31)
+	at org.bytedeco.pytorch.data.dataframe.DataFrame.readArrow(DataFrame.java:1021)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.bytedeco.pytorch.utils.datasets.HfDataset.fromArrow(HfDataset.java:227)
+	... 4 more
+── 2. Live Hub download + parse samples ──
+• LIVE glue/cola
+  [HfDatasets] load_dataset path=glue name=cola split=null endpoint=https://hf-mirror.com token=hf_s****aRli
+  [HfHub] TREE https://hf-mirror.com/api/datasets/glue/tree/main?recursive=1
+  [HfDatasets] layout configs=[ax, cola, mnli, mnli_matched, mnli_mismatched, mrpc, qnli, qqp, rte, sst2, stsb, wnli] splits=[test, train, validation, test_matched, test_mismatched, validation_matched, validation_mismatched] files=34
+  [HfDatasets] truncating file list 3 -> 2
+  [HfHub] GET(stream) https://hf-mirror.com/datasets/glue/resolve/main/cola/test-00000-of-00001.parquet
+  [HfHub] cola/test-00000-of-00001.parquet 0/0 MiB
+  [HfHub] cola/test-00000-of-00001.parquet 0/0 MiB
+  [HfHub] cola/test-00000-of-00001.parquet 0/0 MiB
+  [HfHub] GET(stream) https://hf-mirror.com/datasets/glue/resolve/main/cola/train-00000-of-00001.parquet
+  [HfHub] cola/train-00000-of-00001.parquet 0/0 MiB
+  [HfHub] cola/train-00000-of-00001.parquet 0/0 MiB
+  [HfHub] cola/train-00000-of-00001.parquet 0/0 MiB
+  [HfHub] cola/train-00000-of-00001.parquet 0/0 MiB
+  [HfHub] cola/train-00000-of-00001.parquet 0/0 MiB
+  [HfHub] cola/train-00000-of-00001.parquet 0/0 MiB
+  [HfHub] cola/train-00000-of-00001.parquet 0/0 MiB
+  [HfHub] cola/train-00000-of-00001.parquet 0/0 MiB
+  [HfHub] cola/train-00000-of-00001.parquet 0/0 MiB
+  [HfHub] cola/train-00000-of-00001.parquet 0/0 MiB
+  [HfHub] cola/train-00000-of-00001.parquet 0/0 MiB
+  [HfHub] cola/train-00000-of-00001.parquet 0/0 MiB
+  [HfHub] cola/train-00000-of-00001.parquet 0/0 MiB
+  [HfHub] cola/train-00000-of-00001.parquet 0/0 MiB
+  [HfHub] cola/train-00000-of-00001.parquet 0/0 MiB
+  [HfHub] cola/train-00000-of-00001.parquet 0/0 MiB
+  [HfDatasets] snapshot=/var/folders/2s/b306kwk113n8y4pp5l6sf04c0000gn/T/hf_verify_7204443002756536923/hub_cache/datasets--glue/snapshots/dl-1785168409248
+  [HfDatasets] read test-00000-of-00001.parquet
+  [HfDatasets] split test -> 6 rows from 1 file(s)
+  [HfDatasets] read train-00000-of-00001.parquet
+  [HfDatasets] split train -> 6 rows from 1 file(s)
+  [HfDatasets] missing file in snapshot: cola/validation-00000-of-00001.parquet
+  DatasetDict({test: 6 rows, train: 6 rows})
+HfDataset{rows=6, cols=[sentence, label, idx], info=parquet:train-00000-of-00001.parquet/take}
+  [0] {sentence="Our friends won't buy this analysis, let alone the next one we propose.", label=1, idx=0}
+  [1] {sentence="One more pseudo generalization and I'm giving up.", label=1, idx=1}
+  [2] {sentence="One more pseudo generalization or I'm giving up.", label=1, idx=2}
+  ... (3 more)
+  features={sentence=string, label=numeric, idx=numeric}
+  cols=[sentence, label, idx]
+  → ok
+• LIVE imdb train
+  [HfDatasets] load_dataset path=imdb name=plain_text split=train endpoint=https://hf-mirror.com token=hf_s****aRli
+  [HfHub] TREE https://hf-mirror.com/api/datasets/imdb/tree/main?recursive=1
+  [HfDatasets] layout configs=[plain_text] splits=[test, train, unsupervised] files=3
+  [HfHub] GET(stream) https://hf-mirror.com/datasets/imdb/resolve/main/plain_text/train-00000-of-00001.parquet
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfHub] plain_text/train-00000-of-00001.parquet 0/20 MiB
+  [HfDatasets] snapshot=/var/folders/2s/b306kwk113n8y4pp5l6sf04c0000gn/T/hf_verify_7204443002756536923/hub_cache/datasets--imdb/snapshots/dl-1785168417085
+  [HfDatasets] read train-00000-of-00001.parquet
+  [HfDatasets] split train -> 6 rows from 1 file(s)
+HfDataset{rows=6, cols=[text, label], info=parquet:train-00000-of-00001.parquet/take}
+  [0] {text="I rented I AM CURIOUS-YELLOW from my video store because of all the controver...", label=0}
+  [1] {text=""I Am Curious: Yellow" is a risible and pretentious steaming pile. It doesn't...", label=0}
+  ... (4 more)
+  text[0] len=1640 label=0
+  → ok
+• LIVE squad validation (nested answers)
+  [HfDatasets] load_dataset path=squad name=null split=validation endpoint=https://hf-mirror.com token=hf_s****aRli
+  [HfHub] TREE https://hf-mirror.com/api/datasets/squad/tree/main?recursive=1
+  [HfDatasets] layout configs=[plain_text] splits=[train, validation] files=2
+  [HfHub] GET(stream) https://hf-mirror.com/datasets/squad/resolve/main/plain_text/validation-00000-of-00001.parquet
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfHub] plain_text/validation-00000-of-00001.parquet 0/1 MiB
+  [HfDatasets] snapshot=/var/folders/2s/b306kwk113n8y4pp5l6sf04c0000gn/T/hf_verify_7204443002756536923/hub_cache/datasets--squad/snapshots/dl-1785168422261
+  [HfDatasets] read validation-00000-of-00001.parquet
+  [HfDatasets] split validation -> 4 rows from 1 file(s)
+HfDataset{rows=4, cols=[id, title, context, question, answers], info=parquet:validation-00000-of-00001.parquet/take}
+  [0] {id="56be4db0acb8001400a502ec", title="Super_Bowl_50", context="Super Bowl 50 was an American football game to determine the champion of the ...", question="Which NFL team represented the AFC at Super Bowl 50?", answers={text=[Denver Broncos, Denver Broncos, Denver Broncos], answer_start=[177, 177, 177]}}
+  [1] {id="56be4db0acb8001400a502ed", title="Super_Bowl_50", context="Super Bowl 50 was an American football game to determine the champion of the ...", question="Which NFL team represented the NFC at Super Bowl 50?", answers={text=[Carolina Panthers, Carolina Panthers, Carolina Panthers], answer_start=[249, 249, 249]}}
+  ... (2 more)
+  answers class=java.util.LinkedHashMap
+  answers value={text=[Denver Broncos, Denver Broncos, Denver Broncos], answer_start=[177, 177, 177]}
+  → ok
+• LIVE lhoestq/demo1 csv
+  [HfDatasets] load_dataset path=lhoestq/demo1 name=null split=null endpoint=https://hf-mirror.com token=hf_s****aRli
+  [HfHub] TREE https://hf-mirror.com/api/datasets/lhoestq/demo1/tree/main?recursive=1
+  [HfDatasets] layout configs=[default] splits=[test, train] files=2
+  [HfHub] GET(stream) https://hf-mirror.com/datasets/lhoestq/demo1/resolve/main/data/test.csv
+  [HfHub] data/test.csv 0/0 MiB
+  [HfHub] GET(stream) https://hf-mirror.com/datasets/lhoestq/demo1/resolve/main/data/train.csv
+  [HfHub] data/train.csv 0/0 MiB
+  [HfHub] data/train.csv 0/0 MiB
+  [HfDatasets] snapshot=/var/folders/2s/b306kwk113n8y4pp5l6sf04c0000gn/T/hf_verify_7204443002756536923/hub_cache/datasets--lhoestq--demo1/snapshots/dl-1785168425113
+  [HfDatasets] read test.csv
+  [HfDatasets] split test -> 5 rows from 1 file(s)
+  [HfDatasets] read train.csv
+  [HfDatasets] split train -> 5 rows from 1 file(s)
+  DatasetDict({test: 5 rows, train: 5 rows})
+HfDataset{rows=5, cols=[id, package_name, review, date, star, version_id], info=csv:train.csv}
+  [0] {id="7bd227d9-afc9-11e6-aba1-c4b301cdf627", package_name="com.mantz_it.rfanalyzer", review="Great app! The new version now works on my Bravia Android TV which is great a...", date="October 12 2016", star=4, version_id=1487}
+  [1] {id="7bd22905-afc9-11e6-a5dc-c4b301cdf627", package_name="com.mantz_it.rfanalyzer", review="Great It's not fully optimised and has some issues with crashing but still a ...", date="August 23 2016", star=4, version_id=1487}
+  [2] {id="7bd2299c-afc9-11e6-85d6-c4b301cdf627", package_name="com.mantz_it.rfanalyzer", review="Works on a Nexus 6p I'm still messing around with my hackrf but it works with...", date="August 04 2016", star=5, version_id=1487}
+  ... (2 more)
+  → ok
+── 3. HfDataset ↔ javacpp Dataset / DataLoader ──
+• asDataFrameDataset + pure-Java dataloader
+  dfd size=4 scalars=[f1, f2] labels=[label]
+  batch#1 features=Tensor[shape=[2, 2], dtype=Float, device=cpu, numel=4, values=
+  [[1.0000, 2.0000],
+   [3.0000, 4.0000]]] labels=Tensor[shape=[2], dtype=Long, device=cpu, numel=2, values=
+  [0, 1]]
+  batch#2 features=Tensor[shape=[2, 2], dtype=Float, device=cpu, numel=4, values=
+  [[5.0000, 6.0000],
+   [7.0000, 8.0000]]] labels=Tensor[shape=[2], dtype=Long, device=cpu, numel=2, values=
+  [0, 1]]
+  → ok
+• asDataset native Example get()
+  example0 data=Tensor[shape=[1], dtype=Float, device=cpu, numel=1, values=
+  [1.5000]] target=Tensor[shape=[1], dtype=Long, device=cpu, numel=1, values=
+  [0]]
+  → ok
+• encodeColumn for text labels → dataloader
+HfDataset{rows=3, cols=[label_text, score, label], info=fromList/encode(label_text)}
+  [0] {label_text="neg", score=0.1, label=0}
+  [1] {label_text="pos", score=0.9, label=1}
+  [2] {label_text="neg", score=0.2, label=0}
+  enc batch features=Tensor[shape=[2, 1], dtype=Float, device=cpu, numel=2, values=
+  [[0.1000],
+   [0.9000]]] labels=Tensor[shape=[2], dtype=Long, device=cpu, numel=2, values=
+  [0, 1]]
+  enc batch features=Tensor[shape=[1, 1], dtype=Float, device=cpu, numel=1, values=
+  [[0.2000]]] labels=Tensor[shape=[1], dtype=Long, device=cpu, numel=1, values=
+  [0]]
+  → ok
+• glue-like path: live or local → asDataset
+  size=2 features=[text] labels=[label]
+  native size=2
+  → ok
+
+=== RESULT passed=50 failed=2 ===
+FAIL arrow ipc write+read: java.lang.IllegalStateException: Apache Arrow (used by DataFrame Arrow IPC / Feather / Lance bridge) requires reflective access to java.nio.Buffer.address.
+Start the JVM with either:
+  --add-opens=java.base/java.nio=ALL-UNNAMED --enable-native-access=ALL-UNNAMED
+or (single flag, agent bundled in this jar):
+  -javaagent:/path/to/pytorch.jar
+When using java -jar on a main jar that depends on pytorch, put Add-Opens: java.base/java.nio and Enable-Native-Access: ALL-UNNAMED in that main jar's META-INF/MANIFEST.MF (dependency manifests are ignored).
+Maven Surefire/Failsafe example:
+  <argLine>--add-opens=java.base/java.nio=ALL-UNNAMED --enable-native-access=ALL-UNNAMED</argLine>
+agentApplied=false java.version=26.0.1
+FAIL HfDatasets.load format dispatch: java.io.IOException: Failed to read arrow: /var/folders/2s/b306kwk113n8y4pp5l6sf04c0000gn/T/hf_verify_7204443002756536923/local/a.arrow
+

@@ -6,7 +6,7 @@
  */
 package samples.recommend;
 
-import org.bytedeco.pytorch.utils.recommend.serving.gateway.TrafficRouter;
+import org.bytedeco.pytorch.deploy.serving.gateway.TrafficRouter;
 
 import java.util.HashMap;
 import java.util.List;

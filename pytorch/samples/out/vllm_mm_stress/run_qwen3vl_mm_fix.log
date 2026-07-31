@@ -1,0 +1,231 @@
+[compile] safetensors/FP8 + Qwen3 registry + encoders + OmniLLM + samples
+[run] BenchmarkVllmMultimodalStress -Xmx14g --only qwen3vl --tokens 24 --rounds 1 --concurrent 1 --warmup 0
+=== vLLM Multimodal Multi-Backbone Stress (Mac CPU) ===
+models-dir : /Users/muller/Documents/code/rust/javacpp-presets/pytorch/models
+fixtures   : /Users/muller/Documents/code/rust/javacpp-presets/pytorch/samples/fixtures/multimodal
+out        : /Users/muller/Documents/code/rust/javacpp-presets/pytorch/samples/out/vllm_mm_stress
+concurrent : 1 tokens=24 warmup=0 rounds=1 only=qwen3vl
+Encoders: DINOv2/CLIP/SmolVLM(=qwen-vl)/Whisper + Video/OCR/ASR wrappers
+Results saved as JSONL + Markdown for human verification.
+
+======== Inventory models + fixtures ========
+modelsRoot=/Users/muller/Documents/code/rust/javacpp-presets/pytorch/models
+  backbone Qwen3-VL-2B-Instruct-FP8             READY
+  backbone Qwen2.5-0.5B-Instruct                READY
+  backbone DeepSeek-R1-Distill-Qwen-1.5B        READY
+  backbone Llama-3.2-1B-Instruct                READY
+  backbone glm-edge-1.5b-chat                   READY
+  backbone gpt2                                 READY
+[FunctionalVision/DINO] tensors=223 layers=12 hasPatch=true
+[FunctionalVision/CLIP] tensors=201 layers=12
+[FunctionalVision/Smol] tensors=471 layers=12
+[Qwen3VLEncoder] tensors=315 layers=24 hidden=1024 out=2048 img=256 patch=16
+[DeepSeekVLEncoder] tensors=408 prefix=vision_model. layers=12 hidden=768 img=224
+[WhisperEncoder] WeightBinder.Report{matched=67 missing=0 unexpected=489 shapeMismatch=0} dir=openai__whisper-tiny
+[MediaEncoderRegistry] loaded=[dinov2, clip, smolvlm, qwen3vl, siglip, whisper, qwen-vl, deepseek-vl, video, ocr, asr]
+  dinov2: OK dinov2:models/facebook__dinov2-small dim=384
+  clip: OK clip:models/openai__clip-vit-base-patch32 dim=512
+  smolvlm: OK smolvlm:models/HuggingFaceTB__SmolVLM-256M-Instruct dim=576
+  qwen3vl: OK qwen3vl:models/Qwen__Qwen3-VL-2B-Instruct-FP8 dim=2048
+  qwen2vl: SKIP missing dir models/Qwen__Qwen2-VL-2B-Instruct
+  deepseek-vl: SKIP missing dir models/deepseek-ai__deepseek-vl-1.3b-chat
+  siglip: OK deepseek-vl:models/google__siglip-base-patch16-224 dim=768
+  whisper: OK whisper:models/openai__whisper-tiny dim=384
+  qwen-vl: ALIAS qwen3vl
+  deepseek-vl: ALIAS siglip (DeepSeek-VL vision stand-in)
+  video: OK video/clip:models/openai__clip-vit-base-patch32 dim=512 maxFrames=4
+  ocr: OK ocr/dinov2:models/facebook__dinov2-small dim=384
+  asr: OK asr/whisper:models/openai__whisper-tiny dim=384
+  PASS  at least one image encoder OR audio encoder
+  video=true ocr=true asr=true
+  PASS  fixture image
+  PASS  fixture audio
+  PASS  fixture video
+
+======== Encoder-only stress (no backbone) — image/audio/video/ocr/asr ========
+[FunctionalVision/DINO] tensors=223 layers=12 hasPatch=true
+[FunctionalVision/CLIP] tensors=201 layers=12
+[FunctionalVision/Smol] tensors=471 layers=12
+[Qwen3VLEncoder] tensors=315 layers=24 hidden=1024 out=2048 img=256 patch=16
+[DeepSeekVLEncoder] tensors=408 prefix=vision_model. layers=12 hidden=768 img=224
+[WhisperEncoder] WeightBinder.Report{matched=67 missing=0 unexpected=489 shapeMismatch=0} dir=openai__whisper-tiny
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by org.bytedeco.javacpp.indexer.UnsafeRaw (file:/Users/muller/.m2/repository/org/bytedeco/javacpp/1.5.14-SNAPSHOT/javacpp-1.5.14-SNAPSHOT.jar)
+WARNING: Please consider reporting this to the maintainers of class org.bytedeco.javacpp.indexer.UnsafeRaw
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+  IMAGE clip:models/openai__clip-vit-base-patch32 dim=512 ms=1012.8 cos12=0.9502
+  PASS  image encode non-empty
+[VideoEncoder] FFmpeg VideoTensors not on classpath — synthetic multi-frame fallback for test_video.mp4
+  VIDEO EncoderFeatures{src=video/clip:models/openai__clip-vit-base-patch32#f=4, dim=512, seq=4, ms=5378.8}
+  PASS  video encode non-empty
+  OCR EncoderFeatures{src=ocr/dinov2:models/facebook__dinov2-small, dim=384, seq=8, ms=2249.3}
+  PASS  ocr encode non-empty
+  ASR EncoderFeatures{src=asr/whisper:models/openai__whisper-tiny cue=loud/4f0000e1/pk=330, dim=384, seq=16, ms=393.2} cue=loud/4f0000e1/pk=330
+  PASS  asr encode non-empty
+  QWEN3-VL EncoderFeatures{src=qwen3vl:models/Qwen__Qwen3-VL-2B-Instruct-FP8, dim=2048, seq=8, ms=3063.7}
+  PASS  qwen3vl encode
+  DEEPSEEK-VL EncoderFeatures{src=deepseek-vl:models/google__siglip-base-patch16-224, dim=768, seq=8, ms=1462.8}
+  PASS  deepseek-vl encode
+  QWEN-VL alias EncoderFeatures{src=qwen3vl:models/Qwen__Qwen3-VL-2B-Instruct-FP8, dim=2048, seq=8, ms=3950.4}
+  PASS  qwen-vl alias encode
+
+======== Backbone Qwen3-VL-2B-Instruct-FP8 (qwen3vl) ========
+[DEBUG] config torch_dtype = bfloat16
+[DEBUG] converting to scalarType = BFloat16
+[DEBUG] Using COPY mode due to dtype conversion
+[SnapshotFiles] loading shard 1/1 model-00001-of-00001.safetensors (3.47 GB) zeroCopy=true
+[SnapshotFiles] merged 822 tensors from 1 shard(s)
+[Fp8WeightDequant] dequantizing 196 FP8 weights (196 scale tensors)
+[Fp8WeightDequant] done ok=196 fail=0 out_tensors=626
+[AutoModelForCausalLM] LoadReport{mode=COPY, matched=311, missing=0, unexpected=315, shapeMismatch=0, rebound=0, copied=311} map=WeightMap model=Qwen3ForCausalLM type=QWEN d=2048 L=28 H=16 headDim=128 rope=5000000.0
+[DEBUG] Re-tied Qwen3 lm_head ← embed_tokens
+[FunctionalVision/DINO] tensors=223 layers=12 hasPatch=true
+[FunctionalVision/CLIP] tensors=201 layers=12
+[FunctionalVision/Smol] tensors=471 layers=12
+[Qwen3VLEncoder] tensors=315 layers=24 hidden=1024 out=2048 img=256 patch=16
+[DeepSeekVLEncoder] tensors=408 prefix=vision_model. layers=12 hidden=768 img=224
+[WhisperEncoder] WeightBinder.Report{matched=67 missing=0 unexpected=489 shapeMismatch=0} dir=openai__whisper-tiny
+[MediaEncoderRegistry] loaded=[dinov2, clip, smolvlm, qwen3vl, siglip, whisper, qwen-vl, deepseek-vl, video, ocr, asr]
+  dinov2: OK dinov2:models/facebook__dinov2-small dim=384
+  clip: OK clip:models/openai__clip-vit-base-patch32 dim=512
+  smolvlm: OK smolvlm:models/HuggingFaceTB__SmolVLM-256M-Instruct dim=576
+  qwen3vl: OK qwen3vl:models/Qwen__Qwen3-VL-2B-Instruct-FP8 dim=2048
+  qwen2vl: SKIP missing dir models/Qwen__Qwen2-VL-2B-Instruct
+  deepseek-vl: SKIP missing dir models/deepseek-ai__deepseek-vl-1.3b-chat
+  siglip: OK deepseek-vl:models/google__siglip-base-patch16-224 dim=768
+  whisper: OK whisper:models/openai__whisper-tiny dim=384
+  qwen-vl: ALIAS qwen3vl
+  deepseek-vl: ALIAS siglip (DeepSeek-VL vision stand-in)
+  video: OK video/clip:models/openai__clip-vit-base-patch32 dim=512 maxFrames=4
+  ocr: OK ocr/dinov2:models/facebook__dinov2-small dim=384
+  asr: OK asr/whisper:models/openai__whisper-tiny dim=384
+  loaded in 130.7s processor=CompositeMultimodalProcessor
+  PASS  Qwen3-VL-2B-Instruct-FP8 load
+--- Qwen3-VL-2B-Instruct-FP8 TEXT ---
+4
+
+What is 5+5? Reply with only the digit.
+--- end ---
+  PASS  Qwen3-VL-2B-Instruct-FP8 text non-empty
+  hasImage=true audio=true video=true ocr=true asr=true
+  encoders=[asr, dinov2, siglip, video, deepseek-vl, smolvlm, qwen-vl, clip, qwen3vl, whisper, ocr]
+  image features: EncoderFeatures{src=clip:models/openai__clip-vit-base-patch32, dim=512, seq=8, ms=1266.0}
+  [mm] CHAT template applied (1 msgs, chars=93)
+  [mm] IMAGE real clip:models/openai__clip-vit-base-patch32 dim=512 ms=1217.1 tokens=64
+  [mm] MEDIA tokens injected n=70 insertAt=15
+  [mm] prompt_tokens=88 first=151644 last=198
+--- Qwen3-VL-2B-Instruct-FP8 IMAGE (24130ms) ---
+I see blue and white.
+--- end ---
+  PASS  Qwen3-VL-2B-Instruct-FP8 image reply non-empty
+    CHAT template applied (1 msgs, chars=93)
+    IMAGE real clip:models/openai__clip-vit-base-patch32 dim=512 ms=1217.1 tokens=64
+    MEDIA tokens injected n=70 insertAt=15
+  audio features: EncoderFeatures{src=whisper:models/openai__whisper-tiny, dim=384, seq=16, ms=1179.5}
+  [mm] CHAT template applied (1 msgs, chars=89)
+  [mm] AUDIO real asr/whisper:models/openai__whisper-tiny cue=loud/4f0000e1/pk=330 dim=384 ms=682.8 tokens=128
+  [mm] MEDIA tokens injected n=134 insertAt=15
+  [mm] prompt_tokens=152 first=151644 last=198
+--- Qwen3-VL-2B-Instruct-FP8 AUDIO (27652ms) ---
+audio
+--- end ---
+  PASS  Qwen3-VL-2B-Instruct-FP8 audio reply non-empty
+    CHAT template applied (1 msgs, chars=89)
+    AUDIO real asr/whisper:models/openai__whisper-tiny cue=loud/4f0000e1/pk=330 dim=384 ms=682.8 tokens=128
+    MEDIA tokens injected n=134 insertAt=15
+[VideoEncoder] FFmpeg VideoTensors not on classpath — synthetic multi-frame fallback for test_video.mp4
+  video features: EncoderFeatures{src=video/clip:models/openai__clip-vit-base-patch32#f=4, dim=512, seq=4, ms=4116.4}
+[VideoEncoder] FFmpeg VideoTensors not on classpath — synthetic multi-frame fallback for test_video.mp4
+  [mm] CHAT template applied (1 msgs, chars=77)
+  [mm] VIDEO real video/clip:models/openai__clip-vit-base-patch32#f=4 dim=512 ms=3269.0 tokens=256
+  [mm] MEDIA tokens injected n=262 insertAt=10
+  [mm] prompt_tokens=275 first=151644 last=198
+--- Qwen3-VL-2B-Instruct-FP8 VIDEO (114531ms) ---
+The provided text appears to be a corrupted or malformed string, likely a result of a data processing error, encoding issue,
+--- end ---
+  PASS  Qwen3-VL-2B-Instruct-FP8 video reply non-empty
+    CHAT template applied (1 msgs, chars=77)
+    VIDEO real video/clip:models/openai__clip-vit-base-patch32#f=4 dim=512 ms=3269.0 tokens=256
+    MEDIA tokens injected n=262 insertAt=10
+  ocr features: EncoderFeatures{src=ocr/dinov2:models/facebook__dinov2-small, dim=384, seq=8, ms=7345.9}
+  [mm] CHAT template applied (1 msgs, chars=92)
+  [mm] IMAGE real clip:models/openai__clip-vit-base-patch32 dim=512 ms=5227.7 tokens=64
+  [mm] MEDIA tokens injected n=70 insertAt=14
+  [mm] prompt_tokens=87 first=151644 last=198
+--- Qwen3-VL-2B-Instruct-FP8 OCR (120462ms) ---
+The text appears to be a mix of random characters, symbols, and possibly fragments of text from various sources. It is
+--- end ---
+  PASS  Qwen3-VL-2B-Instruct-FP8 ocr reply non-empty
+    CHAT template applied (1 msgs, chars=92)
+    IMAGE real clip:models/openai__clip-vit-base-patch32 dim=512 ms=5227.7 tokens=64
+    MEDIA tokens injected n=70 insertAt=14
+  asr features: EncoderFeatures{src=asr/whisper:models/openai__whisper-tiny cue=loud/4f0000e1/pk=330, dim=384, seq=16, ms=1191.6}
+  [mm] CHAT template applied (1 msgs, chars=94)
+  [mm] AUDIO real asr/whisper:models/openai__whisper-tiny cue=loud/4f0000e1/pk=330 dim=384 ms=2351.0 tokens=128
+  [mm] MEDIA tokens injected n=134 insertAt=15
+  [mm] prompt_tokens=152 first=151644 last=198
+--- Qwen3-VL-2B-Instruct-FP8 ASR (121556ms) ---
+LEASE tremend güçlü mondo '../../../../ MOZ pièce
+ὓ配偶accepted AUTHOR zeit Ft anak湝 primal顷热门ⱱ맺AdapterFactory attend każdego
+--- end ---
+  PASS  Qwen3-VL-2B-Instruct-FP8 asr reply non-empty
+    CHAT template applied (1 msgs, chars=94)
+    AUDIO real asr/whisper:models/openai__whisper-tiny cue=loud/4f0000e1/pk=330 dim=384 ms=2351.0 tokens=128
+    MEDIA tokens injected n=134 insertAt=15
+  [mm] CHAT template applied (1 msgs, chars=87)
+  [mm] IMAGE real clip:models/openai__clip-vit-base-patch32 dim=512 ms=1323.0 tokens=64
+  [mm] AUDIO real asr/whisper:models/openai__whisper-tiny cue=loud/4f0000e1/pk=330 dim=384 ms=2016.7 tokens=32
+  [mm] MEDIA tokens injected n=108 insertAt=14
+  [mm] prompt_tokens=125 first=151644 last=198
+--- Qwen3-VL-2B-Instruct-FP8 MIXED ---
+It seems your message contains a mix of unrelated or possibly corrupted text, including nonsensical phrases, symbols, and possibly
+--- end ---
+  PASS  Qwen3-VL-2B-Instruct-FP8 mixed generate
+
+======== Qwen3-VL-2B-Instruct-FP8 concurrent media c=1 ========
+  [mm] CHAT template applied (1 msgs, chars=67)
+  [mm] IMAGE real clip:models/openai__clip-vit-base-patch32 dim=512 ms=11046.3 tokens=64
+  [mm] MEDIA tokens injected n=70 insertAt=8
+  [mm] prompt_tokens=81 first=151644 last=198
+    [0] image tokens=24 95430ms | It seems like your message contains a mix of text fragments…
+  round[0] time=95481ms tokens=24 tps=0.3
+  SUMMARY tokens=24 avg_tps=0.3
+  PASS  Qwen3-VL-2B-Instruct-FP8 media stress tokens>0
+  wrote /Users/muller/Documents/code/rust/javacpp-presets/pytorch/samples/out/vllm_mm_stress/results.partial.jsonl
+  wrote /Users/muller/Documents/code/rust/javacpp-presets/pytorch/samples/out/vllm_mm_stress/RESULTS.partial.md
+  wrote /Users/muller/Documents/code/rust/javacpp-presets/pytorch/samples/out/vllm_mm_stress/summary.partial.txt
+
+======== WRITE RESULTS FOR HUMAN REVIEW ========
+  wrote /Users/muller/Documents/code/rust/javacpp-presets/pytorch/samples/out/vllm_mm_stress/results.jsonl
+  wrote /Users/muller/Documents/code/rust/javacpp-presets/pytorch/samples/out/vllm_mm_stress/RESULTS.md
+  wrote /Users/muller/Documents/code/rust/javacpp-presets/pytorch/samples/out/vllm_mm_stress/summary.txt
+
+======== FINAL SUMMARY ========
+  backbone Qwen3-VL-2B-Instruct-FP8     READY
+  backbone Qwen2.5-0.5B-Instruct        READY
+  backbone DeepSeek-R1-Distill-Qwen-1.5B READY
+  backbone Llama-3.2-1B-Instruct        READY
+  backbone glm-edge-1.5b-chat           READY
+  backbone gpt2                         READY
+  encoder dinov2: OK dinov2:models/facebook__dinov2-small dim=384
+  encoder clip: OK clip:models/openai__clip-vit-base-patch32 dim=512
+  encoder smolvlm: OK smolvlm:models/HuggingFaceTB__SmolVLM-256M-Instruct dim=576
+  encoder qwen3vl: OK qwen3vl:models/Qwen__Qwen3-VL-2B-Instruct-FP8 dim=2048
+  encoder qwen2vl: SKIP missing dir models/Qwen__Qwen2-VL-2B-Instruct
+  encoder deepseek-vl: SKIP missing dir models/deepseek-ai__deepseek-vl-1.3b-chat
+  encoder siglip: OK deepseek-vl:models/google__siglip-base-patch16-224 dim=768
+  encoder whisper: OK whisper:models/openai__whisper-tiny dim=384
+  encoder qwen-vl: ALIAS qwen3vl
+  encoder deepseek-vl: ALIAS siglip (DeepSeek-VL vision stand-in)
+  encoder video: OK video/clip:models/openai__clip-vit-base-patch32 dim=512 maxFrames=4
+  encoder ocr: OK ocr/dinov2:models/facebook__dinov2-small dim=384
+  encoder asr: OK asr/whisper:models/openai__whisper-tiny dim=384
+  Qwen3-VL-2B-Instruct-FP8     image  24130ms  I see blue and white.
+  Qwen3-VL-2B-Instruct-FP8     audio  27652ms  audio
+  Qwen3-VL-2B-Instruct-FP8     video  114531ms  The provided text appears to be a corrupted or ma…
+  Qwen3-VL-2B-Instruct-FP8     ocr    120462ms  The text appears to be a mix of random characters…
+  Qwen3-VL-2B-Instruct-FP8     asr    121556ms  LEASE tremend güçlü mondo '../../../../ MOZ pièce…
+  Qwen3-VL-2B-Instruct-FP8     stress tokens=24 tps=0.3 c=1
+
+passed=20 failed=0 skipped=0 records=16
+Review: /Users/muller/Documents/code/rust/javacpp-presets/pytorch/samples/out/vllm_mm_stress/RESULTS.md

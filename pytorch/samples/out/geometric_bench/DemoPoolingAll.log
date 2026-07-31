@@ -1,0 +1,36 @@
+=== Testing Advanced Pooling Layers ===
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.bytedeco.javacpp.Loader in an unnamed module (file:/Users/muller/.m2/repository/org/bytedeco/javacpp/1.5.14-SNAPSHOT/javacpp-1.5.14-SNAPSHOT.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+
+[EdgePooling]
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by org.bytedeco.javacpp.indexer.UnsafeRaw (file:/Users/muller/.m2/repository/org/bytedeco/javacpp/1.5.14-SNAPSHOT/javacpp-1.5.14-SNAPSHOT.jar)
+WARNING: Please consider reporting this to the maintainers of class org.bytedeco.javacpp.indexer.UnsafeRaw
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+[W729 15:33:22.830277000 TensorAdvancedIndexing.cpp:1524] Warning: index_reduce() is in beta and the API may change at any time. (function operator())
+EdgePooling Nodes: 5
+
+[Graclus + MaxPool]
+Clusters: Tensor[shape=[10], dtype=Long, device=cpu, numel=10, values=
+  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]]
+Pooled X Shape: [10, 4]
+
+[SAG Pooling]
+
+=== Starting EdgePooling Test ===
+Running forward pass...
+
+--- Test Results ---
+Original Node Count: 6
+Pooled Node Count: 3
+New Feature Shape: [3, 8]
+Cluster Mapping: Tensor[shape=[6], dtype=Long, device=cpu, numel=6, values=
+  [1, 2, 0, 0, 1, 2]]
+
+SUCCESS: Graph successfully coarsened.
+
+Testing backward pass...
+SUCCESS: Backward pass completed without SIGSEGV.

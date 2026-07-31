@@ -1,0 +1,216 @@
+=== Tokenizers multi-dimensional full-API stress ===
+
+=== D1 BytesToUnicode / JsonMaps / RegexSplit ===
+  PASS  encodeByte space
+  PASS  decodeChar roundtrip space-ish
+  PASS  byteEncode non-empty
+  PASS  byteDecode roundtrip
+  PASS  byteDecodeTokens
+  PASS  spaceChar
+  PASS  asMap
+  PASS  asList
+  PASS  asString
+  PASS  asString key
+  PASS  asInt
+  PASS  asInt key
+  PASS  asLong
+  PASS  asDouble
+  PASS  asBoolean
+  PASS  asBoolean key
+  PASS  requireType
+  PASS  asStringIntMap
+  PASS  asTokenString
+  PASS  RegexSplit REMOVED >=1
+  PASS  Behavior fromString
+  PASS  Span fields
+
+=== D2 AddedToken / AddedVocabulary ===
+  PASS  AddedToken id
+  PASS  AddedToken content
+  PASS  AddedToken special
+  PASS  AddedToken flags
+  PASS  equals/hash
+  PASS  toString
+  PASS  AddedToken full ctor
+  PASS  fromJson
+  PASS  empty vocab
+  PASS  tokens size=3
+  PASS  isSpecialId 100
+  PASS  isSpecialContent
+  PASS  getById
+  PASS  getByContent
+  PASS  byContent map
+  PASS  byId map
+  PASS  split non-null
+  PASS  splitForEncode
+  PASS  fromJsonList
+  PASS  Segment ordinary
+  PASS  Segment toPreToken
+
+=== D3 Normalizers ===
+  PASS  NOP
+  PASS  Lowercase
+  PASS  StripAccents
+  PASS  Nmt
+  PASS  StripNormalizer
+  PASS  ReplaceNormalizer
+  PASS  UnicodeNormalizer
+  PASS  BertNormalizer
+  PASS  SequenceNormalizer
+  PASS  fromJson Lowercase
+
+=== D4 PreTokenizers ===
+  PASS  Whitespace >=1
+  PASS  WhitespaceSplit >=2
+  PASS  BertPreTokenizer
+  PASS  ByteLevel
+  PASS  Punctuation
+  PASS  Digits
+  PASS  Metaspace
+  PASS  SplitPreTokenizer
+  PASS  CharDelimiter
+  PASS  SequencePreTokenizer
+  PASS  PreToken value
+  PASS  PreToken.of
+
+=== D5 Models ===
+  PASS  WordLevel tokenize
+  PASS  WordLevel id
+  PASS  WordLevel vocabSize
+  PASS  WordPiece tokenize
+  PASS  WordPiece unk id
+  PASS  WordPiece wordPiece pieces
+  PASS  BPE tokenize
+  PASS  Unigram tokenize
+
+=== D6 PostProcessors / Decoders ===
+  PASS  BertProcessing ctor
+  PASS  RobertaProcessing ctor
+  PASS  ByteLevelPostProcessor
+  PASS  TemplateProcessing chatGlm4
+  PASS  Template pieces
+  PASS  PostProcessor.NOP
+  PASS  Decoder.FUSE
+  PASS  ByteLevelDecoder
+  PASS  WordPieceDecoder
+  PASS  BPEDecoder
+  PASS  MetaspaceDecoder
+  PASS  ByteFallback
+  PASS  StripDecoder
+  PASS  ReplaceDecoder
+
+=== D7 Encoding builder / pad / truncate ===
+  PASS  ids length=4
+  PASS  size/length
+  PASS  typeIds
+  PASS  attentionMask
+  PASS  specialTokensMask
+  PASS  tokens
+  PASS  offsets
+  PASS  toMap
+  PASS  toString
+  PASS  padTo length=6
+  PASS  padTo left
+  PASS  truncate 2
+  PASS  truncate left
+  PASS  overflowingOf
+
+=== D8 FastTokenizer builders ===
+  PASS  whitespace backend
+  PASS  whitespace vocab>=4
+  PASS  whitespace specials
+  PASS  cls/sep
+  PASS  pipeline non-null
+  PASS  padId/unkId
+  PASS  wordPiece backend
+  PASS  wordPiece mask
+  PASS  gpt2 backend
+  PASS  gpt2 modelMaxLength
+  PASS  bpeFromCorpus vocab>0
+  PASS  bpe backend
+  PASS  of(pipeline)
+  PASS  builder build
+
+=== D9 FastTokenizer encode/decode/batch ===
+  PASS  encode ids > 0
+  PASS  encode addSpecial >= encode
+  PASS  encodePair
+  PASS  encodeBatch size=3
+  PASS  decode non-null
+  PASS  decode skipSpecial
+  PASS  convertIdsToTokens
+  PASS  convertTokensToIds
+  PASS  tokenToId UNK
+  PASS  idToToken
+  PASS  getVocab
+  PASS  bos/eos ids callable
+  PASS  cls/sep ids
+  PASS  wp decode contains hello/world
+
+=== D10 Tiktoken full surface ===
+  PASS  listEncodingNames non-empty
+  PASS  has cl100k
+  PASS  getEncoding cl100k
+  PASS  forEncoding alias
+  PASS  name
+  PASS  nVocab > 0
+  PASS  maxTokenValue >= 0
+  PASS  eotToken >= 0
+  PASS  specialTokensSet
+  PASS  specialTokens map
+  PASS  isSpecialToken eot
+  PASS  pattern
+  PASS  ranks non-empty
+  PASS  bpeModel
+  PASS  model()
+  PASS  toString
+  PASS  encodeOrdinary Hello world
+  PASS  cl100k Hello world ref
+  PASS  decode roundtrip
+  PASS  decodeBytes
+  PASS  decodeBytes skip
+  PASS  encodeOrdinaryBatch
+  PASS  encodeBatchIds
+  PASS  encodeBatch Encoding
+  PASS  decodeBatch
+  PASS  decodeBytesBatch
+  PASS  encodeToEncoding
+  PASS  encode bool
+  PASS  encodePair
+  PASS  encodeBatchPairs
+  PASS  encode allow all special
+  PASS  default encode raises on special
+  PASS  encode with allowed set
+  PASS  encodeSingleToken
+  PASS  decodeSingleTokenBytes
+  PASS  tokenByteValues non-empty
+  PASS  encodingNameForModel gpt-4
+  PASS  encodingNameForModel gpt-4o
+  PASS  encodingForModel
+  PASS  forModel alias
+  PASS  o200k_base encode Hello
+  PASS  o200k_base decode
+  PASS  p50k_base encode Hello
+  PASS  p50k_base decode
+  PASS  r50k_base encode Hello
+  PASS  r50k_base decode
+  PASS  gpt2 encode Hello
+  PASS  gpt2 decode
+  PASS  toFastTokenizer
+  PASS  specialTokenId eot content
+  PASS  idToToken
+  PASS  tokenToId roundish
+
+=== D11 Round-trip stress + throughput ===
+  PASS  roundtrip majority
+  INFO  roundtrips 9/9
+  INFO  cl100k encode x200 tokens=12200 took 6 ms
+  PASS  throughput ran
+  PASS  fast batch 100
+  INFO  whitespace batch100 took 1 ms
+  PASS  bpe encode after learn
+
+============================================================
+Tokenizers  passed=185  failed=0
+============================================================
+ALL DIMENSIONS GREEN

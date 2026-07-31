@@ -5,12 +5,6 @@
  *   java -cp ... samples.recommend.SmokeCriteoRanking
  */
 package samples.recommend;
-import org.bytedeco.pytorch.data.*;
-import org.bytedeco.pytorch.data.datasets.*;
-import org.bytedeco.pytorch.data.dataloader.*;
-import org.bytedeco.pytorch.nn.modules.*;
-import org.bytedeco.pytorch.optim.*;
-import org.bytedeco.pytorch.optim.options.*;
 
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.data.Example;
@@ -19,23 +13,21 @@ import org.bytedeco.pytorch.data.ExampleVectorIterator;
 import org.bytedeco.pytorch.data.dataloader.RandomDataLoader;
 import org.bytedeco.pytorch.optim.Adam;
 import org.bytedeco.pytorch.optim.options.AdamOptions;
-import org.bytedeco.pytorch.utils.recommend.DeviceSupport;
-import org.bytedeco.pytorch.utils.recommend.Recommend;
-import org.bytedeco.pytorch.utils.recommend.TensorHelpers;
-import org.bytedeco.pytorch.utils.recommend.basic.features.Feature;
-import org.bytedeco.pytorch.utils.recommend.basic.features.Features;
-import org.bytedeco.pytorch.utils.recommend.basic.features.SparseFeature;
-import org.bytedeco.pytorch.utils.recommend.basic.losses.Losses;
-import org.bytedeco.pytorch.utils.recommend.data.Batch;
-import org.bytedeco.pytorch.utils.recommend.data.BatchCollator;
-import org.bytedeco.pytorch.utils.recommend.data.CriteoDataset;
-import org.bytedeco.pytorch.utils.recommend.data.DataGenerator;
-import org.bytedeco.pytorch.utils.recommend.data.DataLoader;
-import org.bytedeco.pytorch.utils.recommend.data.RecommendDataset;
-import org.bytedeco.pytorch.utils.recommend.data.SequenceDataset;
-import org.bytedeco.pytorch.utils.recommend.data.TensorDataset;
-import org.bytedeco.pytorch.utils.recommend.models.ranking.DCNv2;
-import org.bytedeco.pytorch.utils.recommend.models.ranking.DeepFM;
+import org.bytedeco.pytorch.recommend.DeviceSupport;
+import org.bytedeco.pytorch.recommend.Recommend;
+import org.bytedeco.pytorch.recommend.TensorHelpers;
+import org.bytedeco.pytorch.recommend.basic.features.Feature;
+import org.bytedeco.pytorch.recommend.basic.features.Features;
+import org.bytedeco.pytorch.recommend.basic.losses.Losses;
+import org.bytedeco.pytorch.recommend.data.Batch;
+import org.bytedeco.pytorch.recommend.data.BatchCollator;
+import org.bytedeco.pytorch.recommend.data.CriteoDataset;
+import org.bytedeco.pytorch.recommend.data.DataGenerator;
+import org.bytedeco.pytorch.recommend.data.DataLoader;
+import org.bytedeco.pytorch.recommend.data.SequenceDataset;
+import org.bytedeco.pytorch.recommend.data.TensorDataset;
+import org.bytedeco.pytorch.recommend.models.ranking.DCNv2;
+import org.bytedeco.pytorch.recommend.models.ranking.DeepFM;
 import org.bytedeco.pytorch.dataframe.dataset.NativeBatchSupport;
 
 import java.util.ArrayList;

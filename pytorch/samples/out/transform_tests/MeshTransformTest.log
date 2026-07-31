@@ -1,0 +1,3 @@
+=== 启动网格与采样变换测试 ===
+✅ GenerateMeshNormals 生成成功
+✅ SamplePoints 采样成功, 得到 100 个点

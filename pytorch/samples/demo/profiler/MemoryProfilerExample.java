@@ -1,5 +1,4 @@
 package samples.demo.profiler;
-import org.bytedeco.pytorch.profiler.*;
 
 import org.bytedeco.pytorch.profiler.ActivityTypeSet;
 import org.bytedeco.pytorch.profiler.ExperimentalConfig;
@@ -73,7 +72,7 @@ public class MemoryProfilerExample {
         } finally {
             System.out.println("disableProfiler + save...");
             ProfilerResult result = disableProfiler();
-            String exportPath = "memory_profile.json";
+            String exportPath = "samples/memory_profile.json";
             if (result != null && !result.isNull()) {
                 result.save(exportPath);
             } else {

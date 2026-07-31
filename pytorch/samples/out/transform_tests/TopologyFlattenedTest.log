@@ -1,0 +1,7 @@
+=== 启动拓扑变换测试 (严格遵循 Flatten-View 模式) ===
+✅ FaceToEdge Pass: 边数=6
+✅ Delaunay Pass: 生成边数=12
+✅ GridSampling Pass: 剩余节点数=2
+✅ ToSLIC Pass: 节点数=4
+
+🎉 所有严格 Flatten 模式测试全部通过！

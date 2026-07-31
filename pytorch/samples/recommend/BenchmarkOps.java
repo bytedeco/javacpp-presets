@@ -6,15 +6,15 @@
  */
 package samples.recommend;
 
-import org.bytedeco.pytorch.utils.recommend.ops.CircuitBreaker;
-import org.bytedeco.pytorch.utils.recommend.ops.DegradationPolicy;
-import org.bytedeco.pytorch.utils.recommend.ops.FallbackStrategy;
-import org.bytedeco.pytorch.utils.recommend.ops.HealthChecker;
-import org.bytedeco.pytorch.utils.recommend.ops.MetricsRegistry;
-import org.bytedeco.pytorch.utils.recommend.ops.RateLimiter;
-import org.bytedeco.pytorch.utils.recommend.ops.ServiceLevel;
-import org.bytedeco.pytorch.utils.recommend.serving.pipeline.Candidate;
-import org.bytedeco.pytorch.utils.recommend.serving.pipeline.RequestContext;
+import org.bytedeco.pytorch.recommend.ops.CircuitBreaker;
+import org.bytedeco.pytorch.recommend.ops.DegradationPolicy;
+import org.bytedeco.pytorch.recommend.ops.FallbackStrategy;
+import org.bytedeco.pytorch.recommend.ops.HealthChecker;
+import org.bytedeco.pytorch.recommend.ops.MetricsRegistry;
+import org.bytedeco.pytorch.recommend.ops.RateLimiter;
+import org.bytedeco.pytorch.recommend.ops.ServiceLevel;
+import org.bytedeco.pytorch.deploy.serving.pipeline.Candidate;
+import org.bytedeco.pytorch.deploy.serving.pipeline.RequestContext;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -9,24 +9,22 @@
  */
 package samples.recommend;
 
-import org.bytedeco.pytorch.utils.recommend.abtest.BucketAssigner;
-import org.bytedeco.pytorch.utils.recommend.abtest.DiversionUnit;
-import org.bytedeco.pytorch.utils.recommend.abtest.Experiment;
-import org.bytedeco.pytorch.utils.recommend.abtest.ExperimentAnalyzer;
-import org.bytedeco.pytorch.utils.recommend.abtest.ExperimentStatus;
-import org.bytedeco.pytorch.utils.recommend.abtest.Guardrail;
-import org.bytedeco.pytorch.utils.recommend.abtest.LayeredExperimentManager;
-import org.bytedeco.pytorch.utils.recommend.abtest.OnlineMetricsCollector;
-import org.bytedeco.pytorch.utils.recommend.abtest.StatisticalTest;
-import org.bytedeco.pytorch.utils.recommend.abtest.TrafficSplitter;
-import org.bytedeco.pytorch.utils.recommend.abtest.Variant;
+import org.bytedeco.pytorch.deploy.abtest.BucketAssigner;
+import org.bytedeco.pytorch.deploy.abtest.DiversionUnit;
+import org.bytedeco.pytorch.deploy.abtest.Experiment;
+import org.bytedeco.pytorch.deploy.abtest.ExperimentAnalyzer;
+import org.bytedeco.pytorch.deploy.abtest.ExperimentStatus;
+import org.bytedeco.pytorch.deploy.abtest.Guardrail;
+import org.bytedeco.pytorch.deploy.abtest.LayeredExperimentManager;
+import org.bytedeco.pytorch.deploy.abtest.OnlineMetricsCollector;
+import org.bytedeco.pytorch.deploy.abtest.StatisticalTest;
+import org.bytedeco.pytorch.deploy.abtest.TrafficSplitter;
+import org.bytedeco.pytorch.deploy.abtest.Variant;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 public final class BenchmarkAbtest {
 

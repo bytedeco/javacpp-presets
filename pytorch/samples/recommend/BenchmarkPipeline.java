@@ -6,15 +6,15 @@
  */
 package samples.recommend;
 
-import org.bytedeco.pytorch.utils.recommend.serving.pipeline.Candidate;
-import org.bytedeco.pytorch.utils.recommend.serving.pipeline.CoarseRankStage;
-import org.bytedeco.pytorch.utils.recommend.serving.pipeline.FineRankStage;
-import org.bytedeco.pytorch.utils.recommend.serving.pipeline.MixRankStage;
-import org.bytedeco.pytorch.utils.recommend.serving.pipeline.PipelineOrchestrator;
-import org.bytedeco.pytorch.utils.recommend.serving.pipeline.RankStage;
-import org.bytedeco.pytorch.utils.recommend.serving.pipeline.RecallStage;
-import org.bytedeco.pytorch.utils.recommend.serving.pipeline.RequestContext;
-import org.bytedeco.pytorch.utils.recommend.serving.pipeline.RerankStage;
+import org.bytedeco.pytorch.deploy.serving.pipeline.Candidate;
+import org.bytedeco.pytorch.deploy.serving.pipeline.CoarseRankStage;
+import org.bytedeco.pytorch.deploy.serving.pipeline.FineRankStage;
+import org.bytedeco.pytorch.deploy.serving.pipeline.MixRankStage;
+import org.bytedeco.pytorch.deploy.serving.pipeline.PipelineOrchestrator;
+import org.bytedeco.pytorch.deploy.serving.pipeline.RankStage;
+import org.bytedeco.pytorch.deploy.serving.pipeline.RecallStage;
+import org.bytedeco.pytorch.deploy.serving.pipeline.RequestContext;
+import org.bytedeco.pytorch.deploy.serving.pipeline.RerankStage;
 
 import java.util.ArrayList;
 import java.util.HashSet;

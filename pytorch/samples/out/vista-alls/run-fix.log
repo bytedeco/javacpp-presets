@@ -1,0 +1,185 @@
+========== multi_task (12) ==========
+
+── multi_task/SharedBottom ──
+Warning: Loader.putMemberOffset(): java.lang.ClassNotFoundException: org.bytedeco.pytorch.BackendMetaPtr
+Warning: Loader.putMemberOffset(): java.lang.ClassNotFoundException: org.bytedeco.pytorch.ExampleBatchMapper
+Warning: Loader.putMemberOffset(): java.lang.ClassNotFoundException: org.bytedeco.pytorch.ExampleMapper
+Warning: Loader.putMemberOffset(): java.lang.ClassNotFoundException: org.bytedeco.pytorch.OperationCreator
+Warning: Loader.putMemberOffset(): java.lang.ClassNotFoundException: org.bytedeco.pytorch.TensorValueMapper
+SharedBottom(
+  (embedding): EmbeddingLayer(
+    (embed_user_id): torch::nn::EmbeddingImpl(num_embeddings=500, embedding_dim=8)
+    (embed_item_id): torch::nn::EmbeddingImpl(num_embeddings=1000, embedding_dim=8)
+    (embed_cate_id): torch::nn::EmbeddingImpl(num_embeddings=50, embedding_dim=8)
+  )
+  (bottom_mlp): MLP(
+    (sequential): torch::nn::SequentialImpl(
+      (0): torch::nn::LinearImpl(in_features=24, out_features=32, bias=true)
+      (1): torch::nn::ReLUImpl
+    )
+  )
+  (tower_0): MLP(
+    (sequential): torch::nn::SequentialImpl(
+[vista] wrote interactive graph → /Users/muller/Documents/code/rust/javacpp-presets/pytorch/samples/out/vista-all/multi_task/SharedBottom.html
+TraceGraph{nodes=15, edges=15} → SharedBottom.html
+  [Input] user_id e=1
+  [Input] item_id e=1
+  [Input] cate_id e=1
+  [Module] embedding e=1
+  [Module] bottom_mlp.sequential.0 e=1
+  [Module] bottom_mlp.sequential.1 e=2
+  … +9 more
+
+── multi_task/AITM ──
+AITM(
+  (embedding): EmbeddingLayer(
+    (embed_user_id): torch::nn::EmbeddingImpl(num_embeddings=500, embedding_dim=8)
+    (embed_item_id): torch::nn::EmbeddingImpl(num_embeddings=1000, embedding_dim=8)
+    (embed_cate_id): torch::nn::EmbeddingImpl(num_embeddings=50, embedding_dim=8)
+  )
+  (bottom_0): MLP(
+    (sequential): torch::nn::SequentialImpl(
+      (0): torch::nn::LinearImpl(in_features=24, out_features=32, bias=true)
+      (1): torch::nn::ReLUImpl
+    )
+  )
+  (bottom_1): MLP(
+    (sequential): torch::nn::SequentialImpl(
+[vista] wrote interactive graph → /Users/muller/Documents/code/rust/javacpp-presets/pytorch/samples/out/vista-all/multi_task/AITM.html
+TraceGraph{nodes=19, edges=24, error=RuntimeException: mat1 and mat2 shapes cannot be multiplied (2x32 and 24x32)
+Exception raised from meta at /Users/muller/Documents/code/rust/javacpp-presets/pytorch/cppbuild/macosx-arm64/pytorch/aten/src/ATen/native/LinearAlgebra.cpp:194 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>) + 52 (0x123a8caf8 in libc10.dylib)
+frame #1: c10::detail::torchCheckFail(char const*, char const*, unsigned int, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) + 120 (0x123a89f2c in libc10.dylib)
+frame #2: at::meta::structured_addmm::meta(at::Tensor const&, at::Tensor const&, at::Tensor const&, c10::Scalar const&, c10::Scalar const&) + 1092 (0x1732fa484 in libtorch_cpu.dylib)
+frame #3: c10::impl::wrap_kernel_functor_unboxed_<c10::impl::detail::WrapFunctionIntoFunctor_<c10::CompileTimeFunctionPointer<at::Tensor (at::Tensor const&, at::Tensor const&, at::Tensor const&, c10::Scalar const&, c10::Scalar const&), &at::(anonymous namespace)::wrapper_CPU_addmm(at::Tensor const&, at::Tensor const&, at::Tensor const&, c10::Scalar const&, c10::Scalar const&)>, at::Tensor, c10::guts::typelist::typelist<at::Tensor const&, at::Tensor const&, at::Tensor const&, c10::Scalar const&, c10::Scalar const&>>, at::Tensor (at::Tensor const&, at::Tensor const&, at::Tensor const&, c10::Scalar const&, c10::Scalar const&)>::call(c10::OperatorKernel*, c10::DispatchKeySet, at::Tensor const&, at::Tensor const&, at::Tensor const&, c10::Scalar const&, c10::Scalar const&) + 104 (0x1741bacf4 in libtorch_cpu.dylib)
+frame #4: c10::impl::wrap_kernel_functor_unboxed_<c10::impl::detail::WrapFunctionIntoFunctor_<c10::CompileTimeFunctionPointer<at::Tensor (c10::DispatchKeySet, at::Tensor const&, at::Tensor const&, at::Tensor const&, c10::Scalar const&, c10::Scalar const&), &torch::autograd::VariableType::(anonymous namespace)::addmm(c10::DispatchKeySet, at::Tensor const&, at::Tensor const&, at::Tensor const&, c10::Scalar const&, c10::Scalar const&)>, at::Tensor, c10::guts::typelist::typelist<c10::DispatchKeySet, at::Tensor const&, at::Tensor const&, at::Tensor const&, c10::Scalar const&, c10::Scalar const&>>, at::Tensor (c10::DispatchKeySet, at::Tensor const&, at::Tensor const&, at::Tensor const&, c10::Scalar const&, c10::Scalar const&)>::call(c10::OperatorKernel*, c10::DispatchKeySet, at::Tensor const&, at::Tensor const&, at::Tensor const&, c10::Scalar const&, c10::Scalar const&) + 2692 (0x175e12a1c in libtorch_cpu.dylib)
+frame #5: at::_ops::addmm::call(at::Tensor const&, at::Tensor const&, at::Tensor const&, c10::Scalar const&, c10::Scalar const&) + 356 (0x17391ca80 in libtorch_cpu.dylib)
+frame #6: torch::nn::functional::linear(at::Tensor const&, at::Tensor const&, at::Tensor const&) + 308 (0x177665668 in libtorch_cpu.dylib)
+frame #7: Java_org_bytedeco_pytorch_nn_modules_LinearImpl_forward + 188 (0x16212af48 in libjnitorch.dylib)
+frame #8: 0x0 + 4697033076 (0x117f70974 in ???)
+frame #9: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #10: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #11: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #12: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #13: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #14: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #15: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #16: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #17: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #18: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #19: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #20: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #21: 0x0 + 4697017744 (0x117f6cd90 in ???)
+frame #22: 0x0 + 4696998996 (0x117f68454 in ???)
+frame #23: JavaCalls::call_helper(JavaValue*, methodHandle const&, JavaCallArguments*, JavaThread*) + 984 (0x1071b9294 in libjvm.dylib)
+frame #24: jni_invoke_static(JNIEnv_*, JavaValue*, _jobject*, JNICallType, _jmethodID*, JNI_ArgumentPusher*, JavaThread*) + 380 (0x10723fbf0 in libjvm.dylib)
+frame #25: jni_CallStaticVoidMethod + 260 (0x1072436cc in libjvm.dylib)
+frame #26: JavaMain + 2328 (0x100ebf7cc in libjli.dylib)
+frame #27: ThreadJavaMain + 12 (0x100ec21dc in libjli.dylib)
+frame #28: _pthread_start + 136 (0x1972e3c08 in libsystem_pthread.dylib)
+frame #29: thread_start + 8 (0x1972deba8 in libsystem_pthread.dylib)
+} → AITM.html
+  [Input] user_id e=1
+  [Input] item_id e=1
+  [Input] cate_id e=1
+  [Module] embedding e=1
+  [Module] bottom_0.sequential.0 e=1
+  [Module] bottom_0.sequential.1 e=7
+  … +13 more
+  (partial) RuntimeException: mat1 and mat2 shapes cannot be multiplied (2x32 and 24x32)
+
+── multi_task/MetaHeac ──
+MetaHeac(
+  (embedding): EmbeddingLayer(
+    (embed_user_id): torch::nn::EmbeddingImpl(num_embeddings=500, embedding_dim=8)
+    (embed_item_id): torch::nn::EmbeddingImpl(num_embeddings=1000, embedding_dim=8)
+    (embed_cate_id): torch::nn::EmbeddingImpl(num_embeddings=50, embedding_dim=8)
+  )
+  (taskEmbedding_0): MetaEmbedding(
+    (embedding): torch::nn::EmbeddingImpl(num_embeddings=2, embedding_dim=8)
+  )
+  (taskEmbedding_1): MetaEmbedding(
+    (embedding): torch::nn::EmbeddingImpl(num_embeddings=2, embedding_dim=8)
+  )
+  (expert_0): MLP(
+    (sequential): torch::nn::SequentialImpl(
+[vista] wrote interactive graph → /Users/muller/Documents/code/rust/javacpp-presets/pytorch/samples/out/vista-all/multi_task/MetaHeac.html
+TraceGraph{nodes=14, edges=18, error=RuntimeException: index out of range in self
+Exception raised from operator() at /Users/muller/Documents/code/rust/javacpp-presets/pytorch/cppbuild/macosx-arm64/pytorch/aten/src/ATen/native/TensorAdvancedIndexing.cpp:1769 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>) + 52 (0x123a8c8e8 in libc10.dylib)
+frame #1: c10::IndexError::IndexError(c10::SourceLocation, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>) + 72 (0x123a8cdfc in libc10.dylib)
+frame #2: at::native::index_select_out_cpu_(at::Tensor const&, long long, at::Tensor const&, at::Tensor&)::$_2::operator()(long long, long long) const + 424 (0x1734faa10 in libtorch_cpu.dylib)
+frame #3: void at::parallel_for<at::native::index_select_out_cpu_(at::Tensor const&, long long, at::Tensor const&, at::Tensor&)::$_2>(long long, long long, long long, at::native::index_select_out_cpu_(at::Tensor const&, long long, at::Tensor const&, at::Tensor&)::$_2 const&) + 268 (0x1734d52d8 in libtorch_cpu.dylib)
+frame #4: at::native::index_select_out_cpu_(at::Tensor const&, long long, at::Tensor const&, at::Tensor&) + 3504 (0x1734d3314 in libtorch_cpu.dylib)
+frame #5: at::native::index_select_cpu_(at::Tensor const&, long long, at::Tensor const&) + 108 (0x1734da34c in libtorch_cpu.dylib)
+frame #6: at::_ops::index_select::call(at::Tensor const&, long long, at::Tensor const&) + 324 (0x17393c1b8 in libtorch_cpu.dylib)
+frame #7: at::native::embedding_symint(at::Tensor const&, at::Tensor const&, c10::SymInt, bool, bool) + 164 (0x173280950 in libtorch_cpu.dylib)
+frame #8: c10::impl::wrap_kernel_functor_unboxed_<c10::impl::detail::WrapFunctionIntoFunctor_<c10::CompileTimeFunctionPointer<at::Tensor (at::Tensor const&, at::Tensor const&, c10::SymInt, bool, bool), &at::(anonymous namespace)::(anonymous namespace)::wrapper_CompositeExplicitAutograd__embedding(at::Tensor const&, at::Tensor const&, c10::SymInt, bool, bool)>, at::Tensor, c10::guts::typelist::typelist<at::Tensor const&, at::Tensor const&, c10::SymInt, bool, bool>>, at::Tensor (at::Tensor const&, at::Tensor const&, c10::SymInt, bool, bool)>::call(c10::OperatorKernel*, c10::DispatchKeySet, at::Tensor const&, at::Tensor const&, c10::SymInt, bool, bool) + 88 (0x1743e0a08 in libtorch_cpu.dylib)
+frame #9: at::Tensor c10::Dispatcher::redispatch<at::Tensor, at::Tensor const&, at::Tensor const&, c10::SymInt, bool, bool>(c10::TypedOperatorHandle<at::Tensor (at::Tensor const&, at::Tensor const&, c10::SymInt, bool, bool)> const&, c10::DispatchKeySet, at::Tensor const&, at::Tensor const&, c10::SymInt, bool, bool) const + 132 (0x17400e9bc in libtorch_cpu.dylib)
+frame #10: at::_ops::embedding::redispatch(c10::DispatchKeySet, at::Tensor const&, at::Tensor const&, c10::SymInt, bool, bool) + 164 (0x173f5721c in libtorch_cpu.dylib)
+frame #11: c10::impl::wrap_kernel_functor_unboxed_<c10::impl::detail::WrapFunctionIntoFunctor_<c10::CompileTimeFunctionPointer<at::Tensor (c10::DispatchKeySet, at::Tensor const&, at::Tensor const&, c10::SymInt, bool, bool), &torch::autograd::VariableType::(anonymous namespace)::embedding(c10::DispatchKeySet, at::Tensor const&, at::Tensor const&, c10::SymInt, bool, bool)>, at::Tensor, c10::guts::typelist::typelist<c10::DispatchKeySet, at::Tensor const&, at::Tensor const&, c10::SymInt, bool, bool>>, at::Tensor (c10::DispatchKeySet, at::Tensor const&, at::Tensor const&, c10::SymInt, bool, bool)>::call(c10::OperatorKernel*, c10::DispatchKeySet, at::Tensor const&, at::Tensor const&, c10::SymInt, bool, bool) + 1000 (0x17630a7b8 in libtorch_cpu.dylib)
+frame #12: at::_ops::embedding::call(at::Tensor const&, at::Tensor const&, c10::SymInt, bool, bool) + 372 (0x173f56d2c in libtorch_cpu.dylib)
+frame #13: torch::nn::functional::detail::embedding(at::Tensor const&, at::Tensor const&, std::__1::optional<long long>, std::__1::optional<double>, double, bool, bool) + 532 (0x177699ed4 in libtorch_cpu.dylib)
+frame #14: Java_org_bytedeco_pytorch_nn_modules_EmbeddingImpl_forward + 188 (0x162101fd0 in libjnitorch.dylib)
+frame #15: 0x0 + 4697033076 (0x117f70974 in ???)
+frame #16: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #17: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #18: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #19: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #20: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #21: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #22: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #23: 0x0 + 4697017120 (0x117f6cb20 in ???)
+frame #24: 0x0 + 4697017744 (0x117f6cd90 in ???)
+frame #25: 0x0 + 4696998996 (0x117f68454 in ???)
+frame #26: JavaCalls::call_helper(JavaValue*, methodHandle const&, JavaCallArguments*, JavaThread*) + 984 (0x1071b9294 in libjvm.dylib)
+frame #27: jni_invoke_static(JNIEnv_*, JavaValue*, _jobject*, JNICallType, _jmethodID*, JNI_ArgumentPusher*, JavaThread*) + 380 (0x10723fbf0 in libjvm.dylib)
+frame #28: jni_CallStaticVoidMethod + 260 (0x1072436cc in libjvm.dylib)
+frame #29: JavaMain + 2328 (0x100ebf7cc in libjli.dylib)
+frame #30: ThreadJavaMain + 12 (0x100ec21dc in libjli.dylib)
+frame #31: _pthread_start + 136 (0x1972e3c08 in libsystem_pthread.dylib)
+frame #32: thread_start + 8 (0x1972deba8 in libsystem_pthread.dylib)
+} → MetaHeac.html
+  [Input] input_0 e=9
+  [Input] input_1 e=0
+  [Input] input_2 e=0
+  [Input] input_3 e=0
+  [Module] embedding e=1
+  [Module] taskEmbedding_0 e=1
+  … +8 more
+  (partial) RuntimeException: index out of range in self
+
+multi_task: ok=3 fail=0 skip=9
+
+========== generative (12) ==========
+
+── generative/HLLMTransformerBlock ──
+HLLMTransformerBlock(
+  (W_Q): torch::nn::LinearImpl(in_features=32, out_features=32, bias=true)
+  (W_K): torch::nn::LinearImpl(in_features=32, out_features=32, bias=true)
+  (W_V): torch::nn::LinearImpl(in_features=32, out_features=32, bias=true)
+  (W_O): torch::nn::LinearImpl(in_features=32, out_features=32, bias=true)
+  (ffn): torch::nn::SequentialImpl(
+    (ffn_lin1): torch::nn::LinearImpl(in_features=32, out_features=128, bias=true)
+    (ffn_relu): torch::nn::ReLUImpl
+    (ffn_lin2): torch::nn::LinearImpl(in_features=128, out_features=32, bias=true)
+  )
+  (norm1): torch::nn::LayerNormImpl(normalized_shape=32, eps=1.0E-5, elementwise_affine=true)
+  (norm2): torch::nn::LayerNormImpl(normalized_shape=32, eps=1.0E-5, elementwise_affine=true)
+  (attnDropout): torch::nn::DropoutImpl(p=0.0, inplace=false)
+)
+[vista] wrote interactive graph → /Users/muller/Documents/code/rust/javacpp-presets/pytorch/samples/out/vista-all/generative/HLLMTransformerBlock.html
+TraceGraph{nodes=12, edges=18} → HLLMTransformerBlock.html
+  [Input] input_0 e=8
+  [Module] W_Q e=1
+  [Module] W_K e=1
+  [Module] W_V e=1
+  [Module] W_O e=1
+  [Module] ffn_lin1 e=1
+  … +6 more
+
+generative: ok=1 fail=0 skip=11
+
+HTML root: /Users/muller/Documents/code/rust/javacpp-presets/pytorch/samples/out/vista-all
+Controls: →LR ←RL ↓TB ↑BT · ＋/－ zoom · 🍡Cute 🌙Dark 💼Office · 📌 pin-drag · ⇩ Export
+Gallery index: /Users/muller/Documents/code/rust/javacpp-presets/pytorch/samples/out/vista-all/index.html

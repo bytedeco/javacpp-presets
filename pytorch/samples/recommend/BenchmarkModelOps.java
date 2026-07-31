@@ -6,13 +6,13 @@
  */
 package samples.recommend;
 
-import org.bytedeco.pytorch.utils.recommend.modelops.DriftDetector;
-import org.bytedeco.pytorch.utils.recommend.modelops.FeatureStoreSnapshot;
-import org.bytedeco.pytorch.utils.recommend.modelops.ModelRegistry;
-import org.bytedeco.pytorch.utils.recommend.modelops.ModelStage;
-import org.bytedeco.pytorch.utils.recommend.modelops.ModelVersion;
-import org.bytedeco.pytorch.utils.recommend.modelops.OnlineLearningHook;
-import org.bytedeco.pytorch.utils.recommend.modelops.ShadowServing;
+import org.bytedeco.pytorch.recommend.modelops.DriftDetector;
+import org.bytedeco.pytorch.recommend.modelops.FeatureStoreSnapshot;
+import org.bytedeco.pytorch.recommend.modelops.ModelRegistry;
+import org.bytedeco.pytorch.recommend.modelops.ModelStage;
+import org.bytedeco.pytorch.recommend.modelops.ModelVersion;
+import org.bytedeco.pytorch.recommend.modelops.OnlineLearningHook;
+import org.bytedeco.pytorch.recommend.modelops.ShadowServing;
 
 import java.util.ArrayList;
 import java.util.HashMap;
