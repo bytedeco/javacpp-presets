@@ -479,6 +479,56 @@ public class torch_mpi implements LoadEnabled, InfoMapper {
                     .javaText("@MemberGetter public static native @ByVal Milliseconds kUnsetTimeout();"))
             .put(new Info("std::chrono::milliseconds(kUnsetTimeout)")
                     .javaText("std::chrono::milliseconds(c10d::kUnsetTimeout)"))
+            // Override all collective methods to use @IntrusivePtr("c10d::Work") instead of
+            // @IntrusivePtr("c10d::ProcessGroupMPI"). All c10d backends return intrusive_ptr<Work>.
+            .put(new Info("c10d::ProcessGroupMPI::broadcast")
+                    .javaText("public native @IntrusivePtr(\"c10d::Work\") Work broadcast(@ByRef TensorVector data, @Const @ByRef(nullValue = \"BroadcastOptions()\") BroadcastOptions opts);\n" +
+                              "  public native @IntrusivePtr(\"c10d::Work\") Work broadcast(@ByRef TensorVector data);"))
+            .put(new Info("c10d::ProcessGroupMPI::allreduce")
+                    .javaText("public native @IntrusivePtr(\"c10d::Work\") Work allreduce(@ByRef TensorVector tensors, @Const @ByRef(nullValue = \"AllreduceOptions()\") AllreduceOptions opts);\n" +
+                              "  public native @IntrusivePtr(\"c10d::Work\") Work allreduce(@ByRef TensorVector tensors);"))
+            .put(new Info("c10d::ProcessGroupMPI::allreduce_coalesced")
+                    .javaText("public native @IntrusivePtr(\"c10d::Work\") Work allreduce_coalesced(@ByRef TensorVector tensors, @Const @ByRef(nullValue = \"AllreduceCoalescedOptions()\") AllreduceCoalescedOptions opts);\n" +
+                              "  public native @IntrusivePtr(\"c10d::Work\") Work allreduce_coalesced(@ByRef TensorVector tensors);"))
+            .put(new Info("c10d::ProcessGroupMPI::reduce")
+                    .javaText("public native @IntrusivePtr(\"c10d::Work\") Work reduce(@ByRef TensorVector tensors, @Const @ByRef(nullValue = \"ReduceOptions()\") ReduceOptions opts);\n" +
+                              "  public native @IntrusivePtr(\"c10d::Work\") Work reduce(@ByRef TensorVector tensors);"))
+            .put(new Info("c10d::ProcessGroupMPI::allgather")
+                    .javaText("public native @IntrusivePtr(\"c10d::Work\") Work allgather(@StdVector TensorVector outputTensors, @ByRef TensorVector inputTensors, @Const @ByRef(nullValue = \"AllgatherOptions()\") AllgatherOptions opts);\n" +
+                              "  public native @IntrusivePtr(\"c10d::Work\") Work allgather(@StdVector TensorVector outputTensors, @ByRef TensorVector inputTensors);"))
+            .put(new Info("c10d::ProcessGroupMPI::_allgather_base")
+                    .javaText("public native @IntrusivePtr(\"c10d::Work\") Work _allgather_base(@ByRef Tensor outputbuffer, @ByRef Tensor inputbuffer, @Const @ByRef(nullValue = \"AllgatherOptions()\") AllgatherOptions opts);\n" +
+                              "  public native @IntrusivePtr(\"c10d::Work\") Work _allgather_base(@ByRef Tensor outputbuffer, @ByRef Tensor inputbuffer);"))
+            .put(new Info("c10d::ProcessGroupMPI::allgather_coalesced")
+                    .javaText("public native @IntrusivePtr(\"c10d::Work\") Work allgather_coalesced(@StdVector TensorVector outputTensorLists, @ByRef TensorVector inputTensors, @Const @ByRef(nullValue = \"AllgatherOptions()\") AllgatherOptions opts);\n" +
+                              "  public native @IntrusivePtr(\"c10d::Work\") Work allgather_coalesced(@StdVector TensorVector outputTensorLists, @ByRef TensorVector inputTensors);"))
+            .put(new Info("c10d::ProcessGroupMPI::gather")
+                    .javaText("public native @IntrusivePtr(\"c10d::Work\") Work gather(@StdVector TensorVector outputTensors, @ByRef TensorVector inputTensors, @Const @ByRef(nullValue = \"GatherOptions()\") GatherOptions opts);\n" +
+                              "  public native @IntrusivePtr(\"c10d::Work\") Work gather(@StdVector TensorVector outputTensors, @ByRef TensorVector inputTensors);"))
+            .put(new Info("c10d::ProcessGroupMPI::scatter")
+                    .javaText("public native @IntrusivePtr(\"c10d::Work\") Work scatter(@ByRef TensorVector outputTensors, @StdVector TensorVector inputTensors, @Const @ByRef(nullValue = \"ScatterOptions()\") ScatterOptions opts);\n" +
+                              "  public native @IntrusivePtr(\"c10d::Work\") Work scatter(@ByRef TensorVector outputTensors, @StdVector TensorVector inputTensors);"))
+            .put(new Info("c10d::ProcessGroupMPI::reduce_scatter")
+                    .javaText("public native @IntrusivePtr(\"c10d::Work\") Work reduce_scatter(@ByRef TensorVector outputTensors, @StdVector TensorVector inputTensors, @Const @ByRef(nullValue = \"ReduceScatterOptions()\") ReduceScatterOptions opts);\n" +
+                              "  public native @IntrusivePtr(\"c10d::Work\") Work reduce_scatter(@ByRef TensorVector outputTensors, @StdVector TensorVector inputTensors);"))
+            .put(new Info("c10d::ProcessGroupMPI::_reduce_scatter_base")
+                    .javaText("public native @IntrusivePtr(\"c10d::Work\") Work _reduce_scatter_base(@ByRef Tensor outputTensor, @ByRef Tensor inputTensor, @Const @ByRef(nullValue = \"ReduceScatterOptions()\") ReduceScatterOptions opts);\n" +
+                              "  public native @IntrusivePtr(\"c10d::Work\") Work _reduce_scatter_base(@ByRef Tensor outputTensor, @ByRef Tensor inputTensor);"))
+            .put(new Info("c10d::ProcessGroupMPI::alltoall_base")
+                    .javaText("public native @IntrusivePtr(\"c10d::Work\") Work alltoall_base(@ByRef Tensor outputTensor, @ByRef Tensor inputTensor, @Cast(\"std::vector<int64_t>*\") @ByRef LongVector outputSplitSizes, @Cast(\"std::vector<int64_t>*\") @ByRef LongVector inputSplitSizes, @Const @ByRef(nullValue = \"AllToAllOptions()\") AllToAllOptions opts);\n" +
+                              "  public native @IntrusivePtr(\"c10d::Work\") Work alltoall_base(@ByRef Tensor outputTensor, @ByRef Tensor inputTensor, @Cast(\"std::vector<int64_t>*\") @ByRef LongVector outputSplitSizes, @Cast(\"std::vector<int64_t>*\") @ByRef LongVector inputSplitSizes);"))
+            .put(new Info("c10d::ProcessGroupMPI::alltoall")
+                    .javaText("public native @IntrusivePtr(\"c10d::Work\") Work alltoall(@ByRef TensorVector outputTensors, @ByRef TensorVector inputTensors, @Const @ByRef(nullValue = \"AllToAllOptions()\") AllToAllOptions opts);\n" +
+                              "  public native @IntrusivePtr(\"c10d::Work\") Work alltoall(@ByRef TensorVector outputTensors, @ByRef TensorVector inputTensors);"))
+            .put(new Info("c10d::ProcessGroupMPI::send")
+                    .javaText("public native @IntrusivePtr(\"c10d::Work\") Work send(@ByRef TensorVector tensors, int dstRank, int tag);"))
+            .put(new Info("c10d::ProcessGroupMPI::recv")
+                    .javaText("public native @IntrusivePtr(\"c10d::Work\") Work recv(@ByRef TensorVector tensors, int srcRank, int tag);"))
+            .put(new Info("c10d::ProcessGroupMPI::recvAnysource")
+                    .javaText("public native @IntrusivePtr(\"c10d::Work\") Work recvAnysource(@ByRef TensorVector tensor, int tag);"))
+            .put(new Info("c10d::ProcessGroupMPI::barrier")
+                    .javaText("public native @IntrusivePtr(\"c10d::Work\") Work barrier(@Const @ByRef(nullValue = \"BarrierOptions()\") BarrierOptions opts);\n" +
+                              "  public native @IntrusivePtr(\"c10d::Work\") Work barrier();"))
         ;
     }
 }

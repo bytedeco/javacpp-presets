@@ -270,7 +270,7 @@ public abstract class BaseChart {
 
     // ---- shared drawing helpers ----
 
-    protected static final Color[] PALETTE = {
+    public static final Color[] PALETTE = {
         new Color(0x1f77b4), new Color(0xff7f0e), new Color(0x2ca02c),
         new Color(0xd62728), new Color(0x9467bd), new Color(0x8c564b),
         new Color(0xe377c2), new Color(0x7f7f7f), new Color(0xbcbd22),

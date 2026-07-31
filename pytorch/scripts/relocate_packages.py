@@ -738,10 +738,21 @@ def classify_nn_subpackage(simple: str) -> str:
     if simple in NN_CONTAINER_NAMES:
         return "nn_container"
     # Options family (includes *FuncOptions / *OptionsBase / Detail*Options)
+    # but exclude distributed/c10d *Options that happen to end with Options
+    # (DistributedBackendOptions, TCPStoreOptions, AllToAllOptions, etc.)
     if simple.endswith(NN_OPTIONS_SUFFIXES) or (
         simple.startswith("Detail") and simple.endswith("Options")
     ):
-        return "nn_options"
+        if simple in (
+            # distributed options (c10d) that should NOT go to nn.options
+            "DistributedBackendOptions", "TCPStoreOptions",
+            "AllToAllOptions", "AllgatherOptions", "AllreduceOptions",
+            "AllreduceCoalescedOptions", "BarrierOptions", "BroadcastOptions",
+            "GatherOptions", "ReduceOptions", "ReduceScatterOptions", "ScatterOptions",
+        ):
+            pass  # fall through to default nn
+        else:
+            return "nn_options"
     if simple.endswith(NN_IMPL_SUFFIXES):
         return "nn_modules"
     if simple in NN_FUNCTIONS_NAMES or (
@@ -851,9 +862,62 @@ def classify_file(path: Path, text: str) -> Optional[str]:
         "TokenImpl": f"{ROOT_PKG}.llm.spacy.impl",
         "SpanImpl": f"{ROOT_PKG}.llm.spacy.impl",
         "LanguageImpl": f"{ROOT_PKG}.llm.spacy.impl",
+        # Domain-specific *Options that must stay in their correct package,
+        # not misrouted to nn.options by the broad *Options→nn_options heuristic.
+        "DockerOptions": f"{ROOT_PKG}.deploy.docker",
+        "K8sOptions": f"{ROOT_PKG}.deploy.k8s",
+        "VistaOptions": f"{ROOT_PKG}.plot.vista",
+        # Serve options
+        "TorchServeOptions": f"{ROOT_PKG}.serve",
+        "ModelLoadOptions": f"{ROOT_PKG}.serve",
+        "InferenceOptions": f"{ROOT_PKG}.serve",
+        # Deploy options
+        "AbtestOptions": f"{ROOT_PKG}.deploy.abtest",
+        "OfflineOptions": f"{ROOT_PKG}.deploy.offline",
+        # Recommend options
+        "NCFOptions": f"{ROOT_PKG}.recommend.modelops",
+        "DeepFMOptions": f"{ROOT_PKG}.recommend.modelops",
+        "DSSMOptions": f"{ROOT_PKG}.recommend.modelops",
+        # Feature options
+        "FeatureOptions": f"{ROOT_PKG}.feature",
+        "ChartOptions": f"{ROOT_PKG}.plot.chart",
+        "MatplotOptions": f"{ROOT_PKG}.plot.matplot",
+        # Feature store classes misclassified as "distributed" due to *Store suffix
+        "OfflineStore": f"{ROOT_PKG}.feature.offline",
+        "FileOfflineStore": f"{ROOT_PKG}.feature.offline",
+        "SqliteOfflineStore": f"{ROOT_PKG}.feature.offline",
+        "OnlineStore": f"{ROOT_PKG}.feature.online",
+        "OnlineFeatureRow": f"{ROOT_PKG}.feature.online",
+        "OnlineWriteBatch": f"{ROOT_PKG}.feature.online",
+        "InMemoryOnlineStore": f"{ROOT_PKG}.feature.online",
+        "SqliteOnlineStore": f"{ROOT_PKG}.feature.online",
+        "RedisOnlineStore": f"{ROOT_PKG}.feature.online",
+        "FileOnlineStore": f"{ROOT_PKG}.feature.online",
+        "RegistryStore": f"{ROOT_PKG}.feature.registry",
+        "FileRegistryStore": f"{ROOT_PKG}.feature.registry",
+        "InMemoryRegistryStore": f"{ROOT_PKG}.feature.registry",
+        "FeatureVersion": f"{ROOT_PKG}.feature.registry",
+        "EmbeddingStore": f"{ROOT_PKG}.feature.store",
+        "MemoryEmbeddingStore": f"{ROOT_PKG}.feature.store",
+        "StoreConfig": f"{ROOT_PKG}.feature.store",
+        "MilvusEmbeddingStore": f"{ROOT_PKG}.feature.store",
+        "RedisVectorEmbeddingStore": f"{ROOT_PKG}.feature.store",
+        "DuckDbOfflineStore": f"{ROOT_PKG}.feature.offline",
+        "LanceOfflineStore": f"{ROOT_PKG}.feature.offline",
+        # Audio-specific classes
+        "AudioDataset": f"{ROOT_PKG}.audio.datasets",
+        "AudioFolder": f"{ROOT_PKG}.audio.datasets",
+        "FakeAudio": f"{ROOT_PKG}.audio.datasets",
     }
     if simple in handwritten_option_pkg:
         return f"handwritten:{handwritten_option_pkg[simple]}"
+
+    # TensorDataset in recommend.data must not be confused with data.datasets.TensorDataset
+    # Pin by path to preserve the recommend module's own TensorDataset
+    if simple == "TensorDataset":
+        posix = path.as_posix()
+        if "/recommend/" in posix:
+            return f"handwritten:{ROOT_PKG}.recommend.data"
 
     # Multiple pure-Java Transform types share the simple name "Transform".
     # Pin by path / content — do NOT force all of them into
@@ -866,6 +930,10 @@ def classify_file(path: Path, text: str) -> Optional[str]:
             return f"handwritten:{ROOT_PKG}.utils.audio.transforms"
         if "/utils/vision/transforms/" in posix:
             return f"handwritten:{ROOT_PKG}.utils.vision.transforms"
+        if "/audio/transforms/" in posix:
+            return f"handwritten:{ROOT_PKG}.audio.transforms"
+        if "/vision/transforms/" in posix:
+            return f"handwritten:{ROOT_PKG}.vision.transforms"
         if "/data/transforms/" in posix:
             return f"handwritten:{DATA_PKG}.transforms"
         # abstract bijector API (torch.distributions.transforms)
@@ -998,6 +1066,14 @@ def plan_moves(gen_root: Path, main_root: Optional[Path]) -> Tuple[Dict[Path, Tu
         f"{ROOT_PKG}.amp",
         f"{ROOT_PKG}.info",
         f"{ROOT_PKG}.quantization",
+        # Hand-written domain modules that must never be misclassified to nn/options or nn/modules
+        f"{ROOT_PKG}.recommend",
+        f"{ROOT_PKG}.feature",
+        f"{ROOT_PKG}.deploy",
+        f"{ROOT_PKG}.vision",
+        f"{ROOT_PKG}.audio",
+        f"{ROOT_PKG}.plot",
+        f"{ROOT_PKG}.serve",
     )
 
     for root in roots:
@@ -1300,6 +1376,14 @@ def rewrite_references_everywhere(
         f"{ROOT_PKG}.amp",
         f"{ROOT_PKG}.info",
         f"{ROOT_PKG}.quantization",
+        # Hand-written domain modules that must never be misclassified to nn/options or nn/modules
+        f"{ROOT_PKG}.recommend",
+        f"{ROOT_PKG}.feature",
+        f"{ROOT_PKG}.deploy",
+        f"{ROOT_PKG}.vision",
+        f"{ROOT_PKG}.audio",
+        f"{ROOT_PKG}.plot",
+        f"{ROOT_PKG}.serve",
     )
 
     for root in roots:

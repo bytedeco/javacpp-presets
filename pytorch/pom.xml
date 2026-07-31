@@ -61,14 +61,14 @@
     <!-- Own platform jar from local m2 (after mvn install). Needed for IDE runs when
          target/ was cleaned: Make only recompiles .class, not libjnitorch.dylib.
          optional + runtime so it is not a published transitive; consumers use pytorch-platform. -->
-    <dependency>
-      <groupId>org.bytedeco</groupId>
-      <artifactId>pytorch</artifactId>
-      <version>${project.version}</version>
-      <classifier>macosx-arm64</classifier>
-      <optional>true</optional>
-      <scope>runtime</scope>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.bytedeco</groupId>-->
+<!--      <artifactId>pytorch</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--      <classifier>macosx-arm64</classifier>-->
+<!--      <optional>true</optional>-->
+<!--      <scope>runtime</scope>-->
+<!--    </dependency>-->
 
     <dependency>
       <groupId>org.bytedeco</groupId>
