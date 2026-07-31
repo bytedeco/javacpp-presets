@@ -26,6 +26,11 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
+// namespace {
+// const std::array<at::Tag, 1> kJitOnlyOperatorTags = {
+//     at::Tag::pt2_compliant_tag};
+// }
+
 /*
  * Note: JIT relies on Operator instances having static lifetime, because
  * it for example stores a non-owning FunctionSchema* pointer in the Node class,

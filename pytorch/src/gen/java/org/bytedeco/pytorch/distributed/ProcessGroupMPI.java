@@ -136,43 +136,43 @@ public class ProcessGroupMPI extends Backend {
 
   public native @StdString BytePointer getBackendName();
 
-  public native @IntrusivePtr("c10d::Work") Work broadcast(@ByRef TensorVector data, @Const @ByRef(nullValue = "BroadcastOptions()") BroadcastOptions opts);
+  public native @IntrusivePtr("c10d::Work") Work broadcast(@ByRef TensorVector data, @Const @ByRef(nullValue = "c10d::BroadcastOptions()") BroadcastOptions opts);
     public native @IntrusivePtr("c10d::Work") Work broadcast(@ByRef TensorVector data);
 
-  public native @IntrusivePtr("c10d::Work") Work allreduce(@ByRef TensorVector tensors, @Const @ByRef(nullValue = "AllreduceOptions()") AllreduceOptions opts);
+  public native @IntrusivePtr("c10d::Work") Work allreduce(@ByRef TensorVector tensors, @Const @ByRef(nullValue = "c10d::AllreduceOptions()") AllreduceOptions opts);
     public native @IntrusivePtr("c10d::Work") Work allreduce(@ByRef TensorVector tensors);
 
-  public native @IntrusivePtr("c10d::Work") Work allreduce_coalesced(@ByRef TensorVector tensors, @Const @ByRef(nullValue = "AllreduceCoalescedOptions()") AllreduceCoalescedOptions opts);
+  public native @IntrusivePtr("c10d::Work") Work allreduce_coalesced(@ByRef TensorVector tensors, @Const @ByRef(nullValue = "c10d::AllreduceCoalescedOptions()") AllreduceCoalescedOptions opts);
     public native @IntrusivePtr("c10d::Work") Work allreduce_coalesced(@ByRef TensorVector tensors);
 
-  public native @IntrusivePtr("c10d::Work") Work reduce(@ByRef TensorVector tensors, @Const @ByRef(nullValue = "ReduceOptions()") ReduceOptions opts);
+  public native @IntrusivePtr("c10d::Work") Work reduce(@ByRef TensorVector tensors, @Const @ByRef(nullValue = "c10d::ReduceOptions()") ReduceOptions opts);
     public native @IntrusivePtr("c10d::Work") Work reduce(@ByRef TensorVector tensors);
 
-  public native @IntrusivePtr("c10d::Work") Work allgather(@StdVector TensorVector outputTensors, @ByRef TensorVector inputTensors, @Const @ByRef(nullValue = "AllgatherOptions()") AllgatherOptions opts);
+  public native @IntrusivePtr("c10d::Work") Work allgather(@StdVector TensorVector outputTensors, @ByRef TensorVector inputTensors, @Const @ByRef(nullValue = "c10d::AllgatherOptions()") AllgatherOptions opts);
     public native @IntrusivePtr("c10d::Work") Work allgather(@StdVector TensorVector outputTensors, @ByRef TensorVector inputTensors);
 
-  public native @IntrusivePtr("c10d::Work") Work _allgather_base(@ByRef Tensor outputbuffer, @ByRef Tensor inputbuffer, @Const @ByRef(nullValue = "AllgatherOptions()") AllgatherOptions opts);
+  public native @IntrusivePtr("c10d::Work") Work _allgather_base(@ByRef Tensor outputbuffer, @ByRef Tensor inputbuffer, @Const @ByRef(nullValue = "c10d::AllgatherOptions()") AllgatherOptions opts);
     public native @IntrusivePtr("c10d::Work") Work _allgather_base(@ByRef Tensor outputbuffer, @ByRef Tensor inputbuffer);
 
-  public native @IntrusivePtr("c10d::Work") Work allgather_coalesced(@StdVector TensorVector outputTensorLists, @ByRef TensorVector inputTensors, @Const @ByRef(nullValue = "AllgatherOptions()") AllgatherOptions opts);
+  public native @IntrusivePtr("c10d::Work") Work allgather_coalesced(@StdVector TensorVector outputTensorLists, @ByRef TensorVector inputTensors, @Const @ByRef(nullValue = "c10d::AllgatherOptions()") AllgatherOptions opts);
     public native @IntrusivePtr("c10d::Work") Work allgather_coalesced(@StdVector TensorVector outputTensorLists, @ByRef TensorVector inputTensors);
 
-  public native @IntrusivePtr("c10d::Work") Work gather(@StdVector TensorVector outputTensors, @ByRef TensorVector inputTensors, @Const @ByRef(nullValue = "GatherOptions()") GatherOptions opts);
+  public native @IntrusivePtr("c10d::Work") Work gather(@StdVector TensorVector outputTensors, @ByRef TensorVector inputTensors, @Const @ByRef(nullValue = "c10d::GatherOptions()") GatherOptions opts);
     public native @IntrusivePtr("c10d::Work") Work gather(@StdVector TensorVector outputTensors, @ByRef TensorVector inputTensors);
 
-  public native @IntrusivePtr("c10d::Work") Work scatter(@ByRef TensorVector outputTensors, @StdVector TensorVector inputTensors, @Const @ByRef(nullValue = "ScatterOptions()") ScatterOptions opts);
+  public native @IntrusivePtr("c10d::Work") Work scatter(@ByRef TensorVector outputTensors, @StdVector TensorVector inputTensors, @Const @ByRef(nullValue = "c10d::ScatterOptions()") ScatterOptions opts);
     public native @IntrusivePtr("c10d::Work") Work scatter(@ByRef TensorVector outputTensors, @StdVector TensorVector inputTensors);
 
-  public native @IntrusivePtr("c10d::Work") Work reduce_scatter(@ByRef TensorVector outputTensors, @StdVector TensorVector inputTensors, @Const @ByRef(nullValue = "ReduceScatterOptions()") ReduceScatterOptions opts);
+  public native @IntrusivePtr("c10d::Work") Work reduce_scatter(@ByRef TensorVector outputTensors, @StdVector TensorVector inputTensors, @Const @ByRef(nullValue = "c10d::ReduceScatterOptions()") ReduceScatterOptions opts);
     public native @IntrusivePtr("c10d::Work") Work reduce_scatter(@ByRef TensorVector outputTensors, @StdVector TensorVector inputTensors);
 
-  public native @IntrusivePtr("c10d::Work") Work _reduce_scatter_base(@ByRef Tensor outputTensor, @ByRef Tensor inputTensor, @Const @ByRef(nullValue = "ReduceScatterOptions()") ReduceScatterOptions opts);
+  public native @IntrusivePtr("c10d::Work") Work _reduce_scatter_base(@ByRef Tensor outputTensor, @ByRef Tensor inputTensor, @Const @ByRef(nullValue = "c10d::ReduceScatterOptions()") ReduceScatterOptions opts);
     public native @IntrusivePtr("c10d::Work") Work _reduce_scatter_base(@ByRef Tensor outputTensor, @ByRef Tensor inputTensor);
 
-  public native @IntrusivePtr("c10d::Work") Work alltoall_base(@ByRef Tensor outputTensor, @ByRef Tensor inputTensor, @Cast("std::vector<int64_t>*") @ByRef LongVector outputSplitSizes, @Cast("std::vector<int64_t>*") @ByRef LongVector inputSplitSizes, @Const @ByRef(nullValue = "AllToAllOptions()") AllToAllOptions opts);
+  public native @IntrusivePtr("c10d::Work") Work alltoall_base(@ByRef Tensor outputTensor, @ByRef Tensor inputTensor, @Cast("std::vector<int64_t>*") @ByRef LongVector outputSplitSizes, @Cast("std::vector<int64_t>*") @ByRef LongVector inputSplitSizes, @Const @ByRef(nullValue = "c10d::AllToAllOptions()") AllToAllOptions opts);
     public native @IntrusivePtr("c10d::Work") Work alltoall_base(@ByRef Tensor outputTensor, @ByRef Tensor inputTensor, @Cast("std::vector<int64_t>*") @ByRef LongVector outputSplitSizes, @Cast("std::vector<int64_t>*") @ByRef LongVector inputSplitSizes);
 
-  public native @IntrusivePtr("c10d::Work") Work alltoall(@ByRef TensorVector outputTensors, @ByRef TensorVector inputTensors, @Const @ByRef(nullValue = "AllToAllOptions()") AllToAllOptions opts);
+  public native @IntrusivePtr("c10d::Work") Work alltoall(@ByRef TensorVector outputTensors, @ByRef TensorVector inputTensors, @Const @ByRef(nullValue = "c10d::AllToAllOptions()") AllToAllOptions opts);
     public native @IntrusivePtr("c10d::Work") Work alltoall(@ByRef TensorVector outputTensors, @ByRef TensorVector inputTensors);
 
   public native @IntrusivePtr("c10d::Work") Work send(@ByRef TensorVector tensors, int dstRank, int tag);
@@ -181,7 +181,7 @@ public class ProcessGroupMPI extends Backend {
 
   public native @IntrusivePtr("c10d::Work") Work recvAnysource(@ByRef TensorVector tensor, int tag);
 
-  public native @IntrusivePtr("c10d::Work") Work barrier(@Const @ByRef(nullValue = "BarrierOptions()") BarrierOptions opts);
+  public native @IntrusivePtr("c10d::Work") Work barrier(@Const @ByRef(nullValue = "c10d::BarrierOptions()") BarrierOptions opts);
     public native @IntrusivePtr("c10d::Work") Work barrier();
 
   // Creating a new ProcessGroupMPI, will initialize MPI if not initialized
