@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-NUMPY_VERSION=2.5.0
+NUMPY_VERSION=2.5.1
 download https://github.com/numpy/numpy/releases/download/v$NUMPY_VERSION/numpy-$NUMPY_VERSION.tar.gz numpy-$NUMPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -140,7 +140,7 @@ case $PLATFORM in
         # sedinplace 's/-std=c99/-w/g' numpy/distutils/ccompiler.py
         ATLAS=None "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=build-dir=build
         # need to add RPATH so it can find MKL in cache
-        for f in $(find ../ -iname *.so); do install_name_tool -add_rpath @loader_path/../../../ $f; done
+        for f in $(find ../ -iname *.so); do install_name_tool -add_rpath @loader_path/../../../ $f || true; done
         ;;
     windows-x86)
         # sedinplace '/ccompiler._default_compilers = /,+2d' numpy/distutils/ccompiler.py # don't try to use GCC

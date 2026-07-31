@@ -46,7 +46,7 @@ public static final int OPENBLAS_CLOCAL_BUFFER_SIZE = 65536;
 public static final int OPENBLAS_ZLOCAL_BUFFER_SIZE = 32768;
 public static final int OPENBLAS_GEMM_MULTITHREAD_THRESHOLD = 4;
 // #define OPENBLAS_EXPRECISION 
-public static final String OPENBLAS_VERSION = " OpenBLAS 0.3.33 ";
+public static final String OPENBLAS_VERSION = " OpenBLAS 0.3.34 ";
 /*This is only for "make install" target.*/
 
 // #if defined(OPENBLAS_OS_WINNT) || defined(OPENBLAS_OS_CYGWIN_NT) || defined(OPENBLAS_OS_INTERIX)
@@ -213,6 +213,16 @@ public static class openblas_threads_callback extends FunctionPointer {
     public native void call(int sync, openblas_dojob_callback dojob, int numjobs, @Cast("size_t") long jobdata_elsize, Pointer jobdata, int dojob_data);
 }
 
+
+/* Replace the XERBLA handler for this OpenBLAS instance and return the
+ * previous handler. Passing NULL restores the default. Callbacks may run
+ * concurrently and must be thread-safe. The name and info pointers are valid
+ * only during the callback; name spans name_length bytes and need not be
+ * NUL-terminated. Replacement is thread-safe but does not wait for in-flight
+ * calls, so the previous handler must remain loaded until they complete. */
+// #ifndef OPENBLAS_XERBLA_HANDLER_DEFINED
+// #define OPENBLAS_XERBLA_HANDLER_DEFINED
+// #endif
 
 // #ifdef OPENBLAS_OS_LINUX
 // #endif
@@ -780,7 +790,7 @@ public static native void cblas_zher2k(@Cast("const CBLAS_ORDER") int Order, @Ca
  
  
 
- 
+
  
  
  
