@@ -10,7 +10,7 @@ import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorOptions;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.global.torch.ScalarType;
-import org.bytedeco.pytorch.plot.*;
+import org.bytedeco.pytorch.plot.chart.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;

@@ -1,5 +1,7 @@
 package org.bytedeco.pytorch.plot;
 
+import org.bytedeco.pytorch.plot.chart.BaseChart;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 

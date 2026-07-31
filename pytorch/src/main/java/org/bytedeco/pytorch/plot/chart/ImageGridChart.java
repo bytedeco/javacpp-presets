@@ -1,4 +1,6 @@
-package org.bytedeco.pytorch.plot;
+package org.bytedeco.pytorch.plot.chart;
+
+import org.bytedeco.pytorch.plot.TensorPlotUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

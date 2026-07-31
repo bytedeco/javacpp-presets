@@ -1,15 +1,15 @@
 package org.bytedeco.pytorch.data.numpy;
 
-import org.bytedeco.pytorch.plot.AreaChart;
-import org.bytedeco.pytorch.plot.BarChart;
-import org.bytedeco.pytorch.plot.BaseChart;
-import org.bytedeco.pytorch.plot.BoxChart;
-import org.bytedeco.pytorch.plot.HeatmapChart;
-import org.bytedeco.pytorch.plot.HistogramChart;
-import org.bytedeco.pytorch.plot.LineChart;
-import org.bytedeco.pytorch.plot.Matplotlib;
-import org.bytedeco.pytorch.plot.PieChart;
-import org.bytedeco.pytorch.plot.ScatterChart;
+import org.bytedeco.pytorch.plot.chart.AreaChart;
+import org.bytedeco.pytorch.plot.chart.BarChart;
+import org.bytedeco.pytorch.plot.chart.BaseChart;
+import org.bytedeco.pytorch.plot.chart.BoxChart;
+import org.bytedeco.pytorch.plot.chart.HeatmapChart;
+import org.bytedeco.pytorch.plot.chart.HistogramChart;
+import org.bytedeco.pytorch.plot.chart.LineChart;
+import org.bytedeco.pytorch.plot.matplot.Matplotlib;
+import org.bytedeco.pytorch.plot.chart.PieChart;
+import org.bytedeco.pytorch.plot.chart.ScatterChart;
 
 /**
  * Matplotlib-style plotting for {@link NDArray} — thin wrapper that delegates to

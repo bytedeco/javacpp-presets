@@ -1,4 +1,4 @@
-package org.bytedeco.pytorch.plot;
+package org.bytedeco.pytorch.plot.chart;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

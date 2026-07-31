@@ -1,10 +1,14 @@
-package org.bytedeco.pytorch.plot;
+package org.bytedeco.pytorch.plot.matplot;
 
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.data.numpy.NDArray;
 import org.bytedeco.pytorch.dataframe.DataFrame;
+import org.bytedeco.pytorch.plot.Figure;
+import org.bytedeco.pytorch.plot.PlotInputs;
+import org.bytedeco.pytorch.plot.TensorPlotUtils;
 import org.bytedeco.pytorch.plot.TensorPlotUtils.Layout;
 import org.bytedeco.pytorch.plot.TensorPlotUtils.Plane;
+import org.bytedeco.pytorch.plot.chart.*;
 
 import java.awt.Color;
 import java.util.List;

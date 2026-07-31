@@ -4,6 +4,7 @@ import org.bytedeco.javacpp.DoublePointer;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.c10.LongHeaderOnlyArrayRef;
 import org.bytedeco.pytorch.global.torch.ScalarType;
+import org.bytedeco.pytorch.plot.matplot.Matplotlib;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

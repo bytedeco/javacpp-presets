@@ -2,6 +2,8 @@ package org.bytedeco.pytorch.plot;
 
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.plot.TensorPlotUtils.Layout;
+import org.bytedeco.pytorch.plot.chart.*;
+import org.bytedeco.pytorch.plot.matplot.Matplotlib;
 
 /**
  * Tensor-first plotting façade. Delegates to {@link Matplotlib} so DataFrame,

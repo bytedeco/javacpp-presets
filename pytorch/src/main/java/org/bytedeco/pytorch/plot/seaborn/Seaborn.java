@@ -1,10 +1,13 @@
-package org.bytedeco.pytorch.plot;
+package org.bytedeco.pytorch.plot.seaborn;
 
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.data.numpy.NDArray;
 import org.bytedeco.pytorch.dataframe.Column;
 import org.bytedeco.pytorch.dataframe.DataFrame;
 import org.bytedeco.pytorch.dataframe.DataValues;
+import org.bytedeco.pytorch.plot.*;
+import org.bytedeco.pytorch.plot.chart.*;
+import org.bytedeco.pytorch.plot.matplot.Matplotlib;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

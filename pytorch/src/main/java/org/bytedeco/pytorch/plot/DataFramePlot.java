@@ -1,6 +1,9 @@
 package org.bytedeco.pytorch.plot;
 
 import org.bytedeco.pytorch.dataframe.DataFrame;
+import org.bytedeco.pytorch.plot.chart.*;
+import org.bytedeco.pytorch.plot.matplot.Matplotlib;
+import org.bytedeco.pytorch.plot.seaborn.Seaborn;
 
 /**
  * Fluent plot handle returned by {@link DataFrame#plot()}.
