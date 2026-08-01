@@ -1397,10 +1397,14 @@ public static final int
     dnnl_BA4b8a = 868,
     dnnl_aCB4c8b = 869,
     dnnl_abDC4d8c = 870,
+    dnnl_Abc8a = 871,
+    dnnl_Abc32a = 872,
+    dnnl_aBcdef8b = 873,
+    dnnl_aBcdef32b = 874,
 
     /** Just a sentinel, not real memory format tag. Must be changed after new
      *  format tag is added. */
-    dnnl_format_tag_last = 871,
+    dnnl_format_tag_last = 875,
 
     // Aliases
 
@@ -1639,6 +1643,7 @@ public static final int
     dnnl_OwI16i64o = dnnl_AcB16b64a,
     dnnl_OIw16o16i = dnnl_ABc16a16b,
     dnnl_Oiw16o = dnnl_Abc16a,
+    dnnl_Oiw32o = dnnl_Abc32a,
     dnnl_OIw4i8o4i = dnnl_ABc4b8a4b,
     dnnl_OwI4i8o4i = dnnl_AcB4b8a4b,
     dnnl_OIw4i16o4i = dnnl_ABc4b16a4b,
@@ -1656,6 +1661,7 @@ public static final int
     dnnl_OIw4i4o = dnnl_ABc4b4a,
     dnnl_OIw4o4i = dnnl_ABc4a4b,
     dnnl_Oiw4o = dnnl_Abc4a,
+    dnnl_Oiw8o = dnnl_Abc8a,
     dnnl_OIw8i8o2i = dnnl_ABc8b8a2b,
     dnnl_OwI8i8o2i = dnnl_AcB8b8a2b,
     dnnl_OIw8i16o2i = dnnl_ABc8b16a2b,
@@ -1728,6 +1734,7 @@ public static final int
     dnnl_OhwI16i64o = dnnl_AcdB16b64a,
     dnnl_OIhw16o16i = dnnl_ABcd16a16b,
     dnnl_Oihw16o = dnnl_Abcd16a,
+    dnnl_Oihw32o = dnnl_Abcd32a,
     dnnl_OIhw4i8o4i = dnnl_ABcd4b8a4b,
     dnnl_OhwI4i8o4i = dnnl_AcdB4b8a4b,
     dnnl_OIhw4i16o4i = dnnl_ABcd4b16a4b,
@@ -1744,6 +1751,7 @@ public static final int
     dnnl_OIhw4i4o = dnnl_ABcd4b4a,
     dnnl_OIhw4o4i = dnnl_ABcd4a4b,
     dnnl_Oihw4o = dnnl_Abcd4a,
+    dnnl_Oihw8o = dnnl_Abcd8a,
     dnnl_OIhw8i8o2i = dnnl_ABcd8b8a2b,
     dnnl_OhwI8i8o2i = dnnl_AcdB8b8a2b,
     dnnl_OIhw8i16o2i = dnnl_ABcd8b16a2b,
@@ -1797,9 +1805,11 @@ public static final int
     dnnl_OdhwI16i64o = dnnl_AcdeB16b64a,
     dnnl_OIdhw16o16i = dnnl_ABcde16a16b,
     dnnl_Oidhw16o = dnnl_Abcde16a,
+    dnnl_Oidhw32o = dnnl_Abcde32a,
     dnnl_OIdhw4i4o = dnnl_ABcde4b4a,
     dnnl_OIdhw4o4i = dnnl_ABcde4a4b,
     dnnl_Oidhw4o = dnnl_Abcde4a,
+    dnnl_Oidhw8o = dnnl_Abcde8a,
     dnnl_OIdhw8i8o2i = dnnl_ABcde8b8a2b,
     dnnl_OdhwI8i8o2i = dnnl_AcdeB8b8a2b,
     dnnl_OIdhw8i16o2i = dnnl_ABcde8b16a2b,
@@ -1853,6 +1863,7 @@ public static final int
     dnnl_gOIw16i16o = dnnl_aBCd16c16b,
     dnnl_gOIw16o16i = dnnl_aBCd16b16c,
     dnnl_gOiw16o = dnnl_aBcd16b,
+    dnnl_gOiw32o = dnnl_aBcd32b,
     dnnl_gOIw4i16o4i = dnnl_aBCd4c16b4c,
     dnnl_gOIw2i8o4i = dnnl_aBCd2c8b4c,
     dnnl_gOIw16i16o4i = dnnl_aBCd16c16b4c,
@@ -1861,6 +1872,7 @@ public static final int
     dnnl_gOIw4i4o = dnnl_aBCd4c4b,
     dnnl_gOIw4o4i = dnnl_aBCd4b4c,
     dnnl_gOiw4o = dnnl_aBcd4b,
+    dnnl_gOiw8o = dnnl_aBcd8b,
     dnnl_gOIw8i16o2i = dnnl_aBCd8c16b2c,
     dnnl_gOIw8i8o = dnnl_aBCd8c8b,
     dnnl_gOIw8o16i2o = dnnl_aBCd8b16c2b,
@@ -1920,6 +1932,7 @@ public static final int
     dnnl_gOIhw16i16o = dnnl_aBCde16c16b,
     dnnl_gOIhw16o16i = dnnl_aBCde16b16c,
     dnnl_gOihw16o = dnnl_aBcde16b,
+    dnnl_gOihw32o = dnnl_aBcde32b,
     dnnl_gOIhw2i8o4i = dnnl_aBCde2c8b4c,
     dnnl_gOIhw4i16o4i = dnnl_aBCde4c16b4c,
     dnnl_gOIhw16i16o4i = dnnl_aBCde16c16b4c,
@@ -1928,6 +1941,7 @@ public static final int
     dnnl_gOIhw4i4o = dnnl_aBCde4c4b,
     dnnl_gOIhw4o4i = dnnl_aBCde4b4c,
     dnnl_gOihw4o = dnnl_aBcde4b,
+    dnnl_gOihw8o = dnnl_aBcde8b,
     dnnl_Goihw8g = dnnl_Abcde8a,
     dnnl_Goihw4g = dnnl_Abcde4a,
     dnnl_gOIhw8i16o2i = dnnl_aBCde8c16b2c,
@@ -1990,9 +2004,11 @@ public static final int
     dnnl_gOIdhw16o16i = dnnl_aBCdef16b16c,
     dnnl_gOIdhw16o16i2o = dnnl_aBCdef16b16c2b,
     dnnl_gOidhw16o = dnnl_aBcdef16b,
+    dnnl_gOidhw32o = dnnl_aBcdef32b,
     dnnl_gOIdhw4i4o = dnnl_aBCdef4c4b,
     dnnl_gOIdhw4o4i = dnnl_aBCdef4b4c,
     dnnl_gOidhw4o = dnnl_aBcdef4b,
+    dnnl_gOidhw8o = dnnl_aBcdef8b,
     dnnl_gOIdhw8i16o2i = dnnl_aBCdef8c16b2c,
     dnnl_gOIdhw8i8o = dnnl_aBCdef8c8b,
     dnnl_gOIdhw8o16i2o = dnnl_aBCdef8b16c2b,
@@ -3709,9 +3725,6 @@ public static final int DNNL_GPU_VENDOR = DNNL_VENDOR_INTEL;
 // #endif
 // #endif
 
-// When defined, primitive cache stores runtime objects.
-/* #undef DNNL_USE_RT_OBJECTS_IN_PRIMITIVE_CACHE */
-
 // When defined, DPCPP is supported.
 /* #undef DNNL_WITH_SYCL */
 
@@ -3836,10 +3849,10 @@ public static final int BUILD_GEMM_AVX512 = 0;
 public static final int DNNL_VERSION_MAJOR = 3;
 
 /** Minor version */
-public static final int DNNL_VERSION_MINOR = 12;
+public static final int DNNL_VERSION_MINOR = 13;
 
 /** Patch version */
-public static final int DNNL_VERSION_PATCH = 2;
+public static final int DNNL_VERSION_PATCH = 0;
 
 // clang-format on
 
@@ -4473,11 +4486,12 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_scales_m
  *      The set i-th bit indicates that a dedicated scaling factor is used for
  *      each index along that dimension. Set the mask to 0 to use a common
  *      scaling factor for the whole output tensor.
- *  @param group_ndims Number of group dimensions.
- *  @param group_dims Scaling factors correspondence groups that define the
- *      correspondence between the tensor dimensions and the scales array.
- *      The group dimensions should only be provided for each logical dimension
- *      that has correspondence mask \p mask set.
+ *  @param group_ndims Number of group dimensions. Must be 0 or 2.
+ *  @param group_dims Block sizes for the last two tensor dimensions:
+ *      {@code {G0, G1}} where {@code G0} subdivides the second-to-last tensor dimension
+ *      and {@code G1} subdivides the last. The corresponding mask bits must
+ *      be set. Use {@code 1} for no sub-blocking.
+ *      NULL when \p group_ndims is 0.
  *  @param data_type Scaling factors data_type.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
@@ -4514,13 +4528,14 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_scales(
  *      The set i-th bit indicates that a dedicated scaling factor is used for
  *      each index along that dimension. Set the mask to 0 to use a common
  *      scaling factor for the whole output tensor.
- *  @param ndims Number of group dimensions.
- *  @param group_dims Scaling factors correspondence groups that define the
- *      correspondence between the tensor dimensions and the scales array.
- *      The group dimensions should only be provided for each logical dimension
- *      that has correspondence mask \p mask set.
+ *  @param ndims Number of group dimensions. Must be 0 or 2.
+ *  @param group_dims Block sizes for the last two tensor dimensions:
+ *      {@code {G0, G1}} where {@code G0} subdivides the second-to-last tensor dimension
+ *      and {@code G1} subdivides the last. The corresponding mask bits must
+ *      be set. Use {@code 1} for no sub-blocking.
+ *      NULL when \p ndims is 0.
  *  @param data_type Scaling factors data_type.
- *  @param is_on_host Indicates whether the zero point is a host-side scalar.
+ *  @param is_on_host Indicates whether the scaling factor is a host-side scalar.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
@@ -4551,11 +4566,12 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_scales_v
  *      The set i-th bit indicates that a dedicated scaling factor is used for
  *      each index along that dimension. Set the mask to 0 to use a common
  *      scaling factor for the whole tensor.
- *  @param ndims Number of group dimensions.
- *  @param group_dims Scaling factors correspondence groups that define the
- *      correspondence between the tensor dimensions and the scales array.
- *      The group dimensions should only be provided for each logical dimension
- *      that has correspondence mask \p mask set.
+ *  @param ndims Number of group dimensions. Must be 0 or 2.
+ *  @param group_dims Block sizes for the last two tensor dimensions:
+ *      {@code {G0, G1}} where {@code G0} subdivides the second-to-last tensor dimension
+ *      and {@code G1} subdivides the last. The corresponding mask bits must
+ *      be set. Use {@code 1} for no sub-blocking.
+ *      NULL when \p ndims is 0.
  *  @param data_type Scaling factors data_type.
  *  @param is_on_host Indicates whether the scale is a host-side scalar.
  *  @param qmode Quantization mode, can be #dnnl_quantization_mode_static_sazp
@@ -4613,11 +4629,12 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_zero_poi
  *      zero points array. The set i-th bit indicates that a dedicated
  *      zero point is used for each index along that dimension. Set the
  *      mask to 0 to use a common zero point for the whole output tensor.
- *  @param group_ndims Number of group dimensions.
- *  @param group_dims Zero point factors correspondence groups that define the
- *      correspondence between the tensor dimensions and the zero points array.
- *      The group dimensions should be only provided for each logical dimension
- *      that has the bit set correspondence mask \p mask set.
+ *  @param group_ndims Number of group dimensions. Must be 0 or 2.
+ *  @param group_dims Block sizes for the last two tensor dimensions:
+ *      {@code {G0, G1}} where {@code G0} subdivides the second-to-last tensor dimension
+ *      and {@code G1} subdivides the last. The corresponding mask bits must
+ *      be set. Use {@code 1} for no sub-blocking.
+ *      NULL when \p group_ndims is 0.
  *  @param data_type Zero points factors data_type.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
@@ -4650,12 +4667,12 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_zero_poi
  *      correspondence between the tensor dimensions and the precomputed
  *      reductions array. The set i-th bit indicates that a dedicated
  *      precomputed reductions is used for each index along that dimension.
- *  @param group_ndims Number of group dimensions.
- *  @param group_dims Precomputed reduction factors correspondence groups that
- *      define the correspondence between the tensor dimensions and the
- *      precomputed reductions array.
- *      The group dimensions should be only provided for each logical dimension
- *      that has the bit set correspondence mask \p mask set.
+ *  @param group_ndims Number of group dimensions. Must be 0 or 2.
+ *  @param group_dims Block sizes for the last two tensor dimensions:
+ *      {@code {G0, G1}} where {@code G0} subdivides the second-to-last tensor dimension
+ *      and {@code G1} subdivides the last. The corresponding mask bits must
+ *      be set. Use {@code 1} for no sub-blocking.
+ *      NULL when \p group_ndims is 0.
  *  @param data_type Precomputed reduction factors data_type.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
@@ -4690,11 +4707,12 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_precompu
  *      zero_points array. The set i-th bit indicates that a dedicated
  *      zero point is used for each index along that dimension. Set the
  *      mask to 0 to use a common zero point for the whole output tensor.
- *  @param ndims Number of group dimensions.
- *  @param group_dims Zero point factors correspondence groups that define the
- *      correspondence between the tensor dimensions and the zero_points array.
- *      The group dimensions should be only provided for each logical dimension
- *      that has the bit set correspondence mask \p mask set.
+ *  @param ndims Number of group dimensions. Must be 0 or 2.
+ *  @param group_dims Block sizes for the last two tensor dimensions:
+ *      {@code {G0, G1}} where {@code G0} subdivides the second-to-last tensor dimension
+ *      and {@code G1} subdivides the last. The corresponding mask bits must
+ *      be set. Use {@code 1} for no sub-blocking.
+ *      NULL when \p ndims is 0.
  *  @param data_type Zero points factors data_type.
  *  @param is_on_host Indicates whether the zero point is a host-side scalar.
  *  @return #dnnl_success on success and a status describing the error
