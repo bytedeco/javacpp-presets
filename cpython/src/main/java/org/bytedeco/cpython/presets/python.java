@@ -69,6 +69,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 
                 "object.h",
                 "cpython/object.h",
+                "refcount.h",
                 "objimpl.h",
                 "cpython/objimpl.h",
                 "typeslots.h",
@@ -348,7 +349,8 @@ public class python implements InfoMapper {
                .put(new Info("COMPILER", "PY_LLONG_MIN", "PY_LLONG_MAX", "PY_ULLONG_MAX", "PY_TIMEOUT_MAX",
                              "SIZEOF_PY_HASH_T", "SIZEOF_PY_UHASH_T", "PY_SSIZE_T_MAX", "PY_SSIZE_T_MIN",
                              "LONG_BIT", "PyLong_BASE", "PyLong_MASK", "Py_UNICODE_SIZE", "PyTime_MIN", "PyTime_MAX", "PyHASH_MODULUS",
-                             "_Py_IMMORTAL_REFCNT_LOCAL", "PY_VECTORCALL_ARGUMENTS_OFFSET", "_Py_IMMORTAL_REFCNT").cppTypes("long long").translate(false))
+                             "_Py_IMMORTAL_REFCNT_LOCAL", "PY_VECTORCALL_ARGUMENTS_OFFSET", "_Py_IMMORTAL_REFCNT",
+                             "_Py_STATIC_FLAG_BITS", "_Py_STATIC_IMMORTAL_INITIAL_REFCNT").cppTypes("long long").translate(false))
 
                .put(new Info("Py_INFINITY").cppTypes("double").translate(false))
 

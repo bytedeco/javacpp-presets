@@ -4694,6 +4694,271 @@ public static final int
 @NoException public static native int PyUnstable_Object_IsUniquelyReferenced(PyObject arg0);
 
 
+// Parsed from refcount.h
+
+// #ifndef _Py_REFCOUNT_H
+// #define _Py_REFCOUNT_H
+// #ifdef __cplusplus
+// #endif
+
+
+/*
+Immortalization:
+
+The following indicates the immortalization strategy depending on the amount
+of available bits in the reference count field. All strategies are backwards
+compatible but the specific reference count value or immortalization check
+might change depending on the specializations for the underlying system.
+
+Proper deallocation of immortal instances requires distinguishing between
+statically allocated immortal instances vs those promoted by the runtime to be
+immortal. The latter should be the only instances that require
+cleanup during runtime finalization.
+*/
+
+public static final int _Py_STATICALLY_ALLOCATED_FLAG = 4;
+public static final int _Py_IMMORTAL_FLAGS = 1;
+
+// #if SIZEOF_VOID_P > 4
+/*
+In 64+ bit systems, any object whose 32 bit reference count is >= 2**31
+will be treated as immortal.
+
+Using the lower 32 bits makes the value backwards compatible by allowing
+C-Extensions without the updated checks in Py_INCREF and Py_DECREF to safely
+increase and decrease the objects reference count.
+
+In order to offer sufficient resilience to C extensions using the stable ABI
+compiled against 3.11 or earlier, we set the initial value near the
+middle of the range (2**31, 2**32). That way the refcount can be
+off by ~1 billion without affecting immortality.
+
+Reference count increases will use saturated arithmetic, taking advantage of
+having all the lower 32 bits set, which will avoid the reference count to go
+beyond the refcount limit. Immortality checks for reference count decreases will
+be done by checking the bit sign flag in the lower 32 bits.
+
+To ensure that once an object becomes immortal, it remains immortal, the threshold
+for omitting increfs is much higher than for omitting decrefs. Consequently, once
+the refcount for an object exceeds _Py_IMMORTAL_MINIMUM_REFCNT it will gradually
+increase over time until it reaches _Py_IMMORTAL_INITIAL_REFCNT.
+*/
+public static final long _Py_IMMORTAL_INITIAL_REFCNT = (3L << 30);
+public static final long _Py_IMMORTAL_MINIMUM_REFCNT = (1L << 31);
+public static native @MemberGetter long _Py_STATIC_FLAG_BITS();
+public static final long _Py_STATIC_FLAG_BITS = _Py_STATIC_FLAG_BITS();
+public static native @MemberGetter long _Py_STATIC_IMMORTAL_INITIAL_REFCNT();
+public static final long _Py_STATIC_IMMORTAL_INITIAL_REFCNT = _Py_STATIC_IMMORTAL_INITIAL_REFCNT();
+
+// #else
+// #endif
+
+// Py_GIL_DISABLED builds indicate immortal objects using `ob_ref_local`, which is
+// always 32-bits.
+// #ifdef Py_GIL_DISABLED
+// #endif
+
+
+// #ifdef Py_GIL_DISABLED
+// #endif  // Py_GIL_DISABLED
+
+
+// Py_REFCNT() implementation for the stable ABI
+@NoException public static native @Cast("Py_ssize_t") long Py_REFCNT(PyObject ob);
+
+// #if defined(Py_LIMITED_API) && Py_LIMITED_API+0 >= 0x030e0000
+    // Stable ABI implements Py_REFCNT() as a function call
+    // on limited C API version 3.14 and newer.
+// #else
+    @NoException public static native @Cast("Py_ssize_t") long _Py_REFCNT(PyObject ob);
+//     #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
+//     #else
+//     #  define Py_REFCNT(ob) _Py_REFCNT(ob)
+//     #endif
+// #endif
+
+@NoException public static native int _Py_IsImmortal(PyObject op);
+// #define _Py_IsImmortal(op) _Py_IsImmortal(_PyObject_CAST(op))
+
+
+@NoException public static native int _Py_IsStaticImmortal(PyObject op);
+// #define _Py_IsStaticImmortal(op) _Py_IsStaticImmortal(_PyObject_CAST(op))
+
+// Py_SET_REFCNT() implementation for stable ABI
+@NoException public static native void _Py_SetRefcnt(PyObject ob, @Cast("Py_ssize_t") long refcnt);
+
+@NoException public static native void Py_SET_REFCNT(PyObject ob, @Cast("Py_ssize_t") long refcnt);
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
+// #endif
+
+
+/*
+The macros Py_INCREF(op) and Py_DECREF(op) are used to increment or decrement
+reference counts.  Py_DECREF calls the object's deallocator function when
+the refcount falls to 0; for
+objects that don't contain references to other objects or heap memory
+this can be the standard function free().  Both macros can be used
+wherever a void expression is allowed.  The argument must not be a
+NULL pointer.  If it may be NULL, use Py_XINCREF/Py_XDECREF instead.
+The macro _Py_NewReference(op) initialize reference counts to 1, and
+in special builds (Py_REF_DEBUG, Py_TRACE_REFS) performs additional
+bookkeeping appropriate to the special build.
+
+We assume that the reference count field can never overflow; this can
+be proven when the size of the field is the same as the pointer size, so
+we ignore the possibility.  Provided a C int is at least 32 bits (which
+is implicitly assumed in many parts of this code), that's enough for
+about 2**31 references to an object.
+
+XXX The following became out of date in Python 2.2, but I'm not sure
+XXX what the full truth is now.  Certainly, heap-allocated type objects
+XXX can and should be deallocated.
+Type objects should never be deallocated; the type pointer in an object
+is not considered to be a reference to the type object, to save
+complications in the deallocation function.  (This is actually a
+decision that's up to the implementer of each new type so if you want,
+you can count such references to the type object.)
+*/
+
+// #if defined(Py_REF_DEBUG) && !defined(Py_LIMITED_API)
+// #endif  // Py_REF_DEBUG && !Py_LIMITED_API
+
+@NoException public static native void _Py_Dealloc(PyObject arg0);
+
+
+/*
+These are provided as conveniences to Python runtime embedders, so that
+they can have object code that is not dependent on Python compilation flags.
+*/
+@NoException public static native void Py_IncRef(PyObject arg0);
+@NoException public static native void Py_DecRef(PyObject arg0);
+
+// Similar to Py_IncRef() and Py_DecRef() but the argument must be non-NULL.
+// Private functions used by Py_INCREF() and Py_DECREF().
+@NoException public static native void _Py_IncRef(PyObject arg0);
+@NoException public static native void _Py_DecRef(PyObject arg0);
+
+@NoException public static native void Py_INCREF(PyObject op);
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
+// #endif
+
+
+// #if !defined(Py_LIMITED_API) && defined(Py_GIL_DISABLED)
+// #endif
+
+// #if defined(Py_LIMITED_API) && (Py_LIMITED_API+0 >= 0x030c0000 || defined(Py_REF_DEBUG))
+
+// #elif defined(Py_GIL_DISABLED) && defined(Py_REF_DEBUG)
+
+// #elif defined(Py_GIL_DISABLED)
+
+// #elif defined(Py_REF_DEBUG)
+
+// #else
+
+@NoException public static native void Py_DECREF(PyObject op);
+// #define Py_DECREF(op) Py_DECREF(_PyObject_CAST(op))
+// #endif
+
+
+/* Safely decref `op` and set `op` to NULL, especially useful in tp_clear
+ * and tp_dealloc implementations.
+ *
+ * Note that "the obvious" code can be deadly:
+ *
+ *     Py_XDECREF(op);
+ *     op = NULL;
+ *
+ * Typically, `op` is something like self->containee, and `self` is done
+ * using its `containee` member.  In the code sequence above, suppose
+ * `containee` is non-NULL with a refcount of 1.  Its refcount falls to
+ * 0 on the first line, which can trigger an arbitrary amount of code,
+ * possibly including finalizers (like __del__ methods or weakref callbacks)
+ * coded in Python, which in turn can release the GIL and allow other threads
+ * to run, etc.  Such code may even invoke methods of `self` again, or cause
+ * cyclic gc to trigger, but-- oops! --self->containee still points to the
+ * object being torn down, and it may be in an insane state while being torn
+ * down.  This has in fact been a rich historic source of miserable (rare &
+ * hard-to-diagnose) segfaulting (and other) bugs.
+ *
+ * The safe way is:
+ *
+ *      Py_CLEAR(op);
+ *
+ * That arranges to set `op` to NULL _before_ decref'ing, so that any code
+ * triggered as a side-effect of `op` getting torn down no longer believes
+ * `op` points to a valid object.
+ *
+ * There are cases where it's safe to use the naive code, but they're brittle.
+ * For example, if `op` points to a Python integer, you know that destroying
+ * one of those can't cause problems -- but in part that relies on that
+ * Python integers aren't currently weakly referencable.  Best practice is
+ * to use Py_CLEAR() even if you can't think of a reason for why you need to.
+ *
+ * gh-98724: Use a temporary variable to only evaluate the macro argument once,
+ * to avoid the duplication of side effects if the argument has side effects.
+ *
+ * gh-99701: If the PyObject* type is used with casting arguments to PyObject*,
+ * the code can be miscompiled with strict aliasing because of type punning.
+ * With strict aliasing, a compiler considers that two pointers of different
+ * types cannot read or write the same memory which enables optimization
+ * opportunities.
+ *
+ * If available, use _Py_TYPEOF() to use the 'op' type for temporary variables,
+ * and so avoid type punning. Otherwise, use memcpy() which causes type erasure
+ * and so prevents the compiler to reuse an old cached 'op' value after
+ * Py_CLEAR().
+ */
+// #ifdef _Py_TYPEOF
+// #else
+// #define Py_CLEAR(op)
+//     do {
+//         PyObject **_tmp_op_ptr = _Py_CAST(PyObject**, &(op));
+//         PyObject *_tmp_old_op = (*_tmp_op_ptr);
+//         if (_tmp_old_op != NULL) {
+//             PyObject *_null_ptr = _Py_NULL;
+//             memcpy(_tmp_op_ptr, &_null_ptr, sizeof(PyObject*));
+//             Py_DECREF(_tmp_old_op);
+//         }
+//     } while (0)
+// #endif
+
+
+/* Function to use in case the object pointer can be NULL: */
+@NoException public static native void Py_XINCREF(PyObject op);
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
+// #endif
+
+@NoException public static native void Py_XDECREF(PyObject op);
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
+// #endif
+
+// Create a new strong reference to an object:
+// increment the reference count of the object and return the object.
+@NoException public static native PyObject Py_NewRef(PyObject obj);
+
+// Similar to Py_NewRef(), but the object can be NULL.
+@NoException public static native PyObject Py_XNewRef(PyObject obj);
+
+@NoException public static native PyObject _Py_NewRef(PyObject obj);
+
+@NoException public static native PyObject _Py_XNewRef(PyObject obj);
+
+// Py_NewRef() and Py_XNewRef() are exported as functions for the stable ABI.
+// Names overridden with macros by static inline functions for best
+// performances.
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
+// #else
+// #  define Py_NewRef(obj) _Py_NewRef(obj)
+// #  define Py_XNewRef(obj) _Py_XNewRef(obj)
+// #endif
+
+
+// #ifdef __cplusplus
+// #endif
+// #endif   // !_Py_REFCOUNT_H
+
+
 // Parsed from objimpl.h
 
 // The PyObject_ memory family:  high-level object memory interfaces.
