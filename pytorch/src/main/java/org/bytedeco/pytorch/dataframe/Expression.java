@@ -1993,68 +1993,194 @@ public class Expression {
     }
 
     // ================================================================
-    // Temporal namespace
+    // Temporal namespace (pandas / polars .dt — full enterprise set)
     // ================================================================
 
     public static final class DtNameSpace {
         private final Expression parent;
-        DtNameSpace(Expression parent) { this.parent = parent; }
-        public Expression year() { return new DtExpr(parent, DtOp.YEAR); }
-        public Expression month() { return new DtExpr(parent, DtOp.MONTH); }
-        public Expression day() { return new DtExpr(parent, DtOp.DAY); }
-        public Expression hour() { return new DtExpr(parent, DtOp.HOUR); }
-        public Expression minute() { return new DtExpr(parent, DtOp.MINUTE); }
-        public Expression second() { return new DtExpr(parent, DtOp.SECOND); }
-        public Expression epochMilli() { return new DtExpr(parent, DtOp.EPOCH_MILLI); }
-        public Expression toLocalDate() { return new DtExpr(parent, DtOp.TO_DATE); }
-        public Expression toLocalTime() { return new DtExpr(parent, DtOp.TO_TIME); }
+        private final ZoneId zone;
+        private final org.bytedeco.pytorch.dataframe.temporal.BusinessCalendar calendar;
+
+        DtNameSpace(Expression parent) {
+            this(parent, ZoneOffset.UTC, org.bytedeco.pytorch.dataframe.temporal.TemporalOps.DEFAULT_CALENDAR);
+        }
+
+        DtNameSpace(Expression parent, ZoneId zone,
+                    org.bytedeco.pytorch.dataframe.temporal.BusinessCalendar calendar) {
+            this.parent = parent;
+            this.zone = zone == null ? ZoneOffset.UTC : zone;
+            this.calendar = calendar == null
+                    ? org.bytedeco.pytorch.dataframe.temporal.TemporalOps.DEFAULT_CALENDAR
+                    : calendar;
+        }
+
+        /** Evaluate subsequent dt ops in the given zone (pandas tz-aware). */
+        public DtNameSpace withZone(ZoneId z) {
+            return new DtNameSpace(parent, z, calendar);
+        }
+
+        /** Bind a business calendar for is_business_day / holidays / busday ops. */
+        public DtNameSpace withCalendar(org.bytedeco.pytorch.dataframe.temporal.BusinessCalendar cal) {
+            return new DtNameSpace(parent, zone, cal);
+        }
+
+        public Expression year() { return new DtExpr(parent, DtOp.YEAR, zone, calendar); }
+        public Expression month() { return new DtExpr(parent, DtOp.MONTH, zone, calendar); }
+        public Expression day() { return new DtExpr(parent, DtOp.DAY, zone, calendar); }
+        public Expression hour() { return new DtExpr(parent, DtOp.HOUR, zone, calendar); }
+        public Expression minute() { return new DtExpr(parent, DtOp.MINUTE, zone, calendar); }
+        public Expression second() { return new DtExpr(parent, DtOp.SECOND, zone, calendar); }
+        public Expression epochMilli() { return new DtExpr(parent, DtOp.EPOCH_MILLI, zone, calendar); }
+        public Expression toLocalDate() { return new DtExpr(parent, DtOp.TO_DATE, zone, calendar); }
+        public Expression toLocalTime() { return new DtExpr(parent, DtOp.TO_TIME, zone, calendar); }
+
+        /** ISO day-of-week 1=Mon … 7=Sun. */
+        public Expression dayOfWeek() { return new DtExpr(parent, DtOp.DAY_OF_WEEK, zone, calendar); }
+        /** Alias of {@link #dayOfWeek()}. */
+        public Expression weekday() { return dayOfWeek(); }
+        public Expression dayOfYear() { return new DtExpr(parent, DtOp.DAY_OF_YEAR, zone, calendar); }
+        public Expression week() { return new DtExpr(parent, DtOp.WEEK, zone, calendar); }
+        /** Calendar quarter 1–4. */
+        public Expression quarter() { return new DtExpr(parent, DtOp.QUARTER, zone, calendar); }
+
+        public Expression isWeekend() { return new DtExpr(parent, DtOp.IS_WEEKEND, zone, calendar); }
+        public Expression isMonthEnd() { return new DtExpr(parent, DtOp.IS_MONTH_END, zone, calendar); }
+        public Expression isMonthStart() { return new DtExpr(parent, DtOp.IS_MONTH_START, zone, calendar); }
+        public Expression isQuarterEnd() { return new DtExpr(parent, DtOp.IS_QUARTER_END, zone, calendar); }
+        public Expression isQuarterStart() { return new DtExpr(parent, DtOp.IS_QUARTER_START, zone, calendar); }
+        public Expression isYearEnd() { return new DtExpr(parent, DtOp.IS_YEAR_END, zone, calendar); }
+        public Expression isYearStart() { return new DtExpr(parent, DtOp.IS_YEAR_START, zone, calendar); }
+        public Expression isLeapYear() { return new DtExpr(parent, DtOp.IS_LEAP_YEAR, zone, calendar); }
+
+        public Expression isBusinessDay() { return new DtExpr(parent, DtOp.IS_BUSINESS_DAY, zone, calendar); }
+        public Expression isHoliday() { return new DtExpr(parent, DtOp.IS_HOLIDAY, zone, calendar); }
+        public Expression nextBusinessDay() { return new DtExpr(parent, DtOp.NEXT_BUSINESS_DAY, zone, calendar); }
+        public Expression previousBusinessDay() { return new DtExpr(parent, DtOp.PREV_BUSINESS_DAY, zone, calendar); }
+        /** Snap non-business days forward to the next business day. */
+        public Expression toBusinessDay() { return new DtExpr(parent, DtOp.TO_BUSINESS_DAY, zone, calendar); }
+
+        public Expression monthStart() { return new DtExpr(parent, DtOp.MONTH_START, zone, calendar); }
+        public Expression monthEnd() { return new DtExpr(parent, DtOp.MONTH_END, zone, calendar); }
+        public Expression quarterStart() { return new DtExpr(parent, DtOp.QUARTER_START, zone, calendar); }
+        public Expression quarterEnd() { return new DtExpr(parent, DtOp.QUARTER_END, zone, calendar); }
+
+        /**
+         * Business-day count from this column to {@code other} (half-open, pandas busday_count).
+         */
+        public Expression businessDaysBetween(Expression other) {
+            return new BusinessDaysBetweenExpr(parent, other, zone, calendar);
+        }
     }
 
-    enum DtOp { YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, EPOCH_MILLI, TO_DATE, TO_TIME }
+    enum DtOp {
+        YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, EPOCH_MILLI, TO_DATE, TO_TIME,
+        DAY_OF_WEEK, DAY_OF_YEAR, WEEK, QUARTER,
+        IS_WEEKEND, IS_MONTH_END, IS_MONTH_START, IS_QUARTER_END, IS_QUARTER_START,
+        IS_YEAR_END, IS_YEAR_START, IS_LEAP_YEAR,
+        IS_BUSINESS_DAY, IS_HOLIDAY, NEXT_BUSINESS_DAY, PREV_BUSINESS_DAY, TO_BUSINESS_DAY,
+        MONTH_START, MONTH_END, QUARTER_START, QUARTER_END
+    }
 
     static final class DtExpr extends Expression {
         final Expression child;
         final DtOp op;
-        DtExpr(Expression child, DtOp op) { this.child = child; this.op = op; }
+        final ZoneId zone;
+        final org.bytedeco.pytorch.dataframe.temporal.BusinessCalendar calendar;
+
+        DtExpr(Expression child, DtOp op) {
+            this(child, op, ZoneOffset.UTC, org.bytedeco.pytorch.dataframe.temporal.TemporalOps.DEFAULT_CALENDAR);
+        }
+
+        DtExpr(Expression child, DtOp op, ZoneId zone,
+               org.bytedeco.pytorch.dataframe.temporal.BusinessCalendar calendar) {
+            this.child = child;
+            this.op = op;
+            this.zone = zone == null ? ZoneOffset.UTC : zone;
+            this.calendar = calendar;
+        }
 
         static LocalDateTime toLdt(Object v) {
-            if (v == null) return null;
-            if (v instanceof LocalDateTime ldt) return ldt;
-            if (v instanceof LocalDate ld) return ld.atStartOfDay();
-            if (v instanceof Instant in) return LocalDateTime.ofInstant(in, ZoneOffset.UTC);
-            if (v instanceof ZonedDateTime zdt) return zdt.toLocalDateTime();
-            if (v instanceof Number n) return LocalDateTime.ofInstant(Instant.ofEpochMilli(n.longValue()), ZoneOffset.UTC);
-            try { return LocalDateTime.parse(v.toString()); } catch (Exception e) {}
-            try { return LocalDate.parse(v.toString()).atStartOfDay(); } catch (Exception e) {}
-            return null;
+            return org.bytedeco.pytorch.dataframe.temporal.TemporalOps.toLdt(v, ZoneOffset.UTC);
+        }
+
+        static LocalDateTime toLdt(Object v, ZoneId zone) {
+            return org.bytedeco.pytorch.dataframe.temporal.TemporalOps.toLdt(v, zone);
         }
 
         @Override public Object eval(int row, DataFrame df) {
             Object v = child.eval(row, df);
             if (v == null) return null;
-            if (op == DtOp.TO_TIME) {
-                if (v instanceof LocalTime lt) return lt;
-                LocalDateTime ldt = toLdt(v);
-                return ldt == null ? null : ldt.toLocalTime();
-            }
-            LocalDateTime ldt = toLdt(v);
-            if (ldt == null) return null;
             return switch (op) {
-                case YEAR -> ldt.getYear();
-                case MONTH -> ldt.getMonthValue();
-                case DAY -> ldt.getDayOfMonth();
-                case HOUR -> ldt.getHour();
-                case MINUTE -> ldt.getMinute();
-                case SECOND -> ldt.getSecond();
-                case EPOCH_MILLI -> ldt.toInstant(ZoneOffset.UTC).toEpochMilli();
-                case TO_DATE -> ldt.toLocalDate();
-                case TO_TIME -> ldt.toLocalTime();
+                case YEAR -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.year(v, zone);
+                case MONTH -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.month(v, zone);
+                case DAY -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.day(v, zone);
+                case HOUR -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.hour(v, zone);
+                case MINUTE -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.minute(v, zone);
+                case SECOND -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.second(v, zone);
+                case EPOCH_MILLI -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.epochMilli(v, zone);
+                case TO_DATE -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.toDate(v, zone);
+                case TO_TIME -> {
+                    if (v instanceof LocalTime lt) yield lt;
+                    yield org.bytedeco.pytorch.dataframe.temporal.TemporalOps.toTime(v, zone);
+                }
+                case DAY_OF_WEEK -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.dayOfWeek(v, zone);
+                case DAY_OF_YEAR -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.dayOfYear(v, zone);
+                case WEEK -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.week(v, zone);
+                case QUARTER -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.quarter(v, zone);
+                case IS_WEEKEND -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.isWeekend(v, zone);
+                case IS_MONTH_END -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.isMonthEnd(v, zone);
+                case IS_MONTH_START -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.isMonthStart(v, zone);
+                case IS_QUARTER_END -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.isQuarterEnd(v, zone);
+                case IS_QUARTER_START -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.isQuarterStart(v, zone);
+                case IS_YEAR_END -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.isYearEnd(v, zone);
+                case IS_YEAR_START -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.isYearStart(v, zone);
+                case IS_LEAP_YEAR -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.isLeapYear(v, zone);
+                case IS_BUSINESS_DAY -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.isBusinessDay(v, zone, calendar);
+                case IS_HOLIDAY -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.isHoliday(v, zone, calendar);
+                case NEXT_BUSINESS_DAY -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.nextBusinessDay(v, zone, calendar);
+                case PREV_BUSINESS_DAY -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.previousBusinessDay(v, zone, calendar);
+                case TO_BUSINESS_DAY -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.toBusinessDay(v, zone, calendar);
+                case MONTH_START -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.monthStart(v, zone);
+                case MONTH_END -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.monthEnd(v, zone);
+                case QUARTER_START -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.quarterStart(v, zone);
+                case QUARTER_END -> org.bytedeco.pytorch.dataframe.temporal.TemporalOps.quarterEnd(v, zone);
             };
         }
         @Override public String suggestedName() {
             return "dt_" + op.name().toLowerCase() + "(" + child.suggestedName() + ")";
         }
         @Override public Set<String> referencedColumns() { return child.referencedColumns(); }
+    }
+
+    /** Row-wise business-day count between two temporal expressions. */
+    static final class BusinessDaysBetweenExpr extends Expression {
+        final Expression left;
+        final Expression right;
+        final ZoneId zone;
+        final org.bytedeco.pytorch.dataframe.temporal.BusinessCalendar calendar;
+
+        BusinessDaysBetweenExpr(Expression left, Expression right, ZoneId zone,
+                                org.bytedeco.pytorch.dataframe.temporal.BusinessCalendar calendar) {
+            this.left = left;
+            this.right = right;
+            this.zone = zone == null ? ZoneOffset.UTC : zone;
+            this.calendar = calendar;
+        }
+
+        @Override public Object eval(int row, DataFrame df) {
+            return org.bytedeco.pytorch.dataframe.temporal.TemporalOps.businessDaysBetween(
+                    left.eval(row, df), right.eval(row, df), zone, calendar);
+        }
+
+        @Override public String suggestedName() {
+            return "dt_busday_count(" + left.suggestedName() + "," + right.suggestedName() + ")";
+        }
+
+        @Override public Set<String> referencedColumns() {
+            Set<String> s = new LinkedHashSet<>(left.referencedColumns());
+            s.addAll(right.referencedColumns());
+            return s;
+        }
     }
 
     // ================================================================
