@@ -919,31 +919,59 @@ def classify_file(path: Path, text: str) -> Optional[str]:
         if "/recommend/" in posix:
             return f"handwritten:{ROOT_PKG}.recommend.data"
 
-    # Multiple pure-Java Transform types share the simple name "Transform".
-    # Pin by path / content — do NOT force all of them into
-    # distribution.transforms (that previously ate audio/data Transform).
+    # Multiple pure-Java types share the simple name "Transform"
+    # (data / audio / vision / distribution / pillow enum / …).
+    #
+    # STRICT RULES — never infer package from bare name "Transform":
+    #   1. Path is the only authority for already-placed handwritten files.
+    #   2. utils.{audio,vision}.transforms is a LEGACY path only; rehome to
+    #      audio.transforms / vision.transforms (do not keep or re-create utils.*).
+    #   3. Content heuristics only apply when the file is still at package root
+    #      (or otherwise un-pinned) — never override a path under *.transforms
+    #      or under another domain module (vision.pillow.enums, geometric, …).
+    #   4. Future packages named "transforms" or classes named "Transform" are
+    #      left alone unless they match an explicit path / content pin below.
     if simple == "Transform":
         posix = path.as_posix()
+        # --- path pins (most-specific first) ---------------------------------
+        # Legacy utils paths → canonical domain packages (do NOT preserve utils).
+        if "/utils/audio/transforms/" in posix:
+            return f"handwritten:{ROOT_PKG}.audio.transforms"
+        if "/utils/vision/transforms/" in posix:
+            return f"handwritten:{ROOT_PKG}.vision.transforms"
         if "/distribution/transforms/" in posix:
             return f"handwritten:{ROOT_PKG}.distribution.transforms"
-        if "/utils/audio/transforms/" in posix:
-            return f"handwritten:{ROOT_PKG}.utils.audio.transforms"
-        if "/utils/vision/transforms/" in posix:
-            return f"handwritten:{ROOT_PKG}.utils.vision.transforms"
         if "/audio/transforms/" in posix:
             return f"handwritten:{ROOT_PKG}.audio.transforms"
         if "/vision/transforms/" in posix:
             return f"handwritten:{ROOT_PKG}.vision.transforms"
         if "/data/transforms/" in posix:
             return f"handwritten:{DATA_PKG}.transforms"
+        # Non-transform "Transform" types (e.g. vision.pillow.enums.Transform) —
+        # already under a domain package: leave package unchanged.
+        if any(
+            seg in posix
+            for seg in (
+                "/vision/", "/audio/", "/distribution/", "/geometric/",
+                "/llm/", "/utils/", "/recommend/", "/feature/", "/rl/",
+            )
+        ):
+            return None  # plan_moves keeps current_pkg
+        # --- content pins (only for files not already under a domain path) ---
         # abstract bijector API (torch.distributions.transforms)
         if "eventDim" in text and "logAbsDetJacobian" in text:
             return f"handwritten:{ROOT_PKG}.distribution.transforms"
-        # generic functional interface used by vision/audio/dataset pipelines
+        # generic functional interface used by vision/audio/dataset pipelines.
+        # Prefer audio.transforms (canonical) — never utils.audio.transforms.
         if "@FunctionalInterface" in text:
-            if "audio" in text.lower():
-                return f"handwritten:{ROOT_PKG}.utils.audio.transforms"
+            if "torchaudio" in text.lower() or "audio.transforms" in text:
+                return f"handwritten:{ROOT_PKG}.audio.transforms"
+            if "torchvision" in text.lower() or "vision.transforms" in text:
+                return f"handwritten:{ROOT_PKG}.vision.transforms"
             return f"handwritten:{DATA_PKG}.transforms"
+        # Bare "Transform" with no path/content signal: do NOT force into
+        # data.transforms via DATA_NAMES. Leave package as-is.
+        return None
 
     by_attr = classify_by_name_attr(text, simple)
     kind = by_attr if by_attr else classify_by_simple_name(simple)

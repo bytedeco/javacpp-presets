@@ -267,6 +267,36 @@
       <version>4.3.1</version>
       <scope>compile</scope>
     </dependency>
+    <!-- MySQL JDBC: Apache Doris FE (MySQL protocol :9030) + generic MySQL.
+         Source: https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
+    <dependency>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <version>9.7.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <!-- Apache Iceberg core: open table format for data-lake / Data-for-AI.
+         NO Hadoop/Hive runtime — LocalFileIO / REST catalog / custom FileIO only.
+         Source: https://mvnrepository.com/artifact/org.apache.iceberg/iceberg-core -->
+    <dependency>
+      <groupId>org.apache.iceberg</groupId>
+      <artifactId>iceberg-core</artifactId>
+      <version>1.11.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.hive</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.orc</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
     <!-- FFmpeg JavaCPP: video / audio decode-encode via libav -->
     <dependency>
       <groupId>org.bytedeco</groupId>
