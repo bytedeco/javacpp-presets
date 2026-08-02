@@ -1725,7 +1725,7 @@ public class INetworkDefinition extends INoCopy {
      *  @see IGridSampleLayer
      * 
      *  Creates a GridSample layer with a InterpolationMode::kLINEAR, unaligned corners,
-     *  and SampleMode::kFILL for 4d-shape input tensors.
+     *  and SampleMode::kFILL for rank 4 or 5 input tensors.
      * 
      *  @return The new GridSample layer, or nullptr if it could not be created.
      *  */

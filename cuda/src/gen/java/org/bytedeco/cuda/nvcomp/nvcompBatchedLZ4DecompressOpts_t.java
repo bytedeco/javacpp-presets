@@ -50,7 +50,7 @@ public class nvcompBatchedLZ4DecompressOpts_t extends Pointer {
    *        the correct output.
    *        If bitshuffle is not enabled, this field is ignored.
    */
-   public native @Cast("nvcompType_t") int data_type(); public native nvcompBatchedLZ4DecompressOpts_t data_type(int setter);
+  public native @Cast("nvcompType_t") int data_type(); public native nvcompBatchedLZ4DecompressOpts_t data_type(int setter);
 
   /**
    * \brief Bitshuffle mode to use.

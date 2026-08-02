@@ -38,8 +38,8 @@ public class BitcompFormatSpecHeader extends Pointer {
    * \brief Bitcomp algorithm options.
    *
    * - 0 : Default algorithm, usually gives the best compression ratios
-   * - 1 : "Sparse" algorithm, works well on sparse data (with lots of zeroes).
-   *        and is usually a faster than the default algorithm.
+   * - 1 : "Sparse" algorithm, works well on sparse data (with lots of zeroes),
+   *        and is usually faster than the default algorithm.
    */
   public native int algorithm(); public native BitcompFormatSpecHeader algorithm(int setter);
   /**

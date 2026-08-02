@@ -36,6 +36,17 @@ public class nvcompBatchedGzipCompressOpts_t extends Pointer {
     }
 
   /**
+   * \brief gzip compression algorithm option.
+   *
+   * - 0: highest-throughput, lowest compression ratio, entropy-only compression (use for symmetric compression/decompression performance)
+   * - 1: high-throughput, low compression ratio (default)
+   * - 2: medium-throughput, medium compression ratio, beat Zlib level 1 on the compression ratio
+   * - 3: placeholder for further compression level support, will fall into MEDIUM_COMPRESSION at this point
+   * - 4: lower-throughput, higher compression ratio, beat Zlib level 6 on the compression ratio
+   * - 5: lowest-throughput, highest compression ratio
+   */
+  public native int algorithm(); public native nvcompBatchedGzipCompressOpts_t algorithm(int setter);
+  /**
    * \brief These bytes are unused and must be zeroed. This ensures
    *        compatibility if additional fields are added in the future.
    */

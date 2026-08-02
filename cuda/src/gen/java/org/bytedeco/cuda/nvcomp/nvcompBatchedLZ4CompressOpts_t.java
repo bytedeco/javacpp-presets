@@ -48,7 +48,7 @@ public class nvcompBatchedLZ4CompressOpts_t extends Pointer {
    *        and the remaining elements are not bitshuffled.
    */
   public native @Cast("nvcompBitshuffleMode_t") int bitshuffle_mode(); public native nvcompBatchedLZ4CompressOpts_t bitshuffle_mode(int setter);
-  
+
   /**
    * \brief These bytes are unused and must be zeroed. This ensures
    *        compatibility if additional fields are added in the future.

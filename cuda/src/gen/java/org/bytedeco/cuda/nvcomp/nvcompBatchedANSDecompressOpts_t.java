@@ -39,6 +39,26 @@ public class nvcompBatchedANSDecompressOpts_t extends Pointer {
    */
   public native @Cast("nvcompDecompressBackend_t") int backend(); public native nvcompBatchedANSDecompressOpts_t backend(int setter);
   /**
+   * \brief ANS data type to use for decompression.
+   *
+   * The ANS format spec is self-describing, so the data type argument is optional.
+   * If NVCOMP_TYPE_CHAR (0, the default), is set, the data type will be determined
+   * from the bitstream. Otherwise, the data type selected here must match what's in
+   * the bitstream. If this does not match, decompression will not complete
+   * and nvcompStatus values will be set to nvcompErrorCannotDecompress.
+   */
+  public native @Cast("nvcompType_t") int data_type(); public native nvcompBatchedANSDecompressOpts_t data_type(int setter);
+  /**
+   * \brief Maximum sub chunk count override for compression.
+   * 0 = auto-compute from GPU properties and batch size (default).
+   * For decompression -- if the user does not have the setting used during compression, 0 should be used to
+   * autodetect the right value. If a nonzero value that is less than the compression setting is used, decompression will fail.
+   * Nonzero = must be a power-of-2 between 4 and 64.
+   * Leave zero unless you can tune the performance of your e2e application based on this value.
+   * Recommend starting with a value of 64 for small batches, 8 for large batches.
+   */
+  public native @Cast("uint8_t") byte max_sub_chunk_count(); public native nvcompBatchedANSDecompressOpts_t max_sub_chunk_count(byte setter);
+  /**
    * \brief These bytes are unused and must be zeroed. This ensures
    *        compatibility if additional fields are added in the future.
    */

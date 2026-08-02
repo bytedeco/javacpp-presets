@@ -54,7 +54,7 @@ public class nvcompCRC32Spec_t extends Pointer {
    */
   public native @Cast("bool") boolean ref_out(); public native nvcompCRC32Spec_t ref_out(boolean setter);
   /**
-   * \brief Value with which to to XOR the final CRC result.
+   * \brief Value with which to XOR the final CRC result.
    *
    * If \ref ref_in is true, the XOR operation is applied after the final CRC
    * value is reflected.

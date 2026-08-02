@@ -49,9 +49,9 @@ public class nvinfer extends org.bytedeco.tensorrt.presets.nvinfer {
 // #define NV_INFER_VERSION_H
 
 public static final int TRT_MAJOR_ENTERPRISE = 11;
-public static final int TRT_MINOR_ENTERPRISE = 1;
-public static final int TRT_PATCH_ENTERPRISE = 0;
-public static final int TRT_BUILD_ENTERPRISE = 106;
+public static final int TRT_MINOR_ENTERPRISE = 2;
+public static final int TRT_PATCH_ENTERPRISE = 1;
+public static final int TRT_BUILD_ENTERPRISE = 2;
 /** TensorRT major version. */
 public static final int NV_TENSORRT_MAJOR = TRT_MAJOR_ENTERPRISE;
 /** TensorRT minor version. */
@@ -2751,7 +2751,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
     kNEAREST(0),
     /** Supports linear (1D), bilinear (2D), and trilinear (3D) interpolation */
     kLINEAR(1),
-    /** Supports bicubic (2D) interpolation */
+    /** Supports bicubic (2D) and tricubic (3D) interpolation */
     kCUBIC(2);
 
     public final int value;
@@ -3420,6 +3420,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
  *  @see RuntimePlatform
  *  */
 
+
 /**
  *  \brief Represents one or more BuilderFlag values using binary OR
  *  operations, e.g., 1U << BuilderFlag::kDEBUG.
@@ -3514,7 +3515,10 @@ public static native @NoException(true) int getInferLibBuildVersion();
      *  BuilderFlag::DISABLE_TIMING_CACHE is not set. */
     kDISABLE_COMPILATION_CACHE(17),
 
-    /** Strip the refittable weights from the engine plan file. */
+    /** Strip refittable weights from the engine plan file. If no refit mode is specified, kREFIT_IDENTICAL is enabled
+     *  by default. When used with kREFIT_INDIVIDUAL, only weights explicitly marked with
+     *  INetworkDefinition::markWeightsRefittable are stripped. When used with kREFIT or kREFIT_IDENTICAL, TensorRT
+     *  determines which refittable weights are stripped according to the selected refit mode. */
     kSTRIP_PLAN(18),
 
     /** Create a refittable engine under the assumption that the refit weights will be identical to those provided at

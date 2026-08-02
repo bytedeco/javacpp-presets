@@ -249,11 +249,13 @@ public class ICudaEngine extends INoCopy {
      *  */
     
     
+    
     //!
     //!
     //!
     //!
     public native @NoException(true) IRuntimeConfig createRuntimeConfig();
+
 
     /**
      *  \brief Return the maximum device memory required by the context over all profiles.

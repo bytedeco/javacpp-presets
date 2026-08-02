@@ -1034,6 +1034,7 @@ public class IBuilderConfig extends INoCopy {
      *  */
     
     
+    
     //!
     //!
     //!
@@ -1042,6 +1043,7 @@ public class IBuilderConfig extends INoCopy {
     //!
     //!
     public native @NoException(true) String getRemoteAutoTuningConfig();
+
 
     /**
      *  \brief Set the build route to be passed to the compiler.

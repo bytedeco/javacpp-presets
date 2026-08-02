@@ -43,8 +43,17 @@ public class nvcompBatchedANSCompressOpts_t extends Pointer {
    *
    * - NVCOMP_TYPE_(U)CHAR: 1-byte, generic data type
    * - NVCOMP_TYPE_FLOAT16: 2-byte floating-point data type. Applicable to all half-precision data formats.
+   * - NVCOMP_TYPE_FLOAT8_E4M3: 1-byte FP8 (E4M3) floating-point data type.
    */
   public native @Cast("nvcompType_t") int data_type(); public native nvcompBatchedANSCompressOpts_t data_type(int setter);
+  /**
+   * \brief Maximum sub chunk count override for compression.
+   * 0 = auto-compute from GPU properties and batch size (default).
+   * Nonzero = must be a power-of-2 between 4 and 64.
+   * Leave zero unless you can tune the performance of your e2e application based on this value.
+   * Recommend starting with a value of 64 for small batches, 8 for large batches.
+   */
+  public native @Cast("uint8_t") byte max_sub_chunk_count(); public native nvcompBatchedANSCompressOpts_t max_sub_chunk_count(byte setter);
   /**
    * \brief These bytes are unused and must be zeroed. This ensures
    *        compatibility if additional fields are added in the future.

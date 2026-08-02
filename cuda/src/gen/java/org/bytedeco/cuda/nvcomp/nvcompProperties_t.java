@@ -34,8 +34,8 @@ public class nvcompProperties_t extends Pointer {
         return new nvcompProperties_t((Pointer)this).offsetAddress(i);
     }
 
-    /** nvCOMP library version. */
-    public native @Cast("uint32_t") int version(); public native nvcompProperties_t version(int setter);
-    /** Version of CUDA Runtime with which the nvCOMP library was built. */
-    public native @Cast("uint32_t") int cudart_version(); public native nvcompProperties_t cudart_version(int setter);
+  /** nvCOMP library version. */
+  public native @Cast("uint32_t") int version(); public native nvcompProperties_t version(int setter);
+  /** Version of CUDA Runtime with which the nvCOMP library was built. */
+  public native @Cast("uint32_t") int cudart_version(); public native nvcompProperties_t cudart_version(int setter);
 }

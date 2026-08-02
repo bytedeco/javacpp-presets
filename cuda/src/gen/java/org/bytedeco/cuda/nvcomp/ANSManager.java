@@ -41,18 +41,22 @@ public class ANSManager extends PimplManager {
       @Const @ByRef(nullValue = "nvcompBatchedANSDecompressOpts_t(nvcompBatchedANSDecompressDefaultOpts)") nvcompBatchedANSDecompressOpts_t decompress_opts,
       CUstream_st user_stream/*=0*/,
       @Cast("nvcomp::ChecksumPolicy") int checksum_policy/*=nvcomp::NoComputeNoVerify*/,
-      @Cast("nvcomp::BitstreamKind") int bitstream_kind/*=nvcomp::BitstreamKind::NVCOMP_NATIVE*/) { super((Pointer)null); allocate(uncomp_chunk_size, compress_opts, decompress_opts, user_stream, checksum_policy, bitstream_kind); }
+      @Cast("nvcomp::BitstreamKind") int bitstream_kind/*=nvcomp::BitstreamKind::NVCOMP_NATIVE*/
+    ) { super((Pointer)null); allocate(uncomp_chunk_size, compress_opts, decompress_opts, user_stream, checksum_policy, bitstream_kind); }
   private native void allocate(
       @Cast("size_t") long uncomp_chunk_size,
       @Const @ByRef(nullValue = "nvcompBatchedANSCompressOpts_t(nvcompBatchedANSCompressDefaultOpts)") nvcompBatchedANSCompressOpts_t compress_opts,
       @Const @ByRef(nullValue = "nvcompBatchedANSDecompressOpts_t(nvcompBatchedANSDecompressDefaultOpts)") nvcompBatchedANSDecompressOpts_t decompress_opts,
       CUstream_st user_stream/*=0*/,
       @Cast("nvcomp::ChecksumPolicy") int checksum_policy/*=nvcomp::NoComputeNoVerify*/,
-      @Cast("nvcomp::BitstreamKind") int bitstream_kind/*=nvcomp::BitstreamKind::NVCOMP_NATIVE*/);
+      @Cast("nvcomp::BitstreamKind") int bitstream_kind/*=nvcomp::BitstreamKind::NVCOMP_NATIVE*/
+    );
   public ANSManager(
-      @Cast("size_t") long uncomp_chunk_size) { super((Pointer)null); allocate(uncomp_chunk_size); }
+      @Cast("size_t") long uncomp_chunk_size
+    ) { super((Pointer)null); allocate(uncomp_chunk_size); }
   private native void allocate(
-      @Cast("size_t") long uncomp_chunk_size);
+      @Cast("size_t") long uncomp_chunk_size
+    );
 
   /**
    * \brief Destructor of ANSManager.

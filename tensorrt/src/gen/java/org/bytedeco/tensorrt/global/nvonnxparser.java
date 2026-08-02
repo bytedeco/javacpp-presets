@@ -62,7 +62,7 @@ public class nvonnxparser extends org.bytedeco.tensorrt.presets.nvonnxparser {
  *  */
 
 public static final int NV_ONNX_PARSER_MAJOR = 0;
-public static final int NV_ONNX_PARSER_MINOR = 1;
+public static final int NV_ONNX_PARSER_MINOR = 2;
 public static final int NV_ONNX_PARSER_PATCH = 0;
 
 
@@ -161,6 +161,56 @@ public static final int NV_ONNX_PARSER_VERSION = NV_ONNX_PARSER_VERSION();
 
 
 // Targeting ../nvonnxparser/IParser.java
+
+
+
+/**
+ *  \enum RefitTransformKind
+ * 
+ *  \brief Identifies how a refittable engine weight is produced from one or more ONNX initializers
+ *         or node attributes.
+ * 
+ *  Emitted by IParserRefitter through IRefitterObserver to describe how each refittable engine
+ *  weight is sourced. A consumer can record these descriptions at build time and replay them at
+ *  engine-load time to refit directly via nvinfer1::IRefitter::setNamedWeights, without invoking
+ *  the ONNX parser again.
+ *  */
+@Namespace("nvonnxparser") public enum RefitTransformKind {
+    /** Source is one ONNX initializer; refit data equals the initializer data verbatim. */
+    kIDENTITY(0),
+
+    /** Source is one ONNX initializer of DOUBLE type; refit data is the FLOAT cast. */
+    kDOUBLE_TO_FLOAT(1),
+
+    /** Source is the four scale/bias/mean/variance initializers of a BatchNormalization node.
+     *  Refit data is combinedScale[i] = scale[i] / sqrt(variance[i] + epsilon). */
+    kBATCH_NORM_FOLD_SCALE(2),
+
+    /** Source is the four scale/bias/mean/variance initializers of a BatchNormalization node.
+     *  Refit data is combinedBias[i] = bias[i] - mean[i] * combinedScale[i]. */
+    kBATCH_NORM_FOLD_BIAS(3),
+
+    /** Source is the value attribute of a Constant node. The bytes are carried in
+     *  RefitRecord::fixedData since they are not available as a separate ONNX initializer. */
+    kCONSTANT_NODE(4),
+
+    /** Source is the value attribute of a ConstantOfShape node (defaulting to 0.0 if absent).
+     *  The bytes are carried in RefitRecord::fixedData. */
+    kCONSTANT_OF_SHAPE(5);
+
+    public final int value;
+    private RefitTransformKind(int v) { this.value = v; }
+    private RefitTransformKind(RefitTransformKind e) { this.value = e.value; }
+    public RefitTransformKind intern() { for (RefitTransformKind e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+/** Specialization. See {@code nvonnxparser::EnumMax()} for details. */
+
+// Targeting ../nvonnxparser/RefitRecord.java
+
+
+// Targeting ../nvonnxparser/IRefitterObserver.java
 
 
 // Targeting ../nvonnxparser/IParserRefitter.java

@@ -34,12 +34,12 @@ public class nvcompAlignmentRequirements_t extends Pointer {
         return new nvcompAlignmentRequirements_t((Pointer)this).offsetAddress(i);
     }
 
-    /** Minimum alignment requirement of each input buffer. */
-    public native @Cast("size_t") long input(); public native nvcompAlignmentRequirements_t input(long setter);
-    /** Minimum alignment requirement of each output buffer. */
-    public native @Cast("size_t") long output(); public native nvcompAlignmentRequirements_t output(long setter);
-    /** Minimum alignment requirement of temporary-storage buffer, if any. For
-     *  algorithms that do not use temporary storage, this field is always equal
-     *  to 1. */
-    public native @Cast("size_t") long temp(); public native nvcompAlignmentRequirements_t temp(long setter);
+  /** Minimum alignment requirement of each input buffer. */
+  public native @Cast("size_t") long input(); public native nvcompAlignmentRequirements_t input(long setter);
+  /** Minimum alignment requirement of each output buffer. */
+  public native @Cast("size_t") long output(); public native nvcompAlignmentRequirements_t output(long setter);
+  /** Minimum alignment requirement of temporary-storage buffer, if any. For
+   *  algorithms that do not use temporary storage, this field is always equal
+   *  to 1. */
+  public native @Cast("size_t") long temp(); public native nvcompAlignmentRequirements_t temp(long setter);
 }

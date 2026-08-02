@@ -90,6 +90,7 @@ public class IBuilder extends INoCopy {
      *  */
     
     
+    
     //!
     //!
     //!
@@ -100,6 +101,7 @@ public class IBuilder extends INoCopy {
     //!
     //!
     public native @NoException(true) IBuilderConfig createBuilderConfig();
+
 
     /**
      *  \brief Create a network definition object

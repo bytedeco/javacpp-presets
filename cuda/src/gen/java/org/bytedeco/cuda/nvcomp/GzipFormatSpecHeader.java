@@ -16,10 +16,37 @@ import static org.bytedeco.cuda.global.nvcomp.*;
 /**
  * \brief Format specification for Gzip compression
  */
-@Namespace("nvcomp") @Opaque @Properties(inherit = org.bytedeco.cuda.presets.nvcomp.class)
+@Namespace("nvcomp") @Properties(inherit = org.bytedeco.cuda.presets.nvcomp.class)
 public class GzipFormatSpecHeader extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public GzipFormatSpecHeader() { super((Pointer)null); }
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public GzipFormatSpecHeader() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public GzipFormatSpecHeader(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GzipFormatSpecHeader(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public GzipFormatSpecHeader position(long position) {
+        return (GzipFormatSpecHeader)super.position(position);
+    }
+    @Override public GzipFormatSpecHeader getPointer(long i) {
+        return new GzipFormatSpecHeader((Pointer)this).offsetAddress(i);
+    }
+
+  /**
+   * \brief Compression algorithm to use.
+   *
+   * - 0: highest-throughput, lowest compression ratio, entropy-only compression (use for symmetric
+   * compression/decompression performance)
+   * - 1: high-throughput, low compression ratio (default)
+   * - 2: medium-throughput, medium compression ratio, beat Zlib level 1 on the
+   * compression ratio
+   * - 3: placeholder for further compression level support, will fall into
+   * MEDIUM_COMPRESSION at this point
+   * - 4: lower-throughput, higher compression ratio, beat Zlib level 6 on the
+   * compression ratio
+   * - 5: lowest-throughput, highest compression ratio
+   */
+  public native @Cast("uint8_t") byte algorithm(); public native GzipFormatSpecHeader algorithm(byte setter);
 }

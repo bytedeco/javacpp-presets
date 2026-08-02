@@ -58,6 +58,9 @@ public static final int
   nvcompErrorCannotCompress = 19,
   nvcompErrorWrongInputLength = 20,
   nvcompErrorBatchSizeTooLarge = 21,
+  nvcompErrorSubChunkCountTooLarge = 22,
+  nvcompErrorSubChunkCountTooSmall = 23,
+  nvcompErrorOutputBufferAlignmentTooSmall = 24,
   nvcompErrorCudaError = 1000,
   nvcompErrorInternal = 10000;
 
@@ -66,16 +69,17 @@ public static final int
  */
 /** enum nvcompType_t */
 public static final int
-  NVCOMP_TYPE_CHAR = 0,      // 1B
-  NVCOMP_TYPE_UCHAR = 1,     // 1B
-  NVCOMP_TYPE_SHORT = 2,     // 2B
-  NVCOMP_TYPE_USHORT = 3,    // 2B
-  NVCOMP_TYPE_INT = 4,       // 4B
-  NVCOMP_TYPE_UINT = 5,      // 4B
-  NVCOMP_TYPE_LONGLONG = 6,  // 8B
+  NVCOMP_TYPE_CHAR = 0, // 1B
+  NVCOMP_TYPE_UCHAR = 1, // 1B
+  NVCOMP_TYPE_SHORT = 2, // 2B
+  NVCOMP_TYPE_USHORT = 3, // 2B
+  NVCOMP_TYPE_INT = 4, // 4B
+  NVCOMP_TYPE_UINT = 5, // 4B
+  NVCOMP_TYPE_LONGLONG = 6, // 8B
   NVCOMP_TYPE_ULONGLONG = 7, // 8B
-  NVCOMP_TYPE_FLOAT16 = 9,   // 2B
-  NVCOMP_TYPE_BITS = 0xff;    // 1b
+  NVCOMP_TYPE_FLOAT16 = 9, // 2B
+  NVCOMP_TYPE_FLOAT8_E4M3 = 10, // 1B FP8 with E4M3 layout (sign:1 | exp:4 | mantissa:3)
+  NVCOMP_TYPE_BITS = 0xff; // 1b
 
 /**
  * \brief Available decompression backend options
@@ -89,9 +93,9 @@ public static final int
   /** Decompress using the dedicated hardware decompression engine.
    *  If using this backend, nvCOMP will not check for buffers that are too large according
    *  to the CUDA Driver variable CU_DEVICE_ATTRIBUTE_MEM_DECOMPRESS_MAXIMUM_LENGTH.
-   *  If any buffer is too large, decompression will fail asynchronously. 
+   *  If any buffer is too large, decompression will fail asynchronously.
    *  Currently this variable is set to 4 MB, but it is subject to change.
-   *  It can be queried using 
+   *  It can be queried using
    *  int max_supported_size = 0;
    *  CUDA_CHECK(cuDeviceGetAttribute(&max_supported_size,
    *     CU_DEVICE_ATTRIBUTE_MEM_DECOMPRESS_MAXIMUM_LENGTH,
@@ -140,14 +144,14 @@ public static final int
 
 // #ifdef __has_include
 // #if __has_include(<cuda_runtime.h>)
-//     #include <cuda_runtime.h>
+// #include <cuda_runtime.h>
 // #else
-//     #ifndef __device__
-//         #define __device__
-//     #endif
-//     #ifndef __host__
-//         #define __host__
-//     #endif
+// #ifndef __device__
+// #define __device__
+// #endif
+// #ifndef __host__
+// #define __host__
+// #endif
 // #endif
 // #endif
 
@@ -260,9 +264,9 @@ public static final byte
 
 // #pragma once
 
+// #include <functional>
 // #include <memory>
 // #include <vector>
-// #include <functional>
 
 // #include "nvcomp.hpp"
 
@@ -359,16 +363,16 @@ public static final int
 
 // #pragma once
 
-// #include "nvcompManager.hpp"
 // #include "ans.hpp"
-// #include "gdeflate.hpp"
-// #include "lz4.hpp"
-// #include "snappy.hpp"
 // #include "bitcomp.hpp"
 // #include "cascaded.hpp"
-// #include "zstd.hpp"
 // #include "deflate.hpp"
+// #include "gdeflate.hpp"
 // #include "gzip.hpp"
+// #include "lz4.hpp"
+// #include "nvcompManager.hpp"
+// #include "snappy.hpp"
+// #include "zstd.hpp"
 
 /**
  * \brief Construct a ManagerBase from a given compressed buffer.
@@ -385,31 +389,36 @@ public static final int
  * @return The constructed manager instance.
  */
 @Namespace("nvcomp") public static native @SharedPtr nvcompManagerBase create_manager(
-    @Cast("const uint8_t*") BytePointer comp_buffer,
-    CUstream_st stream/*=0*/,
-    @Cast("nvcomp::ChecksumPolicy") int checksum_policy/*=nvcomp::NoComputeNoVerify*/,
-    @Cast("nvcompDecompressBackend_t") int backend/*=NVCOMP_DECOMPRESS_BACKEND_DEFAULT*/,
-    @Cast("bool") boolean use_de_sort/*=false*/);
+  @Cast("const uint8_t*") BytePointer comp_buffer,
+  CUstream_st stream/*=0*/,
+  @Cast("nvcomp::ChecksumPolicy") int checksum_policy/*=nvcomp::NoComputeNoVerify*/,
+  @Cast("nvcompDecompressBackend_t") int backend/*=NVCOMP_DECOMPRESS_BACKEND_DEFAULT*/,
+  @Cast("bool") boolean use_de_sort/*=false*/
+);
 @Namespace("nvcomp") public static native @SharedPtr nvcompManagerBase create_manager(
-    @Cast("const uint8_t*") BytePointer comp_buffer);
+  @Cast("const uint8_t*") BytePointer comp_buffer
+);
 @Namespace("nvcomp") public static native @SharedPtr nvcompManagerBase create_manager(
-    @Cast("const uint8_t*") ByteBuffer comp_buffer,
-    CUstream_st stream/*=0*/,
-    @Cast("nvcomp::ChecksumPolicy") int checksum_policy/*=nvcomp::NoComputeNoVerify*/,
-    @Cast("nvcompDecompressBackend_t") int backend/*=NVCOMP_DECOMPRESS_BACKEND_DEFAULT*/,
-    @Cast("bool") boolean use_de_sort/*=false*/);
+  @Cast("const uint8_t*") ByteBuffer comp_buffer,
+  CUstream_st stream/*=0*/,
+  @Cast("nvcomp::ChecksumPolicy") int checksum_policy/*=nvcomp::NoComputeNoVerify*/,
+  @Cast("nvcompDecompressBackend_t") int backend/*=NVCOMP_DECOMPRESS_BACKEND_DEFAULT*/,
+  @Cast("bool") boolean use_de_sort/*=false*/
+);
 @Namespace("nvcomp") public static native @SharedPtr nvcompManagerBase create_manager(
-    @Cast("const uint8_t*") ByteBuffer comp_buffer);
+  @Cast("const uint8_t*") ByteBuffer comp_buffer
+);
 @Namespace("nvcomp") public static native @SharedPtr nvcompManagerBase create_manager(
-    @Cast("const uint8_t*") byte[] comp_buffer,
-    CUstream_st stream/*=0*/,
-    @Cast("nvcomp::ChecksumPolicy") int checksum_policy/*=nvcomp::NoComputeNoVerify*/,
-    @Cast("nvcompDecompressBackend_t") int backend/*=NVCOMP_DECOMPRESS_BACKEND_DEFAULT*/,
-    @Cast("bool") boolean use_de_sort/*=false*/);
+  @Cast("const uint8_t*") byte[] comp_buffer,
+  CUstream_st stream/*=0*/,
+  @Cast("nvcomp::ChecksumPolicy") int checksum_policy/*=nvcomp::NoComputeNoVerify*/,
+  @Cast("nvcompDecompressBackend_t") int backend/*=NVCOMP_DECOMPRESS_BACKEND_DEFAULT*/,
+  @Cast("bool") boolean use_de_sort/*=false*/
+);
 @Namespace("nvcomp") public static native @SharedPtr nvcompManagerBase create_manager(
-    @Cast("const uint8_t*") byte[] comp_buffer);
+  @Cast("const uint8_t*") byte[] comp_buffer
+);
 
-    
 /**
  * \brief Returns the compression format for a given HLIF compressed buffer.
  *
@@ -421,21 +430,12 @@ public static final int
  *
  * @return Compression format.
  */
-@Namespace("nvcomp") public static native @Cast("nvcomp::nvcompFormatType_t") byte get_compression_format(
-    @Cast("const uint8_t*") BytePointer comp_buffer,
-    CUstream_st stream/*=0*/);
-@Namespace("nvcomp") public static native @Cast("nvcomp::nvcompFormatType_t") byte get_compression_format(
-    @Cast("const uint8_t*") BytePointer comp_buffer);
-@Namespace("nvcomp") public static native @Cast("nvcomp::nvcompFormatType_t") byte get_compression_format(
-    @Cast("const uint8_t*") ByteBuffer comp_buffer,
-    CUstream_st stream/*=0*/);
-@Namespace("nvcomp") public static native @Cast("nvcomp::nvcompFormatType_t") byte get_compression_format(
-    @Cast("const uint8_t*") ByteBuffer comp_buffer);
-@Namespace("nvcomp") public static native @Cast("nvcomp::nvcompFormatType_t") byte get_compression_format(
-    @Cast("const uint8_t*") byte[] comp_buffer,
-    CUstream_st stream/*=0*/);
-@Namespace("nvcomp") public static native @Cast("nvcomp::nvcompFormatType_t") byte get_compression_format(
-    @Cast("const uint8_t*") byte[] comp_buffer);
+@Namespace("nvcomp") public static native @Cast("nvcomp::nvcompFormatType_t") byte get_compression_format(@Cast("const uint8_t*") BytePointer comp_buffer, CUstream_st stream/*=0*/);
+@Namespace("nvcomp") public static native @Cast("nvcomp::nvcompFormatType_t") byte get_compression_format(@Cast("const uint8_t*") BytePointer comp_buffer);
+@Namespace("nvcomp") public static native @Cast("nvcomp::nvcompFormatType_t") byte get_compression_format(@Cast("const uint8_t*") ByteBuffer comp_buffer, CUstream_st stream/*=0*/);
+@Namespace("nvcomp") public static native @Cast("nvcomp::nvcompFormatType_t") byte get_compression_format(@Cast("const uint8_t*") ByteBuffer comp_buffer);
+@Namespace("nvcomp") public static native @Cast("nvcomp::nvcompFormatType_t") byte get_compression_format(@Cast("const uint8_t*") byte[] comp_buffer, CUstream_st stream/*=0*/);
+@Namespace("nvcomp") public static native @Cast("nvcomp::nvcompFormatType_t") byte get_compression_format(@Cast("const uint8_t*") byte[] comp_buffer);
 
  // namespace nvcomp
 
@@ -456,6 +456,8 @@ public static final int
  */
 
 // #pragma once
+
+// #include <cassert>
 
 // #include "nvcomp/shared_types.h"
 // Targeting ../nvcomp/ANSFormatSpecHeader.java
@@ -492,7 +494,7 @@ public static final int
 // Parsed from <nvcomp/ans.h>
 
 /*
- * SPDX-FileCopyrightText: Copyright (c) 2017-2025 NVIDIA CORPORATION & AFFILIATES.
+ * SPDX-FileCopyrightText: Copyright (c) 2017-2026 NVIDIA CORPORATION & AFFILIATES.
  * All rights reserved. SPDX-License-Identifier: LicenseRef-NvidiaProprietary
  *
  * NVIDIA CORPORATION, its affiliates and licensors retain all intellectual
@@ -570,8 +572,9 @@ public static final long nvcompANSRequiredCompressionAlignment = nvcompANSRequir
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressGetRequiredAlignments(
-    @ByVal nvcompBatchedANSCompressOpts_t compress_opts,
-    nvcompAlignmentRequirements_t alignment_requirements);
+  @ByVal nvcompBatchedANSCompressOpts_t compress_opts,
+  nvcompAlignmentRequirements_t alignment_requirements
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for compression
@@ -591,14 +594,15 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressGetRequ
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressGetTempSizeAsync(
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedANSCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes);
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedANSCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes
+);
 
 /**
- * \brief Get the amount of temporary memory required on the GPU for compression.
+ * \brief Get the amount of temporary memory required on the GPU for compression
  * synchronously.
  * 
  * \note This function may perform operations on the stream; if so, it will synchronize it internally.
@@ -628,23 +632,25 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressGetTemp
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressGetTempSizeSync(
-    @Cast("const void*const*const") PointerPointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedANSCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    CUstream_st stream);
+  @Cast("const void*const*const") PointerPointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedANSCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedANSCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedANSCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  CUstream_st stream
+);
 
 /**
  * \brief Get the maximum size that a chunk of size at most max_uncompressed_chunk_bytes
@@ -658,9 +664,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressGetTemp
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressGetMaxOutputChunkSize(
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedANSCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer max_compressed_chunk_bytes);
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedANSCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer max_compressed_chunk_bytes
+);
 
 /**
  * \brief Perform batched asynchronous compression.
@@ -714,53 +721,57 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressGetMaxO
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressAsync(
-    @Cast("const void*const*") PointerPointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedANSCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedANSCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedANSCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedANSCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedANSCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedANSCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedANSCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedANSCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 /**
  * \brief The most restrictive of the minimum alignment requirements for void-type CUDA memory buffers
@@ -785,8 +796,9 @@ public static final long nvcompANSRequiredDecompressionAlignment = nvcompANSRequ
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressGetRequiredAlignments(
-    @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
-    nvcompAlignmentRequirements_t alignment_requirements);
+  @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
+  nvcompAlignmentRequirements_t alignment_requirements
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression
@@ -805,11 +817,12 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressGetRe
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressGetTempSizeAsync(
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes);
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression
@@ -843,45 +856,49 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressGetTe
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressGetTempSizeSync(
-    @Cast("const void*const*const") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 /**
  * \brief Asynchronously compute the number of bytes of uncompressed data for
@@ -911,17 +928,19 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressGetTe
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSGetDecompressSizeAsync(
-    @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSGetDecompressSizeAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  CUstream_st stream
+);
 
 /**
  * \brief Perform batched asynchronous decompression.
@@ -977,53 +996,57 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSGetDecompressSi
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressAsync(
-    @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") PointerPointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") PointerPointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedANSDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 // #ifdef __cplusplus
 // #endif
@@ -1047,9 +1070,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressAsync
 
 // #pragma once
 
-// #include "nvcompManager.hpp"
-// #include "formatSpec.hpp"
 // #include "ans.h"
+// #include "formatSpec.hpp"
+// #include "nvcompManager.hpp"
 // Targeting ../nvcomp/ANSManager.java
 
 
@@ -1130,8 +1153,9 @@ public static final long nvcompBitcompRequiredCompressionAlignment = nvcompBitco
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGetRequiredAlignments(
-    @ByVal nvcompBatchedBitcompCompressOpts_t compress_opts,
-    nvcompAlignmentRequirements_t alignment_requirements);
+  @ByVal nvcompBatchedBitcompCompressOpts_t compress_opts,
+  nvcompAlignmentRequirements_t alignment_requirements
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for compression
@@ -1151,14 +1175,15 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGet
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGetTempSizeAsync(
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedBitcompCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes);
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedBitcompCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes
+);
 
 /**
- * \brief Get the amount of temporary memory required on the GPU for compression.
+ * \brief Get the amount of temporary memory required on the GPU for compression
  * synchronously.
  *
  * \note This function may perform operations on the stream; if so, it will synchronize it internally.
@@ -1188,23 +1213,25 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGet
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGetTempSizeSync(
-    @Cast("const void*const*const") PointerPointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedBitcompCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    CUstream_st stream);
+  @Cast("const void*const*const") PointerPointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedBitcompCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedBitcompCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedBitcompCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  CUstream_st stream
+);
 
 /**
  * \brief Get the maximum size that a chunk of size at most max_uncompressed_chunk_bytes
@@ -1218,9 +1245,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGet
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGetMaxOutputChunkSize(
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedBitcompCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer max_compressed_chunk_bytes);
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedBitcompCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer max_compressed_chunk_bytes
+);
 
 /**
  * \brief Perform batched asynchronous compression.
@@ -1272,53 +1300,57 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGet
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressAsync(
-    @Cast("const void*const*") PointerPointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedBitcompCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedBitcompCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedBitcompCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedBitcompCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedBitcompCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedBitcompCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedBitcompCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedBitcompCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 /**
  * \brief The most restrictive of the minimum alignment requirements for void-type CUDA memory buffers
@@ -1343,8 +1375,9 @@ public static final long nvcompBitcompRequiredDecompressionAlignment = nvcompBit
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressGetRequiredAlignments(
-    @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
-    nvcompAlignmentRequirements_t alignment_requirements);
+  @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
+  nvcompAlignmentRequirements_t alignment_requirements
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression
@@ -1363,11 +1396,12 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressG
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressGetTempSizeAsync(
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes);
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression
@@ -1402,45 +1436,49 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressG
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressGetTempSizeSync(
-    @Cast("const void*const*const") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 /**
  * \brief Asynchronously compute the number of bytes of uncompressed data for
@@ -1469,17 +1507,19 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressG
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompGetDecompressSizeAsync(
-    @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompGetDecompressSizeAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  CUstream_st stream
+);
 
 /**
  * \brief Perform batched asynchronous decompression.
@@ -1540,53 +1580,57 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompGetDecompre
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressAsync(
-    @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") PointerPointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") PointerPointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedBitcompDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 // #ifdef __cplusplus
 // #endif
@@ -1610,9 +1654,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressA
 
 // #pragma once
 
-// #include "nvcompManager.hpp"
-// #include "formatSpec.hpp"
 // #include "bitcomp.h"
+// #include "formatSpec.hpp"
+// #include "nvcompManager.hpp"
 // Targeting ../nvcomp/BitcompManager.java
 
 
@@ -1693,8 +1737,9 @@ public static final long nvcompCascadedRequiredCompressionAlignment = nvcompCasc
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressGetRequiredAlignments(
-    @ByVal nvcompBatchedCascadedCompressOpts_t compress_opts,
-    nvcompAlignmentRequirements_t alignment_requirements);
+  @ByVal nvcompBatchedCascadedCompressOpts_t compress_opts,
+  nvcompAlignmentRequirements_t alignment_requirements
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for compression
@@ -1714,14 +1759,15 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressGe
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressGetTempSizeAsync(
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedCascadedCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes);
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedCascadedCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes
+);
 
 /**
- * \brief Get the amount of temporary memory required on the GPU for compression.
+ * \brief Get the amount of temporary memory required on the GPU for compression
  * synchronously.
  *
  * \note This function may perform operations on the stream; if so, it will synchronize it internally.
@@ -1751,23 +1797,25 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressGe
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressGetTempSizeSync(
-    @Cast("const void*const*const") PointerPointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedCascadedCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    CUstream_st stream);
+  @Cast("const void*const*const") PointerPointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedCascadedCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedCascadedCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedCascadedCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  CUstream_st stream
+);
 
 /**
  * \brief Get the maximum size that a chunk of size at most max_uncompressed_chunk_bytes
@@ -1781,9 +1829,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressGe
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressGetMaxOutputChunkSize(
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedCascadedCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer max_compressed_chunk_bytes);
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedCascadedCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer max_compressed_chunk_bytes
+);
 
 /**
  * \brief Perform batched asynchronous compression.
@@ -1838,53 +1887,57 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressGe
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressAsync(
-    @Cast("const void*const*") PointerPointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedCascadedCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedCascadedCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedCascadedCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedCascadedCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedCascadedCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedCascadedCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedCascadedCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedCascadedCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 /**
  * \brief The most restrictive of the minimum alignment requirements for void-type CUDA memory buffers
@@ -1909,8 +1962,9 @@ public static final long nvcompCascadedRequiredDecompressionAlignment = nvcompCa
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedDecompressGetRequiredAlignments(
-    @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
-    nvcompAlignmentRequirements_t alignment_requirements);
+  @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
+  nvcompAlignmentRequirements_t alignment_requirements
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression
@@ -1929,11 +1983,12 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedDecompress
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedDecompressGetTempSizeAsync(
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes);
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression
@@ -1967,45 +2022,49 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedDecompress
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedDecompressGetTempSizeSync(
-    @Cast("const void*const*const") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 /**
  * \brief Asynchronously compute the number of bytes of uncompressed data for
@@ -2035,17 +2094,19 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedDecompress
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedGetDecompressSizeAsync(
-    @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedGetDecompressSizeAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  CUstream_st stream
+);
 
 /**
  * \brief Perform batched asynchronous decompression.
@@ -2100,53 +2161,57 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedGetDecompr
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedDecompressAsync(
-    @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") PointerPointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") PointerPointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedCascadedDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 // #ifdef __cplusplus
 // #endif
@@ -2323,41 +2388,45 @@ public static final int
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCRC32Async(
-    @Cast("const void*const*") PointerPointer device_input_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_input_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("uint32_t*") IntPointer device_crc32_ptr,
-    @ByVal nvcompBatchedCRC32Opts_t opts,
-    @Cast("nvcompCRC32SegmentKind_t") int segment_kind,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_input_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_input_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("uint32_t*") IntPointer device_crc32_ptr,
+  @ByVal nvcompBatchedCRC32Opts_t opts,
+  @Cast("nvcompCRC32SegmentKind_t") int segment_kind,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCRC32Async(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_input_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_input_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("uint32_t*") IntPointer device_crc32_ptr,
-    @ByVal nvcompBatchedCRC32Opts_t opts,
-    @Cast("nvcompCRC32SegmentKind_t") int segment_kind,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_input_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_input_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("uint32_t*") IntPointer device_crc32_ptr,
+  @ByVal nvcompBatchedCRC32Opts_t opts,
+  @Cast("nvcompCRC32SegmentKind_t") int segment_kind,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCRC32Async(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_input_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_input_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("uint32_t*") IntBuffer device_crc32_ptr,
-    @ByVal nvcompBatchedCRC32Opts_t opts,
-    @Cast("nvcompCRC32SegmentKind_t") int segment_kind,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_input_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_input_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("uint32_t*") IntBuffer device_crc32_ptr,
+  @ByVal nvcompBatchedCRC32Opts_t opts,
+  @Cast("nvcompCRC32SegmentKind_t") int segment_kind,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCRC32Async(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_input_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_input_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("uint32_t*") int[] device_crc32_ptr,
-    @ByVal nvcompBatchedCRC32Opts_t opts,
-    @Cast("nvcompCRC32SegmentKind_t") int segment_kind,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_input_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_input_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("uint32_t*") int[] device_crc32_ptr,
+  @ByVal nvcompBatchedCRC32Opts_t opts,
+  @Cast("nvcompCRC32SegmentKind_t") int segment_kind,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 /**
  * \brief Value to pass as \p device_input_chunk_bytes to \ref
@@ -2421,11 +2490,12 @@ public static final long nvcompCRC32DeducedMaxInputChunkBytes = nvcompCRC32Deduc
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCRC32GetHeuristicConf(
-    @Cast("const size_t*") SizeTPointer device_input_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    nvcompCRC32KernelConf_t kernel_conf,
-    @Cast("size_t") long max_input_chunk_bytes,
-    CUstream_st stream);
+  @Cast("const size_t*") SizeTPointer device_input_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  nvcompCRC32KernelConf_t kernel_conf,
+  @Cast("size_t") long max_input_chunk_bytes,
+  CUstream_st stream
+);
 
 /**
  * \brief Explicitly search for the optimal CRC32 kernel configuration by
@@ -2459,37 +2529,41 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCRC32GetHeuristicC
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCRC32SearchConf(
-    @Cast("const void*const*") PointerPointer device_input_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_input_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("uint32_t*") IntPointer device_crc32_ptr,
-    @ByVal nvcompCRC32Spec_t spec,
-    nvcompCRC32KernelConf_t kernel_conf,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_input_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_input_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("uint32_t*") IntPointer device_crc32_ptr,
+  @ByVal nvcompCRC32Spec_t spec,
+  nvcompCRC32KernelConf_t kernel_conf,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCRC32SearchConf(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_input_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_input_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("uint32_t*") IntPointer device_crc32_ptr,
-    @ByVal nvcompCRC32Spec_t spec,
-    nvcompCRC32KernelConf_t kernel_conf,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_input_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_input_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("uint32_t*") IntPointer device_crc32_ptr,
+  @ByVal nvcompCRC32Spec_t spec,
+  nvcompCRC32KernelConf_t kernel_conf,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCRC32SearchConf(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_input_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_input_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("uint32_t*") IntBuffer device_crc32_ptr,
-    @ByVal nvcompCRC32Spec_t spec,
-    nvcompCRC32KernelConf_t kernel_conf,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_input_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_input_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("uint32_t*") IntBuffer device_crc32_ptr,
+  @ByVal nvcompCRC32Spec_t spec,
+  nvcompCRC32KernelConf_t kernel_conf,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedCRC32SearchConf(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_input_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_input_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("uint32_t*") int[] device_crc32_ptr,
-    @ByVal nvcompCRC32Spec_t spec,
-    nvcompCRC32KernelConf_t kernel_conf,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_input_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_input_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("uint32_t*") int[] device_crc32_ptr,
+  @ByVal nvcompCRC32Spec_t spec,
+  nvcompCRC32KernelConf_t kernel_conf,
+  CUstream_st stream
+);
 
 // #ifdef __cplusplus
 // #endif
@@ -2575,8 +2649,9 @@ public static final long nvcompDeflateRequiredCompressionAlignment = nvcompDefla
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressGetRequiredAlignments(
-    @ByVal nvcompBatchedDeflateCompressOpts_t compress_opts,
-    nvcompAlignmentRequirements_t alignment_requirements);
+  @ByVal nvcompBatchedDeflateCompressOpts_t compress_opts,
+  nvcompAlignmentRequirements_t alignment_requirements
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for compression
@@ -2596,14 +2671,15 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressGet
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressGetTempSizeAsync(
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedDeflateCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes);
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedDeflateCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes
+);
 
 /**
- * \brief Get the amount of temporary memory required on the GPU for compression.
+ * \brief Get the amount of temporary memory required on the GPU for compression
  * synchronously.
  *
  * \note This function may perform operations on the stream; if so, it will synchronize it internally.
@@ -2633,23 +2709,25 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressGet
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressGetTempSizeSync(
-    @Cast("const void*const*const") PointerPointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedDeflateCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    CUstream_st stream);
+  @Cast("const void*const*const") PointerPointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedDeflateCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedDeflateCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedDeflateCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  CUstream_st stream
+);
 
 /**
  * \brief Get the maximum size that a chunk of size at most max_uncompressed_chunk_bytes
@@ -2665,9 +2743,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressGet
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressGetMaxOutputChunkSize(
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedDeflateCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer max_compressed_chunk_bytes);
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedDeflateCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer max_compressed_chunk_bytes
+);
 
 /**
  * \brief Perform batched asynchronous compression.
@@ -2724,53 +2803,57 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressGet
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressAsync(
-    @Cast("const void*const*") PointerPointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedDeflateCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedDeflateCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedDeflateCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedDeflateCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedDeflateCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedDeflateCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedDeflateCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedDeflateCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 /**
  * \brief The most restrictive of the minimum alignment requirements for void-type CUDA memory buffers
@@ -2795,8 +2878,9 @@ public static final long nvcompDeflateRequiredDecompressionAlignment = nvcompDef
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateDecompressGetRequiredAlignments(
-    @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
-    nvcompAlignmentRequirements_t alignment_requirements);
+  @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
+  nvcompAlignmentRequirements_t alignment_requirements
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression
@@ -2815,11 +2899,12 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateDecompressG
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateDecompressGetTempSizeAsync(
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes);
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression
@@ -2853,45 +2938,49 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateDecompressG
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateDecompressGetTempSizeSync(
-    @Cast("const void*const*const") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 /**
  * \brief Asynchronously compute the number of bytes of uncompressed data for
@@ -2922,17 +3011,19 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateDecompressG
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateGetDecompressSizeAsync(
-    @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateGetDecompressSizeAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  CUstream_st stream
+);
 
 /**
  * \brief Perform batched asynchronous decompression.
@@ -2991,53 +3082,57 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateGetDecompre
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateDecompressAsync(
-    @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") PointerPointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") PointerPointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedDeflateDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 // #ifdef __cplusplus
 // #endif
@@ -3061,9 +3156,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateDecompressA
 
 // #pragma once
 
-// #include "nvcompManager.hpp"
-// #include "formatSpec.hpp"
 // #include "deflate.h"
+// #include "formatSpec.hpp"
+// #include "nvcompManager.hpp"
 // Targeting ../nvcomp/DeflateManager.java
 
 
@@ -3148,8 +3243,9 @@ public static final long nvcompGdeflateRequiredCompressionAlignment = nvcompGdef
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressGetRequiredAlignments(
-    @ByVal nvcompBatchedGdeflateCompressOpts_t compress_opts,
-    nvcompAlignmentRequirements_t alignment_requirements);
+  @ByVal nvcompBatchedGdeflateCompressOpts_t compress_opts,
+  nvcompAlignmentRequirements_t alignment_requirements
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for compression
@@ -3171,14 +3267,15 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressGe
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressGetTempSizeAsync(
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedGdeflateCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes);
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedGdeflateCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes
+);
 
 /**
- * \brief Get the amount of temporary memory required on the GPU for compression.
+ * \brief Get the amount of temporary memory required on the GPU for compression
  * synchronously.
  *
  * \note This function may perform operations on the stream; if so, it will synchronize it internally.
@@ -3210,23 +3307,25 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressGe
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressGetTempSizeSync(
-    @Cast("const void*const*const") PointerPointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedGdeflateCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    CUstream_st stream);
+  @Cast("const void*const*const") PointerPointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedGdeflateCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedGdeflateCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedGdeflateCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  CUstream_st stream
+);
 
 /**
  * \brief Get the maximum size that a chunk of size at most max_uncompressed_chunk_bytes
@@ -3242,9 +3341,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressGe
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressGetMaxOutputChunkSize(
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedGdeflateCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer max_compressed_chunk_bytes);
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedGdeflateCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer max_compressed_chunk_bytes
+);
 
 /**
  * \brief Perform batched asynchronous compression.
@@ -3301,53 +3401,57 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressGe
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressAsync(
-    @Cast("const void*const*") PointerPointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedGdeflateCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedGdeflateCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedGdeflateCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedGdeflateCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedGdeflateCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedGdeflateCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedGdeflateCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedGdeflateCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 /**
  * \brief The most restrictive of the minimum alignment requirements for void-type CUDA memory buffers
@@ -3372,8 +3476,9 @@ public static final long nvcompGdeflateRequiredDecompressionAlignment = nvcompGd
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompressGetRequiredAlignments(
-    @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
-    nvcompAlignmentRequirements_t alignment_requirements);
+  @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
+  nvcompAlignmentRequirements_t alignment_requirements
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression
@@ -3392,11 +3497,12 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompress
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompressGetTempSizeAsync(
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes);
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression
@@ -3430,45 +3536,49 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompress
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompressGetTempSizeSync(
-    @Cast("const void*const*const") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 /**
  * \brief Asynchronously compute the number of bytes of uncompressed data for
@@ -3499,17 +3609,19 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompress
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateGetDecompressSizeAsync(
-    @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateGetDecompressSizeAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  CUstream_st stream
+);
 
 /**
  * \brief Perform batched asynchronous decompression.
@@ -3570,53 +3682,57 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateGetDecompr
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompressAsync(
-    @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") PointerPointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") PointerPointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedGdeflateDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 // #ifdef __cplusplus
 // #endif
@@ -3640,9 +3756,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompress
 
 // #pragma once
 
-// #include "nvcompManager.hpp"
 // #include "formatSpec.hpp"
 // #include "gdeflate.h"
+// #include "nvcompManager.hpp"
 // Targeting ../nvcomp/GdeflateManager.java
 
 
@@ -3674,7 +3790,6 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompress
 
 
 
-
 /**
  * \brief Gzip decompression CUDA algorithm options for the low-level API
  */
@@ -3692,6 +3807,14 @@ public static final int
 @MemberGetter public static native @Const @ByRef nvcompBatchedGzipCompressOpts_t nvcompBatchedGzipCompressDefaultOpts();
 
 /**
+ * \brief The maximum supported uncompressed chunk size in bytes for Gzip compression.
+ * \note The implementation balances work internally, so throughput is largely
+ * insensitive to the chosen chunk size.
+ */
+@MemberGetter public static native @Cast("const size_t") long nvcompGzipCompressionMaxAllowedChunkSize();
+public static final long nvcompGzipCompressionMaxAllowedChunkSize = nvcompGzipCompressionMaxAllowedChunkSize();
+
+/**
  * \brief Default Gzip decompression options
  */
 @MemberGetter public static native @Const @ByRef nvcompBatchedGzipDecompressOpts_t nvcompBatchedGzipDecompressDefaultOpts();
@@ -3701,8 +3824,6 @@ public static final int
  * asynchronously.
  *
  * \note This function does not interact with the device, its result can be used immediately.
- *
- * \note For best performance, a chunk size of 65536 bytes is recommended.
  *
  * @param num_chunks [in] The number of chunks of memory in the batch.
  * @param max_uncompressed_chunk_bytes [in] The maximum size of a chunk in the
@@ -3716,14 +3837,29 @@ public static final int
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipCompressGetTempSizeAsync(
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedGzipCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes);
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedGzipCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes
+);
 
 /**
- * \brief Get the amount of temporary memory required on the GPU for compression.
+ * \brief Get the minimum buffer alignment requirements for compression.
+ *
+ * @param compress_opts [in] Compression options.
+ * @param alignment_requirements [out] The minimum buffer alignment requirements
+ * for compression.
+ *
+ * @return nvcompSuccess if successful, and an error code otherwise.
+ */
+public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipCompressGetRequiredAlignments(
+  @ByVal nvcompBatchedGzipCompressOpts_t compress_opts,
+  nvcompAlignmentRequirements_t alignment_requirements
+);
+
+/**
+ * \brief Get the amount of temporary memory required on the GPU for compression
  * synchronously.
  *
  * \note This function may perform operations on the stream; if so, it will synchronize it internally.
@@ -3753,23 +3889,25 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipCompressGetTem
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipCompressGetTempSizeSync(
-    @Cast("const void*const*const") PointerPointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedGzipCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    CUstream_st stream);
+  @Cast("const void*const*const") PointerPointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedGzipCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipCompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedGzipCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedGzipCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  CUstream_st stream
+);
 
 /**
  * \brief Get the maximum size that a chunk of size at most max_uncompressed_chunk_bytes
@@ -3866,8 +4004,9 @@ public static final long nvcompGzipRequiredDecompressionAlignment = nvcompGzipRe
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressGetRequiredAlignments(
-    @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
-    nvcompAlignmentRequirements_t alignment_requirements);
+  @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
+  nvcompAlignmentRequirements_t alignment_requirements
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression
@@ -3886,11 +4025,12 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressGetR
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressGetTempSizeAsync(
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes);
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression
@@ -3918,50 +4058,55 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressGetT
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the data can be parsed successfully, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
- * @param stream [in] The CUDA stream to operate on.
  * Can be NULL if desired, in which case error status is not reported.
+ * @param stream [in] The CUDA stream to operate on.
+ *
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressGetTempSizeSync(
-    @Cast("const void*const*const") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 /**
  * \brief Asynchronously compute the number of bytes of uncompressed data for
@@ -3992,17 +4137,19 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressGetT
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipGetDecompressSizeAsync(
-    @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipGetDecompressSizeAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  CUstream_st stream
+);
 
 /**
  * \brief Perform batched asynchronous decompression.
@@ -4015,6 +4162,8 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipGetDecompressS
  *
  * \note This function performs operations on the stream, and does not synchronize it,
  * therefore, it requires synchronization or stream-ordered operations to use its results.
+ *
+ * \note For best performance, a chunk size of 65536 bytes is recommended.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
  * in device-accessible memory to device-accessible compressed buffers.
@@ -4061,53 +4210,57 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipGetDecompressS
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressAsync(
-    @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") PointerPointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") PointerPointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedGzipDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 // #ifdef __cplusplus
 // #endif
@@ -4190,8 +4343,9 @@ public static final long nvcompLZ4RequiredCompressionAlignment = nvcompLZ4Requir
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressGetRequiredAlignments(
-    @ByVal nvcompBatchedLZ4CompressOpts_t compress_opts,
-    nvcompAlignmentRequirements_t alignment_requirements);
+  @ByVal nvcompBatchedLZ4CompressOpts_t compress_opts,
+  nvcompAlignmentRequirements_t alignment_requirements
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for compression
@@ -4213,14 +4367,15 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressGetRequ
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressGetTempSizeAsync(
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedLZ4CompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes);
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedLZ4CompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes
+);
 
 /**
- * \brief Get the amount of temporary memory required on the GPU for compression.
+ * \brief Get the amount of temporary memory required on the GPU for compression
  * synchronously.
  *
  * \note This function may perform operations on the stream; if so, it will synchronize it internally.
@@ -4250,23 +4405,25 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressGetTemp
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressGetTempSizeSync(
-    @Cast("const void*const*const") PointerPointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedLZ4CompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    CUstream_st stream);
+  @Cast("const void*const*const") PointerPointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedLZ4CompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedLZ4CompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedLZ4CompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  CUstream_st stream
+);
 
 /**
  * \brief Get the maximum size that a chunk of size at most max_uncompressed_chunk_bytes
@@ -4282,9 +4439,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressGetTemp
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressGetMaxOutputChunkSize(
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedLZ4CompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer max_compressed_chunk_bytes);
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedLZ4CompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer max_compressed_chunk_bytes
+);
 
 /**
  * \brief Perform batched asynchronous compression.
@@ -4343,53 +4501,57 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressGetMaxO
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressAsync(
-    @Cast("const void*const*") PointerPointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedLZ4CompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedLZ4CompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedLZ4CompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedLZ4CompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedLZ4CompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedLZ4CompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedLZ4CompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedLZ4CompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 /**
  * \brief The most restrictive of the minimum alignment requirements for void-type CUDA memory buffers
@@ -4414,8 +4576,9 @@ public static final long nvcompLZ4RequiredDecompressionAlignment = nvcompLZ4Requ
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4DecompressGetRequiredAlignments(
-    @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
-    nvcompAlignmentRequirements_t alignment_requirements);
+  @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
+  nvcompAlignmentRequirements_t alignment_requirements
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression
@@ -4434,11 +4597,12 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4DecompressGetRe
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4DecompressGetTempSizeAsync(
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes);
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression
@@ -4472,45 +4636,49 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4DecompressGetTe
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4DecompressGetTempSizeSync(
-    @Cast("const void*const*const") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4DecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4DecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4DecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 /**
  * \brief Asynchronously compute the number of bytes of uncompressed data for
@@ -4542,17 +4710,19 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4DecompressGetTe
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4GetDecompressSizeAsync(
-    @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4GetDecompressSizeAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  CUstream_st stream
+);
 
 /**
  * \brief Perform batched asynchronous decompression.
@@ -4613,53 +4783,57 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4GetDecompressSi
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4DecompressAsync(
-    @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") PointerPointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") PointerPointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4DecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4DecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4DecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedLZ4DecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 // #ifdef __cplusplus
 // #endif
@@ -4683,9 +4857,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4DecompressAsync
 
 // #pragma once
 
-// #include "nvcompManager.hpp"
 // #include "formatSpec.hpp"
 // #include "lz4.h"
+// #include "nvcompManager.hpp"
 // Targeting ../nvcomp/LZ4Manager.java
 
 
@@ -4768,8 +4942,9 @@ public static final long nvcompSnappyRequiredCompressionAlignment = nvcompSnappy
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressGetRequiredAlignments(
-    @ByVal nvcompBatchedSnappyCompressOpts_t compress_opts,
-    nvcompAlignmentRequirements_t alignment_requirements);
+  @ByVal nvcompBatchedSnappyCompressOpts_t compress_opts,
+  nvcompAlignmentRequirements_t alignment_requirements
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for compression
@@ -4789,14 +4964,15 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressGetR
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressGetTempSizeAsync(
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedSnappyCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes);
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedSnappyCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes
+);
 
 /**
- * \brief Get the amount of temporary memory required on the GPU for compression.
+ * \brief Get the amount of temporary memory required on the GPU for compression
  * synchronously.
  *
  * \note This function may perform operations on the stream; if so, it will synchronize it internally.
@@ -4826,23 +5002,25 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressGetT
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressGetTempSizeSync(
-    @Cast("const void*const*const") PointerPointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedSnappyCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    CUstream_st stream);
+  @Cast("const void*const*const") PointerPointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedSnappyCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedSnappyCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedSnappyCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  CUstream_st stream
+);
 
 /**
  * \brief Get the maximum size that a chunk of size at most max_uncompressed_chunk_bytes
@@ -4856,9 +5034,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressGetT
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressGetMaxOutputChunkSize(
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedSnappyCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer max_compressed_chunk_bytes);
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedSnappyCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer max_compressed_chunk_bytes
+);
 
 /**
  * \brief Perform batched asynchronous compression.
@@ -4914,53 +5093,57 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressGetM
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressAsync(
-    @Cast("const void*const*") PointerPointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedSnappyCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedSnappyCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedSnappyCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedSnappyCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedSnappyCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedSnappyCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedSnappyCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedSnappyCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 /**
  * \brief The most restrictive of the minimum alignment requirements for void-type CUDA memory buffers
@@ -4985,8 +5168,9 @@ public static final long nvcompSnappyRequiredDecompressionAlignment = nvcompSnap
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyDecompressGetRequiredAlignments(
-    @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
-    nvcompAlignmentRequirements_t alignment_requirements);
+  @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
+  nvcompAlignmentRequirements_t alignment_requirements
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression
@@ -5005,11 +5189,12 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyDecompressGe
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyDecompressGetTempSizeAsync(
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes);
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression
@@ -5043,45 +5228,49 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyDecompressGe
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyDecompressGetTempSizeSync(
-    @Cast("const void*const*const") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 /**
  * \brief Asynchronously compute the number of bytes of uncompressed data for
@@ -5109,17 +5298,19 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyDecompressGe
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyGetDecompressSizeAsync(
-    @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyGetDecompressSizeAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  CUstream_st stream
+);
 
 /**
  * \brief Perform batched asynchronous decompression.
@@ -5178,53 +5369,57 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyGetDecompres
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyDecompressAsync(
-    @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") PointerPointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") PointerPointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedSnappyDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 // #ifdef __cplusplus
 // #endif
@@ -5330,8 +5525,9 @@ public static final long nvcompZstdRequiredCompressionAlignment = nvcompZstdRequ
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressGetRequiredAlignments(
-    @ByVal nvcompBatchedZstdCompressOpts_t compress_opts,
-    nvcompAlignmentRequirements_t alignment_requirements);
+  @ByVal nvcompBatchedZstdCompressOpts_t compress_opts,
+  nvcompAlignmentRequirements_t alignment_requirements
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for compression
@@ -5358,14 +5554,15 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressGetReq
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressGetTempSizeAsync(
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedZstdCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes);
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedZstdCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes
+);
 
 /**
- * \brief Get the amount of temporary memory required on the GPU for compression.
+ * \brief Get the amount of temporary memory required on the GPU for compression
  * synchronously.
  *
  * \note This function may perform operations on the stream; if so, it will synchronize it internally.
@@ -5397,23 +5594,25 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressGetTem
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressGetTempSizeSync(
-    @Cast("const void*const*const") PointerPointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedZstdCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    CUstream_st stream);
+  @Cast("const void*const*const") PointerPointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedZstdCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedZstdCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedZstdCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  CUstream_st stream
+);
 
 /**
  * \brief Get the maximum size that a chunk of size at most max_uncompressed_chunk_bytes
@@ -5429,9 +5628,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressGetTem
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressGetMaxOutputChunkSize(
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedZstdCompressOpts_t compress_opts,
-    @Cast("size_t*") SizeTPointer max_compressed_chunk_bytes);
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedZstdCompressOpts_t compress_opts,
+  @Cast("size_t*") SizeTPointer max_compressed_chunk_bytes
+);
 
 /**
  * \brief Perform batched asynchronous compression.
@@ -5481,7 +5681,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressGetMax
  * @param compress_opts [in] The Zstd compression options to use. Currently empty.
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
- * chunk, if the decompression is successful, the status will be set to
+ * chunk, if the compression is successful, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
  * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
@@ -5489,53 +5689,57 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressGetMax
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressAsync(
-    @Cast("const void*const*") PointerPointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedZstdCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedZstdCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedZstdCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedZstdCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedZstdCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedZstdCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedZstdCompressOpts_t compress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @ByVal nvcompBatchedZstdCompressOpts_t compress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 /**
  * \brief The most restrictive of the minimum alignment requirements for void-type CUDA memory buffers
@@ -5560,8 +5764,9 @@ public static final long nvcompZstdRequiredDecompressionAlignment = nvcompZstdRe
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdDecompressGetRequiredAlignments(
-    @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
-    nvcompAlignmentRequirements_t alignment_requirements);
+  @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
+  nvcompAlignmentRequirements_t alignment_requirements
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression
@@ -5580,11 +5785,12 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdDecompressGetR
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdDecompressGetTempSizeAsync(
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes);
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes
+);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression
@@ -5618,45 +5824,49 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdDecompressGetT
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdDecompressGetTempSizeSync(
-    @Cast("const void*const*const") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdDecompressGetTempSizeSync(
-    @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer temp_bytes,
-    @Cast("size_t") long max_total_uncompressed_bytes,
-    @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*const") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*const") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  @Cast("size_t") long max_uncompressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer temp_bytes,
+  @Cast("size_t") long max_total_uncompressed_bytes,
+  @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 /**
  * \brief Asynchronously compute the number of bytes of uncompressed data for
@@ -5684,17 +5894,19 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdDecompressGetT
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdGetDecompressSizeAsync(
-    @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdGetDecompressSizeAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  CUstream_st stream
+);
 
 /**
  * \brief Perform batched asynchronous decompression.
@@ -5749,53 +5961,57 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdGetDecompressS
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdDecompressAsync(
-    @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") PointerPointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") PointerPointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") PointerPointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntPointer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntPointer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") IntBuffer device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") IntBuffer device_statuses,
+  CUstream_st stream
+);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdDecompressAsync(
-    @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
-    @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
-    @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
-    @Cast("size_t") long num_chunks,
-    Pointer device_temp_ptr,
-    @Cast("size_t") long temp_bytes,
-    @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
-    @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
-    @Cast("nvcompStatus_t*") int[] device_statuses,
-    CUstream_st stream);
+  @Cast("const void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
+  @Cast("const size_t*") SizeTPointer device_compressed_chunk_bytes,
+  @Cast("const size_t*") SizeTPointer device_uncompressed_buffer_bytes,
+  @Cast("size_t*") SizeTPointer device_uncompressed_chunk_bytes,
+  @Cast("size_t") long num_chunks,
+  Pointer device_temp_ptr,
+  @Cast("size_t") long temp_bytes,
+  @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
+  @ByVal nvcompBatchedZstdDecompressOpts_t decompress_opts,
+  @Cast("nvcompStatus_t*") int[] device_statuses,
+  CUstream_st stream
+);
 
 // #ifdef __cplusplus
 // #endif
@@ -5819,8 +6035,8 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdDecompressAsyn
 
 // #pragma once
 
-// #include "nvcompManager.hpp"
 // #include "formatSpec.hpp"
+// #include "nvcompManager.hpp"
 // #include "zstd.h"
 // Targeting ../nvcomp/ZstdManager.java
 

@@ -40,7 +40,7 @@ public class nvcompBatchedDeflateCompressOpts_t extends Pointer {
    *
    * - 0: highest-throughput, entropy-only compression (use for symmetric compression/decompression performance)
    * - 1: high-throughput, low compression ratio (default)
-   * - 2: medium-througput, medium compression ratio, beat Zlib level 1 on the compression ratio
+   * - 2: medium-throughput, medium compression ratio, beat Zlib level 1 on the compression ratio
    * - 3: placeholder for further compression level support, will fall into MEDIUM_COMPRESSION at this point
    * - 4: lower-throughput, higher compression ratio, beat Zlib level 6 on the compression ratio
    * - 5: lowest-throughput, highest compression ratio

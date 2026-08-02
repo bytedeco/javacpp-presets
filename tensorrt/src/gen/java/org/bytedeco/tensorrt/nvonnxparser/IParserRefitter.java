@@ -174,5 +174,22 @@ public class IParserRefitter extends Pointer {
      *  @return true if refit was successful
      *  @see getNbErrors() getError() loadModelProto()
      *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
     public native @Cast("bool") @NoException(true) boolean refitModelProto();
+
+    /**
+     *  \brief Attach an observer that receives one callback per refittable engine weight.
+     * 
+     *  May be called any time before refitModelProto / refitFromBytes / refitFromFile. Pass
+     *  nullptr to detach. The observer must outlive the refit call, or be detached before
+     *  destruction.
+     * 
+     *  @see IRefitterObserver
+     *  */
+    public native @NoException(true) void setRefitObserver(IRefitterObserver observer);
 }

@@ -53,7 +53,7 @@ import org.bytedeco.cuda.presets.nvrtc;
                        "NvInferPluginBase.h", "NvInferRuntimePlugin.h", /*, "NvUtils.h"*/},
             exclude = "NvInferRuntimeBase.h",
             link = "nvinfer@.11",
-            preload = "nvinfer_builder_resource_ptx@.11.1.0"
+            preload = "nvinfer_builder_resource_ptx@.11.2.1"
         ),
         @Platform(
             value = "linux-arm64",

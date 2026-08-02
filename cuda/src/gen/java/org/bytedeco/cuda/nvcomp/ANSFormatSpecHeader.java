@@ -14,12 +14,54 @@ import static org.bytedeco.cuda.global.nvcomp.*;
 
 
 /**
- * \brief Format specification for ANS compression
+ * \brief Format specification for ANS compression.
+ *
+ * A single packed byte (kept as 1 byte to enable compressed HLIF buffer compatibility
+ * within 5.x); the 3 unused high bits are reserved and kept 0. Use the accessors below.
  */
-@Namespace("nvcomp") @Opaque @Properties(inherit = org.bytedeco.cuda.presets.nvcomp.class)
+@Namespace("nvcomp") @Properties(inherit = org.bytedeco.cuda.presets.nvcomp.class)
 public class ANSFormatSpecHeader extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public ANSFormatSpecHeader() { super((Pointer)null); }
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public ANSFormatSpecHeader() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ANSFormatSpecHeader(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ANSFormatSpecHeader(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public ANSFormatSpecHeader position(long position) {
+        return (ANSFormatSpecHeader)super.position(position);
+    }
+    @Override public ANSFormatSpecHeader getPointer(long i) {
+        return new ANSFormatSpecHeader((Pointer)this).offsetAddress(i);
+    }
+
+  /** enum class nvcomp::ANSFormatSpecHeader::Mode */
+  public static final byte
+    Char = (byte)(0),
+    Fp16 = (byte)(1),
+    Fp8 = (byte)(2);
+
+  // `mode` is a plain 2-bit integer field (not Mode): an enum bitfield trips
+  // bitfield-enum-conversion warnings under clang / nvcc 13.x's host pass, and a
+  // uint8_t field keeps all bitfields packed in 1 byte. The accessors convert
+  // to/from Mode.
+  public native @Cast("uint8_t") @NoOffset byte sub_chunk_log2(); public native ANSFormatSpecHeader sub_chunk_log2(byte setter); // max_sub_chunk_count as log2 (0 = auto; 2..6 for 4..64)
+  public native @Cast("uint8_t") @NoOffset byte mode(); public native ANSFormatSpecHeader mode(byte setter); // ANS decode mode (Mode)
+  public native @Cast("uint8_t") @NoOffset byte reserved(); public native ANSFormatSpecHeader reserved(byte setter);
+
+  // max_sub_chunk_count must be 0 (auto) or a power-of-2 in the inclusive range
+  // [4, 64]; sub_chunk_log2 is only 3 bits, so any other value would silently
+  // truncate. Invalid input asserts in debug and falls back to auto (0) in release
+  // rather than writing a corrupt count.
+  public native void set_max_sub_chunk_count(@Cast("uint8_t") byte count);
+
+  public native @Cast("uint8_t") byte get_max_sub_chunk_count();
+
+  // Maps the (char/uchar/fp16/fp8) data type to the 3 ANS decode modes; char and
+  // uchar both map to Mode::Char (decompression treats them identically).
+  public native void set_data_type(@Cast("nvcompType_t") int data_type);
+
+  public native @Cast("nvcompType_t") int get_data_type();
 }

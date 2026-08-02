@@ -34,7 +34,7 @@ public class nvcompBatchedGdeflateDecompressOpts_t extends Pointer {
         return new nvcompBatchedGdeflateDecompressOpts_t((Pointer)this).offsetAddress(i);
     }
 
-   /**
+  /**
    * \brief Decompression backend to use.
    */
   public native @Cast("nvcompDecompressBackend_t") int backend(); public native nvcompBatchedGdeflateDecompressOpts_t backend(int setter);

@@ -35,8 +35,7 @@ public class nvcompManagerBase extends Pointer {
    *
    * @return CompressionConfig for the size provided.
    */
-  public native @ByVal CompressionConfig configure_compression(
-      @Cast("const size_t") long uncomp_buffer_size);
+  public native @ByVal CompressionConfig configure_compression(@Cast("const size_t") long uncomp_buffer_size);
 
   /**
    * \brief Configure the compression of a batch of buffers.
@@ -46,10 +45,9 @@ public class nvcompManagerBase extends Pointer {
    *
    * @param uncomp_buffer_sizes [in] The vector of uncompressed input data sizes (in bytes) for each element of the batch.
    *
-   * @return A vector with CompressionConfig for each of the size provided.
+   * @return A vector with CompressionConfig for each of the sizes provided.
    */
-  public native @StdVector CompressionConfig configure_compression(
-      @Cast("size_t*") @StdVector SizeTPointer uncomp_buffer_sizes);
+  public native @StdVector CompressionConfig configure_compression(@Cast("size_t*") @StdVector SizeTPointer uncomp_buffer_sizes);
 
   /**
    * \brief Perform compression asynchronously for a single buffer.
@@ -74,29 +72,35 @@ public class nvcompManagerBase extends Pointer {
       @Cast("const uint8_t*") BytePointer uncomp_buffer,
       @Cast("uint8_t*") BytePointer comp_buffer,
       @Const @ByRef CompressionConfig comp_config,
-      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/);
+      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/
+    );
   public native void compress(
       @Cast("const uint8_t*") BytePointer uncomp_buffer,
       @Cast("uint8_t*") BytePointer comp_buffer,
-      @Const @ByRef CompressionConfig comp_config);
+      @Const @ByRef CompressionConfig comp_config
+    );
   public native void compress(
       @Cast("const uint8_t*") ByteBuffer uncomp_buffer,
       @Cast("uint8_t*") ByteBuffer comp_buffer,
       @Const @ByRef CompressionConfig comp_config,
-      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/);
+      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/
+    );
   public native void compress(
       @Cast("const uint8_t*") ByteBuffer uncomp_buffer,
       @Cast("uint8_t*") ByteBuffer comp_buffer,
-      @Const @ByRef CompressionConfig comp_config);
+      @Const @ByRef CompressionConfig comp_config
+    );
   public native void compress(
       @Cast("const uint8_t*") byte[] uncomp_buffer,
       @Cast("uint8_t*") byte[] comp_buffer,
       @Const @ByRef CompressionConfig comp_config,
-      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/);
+      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/
+    );
   public native void compress(
       @Cast("const uint8_t*") byte[] uncomp_buffer,
       @Cast("uint8_t*") byte[] comp_buffer,
-      @Const @ByRef CompressionConfig comp_config);
+      @Const @ByRef CompressionConfig comp_config
+    );
 
   /**
    * \brief Perform compression asynchronously for a batch of buffers.
@@ -122,7 +126,8 @@ public class nvcompManagerBase extends Pointer {
       @Cast("const uint8_t*const*") PointerPointer uncomp_buffers,
       @Cast("uint8_t*const*") PointerPointer comp_buffers,
       @StdVector CompressionConfig comp_configs,
-      @Cast("size_t*") SizeTPointer comp_sizes/*=nullptr*/);
+      @Cast("size_t*") SizeTPointer comp_sizes/*=nullptr*/
+    );
 
   /**
    * \brief Configure the decompression for a single buffer using a compressed buffer.
@@ -130,7 +135,7 @@ public class nvcompManagerBase extends Pointer {
    * Synchronizes the user stream.
    * - If bitstream kind is NVCOMP_NATIVE, it will parse the header in comp_buffer.
    * - If bitstream kind is RAW, it may be required (e.g for LZ4) to parse the whole comp_buffer,
-   *   which could be significantly slower that other options.
+   *   which could be significantly slower than other options.
    * - If bitstream kind is WITH_UNCOMPRESSED_SIZE, it will read the size from the beginning of the comp_buffer.
    *
    * @param comp_buffer [in] The compressed input data.
@@ -143,21 +148,12 @@ public class nvcompManagerBase extends Pointer {
    *
    * @return DecompressionConfig for the comp_buffer provided.
    */
-  public native @ByVal DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*") BytePointer comp_buffer,
-      @Cast("const size_t*") SizeTPointer comp_size/*=nullptr*/);
-  public native @ByVal DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*") BytePointer comp_buffer);
-  public native @ByVal DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*") ByteBuffer comp_buffer,
-      @Cast("const size_t*") SizeTPointer comp_size/*=nullptr*/);
-  public native @ByVal DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*") ByteBuffer comp_buffer);
-  public native @ByVal DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*") byte[] comp_buffer,
-      @Cast("const size_t*") SizeTPointer comp_size/*=nullptr*/);
-  public native @ByVal DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*") byte[] comp_buffer);
+  public native @ByVal DecompressionConfig configure_decompression(@Cast("const uint8_t*") BytePointer comp_buffer, @Cast("const size_t*") SizeTPointer comp_size/*=nullptr*/);
+  public native @ByVal DecompressionConfig configure_decompression(@Cast("const uint8_t*") BytePointer comp_buffer);
+  public native @ByVal DecompressionConfig configure_decompression(@Cast("const uint8_t*") ByteBuffer comp_buffer, @Cast("const size_t*") SizeTPointer comp_size/*=nullptr*/);
+  public native @ByVal DecompressionConfig configure_decompression(@Cast("const uint8_t*") ByteBuffer comp_buffer);
+  public native @ByVal DecompressionConfig configure_decompression(@Cast("const uint8_t*") byte[] comp_buffer, @Cast("const size_t*") SizeTPointer comp_size/*=nullptr*/);
+  public native @ByVal DecompressionConfig configure_decompression(@Cast("const uint8_t*") byte[] comp_buffer);
 
   /**
    * \brief Configure the decompression for a batch of buffers using a compressed buffer.
@@ -165,7 +161,7 @@ public class nvcompManagerBase extends Pointer {
    * Synchronizes the user stream.
    * - If bitstream kind is NVCOMP_NATIVE, it will parse the header in comp_buffers.
    * - If bitstream kind is RAW, it may be required (e.g for LZ4) to parse the whole comp_buffers,
-   *   which could be significantly slower that other options.
+   *   which could be significantly slower than other options.
    * - If bitstream kind is WITH_UNCOMPRESSED_SIZE, it will read the size from the beginning of the comp_buffers.
    *
    * @param comp_buffers [in] The compressed input data.
@@ -178,33 +174,15 @@ public class nvcompManagerBase extends Pointer {
    * (a pointer to device array (or host array for CPU-based (de)compression))
    * This is required only for RAW format.
    *
-   * @return A vector of DecompressionConfig for each of the comp_buffer provided.
+   * @return A vector of DecompressionConfig for each of the comp_buffers provided.
    */
-  public native @StdVector DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*const*") PointerPointer comp_buffers,
-      @Cast("size_t") long batch_size,
-      @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/);
-  public native @StdVector DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*const*") @ByPtrPtr BytePointer comp_buffers,
-      @Cast("size_t") long batch_size);
-  public native @StdVector DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*const*") @ByPtrPtr BytePointer comp_buffers,
-      @Cast("size_t") long batch_size,
-      @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/);
-  public native @StdVector DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer comp_buffers,
-      @Cast("size_t") long batch_size,
-      @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/);
-  public native @StdVector DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer comp_buffers,
-      @Cast("size_t") long batch_size);
-  public native @StdVector DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*const*") @ByPtrPtr byte[] comp_buffers,
-      @Cast("size_t") long batch_size,
-      @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/);
-  public native @StdVector DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*const*") @ByPtrPtr byte[] comp_buffers,
-      @Cast("size_t") long batch_size);
+  public native @StdVector DecompressionConfig configure_decompression(@Cast("const uint8_t*const*") PointerPointer comp_buffers, @Cast("size_t") long batch_size, @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/);
+  public native @StdVector DecompressionConfig configure_decompression(@Cast("const uint8_t*const*") @ByPtrPtr BytePointer comp_buffers, @Cast("size_t") long batch_size);
+  public native @StdVector DecompressionConfig configure_decompression(@Cast("const uint8_t*const*") @ByPtrPtr BytePointer comp_buffers, @Cast("size_t") long batch_size, @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/);
+  public native @StdVector DecompressionConfig configure_decompression(@Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer comp_buffers, @Cast("size_t") long batch_size, @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/);
+  public native @StdVector DecompressionConfig configure_decompression(@Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer comp_buffers, @Cast("size_t") long batch_size);
+  public native @StdVector DecompressionConfig configure_decompression(@Cast("const uint8_t*const*") @ByPtrPtr byte[] comp_buffers, @Cast("size_t") long batch_size, @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/);
+  public native @StdVector DecompressionConfig configure_decompression(@Cast("const uint8_t*const*") @ByPtrPtr byte[] comp_buffers, @Cast("size_t") long batch_size);
 
   /**
    * \brief Configure the decompression for a single buffer using a CompressionConfig object.
@@ -215,8 +193,7 @@ public class nvcompManagerBase extends Pointer {
    *
    * @return DecompressionConfig based on compression config provided.
    */
-  public native @ByVal DecompressionConfig configure_decompression(
-      @Const @ByRef CompressionConfig comp_config);
+  public native @ByVal DecompressionConfig configure_decompression(@Const @ByRef CompressionConfig comp_config);
 
   /**
    * \brief Configure the decompression for a batch of buffers using a CompressionConfig objects.
@@ -252,29 +229,35 @@ public class nvcompManagerBase extends Pointer {
       @Cast("uint8_t*") BytePointer decomp_buffer,
       @Cast("const uint8_t*") BytePointer comp_buffer,
       @Const @ByRef DecompressionConfig decomp_config,
-      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/);
+      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/
+    );
   public native void decompress(
       @Cast("uint8_t*") BytePointer decomp_buffer,
       @Cast("const uint8_t*") BytePointer comp_buffer,
-      @Const @ByRef DecompressionConfig decomp_config);
+      @Const @ByRef DecompressionConfig decomp_config
+    );
   public native void decompress(
       @Cast("uint8_t*") ByteBuffer decomp_buffer,
       @Cast("const uint8_t*") ByteBuffer comp_buffer,
       @Const @ByRef DecompressionConfig decomp_config,
-      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/);
+      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/
+    );
   public native void decompress(
       @Cast("uint8_t*") ByteBuffer decomp_buffer,
       @Cast("const uint8_t*") ByteBuffer comp_buffer,
-      @Const @ByRef DecompressionConfig decomp_config);
+      @Const @ByRef DecompressionConfig decomp_config
+    );
   public native void decompress(
       @Cast("uint8_t*") byte[] decomp_buffer,
       @Cast("const uint8_t*") byte[] comp_buffer,
       @Const @ByRef DecompressionConfig decomp_config,
-      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/);
+      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/
+    );
   public native void decompress(
       @Cast("uint8_t*") byte[] decomp_buffer,
       @Cast("const uint8_t*") byte[] comp_buffer,
-      @Const @ByRef DecompressionConfig decomp_config);
+      @Const @ByRef DecompressionConfig decomp_config
+    );
 
   /**
    * \brief Perform decompression asynchronously of a batch of buffers.
@@ -301,7 +284,8 @@ public class nvcompManagerBase extends Pointer {
       @Cast("uint8_t*const*") PointerPointer decomp_buffers,
       @Cast("const uint8_t*const*") PointerPointer comp_buffers,
       @StdVector DecompressionConfig decomp_configs,
-      @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/);
+      @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/
+    );
 
   /**
    * \brief Allows the user to provide a function for allocating / deallocating memory
@@ -346,12 +330,9 @@ public class nvcompManagerBase extends Pointer {
    *
    * @return Size of the compressed buffer.
    */
-  public native @Cast("size_t") long get_compressed_output_size(
-      @Cast("const uint8_t*") BytePointer comp_buffer);
-  public native @Cast("size_t") long get_compressed_output_size(
-      @Cast("const uint8_t*") ByteBuffer comp_buffer);
-  public native @Cast("size_t") long get_compressed_output_size(
-      @Cast("const uint8_t*") byte[] comp_buffer);
+  public native @Cast("size_t") long get_compressed_output_size(@Cast("const uint8_t*") BytePointer comp_buffer);
+  public native @Cast("size_t") long get_compressed_output_size(@Cast("const uint8_t*") ByteBuffer comp_buffer);
+  public native @Cast("size_t") long get_compressed_output_size(@Cast("const uint8_t*") byte[] comp_buffer);
 
   /**
    * \brief Computes the compressed output size (in bytes) of a given batch of buffers that were compressed using nvcomp.
@@ -369,18 +350,10 @@ public class nvcompManagerBase extends Pointer {
    *
    * @return A vector with sizes of each compressed buffer in the batch.
    */
-  public native @Cast("size_t*") @StdVector SizeTPointer get_compressed_output_size(
-      @Cast("const uint8_t*const*") PointerPointer comp_buffers,
-      @Cast("size_t") long batch_size);
-  public native @Cast("size_t*") @StdVector SizeTPointer get_compressed_output_size(
-      @Cast("const uint8_t*const*") @ByPtrPtr BytePointer comp_buffers,
-      @Cast("size_t") long batch_size);
-  public native @Cast("size_t*") @StdVector SizeTPointer get_compressed_output_size(
-      @Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer comp_buffers,
-      @Cast("size_t") long batch_size);
-  public native @Cast("size_t*") @StdVector SizeTPointer get_compressed_output_size(
-      @Cast("const uint8_t*const*") @ByPtrPtr byte[] comp_buffers,
-      @Cast("size_t") long batch_size);
+  public native @Cast("size_t*") @StdVector SizeTPointer get_compressed_output_size(@Cast("const uint8_t*const*") PointerPointer comp_buffers, @Cast("size_t") long batch_size);
+  public native @Cast("size_t*") @StdVector SizeTPointer get_compressed_output_size(@Cast("const uint8_t*const*") @ByPtrPtr BytePointer comp_buffers, @Cast("size_t") long batch_size);
+  public native @Cast("size_t*") @StdVector SizeTPointer get_compressed_output_size(@Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer comp_buffers, @Cast("size_t") long batch_size);
+  public native @Cast("size_t*") @StdVector SizeTPointer get_compressed_output_size(@Cast("const uint8_t*const*") @ByPtrPtr byte[] comp_buffers, @Cast("size_t") long batch_size);
 
   /**
    * \brief Frees any internal GPU memory used by the nvCOMP HLIF
@@ -425,28 +398,32 @@ public class nvcompManagerBase extends Pointer {
       @StdVector DecompressionConfig decomp_configs,
       @Cast("const size_t*") SizeTPointer comp_sizes,
       @Cast("const size_t") long batch_count,
-      @Cast("const uint8_t*const*") PointerPointer host_comp_buffers);
+      @Cast("const uint8_t*const*") PointerPointer host_comp_buffers
+    );
   public native void decompress(
       @Cast("uint8_t*const*") @ByPtrPtr BytePointer decomp_buffers,
       @Cast("const uint8_t*const*") @ByPtrPtr BytePointer comp_buffers,
       @StdVector DecompressionConfig decomp_configs,
       @Cast("const size_t*") SizeTPointer comp_sizes,
       @Cast("const size_t") long batch_count,
-      @Cast("const uint8_t*const*") @ByPtrPtr BytePointer host_comp_buffers);
+      @Cast("const uint8_t*const*") @ByPtrPtr BytePointer host_comp_buffers
+    );
   public native void decompress(
       @Cast("uint8_t*const*") @ByPtrPtr ByteBuffer decomp_buffers,
       @Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer comp_buffers,
       @StdVector DecompressionConfig decomp_configs,
       @Cast("const size_t*") SizeTPointer comp_sizes,
       @Cast("const size_t") long batch_count,
-      @Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer host_comp_buffers);
+      @Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer host_comp_buffers
+    );
   public native void decompress(
       @Cast("uint8_t*const*") @ByPtrPtr byte[] decomp_buffers,
       @Cast("const uint8_t*const*") @ByPtrPtr byte[] comp_buffers,
       @StdVector DecompressionConfig decomp_configs,
       @Cast("const size_t*") SizeTPointer comp_sizes,
       @Cast("const size_t") long batch_count,
-      @Cast("const uint8_t*const*") @ByPtrPtr byte[] host_comp_buffers);
+      @Cast("const uint8_t*const*") @ByPtrPtr byte[] host_comp_buffers
+    );
 
   /**
    * \brief Computes the decompressed output size (in bytes) of a given buffer that was compressed using nvcomp.
@@ -460,12 +437,9 @@ public class nvcompManagerBase extends Pointer {
    *
    * @return Size of the decompressed buffer.
    */
-  public native @Cast("size_t") long get_decompressed_output_size(
-      @Cast("const uint8_t*") BytePointer comp_buffer);
-  public native @Cast("size_t") long get_decompressed_output_size(
-      @Cast("const uint8_t*") ByteBuffer comp_buffer);
-  public native @Cast("size_t") long get_decompressed_output_size(
-      @Cast("const uint8_t*") byte[] comp_buffer);
+  public native @Cast("size_t") long get_decompressed_output_size(@Cast("const uint8_t*") BytePointer comp_buffer);
+  public native @Cast("size_t") long get_decompressed_output_size(@Cast("const uint8_t*") ByteBuffer comp_buffer);
+  public native @Cast("size_t") long get_decompressed_output_size(@Cast("const uint8_t*") byte[] comp_buffer);
 
   /**
    * \brief Computes the decompressed output size (in bytes) of a given batch of buffers that were compressed using nvcomp.
@@ -479,16 +453,8 @@ public class nvcompManagerBase extends Pointer {
    *
    * @return A vector with the decompressed sizes of each buffer in the batch.
    */
-  public native @Cast("size_t*") @StdVector SizeTPointer get_decompressed_output_size(
-      @Cast("const uint8_t*const*") PointerPointer comp_buffers,
-      @Cast("size_t") long batch_size);
-  public native @Cast("size_t*") @StdVector SizeTPointer get_decompressed_output_size(
-      @Cast("const uint8_t*const*") @ByPtrPtr BytePointer comp_buffers,
-      @Cast("size_t") long batch_size);
-  public native @Cast("size_t*") @StdVector SizeTPointer get_decompressed_output_size(
-      @Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer comp_buffers,
-      @Cast("size_t") long batch_size);
-  public native @Cast("size_t*") @StdVector SizeTPointer get_decompressed_output_size(
-      @Cast("const uint8_t*const*") @ByPtrPtr byte[] comp_buffers,
-      @Cast("size_t") long batch_size);
+  public native @Cast("size_t*") @StdVector SizeTPointer get_decompressed_output_size(@Cast("const uint8_t*const*") PointerPointer comp_buffers, @Cast("size_t") long batch_size);
+  public native @Cast("size_t*") @StdVector SizeTPointer get_decompressed_output_size(@Cast("const uint8_t*const*") @ByPtrPtr BytePointer comp_buffers, @Cast("size_t") long batch_size);
+  public native @Cast("size_t*") @StdVector SizeTPointer get_decompressed_output_size(@Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer comp_buffers, @Cast("size_t") long batch_size);
+  public native @Cast("size_t*") @StdVector SizeTPointer get_decompressed_output_size(@Cast("const uint8_t*const*") @ByPtrPtr byte[] comp_buffers, @Cast("size_t") long batch_size);
 }

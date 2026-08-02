@@ -25,7 +25,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  \brief A GridSample layer in a network definition.
  * 
  *  This layer uses an input tensor and a grid tensor to produce an interpolated output tensor.
- *  The input and grid tensors must be shape tensors of rank 4. The only supported SampleMode
+ *  The input and grid tensors must be tensors of rank 4 or 5. The only supported SampleMode
  *  values are SampleMode::kCLAMP, SampleMode::kFILL, and SampleMode::kREFLECT.
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.

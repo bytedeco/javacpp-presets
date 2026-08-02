@@ -31,146 +31,144 @@ public class PimplManager extends nvcompManagerBase {
 
   
 
-  public native @ByVal CompressionConfig configure_compression(
-      @Cast("const size_t") long uncomp_buffer_size);
+  public native @ByVal CompressionConfig configure_compression(@Cast("const size_t") long uncomp_buffer_size);
 
-  public native @StdVector CompressionConfig configure_compression(
-      @Cast("size_t*") @StdVector SizeTPointer uncomp_buffer_sizes);
+  public native @StdVector CompressionConfig configure_compression(@Cast("size_t*") @StdVector SizeTPointer uncomp_buffer_sizes);
 
   public native void compress(
       @Cast("const uint8_t*") BytePointer uncomp_buffer,
       @Cast("uint8_t*") BytePointer comp_buffer,
       @Const @ByRef CompressionConfig comp_config,
-      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/);
+      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/
+    );
   public native void compress(
       @Cast("const uint8_t*") BytePointer uncomp_buffer,
       @Cast("uint8_t*") BytePointer comp_buffer,
-      @Const @ByRef CompressionConfig comp_config);
+      @Const @ByRef CompressionConfig comp_config
+    );
   public native void compress(
       @Cast("const uint8_t*") ByteBuffer uncomp_buffer,
       @Cast("uint8_t*") ByteBuffer comp_buffer,
       @Const @ByRef CompressionConfig comp_config,
-      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/);
+      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/
+    );
   public native void compress(
       @Cast("const uint8_t*") ByteBuffer uncomp_buffer,
       @Cast("uint8_t*") ByteBuffer comp_buffer,
-      @Const @ByRef CompressionConfig comp_config);
+      @Const @ByRef CompressionConfig comp_config
+    );
   public native void compress(
       @Cast("const uint8_t*") byte[] uncomp_buffer,
       @Cast("uint8_t*") byte[] comp_buffer,
       @Const @ByRef CompressionConfig comp_config,
-      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/);
+      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/
+    );
   public native void compress(
       @Cast("const uint8_t*") byte[] uncomp_buffer,
       @Cast("uint8_t*") byte[] comp_buffer,
-      @Const @ByRef CompressionConfig comp_config);
+      @Const @ByRef CompressionConfig comp_config
+    );
 
   public native void compress(
       @Cast("const uint8_t*const*") PointerPointer uncomp_buffers,
       @Cast("uint8_t*const*") PointerPointer comp_buffers,
       @StdVector CompressionConfig comp_configs,
-      @Cast("size_t*") SizeTPointer comp_sizes/*=nullptr*/);
+      @Cast("size_t*") SizeTPointer comp_sizes/*=nullptr*/
+    );
 
-  public native @ByVal DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*") BytePointer comp_buffer,
-      @Cast("const size_t*") SizeTPointer comp_size/*=nullptr*/);
-  public native @ByVal DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*") BytePointer comp_buffer);
-  public native @ByVal DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*") ByteBuffer comp_buffer,
-      @Cast("const size_t*") SizeTPointer comp_size/*=nullptr*/);
-  public native @ByVal DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*") ByteBuffer comp_buffer);
-  public native @ByVal DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*") byte[] comp_buffer,
-      @Cast("const size_t*") SizeTPointer comp_size/*=nullptr*/);
-  public native @ByVal DecompressionConfig configure_decompression(
-      @Cast("const uint8_t*") byte[] comp_buffer);
+  public native @ByVal DecompressionConfig configure_decompression(@Cast("const uint8_t*") BytePointer comp_buffer, @Cast("const size_t*") SizeTPointer comp_size/*=nullptr*/);
+  public native @ByVal DecompressionConfig configure_decompression(@Cast("const uint8_t*") BytePointer comp_buffer);
+  public native @ByVal DecompressionConfig configure_decompression(@Cast("const uint8_t*") ByteBuffer comp_buffer, @Cast("const size_t*") SizeTPointer comp_size/*=nullptr*/);
+  public native @ByVal DecompressionConfig configure_decompression(@Cast("const uint8_t*") ByteBuffer comp_buffer);
+  public native @ByVal DecompressionConfig configure_decompression(@Cast("const uint8_t*") byte[] comp_buffer, @Cast("const size_t*") SizeTPointer comp_size/*=nullptr*/);
+  public native @ByVal DecompressionConfig configure_decompression(@Cast("const uint8_t*") byte[] comp_buffer);
 
   public native @StdVector DecompressionConfig configure_decompression(
       @Cast("const uint8_t*const*") PointerPointer comp_buffers,
       @Cast("size_t") long batch_size,
-      @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/);
+      @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/
+    );
   public native @StdVector DecompressionConfig configure_decompression(
       @Cast("const uint8_t*const*") @ByPtrPtr BytePointer comp_buffers,
-      @Cast("size_t") long batch_size);
+      @Cast("size_t") long batch_size
+    );
   public native @StdVector DecompressionConfig configure_decompression(
       @Cast("const uint8_t*const*") @ByPtrPtr BytePointer comp_buffers,
       @Cast("size_t") long batch_size,
-      @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/);
+      @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/
+    );
   public native @StdVector DecompressionConfig configure_decompression(
       @Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer comp_buffers,
       @Cast("size_t") long batch_size,
-      @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/);
+      @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/
+    );
   public native @StdVector DecompressionConfig configure_decompression(
       @Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer comp_buffers,
-      @Cast("size_t") long batch_size);
+      @Cast("size_t") long batch_size
+    );
   public native @StdVector DecompressionConfig configure_decompression(
       @Cast("const uint8_t*const*") @ByPtrPtr byte[] comp_buffers,
       @Cast("size_t") long batch_size,
-      @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/);
+      @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/
+    );
   public native @StdVector DecompressionConfig configure_decompression(
       @Cast("const uint8_t*const*") @ByPtrPtr byte[] comp_buffers,
-      @Cast("size_t") long batch_size);
+      @Cast("size_t") long batch_size
+    );
 
-  public native @ByVal DecompressionConfig configure_decompression(
-      @Const @ByRef CompressionConfig comp_config);
+  public native @ByVal DecompressionConfig configure_decompression(@Const @ByRef CompressionConfig comp_config);
 
   public native void decompress(
       @Cast("uint8_t*") BytePointer decomp_buffer,
       @Cast("const uint8_t*") BytePointer comp_buffer,
       @Const @ByRef DecompressionConfig decomp_config,
-      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/);
+      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/
+    );
   public native void decompress(
       @Cast("uint8_t*") BytePointer decomp_buffer,
       @Cast("const uint8_t*") BytePointer comp_buffer,
-      @Const @ByRef DecompressionConfig decomp_config);
+      @Const @ByRef DecompressionConfig decomp_config
+    );
   public native void decompress(
       @Cast("uint8_t*") ByteBuffer decomp_buffer,
       @Cast("const uint8_t*") ByteBuffer comp_buffer,
       @Const @ByRef DecompressionConfig decomp_config,
-      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/);
+      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/
+    );
   public native void decompress(
       @Cast("uint8_t*") ByteBuffer decomp_buffer,
       @Cast("const uint8_t*") ByteBuffer comp_buffer,
-      @Const @ByRef DecompressionConfig decomp_config);
+      @Const @ByRef DecompressionConfig decomp_config
+    );
   public native void decompress(
       @Cast("uint8_t*") byte[] decomp_buffer,
       @Cast("const uint8_t*") byte[] comp_buffer,
       @Const @ByRef DecompressionConfig decomp_config,
-      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/);
+      @Cast("size_t*") SizeTPointer comp_size/*=nullptr*/
+    );
   public native void decompress(
       @Cast("uint8_t*") byte[] decomp_buffer,
       @Cast("const uint8_t*") byte[] comp_buffer,
-      @Const @ByRef DecompressionConfig decomp_config);
+      @Const @ByRef DecompressionConfig decomp_config
+    );
 
   public native void decompress(
       @Cast("uint8_t*const*") PointerPointer decomp_buffers,
       @Cast("const uint8_t*const*") PointerPointer comp_buffers,
       @StdVector DecompressionConfig decomp_configs,
-      @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/);
+      @Cast("const size_t*") SizeTPointer comp_sizes/*=nullptr*/
+    );
 
   
 
-  public native @Cast("size_t") long get_compressed_output_size(
-      @Cast("const uint8_t*") BytePointer comp_buffer);
-  public native @Cast("size_t") long get_compressed_output_size(
-      @Cast("const uint8_t*") ByteBuffer comp_buffer);
-  public native @Cast("size_t") long get_compressed_output_size(
-      @Cast("const uint8_t*") byte[] comp_buffer);
+  public native @Cast("size_t") long get_compressed_output_size(@Cast("const uint8_t*") BytePointer comp_buffer);
+  public native @Cast("size_t") long get_compressed_output_size(@Cast("const uint8_t*") ByteBuffer comp_buffer);
+  public native @Cast("size_t") long get_compressed_output_size(@Cast("const uint8_t*") byte[] comp_buffer);
 
-  public native @Cast("size_t*") @StdVector SizeTPointer get_compressed_output_size(
-      @Cast("const uint8_t*const*") PointerPointer comp_buffers,
-      @Cast("size_t") long batch_size);
-  public native @Cast("size_t*") @StdVector SizeTPointer get_compressed_output_size(
-      @Cast("const uint8_t*const*") @ByPtrPtr BytePointer comp_buffers,
-      @Cast("size_t") long batch_size);
-  public native @Cast("size_t*") @StdVector SizeTPointer get_compressed_output_size(
-      @Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer comp_buffers,
-      @Cast("size_t") long batch_size);
-  public native @Cast("size_t*") @StdVector SizeTPointer get_compressed_output_size(
-      @Cast("const uint8_t*const*") @ByPtrPtr byte[] comp_buffers,
-      @Cast("size_t") long batch_size);
+  public native @Cast("size_t*") @StdVector SizeTPointer get_compressed_output_size(@Cast("const uint8_t*const*") PointerPointer comp_buffers, @Cast("size_t") long batch_size);
+  public native @Cast("size_t*") @StdVector SizeTPointer get_compressed_output_size(@Cast("const uint8_t*const*") @ByPtrPtr BytePointer comp_buffers, @Cast("size_t") long batch_size);
+  public native @Cast("size_t*") @StdVector SizeTPointer get_compressed_output_size(@Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer comp_buffers, @Cast("size_t") long batch_size);
+  public native @Cast("size_t*") @StdVector SizeTPointer get_compressed_output_size(@Cast("const uint8_t*const*") @ByPtrPtr byte[] comp_buffers, @Cast("size_t") long batch_size);
 
   public native void deallocate_gpu_mem();
 
@@ -180,46 +178,39 @@ public class PimplManager extends nvcompManagerBase {
       @StdVector DecompressionConfig decomp_configs,
       @Cast("const size_t*") SizeTPointer comp_sizes,
       @Cast("const size_t") long batch_count,
-      @Cast("const uint8_t*const*") PointerPointer host_comp_buffers);
+      @Cast("const uint8_t*const*") PointerPointer host_comp_buffers
+    );
   public native void decompress(
       @Cast("uint8_t*const*") @ByPtrPtr BytePointer decomp_buffers,
       @Cast("const uint8_t*const*") @ByPtrPtr BytePointer comp_buffers,
       @StdVector DecompressionConfig decomp_configs,
       @Cast("const size_t*") SizeTPointer comp_sizes,
       @Cast("const size_t") long batch_count,
-      @Cast("const uint8_t*const*") @ByPtrPtr BytePointer host_comp_buffers);
+      @Cast("const uint8_t*const*") @ByPtrPtr BytePointer host_comp_buffers
+    );
   public native void decompress(
       @Cast("uint8_t*const*") @ByPtrPtr ByteBuffer decomp_buffers,
       @Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer comp_buffers,
       @StdVector DecompressionConfig decomp_configs,
       @Cast("const size_t*") SizeTPointer comp_sizes,
       @Cast("const size_t") long batch_count,
-      @Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer host_comp_buffers);
+      @Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer host_comp_buffers
+    );
   public native void decompress(
       @Cast("uint8_t*const*") @ByPtrPtr byte[] decomp_buffers,
       @Cast("const uint8_t*const*") @ByPtrPtr byte[] comp_buffers,
       @StdVector DecompressionConfig decomp_configs,
       @Cast("const size_t*") SizeTPointer comp_sizes,
       @Cast("const size_t") long batch_count,
-      @Cast("const uint8_t*const*") @ByPtrPtr byte[] host_comp_buffers);
+      @Cast("const uint8_t*const*") @ByPtrPtr byte[] host_comp_buffers
+    );
 
-  public native @Cast("size_t") long get_decompressed_output_size(
-      @Cast("const uint8_t*") BytePointer comp_buffer);
-  public native @Cast("size_t") long get_decompressed_output_size(
-      @Cast("const uint8_t*") ByteBuffer comp_buffer);
-  public native @Cast("size_t") long get_decompressed_output_size(
-      @Cast("const uint8_t*") byte[] comp_buffer);
+  public native @Cast("size_t") long get_decompressed_output_size(@Cast("const uint8_t*") BytePointer comp_buffer);
+  public native @Cast("size_t") long get_decompressed_output_size(@Cast("const uint8_t*") ByteBuffer comp_buffer);
+  public native @Cast("size_t") long get_decompressed_output_size(@Cast("const uint8_t*") byte[] comp_buffer);
 
-  public native @Cast("size_t*") @StdVector SizeTPointer get_decompressed_output_size(
-      @Cast("const uint8_t*const*") PointerPointer comp_buffers,
-      @Cast("size_t") long batch_size);
-  public native @Cast("size_t*") @StdVector SizeTPointer get_decompressed_output_size(
-      @Cast("const uint8_t*const*") @ByPtrPtr BytePointer comp_buffers,
-      @Cast("size_t") long batch_size);
-  public native @Cast("size_t*") @StdVector SizeTPointer get_decompressed_output_size(
-      @Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer comp_buffers,
-      @Cast("size_t") long batch_size);
-  public native @Cast("size_t*") @StdVector SizeTPointer get_decompressed_output_size(
-      @Cast("const uint8_t*const*") @ByPtrPtr byte[] comp_buffers,
-      @Cast("size_t") long batch_size);
+  public native @Cast("size_t*") @StdVector SizeTPointer get_decompressed_output_size(@Cast("const uint8_t*const*") PointerPointer comp_buffers, @Cast("size_t") long batch_size);
+  public native @Cast("size_t*") @StdVector SizeTPointer get_decompressed_output_size(@Cast("const uint8_t*const*") @ByPtrPtr BytePointer comp_buffers, @Cast("size_t") long batch_size);
+  public native @Cast("size_t*") @StdVector SizeTPointer get_decompressed_output_size(@Cast("const uint8_t*const*") @ByPtrPtr ByteBuffer comp_buffers, @Cast("size_t") long batch_size);
+  public native @Cast("size_t*") @StdVector SizeTPointer get_decompressed_output_size(@Cast("const uint8_t*const*") @ByPtrPtr byte[] comp_buffers, @Cast("size_t") long batch_size);
 }
