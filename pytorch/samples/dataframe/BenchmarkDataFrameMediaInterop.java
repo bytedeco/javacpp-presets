@@ -1,6 +1,7 @@
 package dataframe;
+import org.bytedeco.pytorch.jit.*;
 
-import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.serving.tensorrt.Tensor;
 import org.bytedeco.pytorch.dataframe.Column;
 import org.bytedeco.pytorch.dataframe.DataFrame;
 import org.bytedeco.pytorch.dataframe.dtype.AudioData;

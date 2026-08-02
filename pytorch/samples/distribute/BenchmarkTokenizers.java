@@ -1,4 +1,5 @@
 package distribute;
+import org.bytedeco.pytorch.jit.*;
 
 import org.bytedeco.pytorch.llm.tokenizers.AddedToken;
 import org.bytedeco.pytorch.llm.tokenizers.AddedVocabulary;

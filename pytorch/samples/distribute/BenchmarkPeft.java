@@ -1,4 +1,5 @@
 package distribute;
+import org.bytedeco.pytorch.nn.modules.*;
 
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorVector;

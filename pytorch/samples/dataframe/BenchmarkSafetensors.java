@@ -60,8 +60,8 @@ public class BenchmarkSafetensors {
             benchmark("SafeTensors.save - all float dtypes", () -> {
                 SafeDType[] dtypes = {SafeDType.F64, SafeDType.F32, SafeDType.F16, SafeDType.BF16};
                 for (SafeDType sdt : dtypes) {
-                    org.bytedeco.pytorch.Tensor t = torch.randn(new long[]{3, 4, 5}).to(sdt.toTorch());
-                    Map<String, org.bytedeco.pytorch.Tensor> tensors = new LinkedHashMap<>();
+                    org.bytedeco.pytorch.serving.tensorrt.Tensor t = torch.randn(new long[]{3, 4, 5}).to(sdt.toTorch());
+                    Map<String, org.bytedeco.pytorch.serving.tensorrt.Tensor> tensors = new LinkedHashMap<>();
                     tensors.put("weight_" + sdt.name(), t);
 
                     Path sfFile = tmpDir.resolve("test_" + sdt.name() + ".safetensors");
@@ -74,8 +74,8 @@ public class BenchmarkSafetensors {
             benchmark("SafeTensors.save - all integer dtypes", () -> {
                 SafeDType[] dtypes = {SafeDType.I64, SafeDType.I32, SafeDType.I16, SafeDType.I8, SafeDType.U8};
                 for (SafeDType sdt : dtypes) {
-                    org.bytedeco.pytorch.Tensor t = torch.randint(100L, new long[]{12L}, new org.bytedeco.pytorch.TensorOptions().dtype(new org.bytedeco.pytorch.ScalarTypeOptional(sdt.toTorch()))).view(3L, 4L);
-                    Map<String, org.bytedeco.pytorch.Tensor> tensors = new LinkedHashMap<>();
+                    org.bytedeco.pytorch.serving.tensorrt.Tensor t = torch.randint(100L, new long[]{12L}, new org.bytedeco.pytorch.TensorOptions().dtype(new org.bytedeco.pytorch.ScalarTypeOptional(sdt.toTorch()))).view(3L, 4L);
+                    Map<String, org.bytedeco.pytorch.serving.tensorrt.Tensor> tensors = new LinkedHashMap<>();
                     tensors.put("int_" + sdt.name(), t);
 
                     Path sfFile = tmpDir.resolve("test_int_" + sdt.name() + ".safetensors");
@@ -86,25 +86,25 @@ public class BenchmarkSafetensors {
 
             // ── 3. Load tensors - zeroCopy vs copy ─────────────────────────
             benchmark("SafeTensors.loadAsTensors - zeroCopy vs copy", () -> {
-                org.bytedeco.pytorch.Tensor original = torch.randn(new long[]{10, 26, 100}); // ~200KB
-                Map<String, org.bytedeco.pytorch.Tensor> map = new LinkedHashMap<>();
+                org.bytedeco.pytorch.serving.tensorrt.Tensor original = torch.randn(new long[]{10, 26, 100}); // ~200KB
+                Map<String, org.bytedeco.pytorch.serving.tensorrt.Tensor> map = new LinkedHashMap<>();
                 map.put("large_tensor", original);
                 Path sfFile = tmpDir.resolve("large.safetensors");
                 SafeTensors.save(map, sfFile.toFile());
 
-                Map<String, org.bytedeco.pytorch.Tensor> zc = SafeTensors.loadAsTensors(sfFile.toFile(), true);
+                Map<String, org.bytedeco.pytorch.serving.tensorrt.Tensor> zc = SafeTensors.loadAsTensors(sfFile.toFile(), true);
                 check("zeroCopy load key exists", zc.containsKey("large_tensor"));
                 check("zeroCopy load shape[0]=10", zc.get("large_tensor").size(0L) == 10);
                 check("zeroCopy load shape[1]=26", zc.get("large_tensor").size(1L) == 26);
 
-                Map<String, org.bytedeco.pytorch.Tensor> copy = SafeTensors.loadAsTensors(sfFile.toFile(), false);
+                Map<String, org.bytedeco.pytorch.serving.tensorrt.Tensor> copy = SafeTensors.loadAsTensors(sfFile.toFile(), false);
                 check("copy load key exists", copy.containsKey("large_tensor"));
                 check("copy load shape correct", copy.get("large_tensor").size(0L) == 10);
             });
 
             // ── 4. Load all tensors ──────────────────────────────────────
             benchmark("SafeTensors.loadAsTensors - multiple tensors", () -> {
-                Map<String, org.bytedeco.pytorch.Tensor> originals = new LinkedHashMap<>();
+                Map<String, org.bytedeco.pytorch.serving.tensorrt.Tensor> originals = new LinkedHashMap<>();
                 originals.put("w1", torch.randn(new long[]{10, 20}));
                 originals.put("w2", torch.randn(new long[]{20, 30}));
                 originals.put("w3", torch.randn(new long[]{30, 40}));
@@ -113,7 +113,7 @@ public class BenchmarkSafetensors {
                 Path sfFile = tmpDir.resolve("multi.safetensors");
                 SafeTensors.save(originals, sfFile.toFile());
 
-                Map<String, org.bytedeco.pytorch.Tensor> loaded = SafeTensors.loadAsTensors(sfFile.toFile());
+                Map<String, org.bytedeco.pytorch.serving.tensorrt.Tensor> loaded = SafeTensors.loadAsTensors(sfFile.toFile());
                 check("loadAsTensors count=4", loaded.size() == 4);
                 check("loadAsTensors w1 shape[0]=10", loaded.get("w1").size(0L) == 10);
                 check("loadAsTensors w2 shape[1]=30", loaded.get("w2").size(1L) == 30);
@@ -122,7 +122,7 @@ public class BenchmarkSafetensors {
 
             // ── 5. listTensors (header only, no data) ────────────────────
             benchmark("SafeTensors.listTensors", () -> {
-                Map<String, org.bytedeco.pytorch.Tensor> originals = new LinkedHashMap<>();
+                Map<String, org.bytedeco.pytorch.serving.tensorrt.Tensor> originals = new LinkedHashMap<>();
                 originals.put("tensor_a", torch.randn(new long[]{5, 5}));
                 originals.put("tensor_b", torch.randn(new long[]{10, 10}));
                 originals.put("tensor_c", torch.randn(new long[]{15, 15}));
@@ -145,7 +145,7 @@ public class BenchmarkSafetensors {
 
             // ── 6. Save with metadata ──────────────────────────────────────
             benchmark("SafeTensors.save with metadata", () -> {
-                Map<String, org.bytedeco.pytorch.Tensor> tensors = new LinkedHashMap<>();
+                Map<String, org.bytedeco.pytorch.serving.tensorrt.Tensor> tensors = new LinkedHashMap<>();
                 tensors.put("weight", torch.randn(new long[]{10, 10}));
 
                 Map<String, String> metadata = new LinkedHashMap<>();
@@ -156,13 +156,13 @@ public class BenchmarkSafetensors {
                 Path sfFile = tmpDir.resolve("with_meta.safetensors");
                 SafeTensors.save(tensors, sfFile.toFile(), metadata);
 
-                Map<String, org.bytedeco.pytorch.Tensor> loaded = SafeTensors.loadAsTensors(sfFile.toFile());
+                Map<String, org.bytedeco.pytorch.serving.tensorrt.Tensor> loaded = SafeTensors.loadAsTensors(sfFile.toFile());
                 check("save with metadata - tensor loads", loaded.containsKey("weight"));
             });
 
             // ── 7. Multi-dimensional tensors ──────────────────────────────
             benchmark("SafeTensors - multi-dimensional tensors", () -> {
-                Map<String, org.bytedeco.pytorch.Tensor> originals = new LinkedHashMap<>();
+                Map<String, org.bytedeco.pytorch.serving.tensorrt.Tensor> originals = new LinkedHashMap<>();
                 originals.put("1d", torch.randn(new long[]{100}));
                 originals.put("2d", torch.randn(new long[]{10, 20}));
                 originals.put("3d", torch.randn(new long[]{4, 5, 6}));
@@ -172,7 +172,7 @@ public class BenchmarkSafetensors {
                 Path sfFile = tmpDir.resolve("multi_dim.safetensors");
                 SafeTensors.save(originals, sfFile.toFile());
 
-                Map<String, org.bytedeco.pytorch.Tensor> loaded = SafeTensors.loadAsTensors(sfFile.toFile());
+                Map<String, org.bytedeco.pytorch.serving.tensorrt.Tensor> loaded = SafeTensors.loadAsTensors(sfFile.toFile());
                 check("1D shape len=1", loaded.get("1d").shape().length == 1);
                 check("2D shape[0]=10", loaded.get("2d").size(0L) == 10);
                 check("3D numel=120", loaded.get("3d").numel() == 120);
@@ -183,14 +183,14 @@ public class BenchmarkSafetensors {
             // ── 8. Large tensor (>1MiB zero-copy threshold) ──────────────
             benchmark("SafeTensors - large tensor >1MiB", () -> {
                 // 100*100*100*4bytes = 40MB
-                org.bytedeco.pytorch.Tensor large = torch.randn(new long[]{100, 100, 100});
-                Map<String, org.bytedeco.pytorch.Tensor> map = new LinkedHashMap<>();
+                org.bytedeco.pytorch.serving.tensorrt.Tensor large = torch.randn(new long[]{100, 100, 100});
+                Map<String, org.bytedeco.pytorch.serving.tensorrt.Tensor> map = new LinkedHashMap<>();
                 map.put("large", large);
                 Path sfFile = tmpDir.resolve("large_tensor.safetensors");
                 SafeTensors.save(map, sfFile.toFile());
                 check("large file >1MB", Files.size(sfFile) > 1_000_000);
 
-                Map<String, org.bytedeco.pytorch.Tensor> loaded = SafeTensors.loadAsTensors(sfFile.toFile(), true);
+                Map<String, org.bytedeco.pytorch.serving.tensorrt.Tensor> loaded = SafeTensors.loadAsTensors(sfFile.toFile(), true);
                 check("large tensor shape[0]=100", loaded.get("large").size(0L) == 100);
 
                 SafeTensors.releasePinnedMaps();
@@ -200,7 +200,7 @@ public class BenchmarkSafetensors {
             // ── 9. Python interop: Java → Python ─────────────────────────
             benchmark("Python interop: Java safetensors → Python reads", () -> {
                 Path sfFile = tmpDir.resolve("java_st.safetensors");
-                Map<String, org.bytedeco.pytorch.Tensor> tensors = new LinkedHashMap<>();
+                Map<String, org.bytedeco.pytorch.serving.tensorrt.Tensor> tensors = new LinkedHashMap<>();
                 tensors.put("weight", torch.randn(new long[]{10, 20}));
                 tensors.put("bias", torch.randn(new long[]{20}));
                 SafeTensors.save(tensors, sfFile.toFile());
@@ -232,7 +232,7 @@ public class BenchmarkSafetensors {
                     sfFile.toAbsolutePath());
                 runPython(pyWrite);
 
-                Map<String, org.bytedeco.pytorch.Tensor> loaded = SafeTensors.loadAsTensors(sfFile.toFile());
+                Map<String, org.bytedeco.pytorch.serving.tensorrt.Tensor> loaded = SafeTensors.loadAsTensors(sfFile.toFile());
                 check("Python safetensors has w", loaded.containsKey("w"));
                 check("Python safetensors has b", loaded.containsKey("b"));
                 check("Python safetensors w shape[0]=8", loaded.get("w").size(0L) == 8);
@@ -244,7 +244,7 @@ public class BenchmarkSafetensors {
             benchmark("Python interop: F16/BF16 Java↔Python", () -> {
                 // Write F16 with Java, read with Python
                 Path f16File = tmpDir.resolve("f16_java.safetensors");
-                Map<String, org.bytedeco.pytorch.Tensor> f16map = new LinkedHashMap<>();
+                Map<String, org.bytedeco.pytorch.serving.tensorrt.Tensor> f16map = new LinkedHashMap<>();
                 f16map.put("f16", torch.randn(new long[]{3, 4}).to(torch.ScalarType.Half));
                 SafeTensors.save(f16map, f16File.toFile());
 

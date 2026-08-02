@@ -1,4 +1,5 @@
 package dataframe;
+import org.bytedeco.pytorch.data.*;
 
 import org.bytedeco.pytorch.dataframe.DataFrame;
 import org.bytedeco.pytorch.dataframe.ann.AnnSearchResult;

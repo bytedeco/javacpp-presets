@@ -1,4 +1,6 @@
 package dataframe;
+import org.bytedeco.pytorch.data.*;
+import org.bytedeco.pytorch.data.datasets.*;
 import org.bytedeco.pytorch.dataframe.DataFrame;
 import org.bytedeco.pytorch.dataframe.DataFrameOps;
 import org.bytedeco.pytorch.dataframe.Column;
@@ -8,7 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.serving.tensorrt.Tensor;
 import org.bytedeco.pytorch.data.datasets.TensorDataset;
 import org.bytedeco.pytorch.dataframe.dataset.DataFrameDataLoader;
 import org.bytedeco.pytorch.dataframe.dataset.DataFrameDataset;

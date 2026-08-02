@@ -1,4 +1,8 @@
 package distribute;
+import org.bytedeco.pytorch.nn.modules.*;
+import org.bytedeco.pytorch.optim.*;
+import org.bytedeco.pytorch.optim.options.*;
+import org.bytedeco.pytorch.distributed.*;
 
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.distributed.DistributedStore;

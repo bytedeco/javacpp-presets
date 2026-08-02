@@ -1,4 +1,7 @@
 package distribute;
+import org.bytedeco.pytorch.nn.modules.*;
+import org.bytedeco.pytorch.optim.*;
+import org.bytedeco.pytorch.optim.options.*;
 
 import org.bytedeco.pytorch.NoGradGuard;
 import org.bytedeco.pytorch.Scalar;

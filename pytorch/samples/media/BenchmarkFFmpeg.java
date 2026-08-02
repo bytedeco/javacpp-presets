@@ -1,5 +1,6 @@
 package media;
-import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.autograd.*;
+import org.bytedeco.pytorch.serving.tensorrt.Tensor;
 import org.bytedeco.pytorch.vision.ffmpeg.AudioFile;
 import org.bytedeco.pytorch.vision.ffmpeg.AudioTensorsFFmpeg;
 import org.bytedeco.pytorch.vision.ffmpeg.FFmpegException;

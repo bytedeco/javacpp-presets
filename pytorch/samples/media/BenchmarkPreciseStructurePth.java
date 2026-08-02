@@ -1,4 +1,9 @@
 package media;
+import org.bytedeco.pytorch.nn.modules.*;
+import org.bytedeco.pytorch.jit.*;
+import org.bytedeco.pytorch.optim.*;
+import org.bytedeco.pytorch.optim.options.*;
+import org.bytedeco.pytorch.autograd.*;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.data.serialize.NativeModuleIO;

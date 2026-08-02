@@ -1,4 +1,7 @@
 package media;
+import org.bytedeco.pytorch.nn.*;
+import org.bytedeco.pytorch.optim.*;
+import org.bytedeco.pytorch.optim.options.*;
 
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorVector;

@@ -1,4 +1,6 @@
 package distribute;
+import org.bytedeco.pytorch.optim.*;
+import org.bytedeco.pytorch.optim.options.*;
 
 import org.bytedeco.pytorch.distributed.*;
 import org.bytedeco.pytorch.distributed.examples.MockLLM;

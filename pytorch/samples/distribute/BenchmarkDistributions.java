@@ -4,8 +4,8 @@ import org.bytedeco.pytorch.Scalar;
 import org.bytedeco.pytorch.ScalarTypeOptional;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.distribution.*;
-import org.bytedeco.pytorch.distribution.transforms.Transform;
-import org.bytedeco.pytorch.distribution.transforms.Transforms;
+import org.bytedeco.pytorch.distribution.transforms.DistributionTransform;
+import org.bytedeco.pytorch.distribution.transforms.DistributionTransforms;
 import org.bytedeco.pytorch.global.torch;
 
 import java.util.ArrayList;
@@ -547,7 +547,7 @@ public class BenchmarkDistributions {
         // 4.1 Identity transform preserves Normal
         {
             Normal base = new Normal(f(0f), f(1f));
-            TransformedDistribution td = new TransformedDistribution(base, Transforms.identity());
+            TransformedDistribution td = new TransformedDistribution(base, DistributionTransforms.identity());
             Tensor x = f(0.5f);
             Tensor lpBase = base.log_prob(x);
             Tensor lpTd = td.log_prob(x);
@@ -564,7 +564,7 @@ public class BenchmarkDistributions {
         // 4.2 Exp transform: Transformed(Normal(0,1), Exp) ≈ LogNormal(0,1)
         {
             Normal base = new Normal(f(0f), f(1f));
-            TransformedDistribution td = new TransformedDistribution(base, Transforms.exp(), false, true);
+            TransformedDistribution td = new TransformedDistribution(base, DistributionTransforms.exp(), false, true);
             LogNormal ln = new LogNormal(f(0f), f(1f));
 
             Tensor y = f(1.5f);
@@ -587,7 +587,7 @@ public class BenchmarkDistributions {
         // 4.3 Affine transform: loc=2, scale=3 on Normal(0,1) → Normal(2,3)
         {
             Normal base = new Normal(f(0f), f(1f));
-            Transform aff = Transforms.affine(f(2f), f(3f));
+            DistributionTransform aff = DistributionTransforms.affine(f(2f), f(3f));
             TransformedDistribution td = new TransformedDistribution(base, aff, false, true);
             Normal target = new Normal(f(2f), f(3f));
 
@@ -609,7 +609,7 @@ public class BenchmarkDistributions {
         // 4.4 Tanh squash (SAC-style)
         {
             Normal base = new Normal(f(0f), f(1f));
-            TransformedDistribution td = new TransformedDistribution(base, Transforms.tanh(), false, true);
+            TransformedDistribution td = new TransformedDistribution(base, DistributionTransforms.tanh(), false, true);
             Tensor s = td.sample(1000);
             Tensor absMax = torch.abs(s).max();
             check("Tanh samples in (-1,1)", scalar(absMax) < 1.0f + 1e-5, "max|s|=" + scalar(absMax));
@@ -623,7 +623,7 @@ public class BenchmarkDistributions {
         // 4.5 Sigmoid transform → (0,1)
         {
             Normal base = new Normal(f(0f), f(1f));
-            TransformedDistribution td = new TransformedDistribution(base, Transforms.sigmoid(), false, true);
+            TransformedDistribution td = new TransformedDistribution(base, DistributionTransforms.sigmoid(), false, true);
             Tensor s = td.sample(500);
             Tensor mn = s.min();
             Tensor mx = s.max();
@@ -640,9 +640,9 @@ public class BenchmarkDistributions {
         // 4.6 Compose: Affine then Exp  (lognormal with loc/scale)
         {
             Normal base = new Normal(f(0f), f(1f));
-            Transform comp = Transforms.compose(
-                    Transforms.affine(f(0.5f), f(0.8f)),
-                    Transforms.exp()
+            DistributionTransform comp = DistributionTransforms.compose(
+                    DistributionTransforms.affine(f(0.5f), f(0.8f)),
+                    DistributionTransforms.exp()
             );
             TransformedDistribution td = new TransformedDistribution(base, comp, false, true);
             Tensor s = td.sample(300);
@@ -657,7 +657,7 @@ public class BenchmarkDistributions {
         // 4.7 Softplus transform
         {
             Normal base = new Normal(f(0f), f(1f));
-            TransformedDistribution td = new TransformedDistribution(base, Transforms.softplus(), false, true);
+            TransformedDistribution td = new TransformedDistribution(base, DistributionTransforms.softplus(), false, true);
             Tensor s = td.sample(200);
             check("Softplus samples > 0", scalar(s.min()) > 0, "min=" + scalar(s.min()));
             check("Softplus invertibility", td.validateInvertibility(f(0.8f), 1e-3), null);
@@ -666,11 +666,11 @@ public class BenchmarkDistributions {
         }
 
         // 4.8 null args
-        expectThrow("Transformed null base", () -> new TransformedDistribution(null, Transforms.identity()));
+        expectThrow("Transformed null base", () -> new TransformedDistribution(null, DistributionTransforms.identity()));
         expectThrow("Transformed null transform", () -> {
             Normal n = new Normal(f(0f), f(1f));
             try {
-                return new TransformedDistribution(n, (Transform) null);
+                return new TransformedDistribution(n, (DistributionTransform) null);
             } finally {
                 n.close();
             }

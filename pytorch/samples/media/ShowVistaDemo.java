@@ -1,4 +1,7 @@
 package media;
+import org.bytedeco.pytorch.nn.*;
+import org.bytedeco.pytorch.nn.modules.*;
+import org.bytedeco.pytorch.nn.modules.container.*;
 
 import static org.bytedeco.pytorch.global.torch.randn;
 

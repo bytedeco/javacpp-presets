@@ -1,6 +1,6 @@
 package dataframe;
 
-import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.serving.tensorrt.Tensor;
 import org.bytedeco.pytorch.data.numpy.NDArray;
 import org.bytedeco.pytorch.dataframe.Column;
 import org.bytedeco.pytorch.dataframe.DataFrame;

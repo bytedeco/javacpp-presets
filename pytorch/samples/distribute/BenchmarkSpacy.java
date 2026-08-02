@@ -1,4 +1,6 @@
 package distribute;
+import org.bytedeco.pytorch.data.*;
+import org.bytedeco.pytorch.jit.*;
 
 import org.bytedeco.pytorch.llm.spacy.Doc;
 import org.bytedeco.pytorch.llm.spacy.Example;

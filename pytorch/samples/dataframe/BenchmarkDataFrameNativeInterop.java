@@ -1,10 +1,15 @@
 package dataframe;
+import org.bytedeco.pytorch.data.*;
+import org.bytedeco.pytorch.data.datasets.*;
+import org.bytedeco.pytorch.data.dataloader.*;
+import org.bytedeco.pytorch.nn.modules.*;
+import org.bytedeco.pytorch.optim.options.*;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.serving.tensorrt.Tensor;
 import org.bytedeco.pytorch.data.Dataset;
 import org.bytedeco.pytorch.data.Example;
 import org.bytedeco.pytorch.data.ExampleVector;

@@ -1,4 +1,7 @@
 package distribute;
+import org.bytedeco.pytorch.data.*;
+import org.bytedeco.pytorch.jit.*;
+import org.bytedeco.pytorch.autograd.*;
 import org.bytedeco.pytorch.utils.datasets.HfDataset;
 import org.bytedeco.pytorch.utils.datasets.HfDatasets;
 import org.bytedeco.pytorch.llm.hub.HfHub;

@@ -1,4 +1,5 @@
 package media;
+import org.bytedeco.pytorch.autograd.*;
 import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.vision.opencv.MatToTensor;

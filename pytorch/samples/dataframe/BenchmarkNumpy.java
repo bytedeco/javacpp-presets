@@ -239,7 +239,7 @@ public class BenchmarkNumpy {
             benchmark("Tensor toTensor/fromTensor", () -> {
                 for (DType dt : DType.values()) {
                     NDArray arr = NP.full(dt, 2, 3L, 4L);
-                    org.bytedeco.pytorch.Tensor t = NP.toTensor(arr);
+                    org.bytedeco.pytorch.serving.tensorrt.Tensor t = NP.toTensor(arr);
                     check("toTensor " + dt.name() + " not null", t != null);
                     check("toTensor " + dt.name() + " dim=3", t.dim() == 3);
                     check("toTensor " + dt.name() + " size(0)=3", t.size(0) == 3);
@@ -249,7 +249,7 @@ public class BenchmarkNumpy {
                     check("fromTensor " + dt.name() + " dtype", back.dtype == arr.dtype);
                 }
 
-                org.bytedeco.pytorch.Tensor t4d = torch.randn(new long[]{2, 3, 4, 5});
+                org.bytedeco.pytorch.serving.tensorrt.Tensor t4d = torch.randn(new long[]{2, 3, 4, 5});
                 NDArray arr4d = NP.fromTensor(t4d);
                 check("fromTensor 4D shape len=4", arr4d.shape.length == 4);
                 check("fromTensor 4D numel=120", arr4d.numel() == 120);
@@ -432,7 +432,7 @@ public class BenchmarkNumpy {
                 NDArray f3d = NP.flatten(a3d);
                 check("3D flatten numel=24", f3d.numel() == 24);
 
-                org.bytedeco.pytorch.Tensor t3d = NP.toTensor(a3d);
+                org.bytedeco.pytorch.serving.tensorrt.Tensor t3d = NP.toTensor(a3d);
                 check("3D toTensor dim=3", t3d.dim() == 3);
                 check("3D toTensor size(0)=2", t3d.size(0) == 2);
 

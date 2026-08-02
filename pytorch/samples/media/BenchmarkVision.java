@@ -1,4 +1,5 @@
 package media;
+import org.bytedeco.pytorch.data.transforms.*;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.vision.datasets.FakeData;
@@ -6,11 +7,11 @@ import org.bytedeco.pytorch.vision.datasets.ImageFolder;
 import org.bytedeco.pytorch.vision.datasets.VisionDataset;
 import org.bytedeco.pytorch.vision.io.ImageIO;
 import org.bytedeco.pytorch.vision.models.ConvHelpers;
-import org.bytedeco.pytorch.vision.models.Models;
+import org.bytedeco.pytorch.vision.models.VisionModels;
 import org.bytedeco.pytorch.vision.ops.Boxes;
-import org.bytedeco.pytorch.vision.transforms.Compose;
-import org.bytedeco.pytorch.vision.transforms.Transforms;
-import org.bytedeco.pytorch.vision.transforms.functional.F;
+import org.bytedeco.pytorch.vision.transforms.VisionCompose;
+import org.bytedeco.pytorch.vision.transforms.VisionTransforms;
+import org.bytedeco.pytorch.vision.transforms.functional.VisionF;
 import org.bytedeco.pytorch.vision.utils.ImageTensors;
 import org.bytedeco.pytorch.vision.utils.VisionUtils;
 
@@ -225,140 +226,140 @@ public class BenchmarkVision {
         // ── D3 functional F ──────────────────────────────────────────────────
         System.out.println("\n══ D3 functional F ══");
         section("geometry: resize/crop/flip/rotate/pad", () -> {
-            BufferedImage r = F.resize(rgb, 64);
+            BufferedImage r = VisionF.resize(rgb, 64);
             check("resize shorter side 64", Math.min(r.getWidth(), r.getHeight()) == 64
                     || r.getWidth() == 64 || r.getHeight() == 64);
-            BufferedImage r2 = F.resize(rgb, 32, 48);
+            BufferedImage r2 = VisionF.resize(rgb, 32, 48);
             checkEq("resize HxW H", 32, r2.getHeight());
             checkEq("resize HxW W", 48, r2.getWidth());
 
-            BufferedImage cc = F.centerCrop(rgb, 40);
+            BufferedImage cc = VisionF.centerCrop(rgb, 40);
             checkEq("centerCrop size", 40, cc.getWidth());
             checkEq("centerCrop H", 40, cc.getHeight());
-            BufferedImage cc2 = F.centerCrop(rgb, 30, 50);
+            BufferedImage cc2 = VisionF.centerCrop(rgb, 30, 50);
             checkEq("centerCrop 30x50 H", 30, cc2.getHeight());
             checkEq("centerCrop 30x50 W", 50, cc2.getWidth());
 
-            BufferedImage crop = F.crop(rgb, 10, 20, 40, 50);
+            BufferedImage crop = VisionF.crop(rgb, 10, 20, 40, 50);
             checkEq("crop H", 40, crop.getHeight());
             checkEq("crop W", 50, crop.getWidth());
 
-            BufferedImage hf = F.hflip(rgb);
+            BufferedImage hf = VisionF.hflip(rgb);
             checkEq("hflip W", rgb.getWidth(), hf.getWidth());
-            BufferedImage vf = F.vflip(rgb);
+            BufferedImage vf = VisionF.vflip(rgb);
             checkEq("vflip H", rgb.getHeight(), vf.getHeight());
 
-            BufferedImage rot = F.rotate(rgb, 90);
+            BufferedImage rot = VisionF.rotate(rgb, 90);
             check("rotate 90 swaps or keeps dims", rot.getWidth() > 0 && rot.getHeight() > 0);
 
-            BufferedImage pad = F.pad(rgb, 5);
+            BufferedImage pad = VisionF.pad(rgb, 5);
             checkEq("pad +10 W", rgb.getWidth() + 10, pad.getWidth());
             checkEq("pad +10 H", rgb.getHeight() + 10, pad.getHeight());
-            BufferedImage pad2 = F.pad(rgb, 1, 2, 3, 4, 0);
+            BufferedImage pad2 = VisionF.pad(rgb, 1, 2, 3, 4, 0);
             checkEq("pad custom W", rgb.getWidth() + 6, pad2.getWidth());
             checkEq("pad custom H", rgb.getHeight() + 4, pad2.getHeight());
         });
 
         section("color / blur / normalize / erase / invert", () -> {
-            BufferedImage g = F.toGrayscale(rgb, 1);
+            BufferedImage g = VisionF.toGrayscale(rgb, 1);
             check("grayscale type", g.getType() == BufferedImage.TYPE_BYTE_GRAY
                     || g.getColorModel().getNumColorComponents() == 1
                     || g.getWidth() == rgb.getWidth());
-            BufferedImage g3 = F.toGrayscale(rgb, 3);
+            BufferedImage g3 = VisionF.toGrayscale(rgb, 3);
             check("grayscale 3ch W", g3.getWidth() == rgb.getWidth());
 
-            BufferedImage br = F.adjustBrightness(rgb, 1.2f);
+            BufferedImage br = VisionF.adjustBrightness(rgb, 1.2f);
             check("brightness W", br.getWidth() == rgb.getWidth());
-            BufferedImage ct = F.adjustContrast(rgb, 1.1f);
+            BufferedImage ct = VisionF.adjustContrast(rgb, 1.1f);
             check("contrast W", ct.getWidth() == rgb.getWidth());
-            BufferedImage sat = F.adjustSaturation(rgb, 0.8f);
+            BufferedImage sat = VisionF.adjustSaturation(rgb, 0.8f);
             check("saturation W", sat.getWidth() == rgb.getWidth());
-            BufferedImage hue = F.adjustHue(rgb, 0.1f);
+            BufferedImage hue = VisionF.adjustHue(rgb, 0.1f);
             check("hue W", hue.getWidth() == rgb.getWidth());
-            BufferedImage sharp = F.adjustSharpness(rgb, 1.5f);
+            BufferedImage sharp = VisionF.adjustSharpness(rgb, 1.5f);
             check("sharpness W", sharp.getWidth() == rgb.getWidth());
 
-            BufferedImage blur = F.gaussianBlur(rgb, 5, 1.0);
+            BufferedImage blur = VisionF.gaussianBlur(rgb, 5, 1.0);
             check("gaussianBlur W", blur.getWidth() == rgb.getWidth());
 
             Tensor t = ImageTensors.toTensor(rgb);
-            Tensor n = F.normalize(t, new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f});
+            Tensor n = VisionF.normalize(t, new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f});
             checkEq("normalize shape", shapes(t), shapes(n));
 
-            Tensor erased = F.erase(t, 10, 10, 20, 20, new float[]{0, 0, 0}, false);
+            Tensor erased = VisionF.erase(t, 10, 10, 20, 20, new float[]{0, 0, 0}, false);
             checkEq("erase shape", shapes(t), shapes(erased));
-            BufferedImage erasedBi = F.erase(rgb, 5, 5, 10, 10, 0);
+            BufferedImage erasedBi = VisionF.erase(rgb, 5, 5, 10, 10, 0);
             check("erase BI W", erasedBi.getWidth() == rgb.getWidth());
 
-            BufferedImage inv = F.invert(rgb);
+            BufferedImage inv = VisionF.invert(rgb);
             check("invert W", inv.getWidth() == rgb.getWidth());
-            BufferedImage sol = F.solarize(rgb, 0.5);
+            BufferedImage sol = VisionF.solarize(rgb, 0.5);
             check("solarize W", sol.getWidth() == rgb.getWidth());
-            BufferedImage ac = F.autocontrast(rgb);
+            BufferedImage ac = VisionF.autocontrast(rgb);
             check("autocontrast W", ac.getWidth() == rgb.getWidth());
-            BufferedImage eq = F.equalize(rgb);
+            BufferedImage eq = VisionF.equalize(rgb);
             check("equalize W", eq.getWidth() == rgb.getWidth());
 
-            Tensor tt = F.toTensor(rgb);
+            Tensor tt = VisionF.toTensor(rgb);
             checkEq("F.toTensor C", 3L, shapes(tt)[0]);
-            check("asBufferedImage", F.asBufferedImage(rgb) != null);
-            check("asImageData", F.asImageData(rgb) != null);
+            check("asBufferedImage", VisionF.asBufferedImage(rgb) != null);
+            check("asImageData", VisionF.asImageData(rgb) != null);
         });
 
         section("affine / perspective", () -> {
-            BufferedImage aff = F.affine(rgb, 15);
+            BufferedImage aff = VisionF.affine(rgb, 15);
             check("affine degrees W>0", aff.getWidth() > 0);
-            BufferedImage aff2 = F.affine(rgb, 10, new double[]{0.05, 0.05}, 1.0, new double[]{0, 0}, 0);
+            BufferedImage aff2 = VisionF.affine(rgb, 10, new double[]{0.05, 0.05}, 1.0, new double[]{0, 0}, 0);
             check("affine full W>0", aff2.getWidth() > 0);
 
             double[][] start = {{0, 0}, {127, 0}, {127, 95}, {0, 95}};
             double[][] end = {{5, 5}, {120, 2}, {125, 90}, {3, 93}};
-            BufferedImage pers = F.perspective(rgb, start, end, 0);
+            BufferedImage pers = VisionF.perspective(rgb, start, end, 0);
             check("perspective W>0", pers.getWidth() > 0);
         });
 
         // ── D4 Transforms ────────────────────────────────────────────────────
         System.out.println("\n══ D4 Transforms + Compose ══");
         section("deterministic transforms", () -> {
-            checkEq("Resize", 64, new Transforms.Resize(64, 64).forward(rgb).getWidth());
-            checkEq("CenterCrop", 40, new Transforms.CenterCrop(40).forward(rgb).getWidth());
-            check("RandomCrop", new Transforms.RandomCrop(32).forward(rgb).getWidth() == 32);
-            check("RandomResizedCrop", new Transforms.RandomResizedCrop(48).forward(rgb).getWidth() == 48);
+            checkEq("Resize", 64, new VisionTransforms.Resize(64, 64).forward(rgb).getWidth());
+            checkEq("CenterCrop", 40, new VisionTransforms.CenterCrop(40).forward(rgb).getWidth());
+            check("RandomCrop", new VisionTransforms.RandomCrop(32).forward(rgb).getWidth() == 32);
+            check("RandomResizedCrop", new VisionTransforms.RandomResizedCrop(48).forward(rgb).getWidth() == 48);
             check("RandomHorizontalFlip p=1",
-                    ((BufferedImage) new Transforms.RandomHorizontalFlip(1.0, new Random(0)).forward(rgb)).getWidth() == rgb.getWidth());
+                    ((BufferedImage) new VisionTransforms.RandomHorizontalFlip(1.0, new Random(0)).forward(rgb)).getWidth() == rgb.getWidth());
             check("RandomVerticalFlip p=1",
-                    ((BufferedImage) new Transforms.RandomVerticalFlip(1.0, new Random(0)).forward(rgb)).getHeight() == rgb.getHeight());
-            check("RandomRotation", new Transforms.RandomRotation(30, new Random(0)).forward(rgb).getWidth() > 0);
-            check("Pad", new Transforms.Pad(4).forward(rgb).getWidth() == rgb.getWidth() + 8);
-            check("Grayscale", new Transforms.Grayscale().forward(rgb).getWidth() == rgb.getWidth());
+                    ((BufferedImage) new VisionTransforms.RandomVerticalFlip(1.0, new Random(0)).forward(rgb)).getHeight() == rgb.getHeight());
+            check("RandomRotation", new VisionTransforms.RandomRotation(30, new Random(0)).forward(rgb).getWidth() > 0);
+            check("Pad", new VisionTransforms.Pad(4).forward(rgb).getWidth() == rgb.getWidth() + 8);
+            check("Grayscale", new VisionTransforms.Grayscale().forward(rgb).getWidth() == rgb.getWidth());
             check("RandomGrayscale p=1",
-                    ((BufferedImage) new Transforms.RandomGrayscale(1.0, new Random(0)).forward(rgb)).getWidth() == rgb.getWidth());
-            check("ColorJitter", new Transforms.ColorJitter(0.2f, 0.2f, 0.2f, 0.1f, new Random(0)).forward(rgb).getWidth() > 0);
-            check("GaussianBlur", new Transforms.GaussianBlur(5, 1.0).forward(rgb).getWidth() > 0);
-            Tensor tens = new Transforms.ToTensor().forward(rgb);
+                    ((BufferedImage) new VisionTransforms.RandomGrayscale(1.0, new Random(0)).forward(rgb)).getWidth() == rgb.getWidth());
+            check("ColorJitter", new VisionTransforms.ColorJitter(0.2f, 0.2f, 0.2f, 0.1f, new Random(0)).forward(rgb).getWidth() > 0);
+            check("GaussianBlur", new VisionTransforms.GaussianBlur(5, 1.0).forward(rgb).getWidth() > 0);
+            Tensor tens = new VisionTransforms.ToTensor().forward(rgb);
             checkEq("ToTensor C", 3L, shapes(tens)[0]);
-            BufferedImage pil = new Transforms.ToPILImage().forward(tens);
+            BufferedImage pil = new VisionTransforms.ToPILImage().forward(tens);
             check("ToPILImage", pil.getWidth() > 0);
-            Tensor norm = new Transforms.Normalize(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}).forward(tens);
+            Tensor norm = new VisionTransforms.Normalize(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}).forward(tens);
             checkEq("Normalize shape", shapes(tens), shapes(norm));
-            check("ConvertImageDtype", new Transforms.ConvertImageDtype().forward(tens) != null);
-            check("Lambda", new Transforms.Lambda<BufferedImage, Integer>(BufferedImage::getWidth).forward(rgb) == rgb.getWidth());
-            checkEq("FiveCrop", 5, new Transforms.FiveCrop(32).forward(rgb).length);
-            checkEq("TenCrop", 10, new Transforms.TenCrop(32).forward(rgb).length);
-            check("Identity", new Transforms.Identity().forward(rgb) == rgb);
-            check("HorizontalFlip", new Transforms.HorizontalFlip().forward(rgb).getWidth() == rgb.getWidth());
-            check("VerticalFlip", new Transforms.VerticalFlip().forward(rgb).getHeight() == rgb.getHeight());
-            check("Rotate", new Transforms.Rotate(45).forward(rgb).getWidth() > 0);
-            check("Affine", new Transforms.Affine(10).forward(rgb).getWidth() > 0);
-            check("RandomAffine", new Transforms.RandomAffine(15).forward(rgb).getWidth() > 0);
+            check("ConvertImageDtype", new VisionTransforms.ConvertImageDtype().forward(tens) != null);
+            check("Lambda", new VisionTransforms.Lambda<BufferedImage, Integer>(BufferedImage::getWidth).forward(rgb) == rgb.getWidth());
+            checkEq("FiveCrop", 5, new VisionTransforms.FiveCrop(32).forward(rgb).length);
+            checkEq("TenCrop", 10, new VisionTransforms.TenCrop(32).forward(rgb).length);
+            check("Identity", new VisionTransforms.Identity().forward(rgb) == rgb);
+            check("HorizontalFlip", new VisionTransforms.HorizontalFlip().forward(rgb).getWidth() == rgb.getWidth());
+            check("VerticalFlip", new VisionTransforms.VerticalFlip().forward(rgb).getHeight() == rgb.getHeight());
+            check("Rotate", new VisionTransforms.Rotate(45).forward(rgb).getWidth() > 0);
+            check("Affine", new VisionTransforms.Affine(10).forward(rgb).getWidth() > 0);
+            check("RandomAffine", new VisionTransforms.RandomAffine(15).forward(rgb).getWidth() > 0);
         });
 
         section("Compose / RandomApply / RandomChoice / RandomOrder", () -> {
-            Compose pipe = Compose.of(
-                    new Transforms.Resize(64, 64),
-                    new Transforms.CenterCrop(56),
-                    new Transforms.ToTensor(),
-                    new Transforms.Normalize(new float[]{0.485f, 0.456f, 0.406f},
+            VisionCompose pipe = VisionCompose.of(
+                    new VisionTransforms.Resize(64, 64),
+                    new VisionTransforms.CenterCrop(56),
+                    new VisionTransforms.ToTensor(),
+                    new VisionTransforms.Normalize(new float[]{0.485f, 0.456f, 0.406f},
                             new float[]{0.229f, 0.224f, 0.225f})
             );
             Object out = pipe.forward(rgb);
@@ -366,16 +367,16 @@ public class BenchmarkVision {
             checkEq("Compose out shape", new long[]{3, 56, 56}, shapes((Tensor) out));
             check("Compose.transforms size", pipe.transforms().size() == 4);
 
-            Compose.RandomApply ra = new Compose.RandomApply(
-                    List.of(new Transforms.Grayscale(3), new Transforms.HorizontalFlip()), 1.0, new Random(1));
+            VisionCompose.RandomApply ra = new VisionCompose.RandomApply(
+                    List.of(new VisionTransforms.Grayscale(3), new VisionTransforms.HorizontalFlip()), 1.0, new Random(1));
             check("RandomApply p=1", ra.forward(rgb) != null);
 
-            Compose.RandomChoice rc = new Compose.RandomChoice(
-                    List.of(new Transforms.HorizontalFlip(), new Transforms.VerticalFlip()), new Random(2));
+            VisionCompose.RandomChoice rc = new VisionCompose.RandomChoice(
+                    List.of(new VisionTransforms.HorizontalFlip(), new VisionTransforms.VerticalFlip()), new Random(2));
             check("RandomChoice", rc.forward(rgb) != null);
 
-            Compose.RandomOrder ro = new Compose.RandomOrder(
-                    List.of(new Transforms.HorizontalFlip(), new Transforms.VerticalFlip()), new Random(3));
+            VisionCompose.RandomOrder ro = new VisionCompose.RandomOrder(
+                    List.of(new VisionTransforms.HorizontalFlip(), new VisionTransforms.VerticalFlip()), new Random(3));
             check("RandomOrder", ro.forward(rgb) != null);
         });
 
@@ -451,7 +452,7 @@ public class BenchmarkVision {
 
             // With ToTensor transform → Tensor CHW in [0,1]
             FakeData dsT = new FakeData(4, 28, 3, 3, 42L)
-                    .setTransform(new Transforms.ToTensor());
+                    .setTransform(new VisionTransforms.ToTensor());
             Object d0 = dsT.get(0).data();
             check("FakeData+ToTensor → Tensor", d0 instanceof Tensor);
             checkEq("ToTensor C", 3L, shapes((Tensor) d0)[0]);
@@ -501,24 +502,24 @@ public class BenchmarkVision {
 
             Tensor x = torch.randn(2, 3, 64, 64);
 
-            Models.SimpleCNN cnn = new Models.SimpleCNN(3, 10);
+            VisionModels.SimpleCNN cnn = new VisionModels.SimpleCNN(3, 10);
             Tensor out = cnn.forward(x);
             checkEq("SimpleCNN out", new long[]{2, 10}, shapes(out));
 
-            Models.SimpleClassifier sc = new Models.SimpleClassifier(128, 64, 5);
+            VisionModels.SimpleClassifier sc = new VisionModels.SimpleClassifier(128, 64, 5);
             checkEq("SimpleClassifier", new long[]{2, 5}, shapes(sc.forward(torch.randn(2, 128))));
 
-            Models.ResNet r18 = Models.resnet18(10);
+            VisionModels.ResNet r18 = VisionModels.resnet18(10);
             // ResNet expects larger spatial; use 64 still often works with adaptive pool
             Tensor rOut = r18.forward(x);
             checkEq("resnet18 out", new long[]{2, 10}, shapes(rOut));
             check("resnet18 features", shapes(r18.features(x)).length >= 2);
             checkEq("resnet18 featureDim", 512L, r18.featureDim());
 
-            Models.ResNet r34 = Models.resnet34(5);
+            VisionModels.ResNet r34 = VisionModels.resnet34(5);
             checkEq("resnet34 out", new long[]{2, 5}, shapes(r34.forward(x)));
 
-            Models.AlexNet alex = Models.alexnet(10);
+            VisionModels.AlexNet alex = VisionModels.alexnet(10);
             // AlexNet typically needs 224; try and catch
             try {
                 Tensor aOut = alex.forward(torch.randn(1, 3, 224, 224));
@@ -528,12 +529,12 @@ public class BenchmarkVision {
                 check("alexnet constructed", alex != null);
             }
 
-            Models.MobileNetV2 mnet = Models.mobilenet_v2(10);
+            VisionModels.MobileNetV2 mnet = VisionModels.mobilenet_v2(10);
             Tensor mOut = mnet.forward(x);
             checkEq("mobilenet_v2 out", new long[]{2, 10}, shapes(mOut));
             checkEq("mobilenet featureDim", 128L, mnet.featureDim());
 
-            Models.VGG vgg = Models.vgg11(10);
+            VisionModels.VGG vgg = VisionModels.vgg11(10);
             try {
                 Tensor vOut = vgg.forward(torch.randn(1, 3, 224, 224));
                 checkEq("vgg11 out", new long[]{1, 10}, shapes(vOut));
@@ -541,12 +542,12 @@ public class BenchmarkVision {
                 System.out.println("    vgg11 skip: " + e.getMessage());
                 check("vgg11 constructed", vgg != null);
             }
-            check("vgg16 constructed", Models.vgg16(10) != null);
+            check("vgg16 constructed", VisionModels.vgg16(10) != null);
 
-            check("get_model resnet18", Models.get_model("resnet18", 10) != null);
-            check("getModel alias", Models.getModel("mobilenet_v2", 5) != null);
-            check("get_model simple_cnn", Models.get_model("simple_cnn", 3) != null
-                    || Models.get_model("SimpleCNN", 3) != null
+            check("get_model resnet18", VisionModels.get_model("resnet18", 10) != null);
+            check("getModel alias", VisionModels.getModel("mobilenet_v2", 5) != null);
+            check("get_model simple_cnn", VisionModels.get_model("simple_cnn", 3) != null
+                    || VisionModels.get_model("SimpleCNN", 3) != null
                     || true); // name may vary
         });
 
@@ -556,14 +557,14 @@ public class BenchmarkVision {
             Tensor img = ImageIO.read_image(png.toString());
             // ImageIO may return [0,1]; ensure 3xHxW
             BufferedImage bi = ImageTensors.toBufferedImage(img);
-            Compose pipe = Compose.of(
-                    new Transforms.Resize(64, 64),
-                    new Transforms.ToTensor(),
-                    new Transforms.Normalize(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f})
+            VisionCompose pipe = VisionCompose.of(
+                    new VisionTransforms.Resize(64, 64),
+                    new VisionTransforms.ToTensor(),
+                    new VisionTransforms.Normalize(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f})
             );
             Tensor t = (Tensor) pipe.forward(bi);
             Tensor batch = t.unsqueeze(0);
-            Models.SimpleCNN cnn = new Models.SimpleCNN(3, 4);
+            VisionModels.SimpleCNN cnn = new VisionModels.SimpleCNN(3, 4);
             Tensor logits = cnn.forward(batch);
             checkEq("daily logits", new long[]{1, 4}, shapes(logits));
 
@@ -585,7 +586,7 @@ public class BenchmarkVision {
             System.out.println("    toTensor: " + String.format("%.1f", ips) + " img/s");
             check("toTensor throughput > 0", ips > 0);
 
-            Models.SimpleCNN cnn = new Models.SimpleCNN(3, 10);
+            VisionModels.SimpleCNN cnn = new VisionModels.SimpleCNN(3, 10);
             Tensor batch = torch.randn(4, 3, 64, 64);
             for (int i = 0; i < 3; i++) cnn.forward(batch);
             t0 = System.nanoTime();
@@ -596,7 +597,7 @@ public class BenchmarkVision {
             check("cnn throughput > 0", ips > 0);
 
             t0 = System.nanoTime();
-            for (int i = 0; i < iters; i++) F.resize(rgb, 64, 64);
+            for (int i = 0; i < iters; i++) VisionF.resize(rgb, 64, 64);
             ms = (System.nanoTime() - t0) / 1_000_000;
             ips = iters / (ms / 1000.0);
             System.out.println("    resize: " + String.format("%.1f", ips) + " img/s");

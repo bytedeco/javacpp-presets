@@ -1,4 +1,7 @@
 package dataframe;
+import org.bytedeco.pytorch.jit.*;
+import org.bytedeco.pytorch.distributed.*;
+import org.bytedeco.pytorch.profiler.*;
 //
 // Source code recreated from a .class file by IntelliJ IDEA
 // (powered by Fernflower decompiler)
@@ -13,7 +16,7 @@ import java.nio.file.Path;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.pytorch.Scalar;
 import org.bytedeco.pytorch.ScalarTypeOptional;
-import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.serving.tensorrt.Tensor;
 import org.bytedeco.pytorch.TensorOptions;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.global.torch.ActivityType;

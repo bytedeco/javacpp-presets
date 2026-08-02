@@ -1,4 +1,8 @@
 package media;
+import org.bytedeco.pytorch.data.datasets.*;
+import org.bytedeco.pytorch.nn.modules.*;
+import org.bytedeco.pytorch.optim.*;
+import org.bytedeco.pytorch.optim.options.*;
 
 import org.bytedeco.javacpp.PointerScope;
 import org.bytedeco.pytorch.LongOptional;

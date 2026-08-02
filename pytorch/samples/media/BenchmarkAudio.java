@@ -6,11 +6,11 @@ import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.audio.datasets.AudioDataset;
 import org.bytedeco.pytorch.audio.datasets.AudioFolder;
 import org.bytedeco.pytorch.audio.datasets.FakeAudio;
-import org.bytedeco.pytorch.audio.functional.F;
+import org.bytedeco.pytorch.audio.functional.AudioF;
 import org.bytedeco.pytorch.audio.io.AudioIO;
 import org.bytedeco.pytorch.audio.models.AudioModels;
-import org.bytedeco.pytorch.audio.transforms.Compose;
-import org.bytedeco.pytorch.audio.transforms.Transforms;
+import org.bytedeco.pytorch.audio.transforms.AudioCompose;
+import org.bytedeco.pytorch.audio.transforms.AudioTransforms;
 import org.bytedeco.pytorch.audio.utils.AudioTensors;
 
 import java.io.ByteArrayOutputStream;
@@ -293,195 +293,195 @@ public class BenchmarkAudio {
         // ── D3 functional F ──────────────────────────────────────────────────
         System.out.println("\n══ D3 functional F ══");
         section("spectrogram / mel / mfcc", () -> {
-            Tensor spec = F.spectrogram(waveMono, SR);
+            Tensor spec = AudioF.spectrogram(waveMono, SR);
             long[] ss = shapes(spec);
             check("spec rank 2", ss.length == 2);
             check("spec freq bins > 0", ss[0] > 0);
             check("spec frames > 0", ss[1] > 0);
             check("spec float", isFloat(spec));
 
-            Tensor spec2 = F.spectrogram(waveMono, SR, 1024, 256, 0, true);
+            Tensor spec2 = AudioF.spectrogram(waveMono, SR, 1024, 256, 0, true);
             checkEq("custom nFft bins", 1024 / 2 + 1L, shapes(spec2)[0]);
 
-            Tensor mel = F.mel_spectrogram(waveMono, SR);
+            Tensor mel = AudioF.mel_spectrogram(waveMono, SR);
             check("mel rank 2", shapes(mel).length == 2);
-            check("melSpectrogram alias", shapes(F.melSpectrogram(waveMono, SR)).length == 2);
+            check("melSpectrogram alias", shapes(AudioF.melSpectrogram(waveMono, SR)).length == 2);
 
-            Tensor mel64 = F.melSpectrogram(waveMono, SR, 64, 0, SR / 2.0, 1024, 256);
+            Tensor mel64 = AudioF.melSpectrogram(waveMono, SR, 64, 0, SR / 2.0, 1024, 256);
             checkEq("mel nMels=64", 64L, shapes(mel64)[0]);
 
-            Tensor mfcc = F.mfcc(waveMono, SR);
+            Tensor mfcc = AudioF.mfcc(waveMono, SR);
             checkEq("mfcc default 13", 13L, shapes(mfcc)[0]);
-            Tensor mfcc20 = F.mfcc(waveMono, SR, 20, 64, 0, SR / 2.0, 1024, 256);
+            Tensor mfcc20 = AudioF.mfcc(waveMono, SR, 20, 64, 0, SR / 2.0, 1024, 256);
             checkEq("mfcc n=20", 20L, shapes(mfcc20)[0]);
         });
 
         section("amplitude↔dB roundtrip", () -> {
-            Tensor mel = F.melSpectrogram(waveMono, SR, 32, 0, SR / 2.0, 1024, 256);
-            Tensor db = F.amplitudeToDB(mel);
+            Tensor mel = AudioF.melSpectrogram(waveMono, SR, 32, 0, SR / 2.0, 1024, 256);
+            Tensor db = AudioF.amplitudeToDB(mel);
             check("amplitudeToDB finite shape", shapes(db).length == 2);
-            Tensor back = F.dbToAmplitude(db);
+            Tensor back = AudioF.dbToAmplitude(db);
             check("dbToAmplitude shape match", Arrays.equals(shapes(mel), shapes(back)));
-            check("amplitude_to_DB alias", shapes(F.amplitude_to_DB(mel, 10, 1e-10, 0)).length == 2);
-            check("DB_to_amplitude alias", shapes(F.DB_to_amplitude(db, 1.0, 0.5)).length == 2);
-            check("db_to_amplitude alias", shapes(F.db_to_amplitude(db)).length == 2);
+            check("amplitude_to_DB alias", shapes(AudioF.amplitude_to_DB(mel, 10, 1e-10, 0)).length == 2);
+            check("DB_to_amplitude alias", shapes(AudioF.DB_to_amplitude(db, 1.0, 0.5)).length == 2);
+            check("db_to_amplitude alias", shapes(AudioF.db_to_amplitude(db)).length == 2);
         });
 
         section("resample / mu-law / fade / vol / normalize", () -> {
-            Tensor r8k = F.resample(waveMono, SR, 8000);
+            Tensor r8k = AudioF.resample(waveMono, SR, 8000);
             check("resample 16k→8k time ~8000", Math.abs(AudioTensors.inferTime(r8k) - 8000) < 5);
-            Tensor same = F.resample(waveMono, SR, SR);
+            Tensor same = AudioF.resample(waveMono, SR, SR);
             check("resample identity same object or equal time", AudioTensors.inferTime(same) == SR);
 
-            float[] rs = F.resampleSamples(mono, 1, SR, 8000);
+            float[] rs = AudioF.resampleSamples(mono, 1, SR, 8000);
             check("resampleSamples length ~8000", Math.abs(rs.length - 8000) < 5);
 
             boolean threw = false;
-            try { F.resample(waveMono, 0, 8000); } catch (IllegalArgumentException e) { threw = true; }
+            try { AudioF.resample(waveMono, 0, 8000); } catch (IllegalArgumentException e) { threw = true; }
             check("resample bad sr throws", threw);
 
-            Tensor enc = F.mu_law_encoding(waveMono, 256);
+            Tensor enc = AudioF.mu_law_encoding(waveMono, 256);
             check("mu_law shape", Arrays.equals(shapes(waveMono), shapes(enc)) || shapes(enc)[shapes(enc).length - 1] == SR);
-            Tensor dec = F.mu_law_decoding(enc, 256);
+            Tensor dec = AudioF.mu_law_decoding(enc, 256);
             check("mu_law decode shape rank", shapes(dec).length >= 1);
-            check("muLawEncoding alias", shapes(F.muLawEncoding(waveMono, 256)).length >= 1);
-            check("muLawDecoding alias", shapes(F.muLawDecoding(enc, 256)).length >= 1);
+            check("muLawEncoding alias", shapes(AudioF.muLawEncoding(waveMono, 256)).length >= 1);
+            check("muLawDecoding alias", shapes(AudioF.muLawDecoding(enc, 256)).length >= 1);
 
-            Tensor faded = F.fade(waveMono, 1000, 1000);
+            Tensor faded = AudioF.fade(waveMono, 1000, 1000);
             check("fade same shape", Arrays.equals(shapes(waveMono), shapes(faded)));
-            Tensor faded2 = F.fade(waveMono, 500, 500, "linear");
+            Tensor faded2 = AudioF.fade(waveMono, 500, 500, "linear");
             check("fade shape named", Arrays.equals(shapes(waveMono), shapes(faded2)));
 
-            Tensor vol = F.vol(waveMono, 0.5);
+            Tensor vol = AudioF.vol(waveMono, 0.5);
             float[] vSamples = AudioTensors.fromTensor(vol);
             check("vol 0.5 reduces peak", maxAbs(vSamples) < maxAbs(mono) * 0.6f + 0.01f);
-            Tensor volDb = F.vol(waveMono, -6.0, "db");
+            Tensor volDb = AudioF.vol(waveMono, -6.0, "db");
             check("vol db shape", Arrays.equals(shapes(waveMono), shapes(volDb)));
 
-            Tensor norm = F.normalize(waveMono);
+            Tensor norm = AudioF.normalize(waveMono);
             check("normalize peak ~1", Math.abs(maxAbs(AudioTensors.fromTensor(norm)) - 1.0f) < 0.05f);
-            Tensor norm2 = F.normalize(waveMono, 0.8);
+            Tensor norm2 = AudioF.normalize(waveMono, 0.8);
             check("normalize peak custom", Math.abs(maxAbs(AudioTensors.fromTensor(norm2)) - 0.8f) < 0.05f);
         });
 
         section("masking / pad / trim / deltas / stretch / pitch / lfcc / ispec", () -> {
-            Tensor spec = F.spectrogram(waveMono, SR, 512, 128, 0, true);
-            Tensor fmask = F.frequency_masking(spec, 10);
+            Tensor spec = AudioF.spectrogram(waveMono, SR, 512, 128, 0, true);
+            Tensor fmask = AudioF.frequency_masking(spec, 10);
             check("freq mask same shape", Arrays.equals(shapes(spec), shapes(fmask)));
-            Tensor tmask = F.time_masking(spec, 5);
+            Tensor tmask = AudioF.time_masking(spec, 5);
             check("time mask same shape", Arrays.equals(shapes(spec), shapes(tmask)));
-            Tensor maskAxis = F.mask_along_axis(spec, 8, 0, 0);
+            Tensor maskAxis = AudioF.mask_along_axis(spec, 8, 0, 0);
             check("mask_along_axis shape", Arrays.equals(shapes(spec), shapes(maskAxis)));
 
-            Tensor padded = F.pad(waveMono, 100);
+            Tensor padded = AudioF.pad(waveMono, 100);
             check("pad both sides +200", AudioTensors.inferTime(padded) == SR + 200);
-            Tensor padded2 = F.pad(waveMono, 50, 75);
+            Tensor padded2 = AudioF.pad(waveMono, 50, 75);
             check("pad left/right", AudioTensors.inferTime(padded2) == SR + 125);
-            Tensor padded3 = F.pad(waveMono, new int[]{10, 20}, "constant", 0f);
+            Tensor padded3 = AudioF.pad(waveMono, new int[]{10, 20}, "constant", 0f);
             check("pad array form", AudioTensors.inferTime(padded3) == SR + 30);
 
             // silence + tone → trim
             float[] paddedArr = new float[SR * 3];
             System.arraycopy(mono, 0, paddedArr, SR, mono.length);
             Tensor paddedWave = AudioTensors.toTensor(paddedArr, 1);
-            Tensor trimmed = F.trim(paddedWave, SR, 40f);
+            Tensor trimmed = AudioF.trim(paddedWave, SR, 40f);
             check("trim shortens", AudioTensors.inferTime(trimmed) < SR * 3);
-            check("trim default", AudioTensors.inferTime(F.trim(paddedWave, SR)) < SR * 3);
+            check("trim default", AudioTensors.inferTime(AudioF.trim(paddedWave, SR)) < SR * 3);
 
-            Tensor deltas = F.compute_deltas(spec, 5);
+            Tensor deltas = AudioF.compute_deltas(spec, 5);
             check("deltas shape", Arrays.equals(shapes(spec), shapes(deltas)));
-            check("computeDeltas alias", shapes(F.computeDeltas(spec)).length == 2);
-            Tensor d2 = F.compute_2d_deltas(spec, 5);
+            check("computeDeltas alias", shapes(AudioF.computeDeltas(spec)).length == 2);
+            Tensor d2 = AudioF.compute_2d_deltas(spec, 5);
             check("2d deltas shape", Arrays.equals(shapes(spec), shapes(d2)));
-            check("compute2DDeltas alias", shapes(F.compute2DDeltas(spec)).length == 2);
+            check("compute2DDeltas alias", shapes(AudioF.compute2DDeltas(spec)).length == 2);
 
-            Tensor stretched = F.time_stretch(spec, 1.2);
+            Tensor stretched = AudioF.time_stretch(spec, 1.2);
             check("time_stretch frames change or same rank", shapes(stretched).length == 2);
-            check("timeStretch alias", shapes(F.timeStretch(spec, 0.8)).length == 2);
+            check("timeStretch alias", shapes(AudioF.timeStretch(spec, 0.8)).length == 2);
 
-            Tensor pitched = F.pitch_shift(waveMono, SR, 2.0);
+            Tensor pitched = AudioF.pitch_shift(waveMono, SR, 2.0);
             check("pitch_shift time preserved roughly", Math.abs(AudioTensors.inferTime(pitched) - SR) < SR / 5);
-            check("pitchShift alias", shapes(F.pitchShift(waveMono, SR, -1)).length >= 1);
+            check("pitchShift alias", shapes(AudioF.pitchShift(waveMono, SR, -1)).length >= 1);
 
-            Tensor lfcc = F.lfcc(waveMono, SR);
+            Tensor lfcc = AudioF.lfcc(waveMono, SR);
             check("lfcc rank 2", shapes(lfcc).length == 2);
-            Tensor lfcc2 = F.lfcc(waveMono, SR, 13, 128, 1024, 256);
+            Tensor lfcc2 = AudioF.lfcc(waveMono, SR, 13, 128, 1024, 256);
             checkEq("lfcc n=13", 13L, shapes(lfcc2)[0]);
 
-            Tensor ispec = F.inverse_spectrogram(spec, 512, 128, 0, true);
+            Tensor ispec = AudioF.inverse_spectrogram(spec, 512, 128, 0, true);
             check("inverse_spectrogram rank >= 1", shapes(ispec).length >= 1);
-            check("inverseSpectrogram alias", shapes(F.inverseSpectrogram(spec, 512, 128)).length >= 1);
+            check("inverseSpectrogram alias", shapes(AudioF.inverseSpectrogram(spec, 512, 128)).length >= 1);
         });
 
         // ── D4 Transforms ────────────────────────────────────────────────────
         System.out.println("\n══ D4 Transforms + Compose ══");
         section("transform wrappers", () -> {
-            Tensor s = new Transforms.Spectrogram(SR).forward(waveMono);
+            Tensor s = new AudioTransforms.Spectrogram(SR).forward(waveMono);
             check("Spectrogram transform", shapes(s).length == 2);
-            Tensor s2 = new Transforms.Spectrogram(SR, 1024, 256, 0, true).forward(waveMono);
+            Tensor s2 = new AudioTransforms.Spectrogram(SR, 1024, 256, 0, true).forward(waveMono);
             check("Spectrogram custom", shapes(s2)[0] == 513);
 
-            Tensor m = new Transforms.MelSpectrogram(SR).forward(waveMono);
+            Tensor m = new AudioTransforms.MelSpectrogram(SR).forward(waveMono);
             check("MelSpectrogram", shapes(m).length == 2);
-            Tensor m2 = new Transforms.MelSpectrogram(SR, 64).forward(waveMono);
+            Tensor m2 = new AudioTransforms.MelSpectrogram(SR, 64).forward(waveMono);
             checkEq("MelSpectrogram nMels", 64L, shapes(m2)[0]);
 
-            Tensor mf = new Transforms.MFCC(SR).forward(waveMono);
+            Tensor mf = new AudioTransforms.MFCC(SR).forward(waveMono);
             checkEq("MFCC transform 13", 13L, shapes(mf)[0]);
-            checkEq("MFCC n=20", 20L, shapes(new Transforms.MFCC(SR, 20).forward(waveMono))[0]);
+            checkEq("MFCC n=20", 20L, shapes(new AudioTransforms.MFCC(SR, 20).forward(waveMono))[0]);
 
-            Tensor rs = new Transforms.Resample(SR, 8000).forward(waveMono);
+            Tensor rs = new AudioTransforms.Resample(SR, 8000).forward(waveMono);
             check("Resample transform", Math.abs(AudioTensors.inferTime(rs) - 8000) < 5);
 
-            Tensor v = new Transforms.Vol(0.5).forward(waveMono);
+            Tensor v = new AudioTransforms.Vol(0.5).forward(waveMono);
             check("Vol transform", shapes(v).length == 2);
-            Tensor fad = new Transforms.Fade(100, 100).forward(waveMono);
+            Tensor fad = new AudioTransforms.Fade(100, 100).forward(waveMono);
             check("Fade transform", Arrays.equals(shapes(waveMono), shapes(fad)));
-            Tensor adb = new Transforms.AmplitudeToDB().forward(m);
+            Tensor adb = new AudioTransforms.AmplitudeToDB().forward(m);
             check("AmplitudeToDB transform", shapes(adb).length == 2);
-            Tensor dba = new Transforms.DBToAmplitude().forward(adb);
+            Tensor dba = new AudioTransforms.DBToAmplitude().forward(adb);
             check("DBToAmplitude transform", shapes(dba).length == 2);
 
-            Tensor fm = new Transforms.FrequencyMasking(8).forward(s);
+            Tensor fm = new AudioTransforms.FrequencyMasking(8).forward(s);
             check("FrequencyMasking", Arrays.equals(shapes(s), shapes(fm)));
-            Tensor tm = new Transforms.TimeMasking(4).forward(s);
+            Tensor tm = new AudioTransforms.TimeMasking(4).forward(s);
             check("TimeMasking", Arrays.equals(shapes(s), shapes(tm)));
-            check("FrequencyMask alias", shapes(new Transforms.FrequencyMask(8).forward(s)).length == 2);
-            check("TimeMask alias", shapes(new Transforms.TimeMask(4).forward(s)).length == 2);
+            check("FrequencyMask alias", shapes(new AudioTransforms.FrequencyMask(8).forward(s)).length == 2);
+            check("TimeMask alias", shapes(new AudioTransforms.TimeMask(4).forward(s)).length == 2);
 
-            Tensor mu = new Transforms.MuLawEncoding().forward(waveMono);
-            Tensor mud = new Transforms.MuLawDecoding().forward(mu);
+            Tensor mu = new AudioTransforms.MuLawEncoding().forward(waveMono);
+            Tensor mud = new AudioTransforms.MuLawDecoding().forward(mu);
             check("MuLaw encode/decode", shapes(mud).length >= 1);
 
-            Tensor inv = new Transforms.InverseSpectrogram(512, 128).forward(s);
+            Tensor inv = new AudioTransforms.InverseSpectrogram(512, 128).forward(s);
             check("InverseSpectrogram", shapes(inv).length >= 1);
-            Tensor ts = new Transforms.TimeStretch(1.1).forward(s);
+            Tensor ts = new AudioTransforms.TimeStretch(1.1).forward(s);
             check("TimeStretch", shapes(ts).length == 2);
-            Tensor ps = new Transforms.PitchShift(SR, 1.0).forward(waveMono);
+            Tensor ps = new AudioTransforms.PitchShift(SR, 1.0).forward(waveMono);
             check("PitchShift", shapes(ps).length >= 1);
-            Tensor lf = new Transforms.LFCC(SR).forward(waveMono);
+            Tensor lf = new AudioTransforms.LFCC(SR).forward(waveMono);
             check("LFCC", shapes(lf).length == 2);
-            Tensor cd = new Transforms.ComputeDeltas().forward(s);
+            Tensor cd = new AudioTransforms.ComputeDeltas().forward(s);
             check("ComputeDeltas", shapes(cd).length == 2);
-            Tensor c2 = new Transforms.Compute2DDeltas().forward(s);
+            Tensor c2 = new AudioTransforms.Compute2DDeltas().forward(s);
             check("Compute2DDeltas", shapes(c2).length == 2);
-            Tensor pad = new Transforms.Pad(50).forward(waveMono);
+            Tensor pad = new AudioTransforms.Pad(50).forward(waveMono);
             check("Pad transform", AudioTensors.inferTime(pad) == SR + 100);
-            Tensor tr = new Transforms.Trim(SR).forward(waveMono);
+            Tensor tr = new AudioTransforms.Trim(SR).forward(waveMono);
             check("Trim transform", AudioTensors.inferTime(tr) > 0);
 
             // factory helpers
-            check("spectrogram() factory", shapes(Transforms.spectrogram(SR).forward(waveMono)).length == 2);
-            check("inverse_spectrogram() factory", shapes(Transforms.inverse_spectrogram().forward(s)).length >= 1);
-            check("inverseSpectrogram() factory", shapes(Transforms.inverseSpectrogram().forward(s)).length >= 1);
+            check("spectrogram() factory", shapes(AudioTransforms.spectrogram(SR).forward(waveMono)).length == 2);
+            check("inverse_spectrogram() factory", shapes(AudioTransforms.inverse_spectrogram().forward(s)).length >= 1);
+            check("inverseSpectrogram() factory", shapes(AudioTransforms.inverseSpectrogram().forward(s)).length >= 1);
         });
 
         section("Compose pipeline", () -> {
-            Compose pipe = new Compose(
-                    new Transforms.Resample(SR, 8000),
-                    new Transforms.Vol(0.8),
-                    new Transforms.Fade(100, 100),
-                    new Transforms.MelSpectrogram(8000, 32)
+            AudioCompose pipe = new AudioCompose(
+                    new AudioTransforms.Resample(SR, 8000),
+                    new AudioTransforms.Vol(0.8),
+                    new AudioTransforms.Fade(100, 100),
+                    new AudioTransforms.MelSpectrogram(8000, 32)
             );
             Object out = pipe.forward(waveMono);
             check("Compose returns Tensor", out instanceof Tensor);
@@ -490,9 +490,9 @@ public class BenchmarkAudio {
             checkEq("Compose mel 32", 32L, shapes(t)[0]);
             check("Compose.transforms size", pipe.transforms().size() == 4);
 
-            Compose pipe2 = new Compose(List.of(
-                    new Transforms.Pad(100),
-                    new Transforms.Vol(0.9, "amplitude")
+            AudioCompose pipe2 = new AudioCompose(List.of(
+                    new AudioTransforms.Pad(100),
+                    new AudioTransforms.Vol(0.9, "amplitude")
             ));
             Object out2 = pipe2.forward(waveMono);
             check("Compose(List) returns Tensor", out2 instanceof Tensor);
@@ -523,7 +523,7 @@ public class BenchmarkAudio {
             float[] sineArr = FakeAudio.sine(440, SR, 1000, 0.5);
             checkEq("FakeAudio.sine length", 1000, sineArr.length);
 
-            FakeAudio ds2 = new FakeAudio(4, SR, 1000, 3).setTransform(new Transforms.Vol(0.5));
+            FakeAudio ds2 = new FakeAudio(4, SR, 1000, 3).setTransform(new AudioTransforms.Vol(0.5));
             check("setTransform get works", ds2.get(0).data() instanceof Tensor);
         });
 
@@ -587,10 +587,10 @@ public class BenchmarkAudio {
         section("daily: load → resample → mel → mfcc → mask → model", () -> {
             AudioIO.AudioLoadResult loaded = AudioIO.load(wav.toString(), SR, true);
             Tensor w = loaded.waveform();
-            Tensor r = F.resample(w, loaded.sampleRate(), 8000);
-            Tensor mel = F.melSpectrogram(r, 8000, 64, 0, 4000, 1024, 256);
-            Tensor mfcc = F.mfcc(r, 8000, 13, 64, 0, 4000, 1024, 256);
-            Tensor masked = F.frequency_masking(mel, 8);
+            Tensor r = AudioF.resample(w, loaded.sampleRate(), 8000);
+            Tensor mel = AudioF.melSpectrogram(r, 8000, 64, 0, 4000, 1024, 256);
+            Tensor mfcc = AudioF.mfcc(r, 8000, 13, 64, 0, 4000, 1024, 256);
+            Tensor masked = AudioF.frequency_masking(mel, 8);
             check("pipeline mel", shapes(mel)[0] == 64);
             check("pipeline mfcc", shapes(mfcc)[0] == 13);
             check("pipeline mask", Arrays.equals(shapes(mel), shapes(masked)));
@@ -617,9 +617,9 @@ public class BenchmarkAudio {
         });
 
         section("stereo path", () -> {
-            Tensor mel = F.melSpectrogram(waveStereo, SR, 32, 0, SR / 2.0, 512, 128);
+            Tensor mel = AudioF.melSpectrogram(waveStereo, SR, 32, 0, SR / 2.0, 512, 128);
             check("stereo mel works", shapes(mel).length == 2);
-            Tensor rs = F.resample(waveStereo, SR, 8000);
+            Tensor rs = AudioF.resample(waveStereo, SR, 8000);
             check("stereo resample channels", AudioTensors.inferChannels(rs) == 2);
         });
 
@@ -627,30 +627,30 @@ public class BenchmarkAudio {
         System.out.println("\n══ D8 Throughput ══");
         section("throughput spectrogram/mel/mfcc/resample", () -> {
             int iters = 30;
-            for (int i = 0; i < 3; i++) F.spectrogram(waveMono, SR, 512, 128, 0, true);
+            for (int i = 0; i < 3; i++) AudioF.spectrogram(waveMono, SR, 512, 128, 0, true);
             long t0 = System.nanoTime();
-            for (int i = 0; i < iters; i++) F.spectrogram(waveMono, SR, 512, 128, 0, true);
+            for (int i = 0; i < iters; i++) AudioF.spectrogram(waveMono, SR, 512, 128, 0, true);
             long ms = (System.nanoTime() - t0) / 1_000_000;
             double ips = iters / (ms / 1000.0);
             System.out.println("    spectrogram: " + String.format("%.1f", ips) + " /s");
             check("spec throughput > 0", ips > 0);
 
             t0 = System.nanoTime();
-            for (int i = 0; i < iters; i++) F.melSpectrogram(waveMono, SR, 64, 0, SR / 2.0, 512, 128);
+            for (int i = 0; i < iters; i++) AudioF.melSpectrogram(waveMono, SR, 64, 0, SR / 2.0, 512, 128);
             ms = (System.nanoTime() - t0) / 1_000_000;
             ips = iters / (ms / 1000.0);
             System.out.println("    mel: " + String.format("%.1f", ips) + " /s");
             check("mel throughput > 0", ips > 0);
 
             t0 = System.nanoTime();
-            for (int i = 0; i < iters; i++) F.mfcc(waveMono, SR, 13, 64, 0, SR / 2.0, 512, 128);
+            for (int i = 0; i < iters; i++) AudioF.mfcc(waveMono, SR, 13, 64, 0, SR / 2.0, 512, 128);
             ms = (System.nanoTime() - t0) / 1_000_000;
             ips = iters / (ms / 1000.0);
             System.out.println("    mfcc: " + String.format("%.1f", ips) + " /s");
             check("mfcc throughput > 0", ips > 0);
 
             t0 = System.nanoTime();
-            for (int i = 0; i < iters; i++) F.resample(waveMono, SR, 8000);
+            for (int i = 0; i < iters; i++) AudioF.resample(waveMono, SR, 8000);
             ms = (System.nanoTime() - t0) / 1_000_000;
             ips = iters / (ms / 1000.0);
             System.out.println("    resample: " + String.format("%.1f", ips) + " /s");

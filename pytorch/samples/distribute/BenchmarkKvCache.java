@@ -1,4 +1,5 @@
 package distribute;
+import org.bytedeco.pytorch.c10.*;
 
 import org.bytedeco.pytorch.Device;
 import org.bytedeco.pytorch.Scalar;

@@ -1,4 +1,6 @@
 package distribute;
+import org.bytedeco.pytorch.jit.*;
+import org.bytedeco.pytorch.c10.*;
 
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Loader;

@@ -1,7 +1,12 @@
 package media;
+import org.bytedeco.pytorch.data.transforms.*;
+import org.bytedeco.pytorch.jit.*;
+import org.bytedeco.pytorch.optim.*;
+import org.bytedeco.pytorch.optim.options.*;
 
 import org.bytedeco.javacpp.PointerScope;
 import org.bytedeco.pytorch.ScalarTypeOptional;
+import org.bytedeco.pytorch.audio.functional.AudioF;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorOptions;
 import org.bytedeco.pytorch.dataframe.DataFrame;
@@ -35,11 +40,11 @@ import org.bytedeco.pytorch.vision.datasets.FakeData;
 import org.bytedeco.pytorch.vision.datasets.ImageFolder;
 import org.bytedeco.pytorch.vision.datasets.VisionDataset;
 import org.bytedeco.pytorch.vision.io.ImageIO;
-import org.bytedeco.pytorch.vision.models.Models;
+import org.bytedeco.pytorch.vision.models.VisionModels;
 import org.bytedeco.pytorch.vision.ops.Boxes;
-import org.bytedeco.pytorch.vision.transforms.Compose;
-import org.bytedeco.pytorch.vision.transforms.Transforms;
-import org.bytedeco.pytorch.vision.transforms.functional.F;
+import org.bytedeco.pytorch.vision.transforms.VisionCompose;
+import org.bytedeco.pytorch.vision.transforms.VisionTransforms;
+import org.bytedeco.pytorch.vision.transforms.functional.VisionF;
 import org.bytedeco.pytorch.vision.utils.ImageTensors;
 import org.bytedeco.pytorch.vision.utils.VisionUtils;
 
@@ -188,10 +193,10 @@ public class BenchmarkUtilsEcosystem {
     static void d1ApiShape() {
         section("D1 API shape / smoke");
         try {
-            Compose c = Compose.of(
-                    new Transforms.Resize(32),
-                    new Transforms.ToTensor(),
-                    new Transforms.Normalize(
+            VisionCompose c = VisionCompose.of(
+                    new VisionTransforms.Resize(32),
+                    new VisionTransforms.ToTensor(),
+                    new VisionTransforms.Normalize(
                             new float[]{0.5f, 0.5f, 0.5f},
                             new float[]{0.5f, 0.5f, 0.5f})
             );
@@ -259,7 +264,7 @@ public class BenchmarkUtilsEcosystem {
         section("D2 Vision numerical");
         try (PointerScope scope = new PointerScope()) {
             BufferedImage img = solidImage(64, 48, new Color(30, 120, 200));
-            Tensor t = F.toTensor(img);
+            Tensor t = VisionF.toTensor(img);
             long[] sz = ImageTensors.sizes(t);
             check("ToTensor CHW rank", sz.length == 3, Arrays.toString(sz));
             check("ToTensor channels", sz[0] == 3L, "C=" + sz[0]);
@@ -277,13 +282,13 @@ public class BenchmarkUtilsEcosystem {
             check("ToTensor range [0,1]", min >= -1e-5f && max <= 1f + 1e-5f,
                     "min=" + min + " max=" + max);
 
-            Tensor norm = F.normalize(t,
+            Tensor norm = VisionF.normalize(t,
                     new float[]{0.5f, 0.5f, 0.5f},
                     new float[]{0.5f, 0.5f, 0.5f});
             check("Normalize finite", finite(norm));
 
-            BufferedImage flipped = F.hflip(img);
-            BufferedImage twice = F.hflip(flipped);
+            BufferedImage flipped = VisionF.hflip(img);
+            BufferedImage twice = VisionF.hflip(flipped);
             boolean involution = true;
             for (int y = 0; y < img.getHeight() && involution; y += 7) {
                 for (int x = 0; x < img.getWidth(); x += 11) {
@@ -295,7 +300,7 @@ public class BenchmarkUtilsEcosystem {
             }
             check("hflip involution", involution);
 
-            BufferedImage cropped = F.centerCrop(img, 32, 32);
+            BufferedImage cropped = VisionF.centerCrop(img, 32, 32);
             check("centerCrop size", cropped.getWidth() == 32 && cropped.getHeight() == 32);
 
             float[] boxes = {
@@ -340,7 +345,7 @@ public class BenchmarkUtilsEcosystem {
             check("encode/decode png", finite(decoded) && ImageTensors.sizes(decoded)[0] == 3);
 
             FakeData fake = new FakeData(8, 32, 4)
-                    .setTransform(Compose.of(new Transforms.Resize(28), new Transforms.ToTensor()));
+                    .setTransform(VisionCompose.of(new VisionTransforms.Resize(28), new VisionTransforms.ToTensor()));
             check("FakeData size", fake.size() == 8);
             VisionDataset.Sample s0 = fake.get(0);
             check("FakeData sample tensor", s0.data() instanceof Tensor, String.valueOf(s0.data()));
@@ -357,7 +362,7 @@ public class BenchmarkUtilsEcosystem {
             Files.createDirectories(root.resolve("dog"));
             ImageIO.write_image(t, root.resolve("cat/c1.png"));
             ImageIO.write_image(t, root.resolve("dog/d1.png"));
-            ImageFolder folder = new ImageFolder(root, Compose.of(new Transforms.ToTensor()));
+            ImageFolder folder = new ImageFolder(root, VisionCompose.of(new VisionTransforms.ToTensor()));
             check("ImageFolder size", folder.size() == 2);
             check("ImageFolder classes", folder.classes().size() == 2);
 
@@ -396,9 +401,9 @@ public class BenchmarkUtilsEcosystem {
                     loaded.getSamples() != null && loaded.getSamples().length > 1000,
                     "n=" + (loaded.getSamples() == null ? -1 : loaded.getSamples().length));
 
-            Tensor mel = org.bytedeco.pytorch.audio.functional.F.mel_spectrogram(wave, sr);
+            Tensor mel = AudioF.mel_spectrogram(wave, sr);
             check("audio.F.mel_spectrogram finite", finite(mel), "dim=" + mel.dim());
-            Tensor mfccT = org.bytedeco.pytorch.audio.functional.F.mfcc(wave, sr);
+            Tensor mfccT = AudioF.mfcc(wave, sr);
             check("audio.F.mfcc finite", finite(mfccT));
 
             float[][] melL = Feature.melspectrogram(y, sr);
@@ -424,7 +429,7 @@ public class BenchmarkUtilsEcosystem {
             check("FakeAudio size", fa.size() == 4);
             check("FakeAudio sample", fa.get(0).data() != null);
 
-            Tensor masked = org.bytedeco.pytorch.audio.functional.F.frequency_masking(mel, 4);
+            Tensor masked = AudioF.frequency_masking(mel, 4);
             check("frequency_masking finite", finite(masked));
         } catch (Throwable e) {
             check("D4 audio/librosa", false, e.toString());
@@ -635,8 +640,8 @@ public class BenchmarkUtilsEcosystem {
         section("D9 Mini training");
         try (PointerScope scope = new PointerScope()) {
             FakeData data = new FakeData(16, 16, 3, 3, 0L)
-                    .setTransform(Compose.of(new Transforms.ToTensor()));
-            Module net = new Models.SimpleClassifier(3L * 16 * 16, 64, 3);
+                    .setTransform(VisionCompose.of(new VisionTransforms.ToTensor()));
+            Module net = new VisionModels.SimpleClassifier(3L * 16 * 16, 64, 3);
             net.train(true);
             Adam opt = new Adam(net.parameters(), new AdamOptions(1e-2));
 
@@ -672,7 +677,7 @@ public class BenchmarkUtilsEcosystem {
             float[] yWave = sineWave(16000, 440, 0.25);
             AudioData ad = new AudioData(yWave, 16000, 1);
             Tensor wave = AudioTensors.toTensor(ad);
-            Tensor mel = org.bytedeco.pytorch.audio.functional.F.mel_spectrogram(wave, 16000);
+            Tensor mel = AudioF.mel_spectrogram(wave, 16000);
             Tensor feat = mel.reshape(1, -1);
             long inFeat = feat.size(1);
             Module audioNet = AudioModels.simple_audio_classifier(inFeat, 4);
@@ -703,7 +708,7 @@ public class BenchmarkUtilsEcosystem {
         try (PointerScope scope = new PointerScope()) {
             BufferedImage bi = solidImage(32, 32, Color.GREEN);
             ImageData id = new ImageData(bi);
-            Object out = Compose.of(new Transforms.Resize(24), new Transforms.ToTensor())
+            Object out = VisionCompose.of(new VisionTransforms.Resize(24), new VisionTransforms.ToTensor())
                     .forward(id.getImage());
             check("ImageData→Compose→Tensor",
                     out instanceof Tensor && finite((Tensor) out));
@@ -721,9 +726,9 @@ public class BenchmarkUtilsEcosystem {
             check("tensor reshape finite",
                     finite(t) && t.size(0) == 2 && t.size(1) == 2);
 
-            Module m = Models.get_model("simple_cnn", 10);
+            Module m = VisionModels.get_model("simple_cnn", 10);
             check("get_model simple_cnn", m != null);
-            Module m2 = Models.get_model("resnet18", 10);
+            Module m2 = VisionModels.get_model("resnet18", 10);
             check("get_model resnet18", m2 != null);
         } catch (Throwable e) {
             check("D10 interop", false, e.toString());

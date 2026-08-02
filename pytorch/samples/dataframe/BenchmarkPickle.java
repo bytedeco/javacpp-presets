@@ -174,34 +174,34 @@ public class BenchmarkPickle {
                 Path pklFile = tmpDir.resolve("tensor.pkl");
 
                 // Test scalar
-                org.bytedeco.pytorch.Tensor scalar = torch.tensor(42.0);
+                org.bytedeco.pytorch.serving.tensorrt.Tensor scalar = torch.tensor(42.0);
                 Pickle.dumpTensor(scalar, pklFile.toFile());
-                org.bytedeco.pytorch.Tensor loadedScalar = Pickle.loadTensor(pklFile.toFile());
+                org.bytedeco.pytorch.serving.tensorrt.Tensor loadedScalar = Pickle.loadTensor(pklFile.toFile());
                 check("loadTensor scalar value", Math.abs(loadedScalar.item_double() - 42.0) < 1e-9);
 
                 // Test 2D
-                org.bytedeco.pytorch.Tensor t2d = torch.randn(new long[]{3, 4});
+                org.bytedeco.pytorch.serving.tensorrt.Tensor t2d = torch.randn(new long[]{3, 4});
                 Pickle.dumpTensor(t2d, pklFile.toFile());
-                org.bytedeco.pytorch.Tensor loaded2d = Pickle.loadTensor(pklFile.toFile());
+                org.bytedeco.pytorch.serving.tensorrt.Tensor loaded2d = Pickle.loadTensor(pklFile.toFile());
                 check("loadTensor 2D shape", loaded2d.dim() == 2 && loaded2d.size(0) == 3 && loaded2d.size(1) == 4);
                 check("loadTensor 2D dtype", loaded2d.scalar_type() == t2d.scalar_type());
 
                 // Test 4D
-                org.bytedeco.pytorch.Tensor t4d = torch.randn(new long[]{2, 3, 4, 5});
+                org.bytedeco.pytorch.serving.tensorrt.Tensor t4d = torch.randn(new long[]{2, 3, 4, 5});
                 Pickle.dumpTensor(t4d, pklFile.toFile());
-                org.bytedeco.pytorch.Tensor loaded4d = Pickle.loadTensor(pklFile.toFile());
+                org.bytedeco.pytorch.serving.tensorrt.Tensor loaded4d = Pickle.loadTensor(pklFile.toFile());
                 check("loadTensor 4D numel=120", loaded4d.numel() == 120);
             });
 
             // ── 7. tensorToMap / mapToTensor ─────────────────────────────
             benchmark("Pickle tensorToMap/mapToTensor", () -> {
-                org.bytedeco.pytorch.Tensor t = torch.randn(new long[]{3, 4});
+                org.bytedeco.pytorch.serving.tensorrt.Tensor t = torch.randn(new long[]{3, 4});
                 Map<String, Object> map = Pickle.tensorToMap(t);
                 check("tensorToMap has __torch_tensor__", map.containsKey("__torch_tensor__"));
                 check("tensorToMap has shape", map.containsKey("shape"));
                 check("tensorToMap has dtype", map.containsKey("dtype"));
 
-                org.bytedeco.pytorch.Tensor back = Pickle.mapToTensor(map);
+                org.bytedeco.pytorch.serving.tensorrt.Tensor back = Pickle.mapToTensor(map);
                 check("mapToTensor shape 3x4", back.dim() == 2 && back.size(0) == 3 && back.size(1) == 4);
             });
 
