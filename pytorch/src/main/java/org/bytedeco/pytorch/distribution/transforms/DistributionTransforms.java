@@ -12,46 +12,46 @@ import org.bytedeco.pytorch.global.torch;
  * <p>Factory methods return concrete bijective (or half-bijective) maps that
  * mirror {@code torch.distributions.transforms}.</p>
  */
-public final class Transforms {
-    private Transforms() {}
+public final class DistributionTransforms {
+    private DistributionTransforms() {}
 
     /** Identity: Y = X. */
-    public static Transform identity() {
+    public static DistributionTransform identity() {
         return new IdentityTransform();
     }
 
     /** Exp: Y = exp(X), domain ℝ → (0, ∞). Used by LogNormal. */
-    public static Transform exp() {
+    public static DistributionTransform exp() {
         return new ExpTransform();
     }
 
     /** Affine: Y = loc + scale * X (scale ≠ 0). */
-    public static Transform affine(Tensor loc, Tensor scale) {
+    public static DistributionTransform affine(Tensor loc, Tensor scale) {
         return new AffineTransform(loc, scale);
     }
 
     /** Sigmoid: Y = 1/(1+exp(-X)), domain ℝ → (0,1). */
-    public static Transform sigmoid() {
+    public static DistributionTransform sigmoid() {
         return new SigmoidTransform();
     }
 
     /** Softplus: Y = log(1+exp(X)), domain ℝ → (0,∞). */
-    public static Transform softplus() {
+    public static DistributionTransform softplus() {
         return new SoftplusTransform();
     }
 
     /** Abs: Y = |X| (not bijective; inverse returns +Y). Used by HalfNormal. */
-    public static Transform abs() {
+    public static DistributionTransform abs() {
         return new AbsTransform();
     }
 
     /** Tanh: Y = tanh(X), domain ℝ → (-1,1). Common in SAC squashing. */
-    public static Transform tanh() {
+    public static DistributionTransform tanh() {
         return new TanhTransform();
     }
 
     /** Compose transforms left-to-right: T_{n-1} ∘ … ∘ T_0. */
-    public static Transform compose(Transform... transforms) {
+    public static DistributionTransform compose(DistributionTransform... transforms) {
         return new ComposeTransform(transforms);
     }
 
@@ -59,7 +59,7 @@ public final class Transforms {
     // Implementations
     // ------------------------------------------------------------------
 
-    public static final class IdentityTransform extends Transform {
+    public static final class IdentityTransform extends DistributionTransform {
         @Override public int eventDim() { return 0; }
 
         @Override
@@ -81,7 +81,7 @@ public final class Transforms {
     /**
      * Y = exp(X). Jacobian: dY/dX = exp(X) = Y ⇒ log|J| = X.
      */
-    public static final class ExpTransform extends Transform {
+    public static final class ExpTransform extends DistributionTransform {
         @Override public int eventDim() { return 0; }
 
         @Override
@@ -111,7 +111,7 @@ public final class Transforms {
     /**
      * Y = loc + scale * X. Jacobian: scale (elementwise) ⇒ log|J| = log|scale|.
      */
-    public static final class AffineTransform extends Transform {
+    public static final class AffineTransform extends DistributionTransform {
         private final Tensor loc;
         private final Tensor scale;
 
@@ -160,7 +160,7 @@ public final class Transforms {
      * Inverse: logit(Y) = log(Y) - log(1-Y).
      * log|J| = -softplus(-X) - softplus(X).
      */
-    public static final class SigmoidTransform extends Transform {
+    public static final class SigmoidTransform extends DistributionTransform {
         private static final float EPS = 1e-7f;
 
         @Override public int eventDim() { return 0; }
@@ -201,7 +201,7 @@ public final class Transforms {
      * Inverse: X = log(exp(Y)-1) = Y + log1p(-exp(-Y)).
      * log|J| = log(sigmoid(X)) = -softplus(-X).
      */
-    public static final class SoftplusTransform extends Transform {
+    public static final class SoftplusTransform extends DistributionTransform {
         @Override public int eventDim() { return 0; }
 
         @Override
@@ -231,7 +231,7 @@ public final class Transforms {
      * Abs transform Y = |X|. Not bijective; inverse maps to +Y (positive branch).
      * log|J| = 0 on the positive support (HalfNormal usage).
      */
-    public static final class AbsTransform extends Transform {
+    public static final class AbsTransform extends DistributionTransform {
         @Override public int eventDim() { return 0; }
 
         @Override
@@ -258,7 +258,7 @@ public final class Transforms {
      * Inverse: atanh(Y) = 0.5 * log((1+y)/(1-y)).
      * log|J| = log(1 - tanh²(x)) = 2*(log2 - x - softplus(-2x))  (stable).
      */
-    public static final class TanhTransform extends Transform {
+    public static final class TanhTransform extends DistributionTransform {
         private static final float EPS = 1e-6f;
 
         @Override public int eventDim() { return 0; }
@@ -303,24 +303,24 @@ public final class Transforms {
      * Composition T = T_{n-1} ∘ … ∘ T_0  (applied left-to-right on samples).
      * log|J_T| = Σ_i log|J_{T_i}| along intermediate points.
      */
-    public static final class ComposeTransform extends Transform {
-        private final Transform[] parts;
+    public static final class ComposeTransform extends DistributionTransform {
+        private final DistributionTransform[] parts;
 
-        public ComposeTransform(Transform... transforms) {
+        public ComposeTransform(DistributionTransform... transforms) {
             if (transforms == null || transforms.length == 0) {
                 throw new IllegalArgumentException("ComposeTransform requires ≥1 transform");
             }
             this.parts = transforms.clone();
         }
 
-        public Transform[] getParts() {
+        public DistributionTransform[] getParts() {
             return parts.clone();
         }
 
         @Override
         public int eventDim() {
             int max = 0;
-            for (Transform t : parts) {
+            for (DistributionTransform t : parts) {
                 max = Math.max(max, t.eventDim());
             }
             return max;
@@ -328,7 +328,7 @@ public final class Transforms {
 
         @Override
         public boolean bijective() {
-            for (Transform t : parts) {
+            for (DistributionTransform t : parts) {
                 if (!t.bijective()) return false;
             }
             return true;
@@ -389,7 +389,7 @@ public final class Transforms {
 
         @Override
         public void close() {
-            for (Transform t : parts) {
+            for (DistributionTransform t : parts) {
                 try { t.close(); } catch (Exception ignored) {}
             }
         }

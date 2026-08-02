@@ -31,7 +31,7 @@ import org.bytedeco.pytorch.Tensor;
  * {@code inverse}, and {@code logAbsDetJacobian}, plus {@code eventDim} for
  * event-shape reductions.
  */
-public abstract class Transform implements AutoCloseable {
+public abstract class DistributionTransform implements AutoCloseable {
 
     /** Number of rightmost event dims this transform operates on. */
     public abstract int eventDim();

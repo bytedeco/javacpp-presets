@@ -2078,13 +2078,13 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info(
                 "torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::apply"
             ).javaText(
-                "  /** Applies the transformation to the given {@code input}. */\n" +
+//                "  /** Applies the transformation to the given {@code input}. */\n" +
                 "  @Virtual(true) public native @ByVal @Cast(\"torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::OutputType*\") Example apply(@ByVal @Cast(\"torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::InputType*\") Example input);\n"
             ))
             .put(new Info(
                 "torch::data::transforms::Lambda<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::apply"
             ).javaText(
-                "  /** Applies the user-provided function object to the {@code input}. */\n" +
+//                "  /** Applies the user-provided function object to the {@code input}. */\n" +
                 "  public native @ByVal @Cast(\"torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::OutputType*\") Example apply(@ByVal @Cast(\"torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::InputType*\") Example input);\n"
             ))
             .put(new Info(
@@ -2092,7 +2092,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                 "torch::data::transforms::TensorLambda<torch::Tensor>::apply",
                 "torch::data::transforms::Normalize<torch::Tensor>::apply"
             ).javaText(
-                "  /** Implementation of {@code Transform::apply} that calls {@code operator()}. */\n" +
+//                "  /** Implementation of {@code Transform::apply} that calls {@code operator()}. */\n" +
                 "  @Virtual public native @ByVal @Cast(\"torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::OutputType*\") Example apply(@ByVal @Cast(\"torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::InputType*\") Example input);\n"
             ))
             // purify: C++ has no default ctor (only FunctionType). Without purify,

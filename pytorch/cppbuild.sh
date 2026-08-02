@@ -132,8 +132,13 @@ if [[ ! -d pytorch ]]; then
     git clone https://github.com/pytorch/pytorch
 fi
 cd pytorch
+# Existing clones only have tags from the original clone date; after bumping
+# PYTORCH_VERSION the tag is missing until we fetch. Always refresh tags/refs
+# before checkout so re-runs after a version bump work without a clean rebuild.
+git fetch --tags --force origin "+refs/tags/v${PYTORCH_VERSION}:refs/tags/v${PYTORCH_VERSION}"
+git fetch origin
 git reset --hard
-git checkout v$PYTORCH_VERSION
+git checkout "v${PYTORCH_VERSION}"
 git submodule update --init --recursive
 git submodule foreach --recursive 'git reset --hard'
 

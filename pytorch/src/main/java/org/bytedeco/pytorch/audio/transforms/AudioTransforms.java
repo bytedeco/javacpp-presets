@@ -28,8 +28,8 @@ import org.bytedeco.pytorch.audio.functional.AudioF;
  * torchaudio.transforms factories and callable classes.
  * Inputs/outputs are waveform or spectrogram {@link Tensor}s.
  */
-public final class Transforms {
-    private Transforms() {}
+public final class AudioTransforms {
+    private AudioTransforms() {}
 
     // -------------------------------------------------------------------------
     // Spectrogram / Mel / MFCC
