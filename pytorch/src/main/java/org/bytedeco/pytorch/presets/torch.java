@@ -2056,6 +2056,45 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info(
                 "torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >"
             ).pointerTypes("ExampleTransform").purify().virtualize())
+            // InputType/OutputType are "using" typedefs inside Transform<> / TensorTransform<>.
+            // Map them to Example so peers don't emit bare unresolved identifiers, but do NOT
+            // rely on valueTypes alone for apply(): that drops @ByVal and makes the Generator
+            // emit Example* virtual overrides, which do not match
+            // `OutputType apply(InputType)` (by value) in base.h / tensor.h.
+            .put(new Info(
+                "torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::InputType",
+                "torch::data::transforms::TensorTransform<torch::Tensor>::InputType"
+            ).valueTypes("Example").pointerTypes("Example"))
+            .put(new Info(
+                "torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::OutputType",
+                "torch::data::transforms::TensorTransform<torch::Tensor>::OutputType"
+            ).valueTypes("Example").pointerTypes("Example"))
+            // Force @ByVal + @Cast on apply: C++ takes/returns Example by value via
+            // InputType/OutputType typedefs. Without both annotations, Generator emits
+            // Example* virtual overrides that do not match base.h / tensor.h and fail
+            // with "does not override" / "no viable conversion from Example* to Example".
+            // Match TensorExampleTransform's working form:
+            //   @ByVal @Cast("...::OutputType*") Example apply(@ByVal @Cast("...::InputType*") Example)
+            .put(new Info(
+                "torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::apply"
+            ).javaText(
+                "  /** Applies the transformation to the given {@code input}. */\n" +
+                "  @Virtual(true) public native @ByVal @Cast(\"torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::OutputType*\") Example apply(@ByVal @Cast(\"torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::InputType*\") Example input);\n"
+            ))
+            .put(new Info(
+                "torch::data::transforms::Lambda<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::apply"
+            ).javaText(
+                "  /** Applies the user-provided function object to the {@code input}. */\n" +
+                "  public native @ByVal @Cast(\"torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::OutputType*\") Example apply(@ByVal @Cast(\"torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::InputType*\") Example input);\n"
+            ))
+            .put(new Info(
+                "torch::data::transforms::TensorTransform<torch::Tensor>::apply",
+                "torch::data::transforms::TensorLambda<torch::Tensor>::apply",
+                "torch::data::transforms::Normalize<torch::Tensor>::apply"
+            ).javaText(
+                "  /** Implementation of {@code Transform::apply} that calls {@code operator()}. */\n" +
+                "  @Virtual public native @ByVal @Cast(\"torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::OutputType*\") Example apply(@ByVal @Cast(\"torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::InputType*\") Example input);\n"
+            ))
             // purify: C++ has no default ctor (only FunctionType). Without purify,
             // JavaCPP emits allocate()/allocateArray() that fail to compile in jnitorch.
             .put(new Info(
