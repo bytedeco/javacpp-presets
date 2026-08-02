@@ -1,5 +1,6 @@
 package org.bytedeco.pytorch.serving.tensorrt;
 
+import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.pytorch.serving.tensorrt.exceptions.TrtInvalidArgumentException;
 import org.bytedeco.pytorch.serving.tensorrt.internal.NativeLogger;
 
@@ -18,7 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * <p>Messages at severity strictly greater than {@link #severity()} are filtered
  * (same rule as the common TensorRT sample Logger).
  */
-public final class TRTLogger {
+public final class TRTLogger extends Pointer {
     /**
      * Log severity. Ordinals match {@code nvinfer1::ILogger::Severity}.
      */

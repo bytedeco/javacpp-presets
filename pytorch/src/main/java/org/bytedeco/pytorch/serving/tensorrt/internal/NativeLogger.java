@@ -14,6 +14,7 @@ public final class NativeLogger extends ILogger {
     private final TRTLogger delegate;
 
     public NativeLogger(TRTLogger delegate) {
+        super(delegate);
         this.delegate = delegate;
     }
 

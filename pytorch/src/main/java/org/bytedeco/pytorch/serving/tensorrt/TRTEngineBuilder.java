@@ -160,7 +160,7 @@ public final class TRTEngineBuilder {
         IParser parser = null;
         IHostMemory plan = null;
         try {
-            int networkFlags = 1 << NetworkDefinitionCreationFlag.kEXPLICIT_BATCH.value;
+            int networkFlags = 1 ; //<< NetworkDefinitionCreationFlag.kEXPLICIT_BATCH.value;
             if (trtOptions.stronglyTyped()) {
                 networkFlags |= 1 << NetworkDefinitionCreationFlag.kSTRONGLY_TYPED.value;
             }
