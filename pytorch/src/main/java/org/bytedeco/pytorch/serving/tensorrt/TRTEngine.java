@@ -3,10 +3,7 @@ package org.bytedeco.pytorch.serving.tensorrt;
 import org.bytedeco.cuda.cudart.CUstream_st;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.tensorrt.nvinfer.Dims64;
-import org.bytedeco.tensorrt.nvinfer.ICudaEngine;
-import org.bytedeco.tensorrt.nvinfer.IExecutionContext;
-import org.bytedeco.tensorrt.nvinfer.IRuntime;
+import org.bytedeco.tensorrt.nvinfer.*;
 import org.bytedeco.pytorch.serving.tensorrt.enums.ErrorCode;
 import org.bytedeco.pytorch.serving.tensorrt.enums.TRTDataType;
 import org.bytedeco.pytorch.serving.tensorrt.enums.TRTTensorIOMode;
@@ -16,8 +13,6 @@ import org.bytedeco.pytorch.serving.tensorrt.exceptions.TrtInvalidArgumentExcept
 import org.bytedeco.pytorch.serving.tensorrt.exceptions.TrtNotFoundException;
 import org.bytedeco.pytorch.serving.tensorrt.internal.CudaBuffers;
 import org.bytedeco.pytorch.serving.tensorrt.internal.NativeError;
-import org.bytedeco.pytorch.serving.tensorrt.internal.NativeLogger;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -75,7 +70,7 @@ public final class TRTEngine implements AutoCloseable {
         }
         TrtOption opts = trtOptions == null ? new TrtOption() : new TrtOption(trtOptions);
         TRTLogger logger = opts.logger() != null ? opts.logger() : TRTLogger.getDefaultLogger();
-        NativeLogger nativeLogger = logger.nativeLogger();
+        ILogger nativeLogger = logger.nativeLogger();
 
         NativeError.checkCuda(
                 org.bytedeco.cuda.global.cudart.cudaSetDevice(opts.deviceIndex()),

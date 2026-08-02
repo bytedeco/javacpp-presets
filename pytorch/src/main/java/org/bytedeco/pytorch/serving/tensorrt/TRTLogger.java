@@ -2,7 +2,7 @@ package org.bytedeco.pytorch.serving.tensorrt;
 
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.pytorch.serving.tensorrt.exceptions.TrtInvalidArgumentException;
-import org.bytedeco.pytorch.serving.tensorrt.internal.NativeLogger;
+import org.bytedeco.tensorrt.nvinfer.ILogger;
 
 import java.io.PrintStream;
 import java.util.Objects;
@@ -56,7 +56,7 @@ public final class TRTLogger extends Pointer {
     private volatile Severity severity;
     private final PrintStream out;
     private final Object lock = new Object();
-    private NativeLogger nativeLogger;
+    private ILogger nativeLogger;
 
     public TRTLogger() {
         this(Severity.WARNING, System.err);
@@ -132,9 +132,9 @@ public final class TRTLogger extends Pointer {
      * Lazily creates and returns the native {@code nvinfer1::ILogger} bridge.
      * Required when calling {@code createInferBuilder} / {@code createInferRuntime}.
      */
-    public synchronized NativeLogger nativeLogger() {
+    public synchronized ILogger nativeLogger() {
         if (nativeLogger == null || nativeLogger.isNull()) {
-            nativeLogger = new NativeLogger(this);
+            nativeLogger = new ILogger(this);
         }
         return nativeLogger;
     }

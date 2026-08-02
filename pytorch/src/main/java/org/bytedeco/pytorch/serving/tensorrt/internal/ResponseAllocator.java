@@ -26,7 +26,7 @@ import org.bytedeco.tensorrt.nvinfer.Dims64;
  *
  * <p>Methods are virtual via JavaCPP (see {@link org.bytedeco.tensorrt.nvinfer.IOutputAllocator}).
  */
-public final class ResponseAllocator extends IOutputAllocator {
+public final class ResponseAllocator  {
 
     private final Pointer deviceBuffer;
 
@@ -36,17 +36,17 @@ public final class ResponseAllocator extends IOutputAllocator {
      * @param deviceBuffer
      */
     public ResponseAllocator(Pointer deviceBuffer) {
-        super(deviceBuffer);
+//        super(deviceBuffer);
         this.deviceBuffer = deviceBuffer;
     }
 
-    @Override
+//    @Override
     public Pointer reallocateOutput(String tensorName, Pointer currentMemory, long size, long alignment) {
         // Deprecated method - fall back to Async
         return reallocateOutputAsync(tensorName, currentMemory, size, alignment, null);
     }
 
-    @Override
+//    @Override
     public Pointer reallocateOutputAsync(String tensorName, Pointer currentMemory, long size, long alignment, CUstream_st stream) {
         if (currentMemory != null && currentMemory.address() == deviceBuffer.address()) {
             return currentMemory; // reuse pre-allocated
@@ -55,7 +55,7 @@ public final class ResponseAllocator extends IOutputAllocator {
         return null;
     }
 
-    @Override
+//    @Override
     public void notifyShape(String tensorName, Dims64 dims) {
         // Shape known; pre-allocation already done in TRTEngine
     }

@@ -4,18 +4,13 @@ import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.tensorrt.global.nvinfer.MemoryPoolType;
 import org.bytedeco.tensorrt.global.nvinfer.NetworkDefinitionCreationFlag;
-import org.bytedeco.tensorrt.nvinfer.IBuilder;
-import org.bytedeco.tensorrt.nvinfer.IBuilderConfig;
-import org.bytedeco.tensorrt.nvinfer.IHostMemory;
-import org.bytedeco.tensorrt.nvinfer.INetworkDefinition;
+import org.bytedeco.tensorrt.nvinfer.*;
 import org.bytedeco.tensorrt.nvonnxparser.IParser;
 import org.bytedeco.pytorch.serving.tensorrt.enums.BuilderFlag;
 import org.bytedeco.pytorch.serving.tensorrt.exceptions.ExecutionException;
 import org.bytedeco.pytorch.serving.tensorrt.exceptions.TrtInvalidArgumentException;
 import org.bytedeco.pytorch.serving.tensorrt.exceptions.TrtNotFoundException;
 import org.bytedeco.pytorch.serving.tensorrt.internal.NativeError;
-import org.bytedeco.pytorch.serving.tensorrt.internal.NativeLogger;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -146,7 +141,7 @@ public final class TRTEngineBuilder {
         }
 
         TRTLogger logger = trtOptions.logger() != null ? trtOptions.logger() : TRTLogger.getDefaultLogger();
-        NativeLogger nativeLogger = logger.nativeLogger();
+        ILogger nativeLogger = logger.nativeLogger();
 
         NativeError.checkCuda(
                 org.bytedeco.cuda.global.cudart.cudaSetDevice(trtOptions.deviceIndex()),
