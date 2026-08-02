@@ -22,7 +22,7 @@
 package org.bytedeco.pytorch.audio.transforms;
 
 import org.bytedeco.pytorch.Tensor;
-import org.bytedeco.pytorch.audio.functional.F;
+import org.bytedeco.pytorch.audio.functional.AudioF;
 
 /**
  * torchaudio.transforms factories and callable classes.
@@ -35,7 +35,7 @@ public final class Transforms {
     // Spectrogram / Mel / MFCC
     // -------------------------------------------------------------------------
 
-    public static final class Spectrogram implements Transform<Tensor, Tensor> {
+    public static final class Spectrogram implements AudioTransform<Tensor, Tensor> {
         private final int sampleRate;
         private final int nFft;
         private final int hopLength;
@@ -56,11 +56,11 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor waveform) {
-            return F.spectrogram(waveform, sampleRate, nFft, hopLength, winLength, power);
+            return AudioF.spectrogram(waveform, sampleRate, nFft, hopLength, winLength, power);
         }
     }
 
-    public static final class MelSpectrogram implements Transform<Tensor, Tensor> {
+    public static final class MelSpectrogram implements AudioTransform<Tensor, Tensor> {
         private final int sampleRate;
         private final int nMels;
         private final double fMin;
@@ -87,11 +87,11 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor waveform) {
-            return F.mel_spectrogram(waveform, sampleRate, nMels, fMin, fMax, nFft, hopLength);
+            return AudioF.mel_spectrogram(waveform, sampleRate, nMels, fMin, fMax, nFft, hopLength);
         }
     }
 
-    public static final class MFCC implements Transform<Tensor, Tensor> {
+    public static final class MFCC implements AudioTransform<Tensor, Tensor> {
         private final int sampleRate;
         private final int nMfcc;
         private final int nMels;
@@ -120,7 +120,7 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor waveform) {
-            return F.mfcc(waveform, sampleRate, nMfcc, nMels, fMin, fMax, nFft, hopLength);
+            return AudioF.mfcc(waveform, sampleRate, nMfcc, nMels, fMin, fMax, nFft, hopLength);
         }
     }
 
@@ -128,7 +128,7 @@ public final class Transforms {
     // Resample / Vol / Fade
     // -------------------------------------------------------------------------
 
-    public static final class Resample implements Transform<Tensor, Tensor> {
+    public static final class Resample implements AudioTransform<Tensor, Tensor> {
         private final int origFreq;
         private final int newFreq;
 
@@ -139,11 +139,11 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor waveform) {
-            return F.resample(waveform, origFreq, newFreq);
+            return AudioF.resample(waveform, origFreq, newFreq);
         }
     }
 
-    public static final class Vol implements Transform<Tensor, Tensor> {
+    public static final class Vol implements AudioTransform<Tensor, Tensor> {
         private final double gain;
         private final String gainType;
 
@@ -158,11 +158,11 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor waveform) {
-            return F.vol(waveform, gain, gainType);
+            return AudioF.vol(waveform, gain, gainType);
         }
     }
 
-    public static final class Fade implements Transform<Tensor, Tensor> {
+    public static final class Fade implements AudioTransform<Tensor, Tensor> {
         private final int fadeInLen;
         private final int fadeOutLen;
         private final String shape;
@@ -179,7 +179,7 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor waveform) {
-            return F.fade(waveform, fadeInLen, fadeOutLen, shape);
+            return AudioF.fade(waveform, fadeInLen, fadeOutLen, shape);
         }
     }
 
@@ -187,7 +187,7 @@ public final class Transforms {
     // AmplitudeToDB / SpecAugment masks
     // -------------------------------------------------------------------------
 
-    public static final class AmplitudeToDB implements Transform<Tensor, Tensor> {
+    public static final class AmplitudeToDB implements AudioTransform<Tensor, Tensor> {
         private final double multiplier;
         private final double amin;
         private final double topDb;
@@ -209,11 +209,11 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor x) {
-            return F.amplitudeToDB(x, multiplier, amin, 0.0, topDb);
+            return AudioF.amplitudeToDB(x, multiplier, amin, 0.0, topDb);
         }
     }
 
-    public static class FrequencyMasking implements Transform<Tensor, Tensor> {
+    public static class FrequencyMasking implements AudioTransform<Tensor, Tensor> {
         private final int freqMaskParam;
         private final boolean iidMasks;
 
@@ -229,7 +229,7 @@ public final class Transforms {
         @Override
         public Tensor forward(Tensor specgram) {
             // iidMasks currently ignored (single mask); kept for torchaudio API parity
-            return F.frequency_masking(specgram, freqMaskParam);
+            return AudioF.frequency_masking(specgram, freqMaskParam);
         }
 
         public boolean iidMasks() {
@@ -237,7 +237,7 @@ public final class Transforms {
         }
     }
 
-    public static class TimeMasking implements Transform<Tensor, Tensor> {
+    public static class TimeMasking implements AudioTransform<Tensor, Tensor> {
         private final int timeMaskParam;
         private final boolean iidMasks;
 
@@ -252,7 +252,7 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor specgram) {
-            return F.time_masking(specgram, timeMaskParam);
+            return AudioF.time_masking(specgram, timeMaskParam);
         }
 
         public boolean iidMasks() {
@@ -260,7 +260,7 @@ public final class Transforms {
         }
     }
 
-    public static final class MuLawEncoding implements Transform<Tensor, Tensor> {
+    public static final class MuLawEncoding implements AudioTransform<Tensor, Tensor> {
         private final int quantizationChannels;
 
         public MuLawEncoding() {
@@ -273,11 +273,11 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor x) {
-            return F.mu_law_encoding(x, quantizationChannels);
+            return AudioF.mu_law_encoding(x, quantizationChannels);
         }
     }
 
-    public static final class MuLawDecoding implements Transform<Tensor, Tensor> {
+    public static final class MuLawDecoding implements AudioTransform<Tensor, Tensor> {
         private final int quantizationChannels;
 
         public MuLawDecoding() {
@@ -290,7 +290,7 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor x) {
-            return F.mu_law_decoding(x, quantizationChannels);
+            return AudioF.mu_law_decoding(x, quantizationChannels);
         }
     }
 
@@ -300,9 +300,9 @@ public final class Transforms {
 
     /**
      * Approximate inverse of {@link Spectrogram} (zero-phase overlap-add).
-     * See {@link F#inverseSpectrogram}.
+     * See {@link AudioF#inverseSpectrogram}.
      */
-    public static final class InverseSpectrogram implements Transform<Tensor, Tensor> {
+    public static final class InverseSpectrogram implements AudioTransform<Tensor, Tensor> {
         private final int nFft;
         private final int hopLength;
         private final int winLength;
@@ -325,7 +325,7 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor specgram) {
-            return F.inverse_spectrogram(specgram, nFft, hopLength, winLength, power);
+            return AudioF.inverse_spectrogram(specgram, nFft, hopLength, winLength, power);
         }
     }
 
@@ -333,7 +333,7 @@ public final class Transforms {
      * Time-stretch a spectrogram (magnitude) without changing pitch content layout.
      * {@code rate > 1} shortens time axis.
      */
-    public static final class TimeStretch implements Transform<Tensor, Tensor> {
+    public static final class TimeStretch implements AudioTransform<Tensor, Tensor> {
         private final double fixedRate;
         private final int nFreq; // kept for torchaudio API parity (unused on magnitude path)
 
@@ -356,7 +356,7 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor specgram) {
-            return F.time_stretch(specgram, fixedRate);
+            return AudioF.time_stretch(specgram, fixedRate);
         }
 
         public int nFreq() {
@@ -365,7 +365,7 @@ public final class Transforms {
     }
 
     /** Pitch shift waveform by {@code nSteps} semitones (resample round-trip). */
-    public static final class PitchShift implements Transform<Tensor, Tensor> {
+    public static final class PitchShift implements AudioTransform<Tensor, Tensor> {
         private final int sampleRate;
         private final double nSteps;
 
@@ -376,12 +376,12 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor waveform) {
-            return F.pitch_shift(waveform, sampleRate, nSteps);
+            return AudioF.pitch_shift(waveform, sampleRate, nSteps);
         }
     }
 
     /** Linear-Frequency Cepstral Coefficients. */
-    public static final class LFCC implements Transform<Tensor, Tensor> {
+    public static final class LFCC implements AudioTransform<Tensor, Tensor> {
         private final int sampleRate;
         private final int nLfcc;
         private final int nFilter;
@@ -406,12 +406,12 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor waveform) {
-            return F.lfcc(waveform, sampleRate, nLfcc, nFilter, nFft, hopLength);
+            return AudioF.lfcc(waveform, sampleRate, nLfcc, nFilter, nFft, hopLength);
         }
     }
 
     /** First-order temporal deltas on spectrogram / feature last dim. */
-    public static final class ComputeDeltas implements Transform<Tensor, Tensor> {
+    public static final class ComputeDeltas implements AudioTransform<Tensor, Tensor> {
         private final int winLength;
 
         public ComputeDeltas() {
@@ -424,12 +424,12 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor specgram) {
-            return F.compute_deltas(specgram, winLength);
+            return AudioF.compute_deltas(specgram, winLength);
         }
     }
 
     /** Second-order deltas (acceleration). */
-    public static final class Compute2DDeltas implements Transform<Tensor, Tensor> {
+    public static final class Compute2DDeltas implements AudioTransform<Tensor, Tensor> {
         private final int winLength;
 
         public Compute2DDeltas() {
@@ -442,12 +442,12 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor specgram) {
-            return F.compute_2d_deltas(specgram, winLength);
+            return AudioF.compute_2d_deltas(specgram, winLength);
         }
     }
 
     /** Inverse of {@link AmplitudeToDB}. */
-    public static final class DBToAmplitude implements Transform<Tensor, Tensor> {
+    public static final class DBToAmplitude implements AudioTransform<Tensor, Tensor> {
         private final double ref;
         private final double power;
 
@@ -462,12 +462,12 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor x) {
-            return F.dbToAmplitude(x, ref, power);
+            return AudioF.dbToAmplitude(x, ref, power);
         }
     }
 
     /** Waveform pad along time. */
-    public static final class Pad implements Transform<Tensor, Tensor> {
+    public static final class Pad implements AudioTransform<Tensor, Tensor> {
         private final int left;
         private final int right;
         private final String mode;
@@ -494,12 +494,12 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor waveform) {
-            return F.pad(waveform, new int[]{left, right}, mode, value);
+            return AudioF.pad(waveform, new int[]{left, right}, mode, value);
         }
     }
 
     /** Silence trim by energy threshold. */
-    public static final class Trim implements Transform<Tensor, Tensor> {
+    public static final class Trim implements AudioTransform<Tensor, Tensor> {
         private final int sampleRate;
         private final float topDb;
 
@@ -514,7 +514,7 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Tensor waveform) {
-            return F.trim(waveform, sampleRate, topDb);
+            return AudioF.trim(waveform, sampleRate, topDb);
         }
     }
 

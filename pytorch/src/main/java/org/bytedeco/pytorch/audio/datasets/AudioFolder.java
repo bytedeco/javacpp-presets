@@ -23,7 +23,7 @@ package org.bytedeco.pytorch.audio.datasets;
 
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.audio.io.AudioIO;
-import org.bytedeco.pytorch.audio.transforms.Transform;
+import org.bytedeco.pytorch.audio.transforms.AudioTransform;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -61,21 +61,21 @@ public class AudioFolder extends AudioDataset {
         this(root, null, DEFAULT_EXTS, 16000, true);
     }
 
-    public AudioFolder(Path root, Transform<?, ?> transform) throws IOException {
-        this(root, transform, DEFAULT_EXTS, 16000, true);
+    public AudioFolder(Path root, AudioTransform<?, ?> audioTransform) throws IOException {
+        this(root, audioTransform, DEFAULT_EXTS, 16000, true);
     }
 
-    public AudioFolder(Path root, Transform<?, ?> transform, int sampleRate, boolean mono) throws IOException {
-        this(root, transform, DEFAULT_EXTS, sampleRate, mono);
+    public AudioFolder(Path root, AudioTransform<?, ?> audioTransform, int sampleRate, boolean mono) throws IOException {
+        this(root, audioTransform, DEFAULT_EXTS, sampleRate, mono);
     }
 
-    public AudioFolder(Path root, Transform<?, ?> transform, Set<String> extensions,
+    public AudioFolder(Path root, AudioTransform<?, ?> audioTransform, Set<String> extensions,
                        int sampleRate, boolean mono) throws IOException {
         super(Objects.requireNonNull(root, "root"));
         this.extensions = extensions == null ? DEFAULT_EXTS : extensions;
         this.sampleRate = sampleRate > 0 ? sampleRate : 16000;
         this.mono = mono;
-        setTransform(transform);
+        setTransform(audioTransform);
 
         List<String> classNames = new ArrayList<>();
         try (DirectoryStream<Path> ds = Files.newDirectoryStream(root)) {
@@ -170,8 +170,8 @@ public class AudioFolder extends AudioDataset {
             super(root);
         }
 
-        public DatasetFolder(Path root, Transform<?, ?> transform, String... exts) throws IOException {
-            super(root, transform, exts == null || exts.length == 0
+        public DatasetFolder(Path root, AudioTransform<?, ?> audioTransform, String... exts) throws IOException {
+            super(root, audioTransform, exts == null || exts.length == 0
                     ? DEFAULT_EXTS
                     : new HashSet<>(Arrays.asList(exts)), 16000, true);
         }

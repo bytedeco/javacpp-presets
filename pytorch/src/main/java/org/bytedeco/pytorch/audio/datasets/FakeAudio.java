@@ -23,7 +23,7 @@ package org.bytedeco.pytorch.audio.datasets;
 
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.global.torch;
-import org.bytedeco.pytorch.audio.transforms.Transform;
+import org.bytedeco.pytorch.audio.transforms.AudioTransform;
 import org.bytedeco.pytorch.audio.utils.AudioTensors;
 
 import java.util.Random;
@@ -57,8 +57,8 @@ public final class FakeAudio extends AudioDataset {
         this.seed = seed;
     }
 
-    public FakeAudio setTransform(Transform<?, ?> transform) {
-        super.setTransform(transform);
+    public FakeAudio setTransform(AudioTransform<?, ?> audioTransform) {
+        super.setTransform(audioTransform);
         return this;
     }
 

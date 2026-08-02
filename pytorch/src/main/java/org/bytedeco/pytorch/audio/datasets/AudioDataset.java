@@ -21,7 +21,7 @@
  */
 package org.bytedeco.pytorch.audio.datasets;
 
-import org.bytedeco.pytorch.audio.transforms.Transform;
+import org.bytedeco.pytorch.audio.transforms.AudioTransform;
 
 import java.nio.file.Path;
 import java.util.Iterator;
@@ -32,8 +32,8 @@ import java.util.Objects;
  */
 public abstract class AudioDataset implements Iterable<AudioDataset.Sample> {
     protected final Path root;
-    protected Transform<?, ?> transform;
-    protected Transform<?, ?> targetTransform;
+    protected AudioTransform<?, ?> audioTransform;
+    protected AudioTransform<?, ?> targetAudioTransform;
 
     protected AudioDataset(Path root) {
         this.root = root;
@@ -43,17 +43,17 @@ public abstract class AudioDataset implements Iterable<AudioDataset.Sample> {
         this.root = root == null ? null : Path.of(root);
     }
 
-    public AudioDataset setTransform(Transform<?, ?> transform) {
-        this.transform = transform;
+    public AudioDataset setTransform(AudioTransform<?, ?> audioTransform) {
+        this.audioTransform = audioTransform;
         return this;
     }
 
-    public AudioDataset set_transform(Transform<?, ?> transform) {
-        return setTransform(transform);
+    public AudioDataset set_transform(AudioTransform<?, ?> audioTransform) {
+        return setTransform(audioTransform);
     }
 
-    public AudioDataset setTargetTransform(Transform<?, ?> targetTransform) {
-        this.targetTransform = targetTransform;
+    public AudioDataset setTargetTransform(AudioTransform<?, ?> targetAudioTransform) {
+        this.targetAudioTransform = targetAudioTransform;
         return this;
     }
 
@@ -71,18 +71,18 @@ public abstract class AudioDataset implements Iterable<AudioDataset.Sample> {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     protected Object applyTransform(Object input) {
-        if (transform == null) {
+        if (audioTransform == null) {
             return input;
         }
-        return ((Transform) transform).forward(input);
+        return ((AudioTransform) audioTransform).forward(input);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     protected Object applyTargetTransform(Object target) {
-        if (targetTransform == null) {
+        if (targetAudioTransform == null) {
             return target;
         }
-        return ((Transform) targetTransform).forward(target);
+        return ((AudioTransform) targetAudioTransform).forward(target);
     }
 
     @Override

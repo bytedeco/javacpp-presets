@@ -22,7 +22,7 @@
 package org.bytedeco.pytorch.audio.librosa;
 
 import org.bytedeco.pytorch.dataframe.dtype.AudioData;
-import org.bytedeco.pytorch.audio.functional.F;
+import org.bytedeco.pytorch.audio.functional.AudioF;
 
 import java.util.Objects;
 
@@ -91,11 +91,11 @@ public final class Librosa {
     /** Linear resample. */
     public static float[] resample(float[] y, int origSr, int targetSr) {
         Objects.requireNonNull(y, "y");
-        return F.resampleSamples(y, 1, origSr, targetSr);
+        return AudioF.resampleSamples(y, 1, origSr, targetSr);
     }
 
     public static float[] resample(float[] y, int origSr, int targetSr, int channels) {
-        return F.resampleSamples(y, channels, origSr, targetSr);
+        return AudioF.resampleSamples(y, channels, origSr, targetSr);
     }
 
     /** Duration in seconds. */

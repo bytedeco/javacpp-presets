@@ -32,8 +32,8 @@ import java.util.Objects;
 /**
  * torchaudio.functional-style static helpers. Heavy DSP is delegated to {@link AudioData}.
  */
-public final class F {
-    private F() {}
+public final class AudioF {
+    private AudioF() {}
 
     // -------------------------------------------------------------------------
     // Spectrogram family

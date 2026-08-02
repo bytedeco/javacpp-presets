@@ -29,5 +29,5 @@ package org.bytedeco.pytorch.audio.transforms;
  * @param <R> output type
  */
 @FunctionalInterface
-public interface Transform<T, R> extends org.bytedeco.pytorch.data.transforms.Transform<T, R> {
+public interface AudioTransform<T, R> extends org.bytedeco.pytorch.data.transforms.Transform<T, R> {
 }

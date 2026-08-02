@@ -28,29 +28,29 @@ import java.util.Objects;
 /**
  * Sequential composition of transforms (torchaudio / torchvision Compose-like).
  */
-public final class Compose implements Transform<Object, Object> {
-    private final List<Transform<?, ?>> transforms;
+public final class AudioCompose implements AudioTransform<Object, Object> {
+    private final List<AudioTransform<?, ?>> audioTransforms;
 
     @SafeVarargs
-    public Compose(Transform<?, ?>... transforms) {
-        this.transforms = Arrays.asList(Objects.requireNonNull(transforms, "transforms"));
+    public AudioCompose(AudioTransform<?, ?>... audioTransforms) {
+        this.audioTransforms = Arrays.asList(Objects.requireNonNull(audioTransforms, "transforms"));
     }
 
-    public Compose(List<Transform<?, ?>> transforms) {
-        this.transforms = List.copyOf(Objects.requireNonNull(transforms, "transforms"));
+    public AudioCompose(List<AudioTransform<?, ?>> audioTransforms) {
+        this.audioTransforms = List.copyOf(Objects.requireNonNull(audioTransforms, "transforms"));
     }
 
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
     public Object forward(Object input) {
         Object x = input;
-        for (Transform t : transforms) {
+        for (AudioTransform t : audioTransforms) {
             x = t.forward(x);
         }
         return x;
     }
 
-    public List<Transform<?, ?>> transforms() {
-        return transforms;
+    public List<AudioTransform<?, ?>> transforms() {
+        return audioTransforms;
     }
 }
