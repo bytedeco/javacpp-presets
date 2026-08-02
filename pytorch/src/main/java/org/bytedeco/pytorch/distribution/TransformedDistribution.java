@@ -3,8 +3,8 @@ package org.bytedeco.pytorch.distribution;
 import org.bytedeco.pytorch.Scalar;
 import org.bytedeco.pytorch.ScalarTypeOptional;
 import org.bytedeco.pytorch.Tensor;
-import org.bytedeco.pytorch.distribution.transforms.Transform;
-import org.bytedeco.pytorch.distribution.transforms.Transforms;
+import org.bytedeco.pytorch.distribution.transforms.DistributionTransform;
+import org.bytedeco.pytorch.distribution.transforms.DistributionTransforms;
 import org.bytedeco.pytorch.global.torch;
 
 /**
@@ -18,7 +18,7 @@ import org.bytedeco.pytorch.global.torch;
  *   H(Y)       = H(X) + E_X[log|det J_T(X)|]   (Monte-Carlo when needed)
  * </pre>
  *
- * <p>Supports a single transform or a composition via {@link Transforms#compose}.
+ * <p>Supports a single transform or a composition via {@link DistributionTransforms#compose}.
  * Typical uses:
  * <ul>
  *   <li>LogNormal ≈ TransformedDistribution(Normal(μ,σ), ExpTransform)</li>
@@ -29,7 +29,7 @@ import org.bytedeco.pytorch.global.torch;
 public class TransformedDistribution extends Distribution implements AutoCloseable {
 
     private final Distribution baseDist;
-    private final Transform transform;
+    private final DistributionTransform transform;
     private final boolean ownsBase;
     private final boolean ownsTransform;
     private boolean closed = false;
@@ -38,7 +38,7 @@ public class TransformedDistribution extends Distribution implements AutoCloseab
      * @param baseDist  base distribution P_X (not null)
      * @param transform invertible transform T (not null)
      */
-    public TransformedDistribution(Distribution baseDist, Transform transform) {
+    public TransformedDistribution(Distribution baseDist, DistributionTransform transform) {
         this(baseDist, transform, false, false);
     }
 
@@ -46,7 +46,7 @@ public class TransformedDistribution extends Distribution implements AutoCloseab
      * @param ownsBase      if true, {@link #close()} will close the base dist
      * @param ownsTransform if true, {@link #close()} will close the transform
      */
-    public TransformedDistribution(Distribution baseDist, Transform transform,
+    public TransformedDistribution(Distribution baseDist, DistributionTransform transform,
                                    boolean ownsBase, boolean ownsTransform) {
         if (baseDist == null) {
             throw new IllegalArgumentException("baseDist cannot be null");
@@ -61,9 +61,9 @@ public class TransformedDistribution extends Distribution implements AutoCloseab
     }
 
     /** Convenience: base + a composition of transforms (applied left-to-right). */
-    public TransformedDistribution(Distribution baseDist, Transform... transforms) {
+    public TransformedDistribution(Distribution baseDist, DistributionTransform... transforms) {
         this(baseDist,
-                transforms.length == 1 ? transforms[0] : Transforms.compose(transforms),
+                transforms.length == 1 ? transforms[0] : DistributionTransforms.compose(transforms),
                 false,
                 transforms.length != 1 /* compose is owned */);
     }
@@ -77,7 +77,7 @@ public class TransformedDistribution extends Distribution implements AutoCloseab
         return baseDist;
     }
 
-    public Transform getTransform() {
+    public DistributionTransform getTransform() {
         return transform;
     }
 

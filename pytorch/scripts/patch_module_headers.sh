@@ -7,13 +7,19 @@ set -euo pipefail
 ROOT="${1:?include root required}"
 API="$ROOT/torch/csrc/api/include/torch"
 
-sedinplace() {
-  if [[ "$OSTYPE" == "darwin"* ]]; then
-    sed -i '' "$@"
-  else
-    sed -i "$@"
-  fi
-}
+# Portable in-place sed: GNU sed (Linux) wants `sed -i`, BSD sed (macOS)
+# wants `sed -i ''`. Using BSD form on GNU sed treats the empty extension
+# as the script and the real expression as a filename — exactly the
+# "无法读取 s/@Virtual... 没有那个文件或目录" failure on Linux.
+# Prefer `sed --version` over OSTYPE so Linux hosts with gsed/busybox and
+# macOS hosts with Homebrew GNU sed both resolve correctly.
+if sed --version >/dev/null 2>&1; then
+    # GNU sed
+    sedinplace() { sed -i "$@"; }
+else
+    # BSD sed (macOS)
+    sedinplace() { sed -i '' "$@"; }
+fi
 
 # --- embedding from_pretrained ---
 patch_embedding_from_pretrained() {

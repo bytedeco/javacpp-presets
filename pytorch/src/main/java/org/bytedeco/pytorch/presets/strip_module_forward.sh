@@ -37,6 +37,18 @@
 set -e
 GEN_DIR="${1:-src/gen/java}"
 
+# Portable in-place sed: GNU sed (Linux) wants `sed -i`, BSD sed (macOS)
+# wants `sed -i ''`. Using BSD form on GNU sed treats the empty extension
+# as the script and the real expression as a filename — exactly the
+# "无法读取 s/@Virtual... 没有那个文件或目录" failure on Linux.
+if sed --version >/dev/null 2>&1; then
+    # GNU sed
+    sed_i() { sed -i "$@"; }
+else
+    # BSD sed (macOS)
+    sed_i() { sed -i '' "$@"; }
+fi
+
 # JavaCPP parser bug (libtorch 2.12+): when ArrayRef<at::Dimname> is
 # encountered in a struct from the at::namedinference namespace
 # (TensorName / TensorNames), the parser mis-categorizes the typed
@@ -64,7 +76,7 @@ GEN_DIR="${1:-src/gen/java}"
 # headers. Order matters: apply the @Name fix LAST so the c10::→
 # DimnameArrayRef sed doesn't accidentally rewrite it back.
 if [ -f "$GEN_DIR/DimnameArrayRef.java" ]; then
-    sed -i '' -E '
+    sed_i -E '
         s/public DimnameArrayRef\(@Const Dimname data, @Cast\("size_t"\) long length\)/public DimnameArrayRef(IntPointer data, long length)/g;
         s/private native void allocate\(@Const Dimname data, @Cast\("size_t"\) long length\)/private native void allocate(@Cast("const at::Dimname*") IntPointer data, @Cast("size_t") long length)/g;
         s/public DimnameArrayRef\(@Const Dimname begin, @Const Dimname end\)/public DimnameArrayRef(IntPointer begin, IntPointer end)/g;
@@ -72,55 +84,12 @@ if [ -f "$GEN_DIR/DimnameArrayRef.java" ]; then
     ' "$GEN_DIR/DimnameArrayRef.java"
 fi
 for f in $(grep -rl 'c10::ArrayRef<at::Dimname>' "$GEN_DIR" 2>/dev/null); do
-    sed -i '' 's/c10::ArrayRef<at::Dimname>/DimnameArrayRef/g; s/c10::HeaderOnlyArrayRef<at::Dimname>/DimnameHeaderOnlyArrayRef/g' "$f"
+    sed_i 's/c10::ArrayRef<at::Dimname>/DimnameArrayRef/g; s/c10::HeaderOnlyArrayRef<at::Dimname>/DimnameHeaderOnlyArrayRef/g' "$f"
 done
 # Apply the @Name fix LAST so the c10::→DimnameArrayRef sed above doesn't
 # accidentally rewrite the just-fixed @Name back to bare DimnameArrayRef.
 if [ -f "$GEN_DIR/DimnameArrayRef.java" ]; then
-    sed -i '' 's/@Name("DimnameArrayRef")/@Name("c10::ArrayRef<at::Dimname>")/g' "$GEN_DIR/DimnameArrayRef.java"
-fi
-
-# JavaCPP parser bug (libtorch 2.12+): when ArrayRef<at::Dimname> is
-# encountered in a struct from the at::namedinference namespace
-# (TensorName / TensorNames), the parser mis-categorizes the typed
-# ArrayRef class DimnameArrayRef in two distinct ways:
-#
-#   1) The @Name annotation on the class itself gets set to
-#      @Name("DimnameArrayRef") (just the Java class name) instead of
-#      the proper C++ type @Name("c10::ArrayRef<at::Dimname>"). The
-#      JNI generator then embeds the bare Java class name in the
-#      bridge code (e.g. `DimnameArrayRef* rptr = new DimnameArrayRef[...]`)
-#      which fails to compile because there's no such C++ type.
-#   2) When the same ArrayRef<at::Dimname> appears as a parameter type
-#      in the constructors, the parser emits
-#      `c10::ArrayRef<at::Dimname>` directly instead of the typed
-#      DimnameArrayRef class. After the c10:: strip below reduces
-#      that to `ArrayRef<at.Dimname>`, the result is invalid Java.
-#   3) The class's own native constructors take `@Const Dimname` (a
-#      Java class) as the data element. The JNI generator doesn't
-#      apply the @Name mapping in the bridge code when this is the
-#      case, producing `DimnameArrayRef* rptr = ...` instead of the
-#      @Name-mapped `c10::ArrayRef<at::Dimname>* rptr = ...`. Rewrite
-#      to `@Cast("const at::Dimname*") IntPointer` (primitive pointer)
-#      which makes the JNI generator apply @Name correctly.
-# All three are needed for libtorch 2.12+ with the homebrew libtorch
-# headers. Order matters: apply the constructor fix and @Name fix
-# BEFORE the @Name-rewriting sed below would otherwise revert it.
-if [ -f "$GEN_DIR/DimnameArrayRef.java" ]; then
-    sed -i '' -E '
-        s/public DimnameArrayRef\(@Const Dimname data, @Cast\("size_t"\) long length\)/public DimnameArrayRef(IntPointer data, long length)/g;
-        s/private native void allocate\(@Const Dimname data, @Cast\("size_t"\) long length\)/private native void allocate(@Cast("const at::Dimname*") IntPointer data, @Cast("size_t") long length)/g;
-        s/public DimnameArrayRef\(@Const Dimname begin, @Const Dimname end\)/public DimnameArrayRef(IntPointer begin, IntPointer end)/g;
-        s/private native void allocate\(@Const Dimname begin, @Const Dimname end\)/private native void allocate(@Cast("const at::Dimname*") IntPointer begin, @Cast("const at::Dimname*") IntPointer end)/g;
-    ' "$GEN_DIR/DimnameArrayRef.java"
-fi
-for f in $(grep -rl 'c10::ArrayRef<at::Dimname>' "$GEN_DIR" 2>/dev/null); do
-    sed -i '' 's/c10::ArrayRef<at::Dimname>/DimnameArrayRef/g; s/c10::HeaderOnlyArrayRef<at::Dimname>/DimnameHeaderOnlyArrayRef/g' "$f"
-done
-# Apply the @Name fix LAST so the previous sed doesn't accidentally
-# rewrite the just-fixed @Name back to bare DimnameArrayRef.
-if [ -f "$GEN_DIR/DimnameArrayRef.java" ]; then
-    sed -i '' 's/@Name("DimnameArrayRef")/@Name("c10::ArrayRef<at::Dimname>")/g' "$GEN_DIR/DimnameArrayRef.java"
+    sed_i 's/@Name("DimnameArrayRef")/@Name("c10::ArrayRef<at::Dimname>")/g' "$GEN_DIR/DimnameArrayRef.java"
 fi
 
 # 1) Strip @Virtual(method="forward(T_[A-Za-z_]*)?") on Module.java.
@@ -129,7 +98,7 @@ fi
 # forward_tensorN overload on a built-in *Impl inside a Sequential.
 MODULE_JAVA=$(find "$GEN_DIR" \( -path "*/org/bytedeco/pytorch/*/Module.java" -o -path "*/org/bytedeco/pytorch/Module.java" \) 2>/dev/null | head -1)
 if [ -n "$MODULE_JAVA" ] && [ -f "$MODULE_JAVA" ]; then
-    sed -i '' -E 's/@Virtual\(method="forward(T_[A-Za-z_]*)?"\)//g' "$MODULE_JAVA"
+    sed_i -E 's/@Virtual\(method="forward(T_[A-Za-z_]*)?"\)//g' "$MODULE_JAVA"
 fi
 # 1b) Re-add @Virtual(method="forward") to the 1-arg _forward_tensor ONLY.
 # This is the callback the C++ AnyModuleHolder<Module>::forward path needs:
@@ -146,7 +115,7 @@ fi
 # stripped to keep the arity-mismatch protection for built-in *Impl layers.
 MODULE_JAVA=$(find "$GEN_DIR" \( -path "*/org/bytedeco/pytorch/*/Module.java" -o -path "*/org/bytedeco/pytorch/Module.java" \) 2>/dev/null | head -1)
 if [ -n "$MODULE_JAVA" ] && [ -f "$MODULE_JAVA" ]; then
-    sed -i '' 's/private native @ByVal @Name("forward_tensor")  Tensor _forward_tensor(/private native @ByVal @Name("forward_tensor") @Virtual(method="forward") Tensor _forward_tensor(/' "$MODULE_JAVA"
+    sed_i 's/private native @ByVal @Name("forward_tensor")  Tensor _forward_tensor(/private native @ByVal @Name("forward_tensor") @Virtual(method="forward") Tensor _forward_tensor(/' "$MODULE_JAVA"
 fi
 
 # 1c) libtorch 2.12+ removed the std::vector<Dimname>&& overloads of
@@ -161,7 +130,7 @@ fi
 # NamedTensorMeta.java, global/torch.java.
 for f in "$GEN_DIR/NamedTensorMeta.java" "$GEN_DIR/global/torch.java"; do
     [ -f "$f" ] || continue
-    sed -i '' \
+    sed_i \
         -e '/public NamedTensorMeta(HAS_NON_WILDCARD arg0, @StdVector Dimname names)/d' \
         -e '/public NamedTensorMeta(@Cast("at::NamedTensorMeta::HAS_NON_WILDCARD") int arg0, @StdVector Dimname names)/d' \
         -e '/private native void allocate(HAS_NON_WILDCARD arg0, @StdVector Dimname names)/d' \
@@ -197,15 +166,15 @@ inject_tostring() {
     fi
     # (c) broken prior inject with empty FQCN
     if grep -q 'return \.format(this);' "$F" 2>/dev/null; then
-        sed -i '' "s|return \\.format(this);|return ${PRINTER_FQCN}.format(this);|g" "$F"
-        sed -i '' "s|{@link ${PRINTER}}|{@link ${PRINTER_FQCN}}|g" "$F" 2>/dev/null || true
+        sed_i "s|return \\.format(this);|return ${PRINTER_FQCN}.format(this);|g" "$F"
+        sed_i "s|{@link ${PRINTER}}|{@link ${PRINTER_FQCN}}|g" "$F" 2>/dev/null || true
         return
     fi
     # Anchor on the LAST `^}` (each of these classes has exactly one
     # top-level closing brace at column 1).
     local LAST_BRACE_LINE=$(grep -n '^}' "$F" | tail -1 | cut -d: -f1)
     [ -z "$LAST_BRACE_LINE" ] && return
-    sed -i '' "${LAST_BRACE_LINE}i\\
+    sed_i "${LAST_BRACE_LINE}i\\
 \\
   /** Debug-friendly string representation, mirroring Python PyTorch's\\
    *  {@code print(...)} behavior. See {@link ${PRINTER_FQCN}}. */\\
