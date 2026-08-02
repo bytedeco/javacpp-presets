@@ -34,7 +34,7 @@ import org.bytedeco.pytorch.nn.modules.LayerNormImpl;
 import org.bytedeco.pytorch.nn.modules.LinearImpl;
 import org.bytedeco.pytorch.nn.options.Conv1dOptions;
 import org.bytedeco.pytorch.nn.options.LinearOptions;
-import org.bytedeco.pytorch.audio.functional.F;
+import org.bytedeco.pytorch.audio.functional.AudioF;
 import org.bytedeco.pytorch.audio.io.AudioIO;
 import org.bytedeco.pytorch.llm.vllm.multimodal.MediaInput;
 import org.bytedeco.pytorch.llm.vllm.multimodal.MediaType;
@@ -56,7 +56,7 @@ import static org.bytedeco.pytorch.global.torch.zeros;
  * OpenAI Whisper-tiny <b>encoder</b> (conv frontend + transformer blocks).
  *
  * <p>HF keys under {@code model.encoder.*}. Mel spectrogram is produced via
- * {@link F#melSpectrogram} then log-compressed to approximate Whisper features.
+ * {@link AudioF#melSpectrogram} then log-compressed to approximate Whisper features.
  */
 @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public final class WhisperEncoder extends Module implements MediaEncoder {
@@ -208,7 +208,7 @@ public final class WhisperEncoder extends Module implements MediaEncoder {
         // mel spectrogram
         Tensor mel;
         try {
-            mel = F.melSpectrogram(waveform, sr, N_MELS, 0.0, sr / 2.0, N_FFT, HOP);
+            mel = AudioF.melSpectrogram(waveform, sr, N_MELS, 0.0, sr / 2.0, N_FFT, HOP);
         } catch (Throwable t) {
             // simple magnitude STFT-ish fallback: random-ish but deterministic from samples
             float[] w = ImagePreprocess.toFloatArray(waveform.reshape(-1));

@@ -7,7 +7,7 @@ import org.bytedeco.pytorch.dataframe.dtype.ImageData;
 import org.bytedeco.pytorch.dataframe.dtype.VideoData;
 import org.bytedeco.pytorch.dataframe.media.MediaBridge;
 import org.bytedeco.pytorch.nn.Module;
-import org.bytedeco.pytorch.vision.models.Models;
+import org.bytedeco.pytorch.vision.models.VisionModels;
 import org.bytedeco.pytorch.vision.utils.ImageTensors;
 
 import java.util.ArrayList;
@@ -105,16 +105,16 @@ public final class TorchVisionEmbeddingModel implements EmbeddingModel {
     private static Module buildEncoder(Backbone b) {
         // numClasses is unused when we call features(); keep tiny head for Module completeness.
         return switch (b) {
-            case RESNET34 -> Models.resnet34(10);
-            case MOBILENET_V2 -> Models.mobilenet_v2(10);
-            case RESNET18 -> Models.resnet18(10);
+            case RESNET34 -> VisionModels.resnet34(10);
+            case MOBILENET_V2 -> VisionModels.mobilenet_v2(10);
+            case RESNET18 -> VisionModels.resnet18(10);
         };
     }
 
     private static long featureDimOf(Backbone b, Module encoder) {
         try {
-            if (encoder instanceof Models.ResNet r) return r.featureDim();
-            if (encoder instanceof Models.MobileNetV2 m) return m.featureDim();
+            if (encoder instanceof VisionModels.ResNet r) return r.featureDim();
+            if (encoder instanceof VisionModels.MobileNetV2 m) return m.featureDim();
         } catch (Throwable ignored) {}
         return switch (b) {
             case MOBILENET_V2 -> 128L;
@@ -281,9 +281,9 @@ public final class TorchVisionEmbeddingModel implements EmbeddingModel {
         try (NoGradGuard ng = new NoGradGuard()) {
             encoder.eval();
             Tensor feat;
-            if (encoder instanceof Models.ResNet r) {
+            if (encoder instanceof VisionModels.ResNet r) {
                 feat = r.features(batchNCHW);
-            } else if (encoder instanceof Models.MobileNetV2 m) {
+            } else if (encoder instanceof VisionModels.MobileNetV2 m) {
                 feat = m.features(batchNCHW);
             } else {
                 // generic: forward then treat logits as embedding
