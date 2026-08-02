@@ -36,7 +36,7 @@
 <!--      <groupId>org.bytedeco</groupId>-->
 <!--      <artifactId>javacpp-platform</artifactId>-->
 <!--      <version>${project.parent.version}</version>-->
-<!--&lt;!&ndash;      <classifier>macosx-arm64</classifier>&ndash;&gt;-->
+<!--&lt;!&ndash;      <classifier>${javacpp.platform}</classifier>&ndash;&gt;-->
 <!--      <optional>true</optional>-->
 <!--    </dependency>-->
     <dependency>
@@ -48,7 +48,7 @@
 <!--      <groupId>org.bytedeco</groupId>-->
 <!--      <artifactId>openblas-platform</artifactId>-->
 <!--      <version>0.3.33-${project.parent.version}</version>-->
-<!--&lt;!&ndash;      <classifier>macosx-arm64</classifier>&ndash;&gt;-->
+<!--&lt;!&ndash;      <classifier>${javacpp.platform}</classifier>&ndash;&gt;-->
 <!--      <optional>true</optional>-->
 <!--    </dependency>-->
     <!-- "junit" % "junit" % "4.13.2" ,// % Test -->
@@ -65,7 +65,7 @@
 <!--      <groupId>org.bytedeco</groupId>-->
 <!--      <artifactId>pytorch</artifactId>-->
 <!--      <version>${project.version}</version>-->
-<!--      <classifier>macosx-arm64</classifier>-->
+<!--      <classifier>${javacpp.platform}</classifier>-->
 <!--      <optional>true</optional>-->
 <!--      <scope>runtime</scope>-->
 <!--    </dependency>-->
@@ -336,26 +336,26 @@
       <artifactId>ffmpeg</artifactId>
       <version>8.1.1-${project.parent.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.bytedeco</groupId>
-      <artifactId>ffmpeg</artifactId>
-      <version>8.1.1-${project.parent.version}</version>
-      <classifier>macosx-arm64</classifier>
-      <optional>true</optional>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.bytedeco</groupId>-->
+<!--      <artifactId>ffmpeg</artifactId>-->
+<!--      <version>8.1.1-${project.parent.version}</version>-->
+<!--      <classifier>${javacpp.platform}</classifier>-->
+<!--      <optional>true</optional>-->
+<!--    </dependency>-->
     <!-- OpenCV JavaCPP: image I/O, audioTransforms, computer vision -->
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>opencv</artifactId>
       <version>4.13.0-${project.parent.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.bytedeco</groupId>
-      <artifactId>opencv</artifactId>
-      <version>4.13.0-${project.parent.version}</version>
-      <classifier>macosx-arm64</classifier>
-      <optional>true</optional>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.bytedeco</groupId>-->
+<!--      <artifactId>opencv</artifactId>-->
+<!--      <version>4.13.0-${project.parent.version}</version>-->
+<!--      <classifier>${javacpp.platform}</classifier>-->
+<!--      <optional>true</optional>-->
+<!--    </dependency>-->
   </dependencies>
 
   <build>
@@ -700,11 +700,11 @@
                   <groupId>${project.groupId}</groupId>
                   <artifactId>${project.artifactId}</artifactId>
                   <version>${project.version}</version>
-                  <classifier>macosx-arm64</classifier>
+                  <classifier>${javacpp.platform}</classifier>
                   <type>jar</type>
                   <overWrite>false</overWrite>
                   <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-                  <includes>org/bytedeco/pytorch/macosx-arm64/**,META-INF/native-image/macosx-arm64/**</includes>
+                  <includes>org/bytedeco/pytorch/${javacpp.platform}/**,META-INF/native-image/${javacpp.platform}/**</includes>
                 </artifactItem>
               </artifactItems>
             </configuration>
