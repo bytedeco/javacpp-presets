@@ -21,7 +21,7 @@
  */
 package org.bytedeco.pytorch.vision.datasets;
 
-import org.bytedeco.pytorch.vision.transforms.Transform;
+import org.bytedeco.pytorch.vision.transforms.VisionTransform;
 
 import java.nio.file.Path;
 import java.util.Iterator;
@@ -32,8 +32,8 @@ import java.util.Objects;
  */
 public abstract class VisionDataset implements Iterable<VisionDataset.Sample> {
     protected final Path root;
-    protected Transform<?, ?> transform;
-    protected Transform<?, ?> targetTransform;
+    protected VisionTransform<?, ?> transform;
+    protected VisionTransform<?, ?> targetTransform;
 
     protected VisionDataset(Path root) {
         this.root = root;
@@ -43,16 +43,16 @@ public abstract class VisionDataset implements Iterable<VisionDataset.Sample> {
         this.root = root == null ? null : Path.of(root);
     }
 
-    public VisionDataset setTransform(Transform<?, ?> transform) {
+    public VisionDataset setTransform(VisionTransform<?, ?> transform) {
         this.transform = transform;
         return this;
     }
 
-    public VisionDataset set_transform(Transform<?, ?> transform) {
+    public VisionDataset set_transform(VisionTransform<?, ?> transform) {
         return setTransform(transform);
     }
 
-    public VisionDataset setTargetTransform(Transform<?, ?> targetTransform) {
+    public VisionDataset setTargetTransform(VisionTransform<?, ?> targetTransform) {
         this.targetTransform = targetTransform;
         return this;
     }
@@ -74,7 +74,7 @@ public abstract class VisionDataset implements Iterable<VisionDataset.Sample> {
         if (transform == null) {
             return input;
         }
-        return ((Transform) transform).forward(input);
+        return ((VisionTransform) transform).forward(input);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -82,7 +82,7 @@ public abstract class VisionDataset implements Iterable<VisionDataset.Sample> {
         if (targetTransform == null) {
             return target;
         }
-        return ((Transform) targetTransform).forward(target);
+        return ((VisionTransform) targetTransform).forward(target);
     }
 
     @Override

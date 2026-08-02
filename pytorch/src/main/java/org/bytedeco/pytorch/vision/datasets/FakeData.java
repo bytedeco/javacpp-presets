@@ -23,7 +23,7 @@ package org.bytedeco.pytorch.vision.datasets;
 
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.global.torch;
-import org.bytedeco.pytorch.vision.transforms.Transform;
+import org.bytedeco.pytorch.vision.transforms.VisionTransform;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -55,7 +55,7 @@ public final class FakeData extends VisionDataset {
         this.random = new Random(seed);
     }
 
-    public FakeData setTransform(Transform<?, ?> transform) {
+    public FakeData setTransform(VisionTransform<?, ?> transform) {
         super.setTransform(transform);
         return this;
     }

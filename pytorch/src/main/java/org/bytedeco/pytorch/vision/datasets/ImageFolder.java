@@ -21,7 +21,7 @@
  */
 package org.bytedeco.pytorch.vision.datasets;
 
-import org.bytedeco.pytorch.vision.transforms.Transform;
+import org.bytedeco.pytorch.vision.transforms.VisionTransform;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -59,11 +59,11 @@ public class ImageFolder extends VisionDataset {
         this(root, null, DEFAULT_EXTS);
     }
 
-    public ImageFolder(Path root, Transform<?, ?> transform) throws IOException {
+    public ImageFolder(Path root, VisionTransform<?, ?> transform) throws IOException {
         this(root, transform, DEFAULT_EXTS);
     }
 
-    public ImageFolder(Path root, Transform<?, ?> transform, Set<String> extensions) throws IOException {
+    public ImageFolder(Path root, VisionTransform<?, ?> transform, Set<String> extensions) throws IOException {
         super(Objects.requireNonNull(root, "root"));
         this.extensions = extensions == null ? DEFAULT_EXTS : extensions;
         setTransform(transform);
@@ -153,7 +153,7 @@ public class ImageFolder extends VisionDataset {
             super(root);
         }
 
-        public DatasetFolder(Path root, Transform<?, ?> transform, String... exts) throws IOException {
+        public DatasetFolder(Path root, VisionTransform<?, ?> transform, String... exts) throws IOException {
             super(root, transform, exts == null || exts.length == 0
                     ? DEFAULT_EXTS
                     : new HashSet<>(Arrays.asList(exts)));

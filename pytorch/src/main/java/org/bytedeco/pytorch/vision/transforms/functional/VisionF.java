@@ -38,8 +38,8 @@ import java.util.Objects;
  * Functional image operators (torchvision.transforms.functional / {@code F}).
  * Accepts {@link BufferedImage}, {@link ImageData}, or CHW/NCHW {@link Tensor}.
  */
-public final class F {
-    private F() {}
+public final class VisionF {
+    private VisionF() {}
 
     public static BufferedImage asBufferedImage(Object img) {
         if (img instanceof BufferedImage bi) {

@@ -23,7 +23,7 @@ package org.bytedeco.pytorch.vision.transforms;
 import org.bytedeco.pytorch.dataframe.dtype.ImageData;
 
 import org.bytedeco.pytorch.Tensor;
-import org.bytedeco.pytorch.vision.transforms.functional.F;
+import org.bytedeco.pytorch.vision.transforms.functional.VisionF;
 import org.bytedeco.pytorch.vision.utils.ImageTensors;
 
 import java.awt.image.BufferedImage;
@@ -34,10 +34,10 @@ import java.util.Random;
  * Common torchvision.transforms classes.
  * Image ops accept {@link BufferedImage} / {@link ImageData} / {@link Tensor}.
  */
-public final class Transforms {
-    private Transforms() {}
+public final class VisionTransforms {
+    private VisionTransforms() {}
 
-    public static final class Resize implements Transform<Object, BufferedImage> {
+    public static final class Resize implements VisionTransform<Object, BufferedImage> {
         private final int height;
         private final int width;
 
@@ -52,11 +52,11 @@ public final class Transforms {
 
         @Override
         public BufferedImage forward(Object input) {
-            return F.resize(input, height, width);
+            return VisionF.resize(input, height, width);
         }
     }
 
-    public static final class CenterCrop implements Transform<Object, BufferedImage> {
+    public static final class CenterCrop implements VisionTransform<Object, BufferedImage> {
         private final int height;
         private final int width;
 
@@ -71,11 +71,11 @@ public final class Transforms {
 
         @Override
         public BufferedImage forward(Object input) {
-            return F.centerCrop(input, height, width);
+            return VisionF.centerCrop(input, height, width);
         }
     }
 
-    public static final class RandomCrop implements Transform<Object, BufferedImage> {
+    public static final class RandomCrop implements VisionTransform<Object, BufferedImage> {
         private final int height;
         private final int width;
         private final int padding;
@@ -106,9 +106,9 @@ public final class Transforms {
 
         @Override
         public BufferedImage forward(Object input) {
-            BufferedImage src = F.asBufferedImage(input);
+            BufferedImage src = VisionF.asBufferedImage(input);
             if (padding > 0) {
-                src = F.pad(src, padding, padding, padding, padding, fill);
+                src = VisionF.pad(src, padding, padding, padding, padding, fill);
             }
             int w = src.getWidth();
             int h = src.getHeight();
@@ -116,18 +116,18 @@ public final class Transforms {
                 int padH = Math.max(0, height - h);
                 int padW = Math.max(0, width - w);
                 if (padH > 0 || padW > 0) {
-                    src = F.pad(src, padH / 2, padW / 2, padH - padH / 2, padW - padW / 2, fill);
+                    src = VisionF.pad(src, padH / 2, padW / 2, padH - padH / 2, padW - padW / 2, fill);
                     w = src.getWidth();
                     h = src.getHeight();
                 }
             }
             int top = h > height ? random.nextInt(h - height + 1) : 0;
             int left = w > width ? random.nextInt(w - width + 1) : 0;
-            return F.crop(src, top, left, Math.min(height, h), Math.min(width, w));
+            return VisionF.crop(src, top, left, Math.min(height, h), Math.min(width, w));
         }
     }
 
-    public static final class RandomResizedCrop implements Transform<Object, BufferedImage> {
+    public static final class RandomResizedCrop implements VisionTransform<Object, BufferedImage> {
         private final int height;
         private final int width;
         private final double minScale;
@@ -167,7 +167,7 @@ public final class Transforms {
 
         @Override
         public BufferedImage forward(Object input) {
-            BufferedImage src = F.asBufferedImage(input);
+            BufferedImage src = VisionF.asBufferedImage(input);
             int w = src.getWidth();
             int h = src.getHeight();
             int area = h * w;
@@ -181,16 +181,16 @@ public final class Transforms {
                 if (cropW <= w && cropH <= h) {
                     int top = h > cropH ? random.nextInt(h - cropH + 1) : 0;
                     int left = w > cropW ? random.nextInt(w - cropW + 1) : 0;
-                    BufferedImage cropped = F.crop(src, top, left, cropH, cropW);
-                    return F.resize(cropped, height, width);
+                    BufferedImage cropped = VisionF.crop(src, top, left, cropH, cropW);
+                    return VisionF.resize(cropped, height, width);
                 }
             }
             // fallback: center crop to match aspect then resize
-            return F.resize(F.centerCrop(src, Math.min(h, w), Math.min(h, w)), height, width);
+            return VisionF.resize(VisionF.centerCrop(src, Math.min(h, w), Math.min(h, w)), height, width);
         }
     }
 
-    public static final class RandomHorizontalFlip implements Transform<Object, Object> {
+    public static final class RandomHorizontalFlip implements VisionTransform<Object, Object> {
         private final double p;
         private final Random random;
 
@@ -210,13 +210,13 @@ public final class Transforms {
         @Override
         public Object forward(Object input) {
             if (random.nextDouble() < p) {
-                return F.hflip(input);
+                return VisionF.hflip(input);
             }
-            return input instanceof Tensor ? input : F.asBufferedImage(input);
+            return input instanceof Tensor ? input : VisionF.asBufferedImage(input);
         }
     }
 
-    public static final class RandomVerticalFlip implements Transform<Object, Object> {
+    public static final class RandomVerticalFlip implements VisionTransform<Object, Object> {
         private final double p;
         private final Random random;
 
@@ -236,13 +236,13 @@ public final class Transforms {
         @Override
         public Object forward(Object input) {
             if (random.nextDouble() < p) {
-                return F.vflip(input);
+                return VisionF.vflip(input);
             }
-            return input instanceof Tensor ? input : F.asBufferedImage(input);
+            return input instanceof Tensor ? input : VisionF.asBufferedImage(input);
         }
     }
 
-    public static final class RandomRotation implements Transform<Object, BufferedImage> {
+    public static final class RandomRotation implements VisionTransform<Object, BufferedImage> {
         private final double degrees;
         private final Random random;
 
@@ -258,11 +258,11 @@ public final class Transforms {
         @Override
         public BufferedImage forward(Object input) {
             double angle = (random.nextDouble() * 2 - 1) * degrees;
-            return F.rotate(input, angle);
+            return VisionF.rotate(input, angle);
         }
     }
 
-    public static final class Pad implements Transform<Object, BufferedImage> {
+    public static final class Pad implements VisionTransform<Object, BufferedImage> {
         private final int top, left, bottom, right, fill;
 
         public Pad(int padding) {
@@ -279,11 +279,11 @@ public final class Transforms {
 
         @Override
         public BufferedImage forward(Object input) {
-            return F.pad(input, top, left, bottom, right, fill);
+            return VisionF.pad(input, top, left, bottom, right, fill);
         }
     }
 
-    public static final class Grayscale implements Transform<Object, BufferedImage> {
+    public static final class Grayscale implements VisionTransform<Object, BufferedImage> {
         private final int numOutputChannels;
 
         public Grayscale() {
@@ -296,11 +296,11 @@ public final class Transforms {
 
         @Override
         public BufferedImage forward(Object input) {
-            return F.toGrayscale(input, numOutputChannels);
+            return VisionF.toGrayscale(input, numOutputChannels);
         }
     }
 
-    public static final class RandomGrayscale implements Transform<Object, Object> {
+    public static final class RandomGrayscale implements VisionTransform<Object, Object> {
         private final double p;
         private final Random random;
 
@@ -320,13 +320,13 @@ public final class Transforms {
         @Override
         public Object forward(Object input) {
             if (random.nextDouble() < p) {
-                return F.toGrayscale(input, 3);
+                return VisionF.toGrayscale(input, 3);
             }
-            return input instanceof Tensor ? input : F.asBufferedImage(input);
+            return input instanceof Tensor ? input : VisionF.asBufferedImage(input);
         }
     }
 
-    public static final class ColorJitter implements Transform<Object, BufferedImage> {
+    public static final class ColorJitter implements VisionTransform<Object, BufferedImage> {
         private final float brightness, contrast, saturation, hue;
         private final Random random;
 
@@ -344,28 +344,28 @@ public final class Transforms {
 
         @Override
         public BufferedImage forward(Object input) {
-            BufferedImage img = F.asBufferedImage(input);
+            BufferedImage img = VisionF.asBufferedImage(input);
             if (brightness > 0) {
                 float f = 1f + (random.nextFloat() * 2 - 1f) * brightness;
-                img = F.adjustBrightness(img, Math.max(0f, f));
+                img = VisionF.adjustBrightness(img, Math.max(0f, f));
             }
             if (contrast > 0) {
                 float f = 1f + (random.nextFloat() * 2 - 1f) * contrast;
-                img = F.adjustContrast(img, Math.max(0f, f));
+                img = VisionF.adjustContrast(img, Math.max(0f, f));
             }
             if (saturation > 0) {
                 float f = 1f + (random.nextFloat() * 2 - 1f) * saturation;
-                img = F.adjustSaturation(img, Math.max(0f, f));
+                img = VisionF.adjustSaturation(img, Math.max(0f, f));
             }
             if (hue > 0) {
                 float f = (random.nextFloat() * 2 - 1f) * hue;
-                img = F.adjustHue(img, f);
+                img = VisionF.adjustHue(img, f);
             }
             return img;
         }
     }
 
-    public static final class GaussianBlur implements Transform<Object, BufferedImage> {
+    public static final class GaussianBlur implements VisionTransform<Object, BufferedImage> {
         private final int kernelSize;
         private final double sigma;
 
@@ -380,28 +380,28 @@ public final class Transforms {
 
         @Override
         public BufferedImage forward(Object input) {
-            return F.gaussianBlur(input, kernelSize, sigma);
+            return VisionF.gaussianBlur(input, kernelSize, sigma);
         }
     }
 
-    public static final class ToTensor implements Transform<Object, Tensor> {
+    public static final class ToTensor implements VisionTransform<Object, Tensor> {
         @Override
         public Tensor forward(Object input) {
-            return F.toTensor(input);
+            return VisionF.toTensor(input);
         }
     }
 
-    public static final class ToPILImage implements Transform<Object, BufferedImage> {
+    public static final class ToPILImage implements VisionTransform<Object, BufferedImage> {
         @Override
         public BufferedImage forward(Object input) {
             if (input instanceof Tensor t) {
                 return ImageTensors.toBufferedImage(t);
             }
-            return F.asBufferedImage(input);
+            return VisionF.asBufferedImage(input);
         }
     }
 
-    public static final class Normalize implements Transform<Object, Tensor> {
+    public static final class Normalize implements VisionTransform<Object, Tensor> {
         private final float[] mean;
         private final float[] std;
 
@@ -423,12 +423,12 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Object input) {
-            Tensor t = input instanceof Tensor tt ? tt : F.toTensor(input);
-            return F.normalize(t, mean, std);
+            Tensor t = input instanceof Tensor tt ? tt : VisionF.toTensor(input);
+            return VisionF.normalize(t, mean, std);
         }
     }
 
-    public static final class ConvertImageDtype implements Transform<Object, Tensor> {
+    public static final class ConvertImageDtype implements VisionTransform<Object, Tensor> {
         private final org.bytedeco.pytorch.global.torch.ScalarType dtype;
 
         public ConvertImageDtype() {
@@ -441,12 +441,12 @@ public final class Transforms {
 
         @Override
         public Tensor forward(Object input) {
-            Tensor t = input instanceof Tensor tt ? tt : F.toTensor(input);
+            Tensor t = input instanceof Tensor tt ? tt : VisionF.toTensor(input);
             return t.to(dtype);
         }
     }
 
-    public static final class Lambda<T, R> implements Transform<T, R> {
+    public static final class Lambda<T, R> implements VisionTransform<T, R> {
         private final java.util.function.Function<T, R> fn;
 
         public Lambda(java.util.function.Function<T, R> fn) {
@@ -459,7 +459,7 @@ public final class Transforms {
         }
     }
 
-    public static final class FiveCrop implements Transform<Object, BufferedImage[]> {
+    public static final class FiveCrop implements VisionTransform<Object, BufferedImage[]> {
         private final int size;
 
         public FiveCrop(int size) {
@@ -468,20 +468,20 @@ public final class Transforms {
 
         @Override
         public BufferedImage[] forward(Object input) {
-            BufferedImage src = F.asBufferedImage(input);
+            BufferedImage src = VisionF.asBufferedImage(input);
             int w = src.getWidth();
             int h = src.getHeight();
             int s = size;
-            BufferedImage tl = F.crop(src, 0, 0, s, s);
-            BufferedImage tr = F.crop(src, 0, w - s, s, s);
-            BufferedImage bl = F.crop(src, h - s, 0, s, s);
-            BufferedImage br = F.crop(src, h - s, w - s, s, s);
-            BufferedImage center = F.centerCrop(src, s, s);
+            BufferedImage tl = VisionF.crop(src, 0, 0, s, s);
+            BufferedImage tr = VisionF.crop(src, 0, w - s, s, s);
+            BufferedImage bl = VisionF.crop(src, h - s, 0, s, s);
+            BufferedImage br = VisionF.crop(src, h - s, w - s, s, s);
+            BufferedImage center = VisionF.centerCrop(src, s, s);
             return new BufferedImage[]{tl, tr, bl, br, center};
         }
     }
 
-    public static final class TenCrop implements Transform<Object, BufferedImage[]> {
+    public static final class TenCrop implements VisionTransform<Object, BufferedImage[]> {
         private final int size;
 
         public TenCrop(int size) {
@@ -492,7 +492,7 @@ public final class Transforms {
         public BufferedImage[] forward(Object input) {
             FiveCrop five = new FiveCrop(size);
             BufferedImage[] a = five.forward(input);
-            BufferedImage flipped = F.hflip(input);
+            BufferedImage flipped = VisionF.hflip(input);
             BufferedImage[] b = five.forward(flipped);
             BufferedImage[] out = new BufferedImage[10];
             System.arraycopy(a, 0, out, 0, 5);
@@ -502,7 +502,7 @@ public final class Transforms {
     }
 
     /** Identity transform. */
-    public static final class Identity implements Transform<Object, Object> {
+    public static final class Identity implements VisionTransform<Object, Object> {
         @Override
         public Object forward(Object input) {
             return input;
@@ -514,23 +514,23 @@ public final class Transforms {
     // -------------------------------------------------------------------------
 
     /** Always horizontal flip (HorizontalFlip / RandomHorizontalFlip(p=1)). */
-    public static final class HorizontalFlip implements Transform<Object, BufferedImage> {
+    public static final class HorizontalFlip implements VisionTransform<Object, BufferedImage> {
         @Override
         public BufferedImage forward(Object input) {
-            return F.hflip(input);
+            return VisionF.hflip(input);
         }
     }
 
     /** Always vertical flip. */
-    public static final class VerticalFlip implements Transform<Object, BufferedImage> {
+    public static final class VerticalFlip implements VisionTransform<Object, BufferedImage> {
         @Override
         public BufferedImage forward(Object input) {
-            return F.vflip(input);
+            return VisionF.vflip(input);
         }
     }
 
     /** Deterministic rotation (counter-clockwise degrees). */
-    public static final class Rotate implements Transform<Object, BufferedImage> {
+    public static final class Rotate implements VisionTransform<Object, BufferedImage> {
         private final double degrees;
 
         public Rotate(double degrees) {
@@ -539,7 +539,7 @@ public final class Transforms {
 
         @Override
         public BufferedImage forward(Object input) {
-            return F.rotate(input, degrees);
+            return VisionF.rotate(input, degrees);
         }
     }
 
@@ -547,7 +547,7 @@ public final class Transforms {
      * Affine transform: rotate + translate + scale + shear.
      * {@code translate} is fraction of image size if values in (0,1], else pixels when |v|≥1.
      */
-    public static final class Affine implements Transform<Object, BufferedImage> {
+    public static final class Affine implements VisionTransform<Object, BufferedImage> {
         private final double degrees;
         private final double[] translate;
         private final double scale;
@@ -568,14 +568,14 @@ public final class Transforms {
 
         @Override
         public BufferedImage forward(Object input) {
-            BufferedImage src = F.asBufferedImage(input);
+            BufferedImage src = VisionF.asBufferedImage(input);
             double[] txy = resolveTranslate(src.getWidth(), src.getHeight(), translate);
-            return F.affine(src, degrees, txy, scale, shear, fill);
+            return VisionF.affine(src, degrees, txy, scale, shear, fill);
         }
     }
 
     /** Deterministic perspective given explicit start/end corner points. */
-    public static final class Perspective implements Transform<Object, BufferedImage> {
+    public static final class Perspective implements VisionTransform<Object, BufferedImage> {
         private final double[][] startpoints;
         private final double[][] endpoints;
         private final int fill;
@@ -592,7 +592,7 @@ public final class Transforms {
 
         @Override
         public BufferedImage forward(Object input) {
-            return F.perspective(input, startpoints, endpoints, fill);
+            return VisionF.perspective(input, startpoints, endpoints, fill);
         }
     }
 
@@ -604,7 +604,7 @@ public final class Transforms {
      * Random affine. {@code degrees} is half-range (±degrees) or {min,max}.
      * {@code translate} max fractions of W/H; {@code scale} {min,max}; {@code shear} half-range or pair.
      */
-    public static final class RandomAffine implements Transform<Object, BufferedImage> {
+    public static final class RandomAffine implements VisionTransform<Object, BufferedImage> {
         private final double degMin, degMax;
         private final double[] translateMax; // fractions
         private final double scaleMin, scaleMax;
@@ -654,7 +654,7 @@ public final class Transforms {
 
         @Override
         public BufferedImage forward(Object input) {
-            BufferedImage src = F.asBufferedImage(input);
+            BufferedImage src = VisionF.asBufferedImage(input);
             double angle = degMin + (degMax - degMin) * random.nextDouble();
             double[] txy = new double[]{0, 0};
             if (translateMax != null) {
@@ -668,7 +668,7 @@ public final class Transforms {
                     shearXMin + (shearXMax - shearXMin) * random.nextDouble(),
                     shearYMin + (shearYMax - shearYMin) * random.nextDouble()
             };
-            return F.affine(src, angle, txy, sc, sh, fill);
+            return VisionF.affine(src, angle, txy, sc, sh, fill);
         }
     }
 
@@ -677,7 +677,7 @@ public final class Transforms {
      *
      * @param distortionScale in [0,1], fraction of width/height used to jitter corners
      */
-    public static final class RandomPerspective implements Transform<Object, Object> {
+    public static final class RandomPerspective implements VisionTransform<Object, Object> {
         private final double distortionScale;
         private final double p;
         private final int fill;
@@ -701,9 +701,9 @@ public final class Transforms {
         @Override
         public Object forward(Object input) {
             if (random.nextDouble() >= p) {
-                return input instanceof Tensor ? input : F.asBufferedImage(input);
+                return input instanceof Tensor ? input : VisionF.asBufferedImage(input);
             }
-            BufferedImage src = F.asBufferedImage(input);
+            BufferedImage src = VisionF.asBufferedImage(input);
             int w = src.getWidth();
             int h = src.getHeight();
             double halfW = distortionScale * w / 2.0;
@@ -718,7 +718,7 @@ public final class Transforms {
                     {jitter(w - 1, halfW), jitter(h - 1, halfH)},
                     {jitter(0, halfW), jitter(h - 1, halfH)}
             };
-            return F.perspective(src, start, end, fill);
+            return VisionF.perspective(src, start, end, fill);
         }
 
         private double jitter(double base, double halfRange) {
@@ -729,7 +729,7 @@ public final class Transforms {
     /**
      * Random erasing / Cutout (typically after ToTensor). Operates on CHW float tensor or image.
      */
-    public static final class RandomErasing implements Transform<Object, Object> {
+    public static final class RandomErasing implements VisionTransform<Object, Object> {
         private final double p;
         private final double scaleMin, scaleMax;
         private final double ratioMin, ratioMax;
@@ -763,7 +763,7 @@ public final class Transforms {
             if (random.nextDouble() >= p) {
                 return input;
             }
-            Tensor t = input instanceof Tensor tt ? tt : F.toTensor(input);
+            Tensor t = input instanceof Tensor tt ? tt : VisionF.toTensor(input);
             long[] sizes = ImageTensors.sizes(t);
             if (sizes.length < 3) {
                 return t;
@@ -779,7 +779,7 @@ public final class Transforms {
                 if (h < H && w < W) {
                     int i = random.nextInt(H - h + 1);
                     int j = random.nextInt(W - w + 1);
-                    return F.erase(t, i, j, h, w, value, inplace);
+                    return VisionF.erase(t, i, j, h, w, value, inplace);
                 }
             }
             return t;
@@ -790,7 +790,7 @@ public final class Transforms {
     // Random photometric
     // -------------------------------------------------------------------------
 
-    public static final class RandomSolarize implements Transform<Object, Object> {
+    public static final class RandomSolarize implements VisionTransform<Object, Object> {
         private final double threshold;
         private final double p;
         private final Random random;
@@ -812,13 +812,13 @@ public final class Transforms {
         @Override
         public Object forward(Object input) {
             if (random.nextDouble() < p) {
-                return F.solarize(input, threshold);
+                return VisionF.solarize(input, threshold);
             }
-            return input instanceof Tensor ? input : F.asBufferedImage(input);
+            return input instanceof Tensor ? input : VisionF.asBufferedImage(input);
         }
     }
 
-    public static final class RandomAutocontrast implements Transform<Object, Object> {
+    public static final class RandomAutocontrast implements VisionTransform<Object, Object> {
         private final double p;
         private final Random random;
 
@@ -838,13 +838,13 @@ public final class Transforms {
         @Override
         public Object forward(Object input) {
             if (random.nextDouble() < p) {
-                return F.autocontrast(input);
+                return VisionF.autocontrast(input);
             }
-            return input instanceof Tensor ? input : F.asBufferedImage(input);
+            return input instanceof Tensor ? input : VisionF.asBufferedImage(input);
         }
     }
 
-    public static final class RandomEqualize implements Transform<Object, Object> {
+    public static final class RandomEqualize implements VisionTransform<Object, Object> {
         private final double p;
         private final Random random;
 
@@ -864,13 +864,13 @@ public final class Transforms {
         @Override
         public Object forward(Object input) {
             if (random.nextDouble() < p) {
-                return F.equalize(input);
+                return VisionF.equalize(input);
             }
-            return input instanceof Tensor ? input : F.asBufferedImage(input);
+            return input instanceof Tensor ? input : VisionF.asBufferedImage(input);
         }
     }
 
-    public static final class RandomAdjustSharpness implements Transform<Object, Object> {
+    public static final class RandomAdjustSharpness implements VisionTransform<Object, Object> {
         private final float sharpnessFactor;
         private final double p;
         private final Random random;
@@ -892,14 +892,14 @@ public final class Transforms {
         @Override
         public Object forward(Object input) {
             if (random.nextDouble() < p) {
-                return F.adjustSharpness(input, sharpnessFactor);
+                return VisionF.adjustSharpness(input, sharpnessFactor);
             }
-            return input instanceof Tensor ? input : F.asBufferedImage(input);
+            return input instanceof Tensor ? input : VisionF.asBufferedImage(input);
         }
     }
 
     /** Deterministic sharpness adjust. */
-    public static final class AdjustSharpness implements Transform<Object, BufferedImage> {
+    public static final class AdjustSharpness implements VisionTransform<Object, BufferedImage> {
         private final float factor;
 
         public AdjustSharpness(float factor) {
@@ -908,12 +908,12 @@ public final class Transforms {
 
         @Override
         public BufferedImage forward(Object input) {
-            return F.adjustSharpness(input, factor);
+            return VisionF.adjustSharpness(input, factor);
         }
     }
 
     /** Deterministic solarize. */
-    public static final class Solarize implements Transform<Object, BufferedImage> {
+    public static final class Solarize implements VisionTransform<Object, BufferedImage> {
         private final double threshold;
 
         public Solarize(double threshold) {
@@ -922,23 +922,23 @@ public final class Transforms {
 
         @Override
         public BufferedImage forward(Object input) {
-            return F.solarize(input, threshold);
+            return VisionF.solarize(input, threshold);
         }
     }
 
     /** Deterministic autocontrast. */
-    public static final class Autocontrast implements Transform<Object, BufferedImage> {
+    public static final class Autocontrast implements VisionTransform<Object, BufferedImage> {
         @Override
         public BufferedImage forward(Object input) {
-            return F.autocontrast(input);
+            return VisionF.autocontrast(input);
         }
     }
 
     /** Deterministic equalize. */
-    public static final class Equalize implements Transform<Object, BufferedImage> {
+    public static final class Equalize implements VisionTransform<Object, BufferedImage> {
         @Override
         public BufferedImage forward(Object input) {
-            return F.equalize(input);
+            return VisionF.equalize(input);
         }
     }
 

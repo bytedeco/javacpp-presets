@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2026 Eduardo Gonzalez, Hervé Guillemet, Samuel Audet
+ * Copyright (C) 2020-2026 Eduardo Gonzalez, Hervé Guillemet, Samuel Audet, mullerhai
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -19,15 +19,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.bytedeco.pytorch.vision.transforms;
-
 /**
- * torchvision-style transform: {@code output = transform(input)}.
- * Same contract as {@link org.bytedeco.pytorch.data.transforms.Transform}.
+ * Apache Hudi lightweight adapter for Data-for-AI lake tables.
  *
- * @param <T> input type
- * @param <R> output type
+ * <p>Default path (no Hadoop / Spark / hudi-java-client): parse {@code .hoodie}
+ * timeline (commit / deltacommit) + partition-path Parquet base files →
+ * {@link org.bytedeco.pytorch.dataframe.DataFrame}. COW is fully supported;
+ * MOR is base-file only unless an optional full client is on the classpath.</p>
+ *
+ * @see <a href="https://hudi.apache.org/">Apache Hudi</a>
+ * @see org.bytedeco.pytorch.utils.lake
  */
-@FunctionalInterface
-public interface Transform<T, R> extends org.bytedeco.pytorch.data.transforms.Transform<T, R> {
-}
+package org.bytedeco.pytorch.utils.hudi;

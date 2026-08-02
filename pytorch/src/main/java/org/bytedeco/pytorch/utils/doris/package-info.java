@@ -1,0 +1,31 @@
+/*
+ * Copyright (C) 2020-2026 Eduardo Gonzalez, Hervé Guillemet, Samuel Audet, mullerhai
+ *
+ * Licensed either under the Apache License, Version 2.0, or (at your option)
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation (subject to the "Classpath" exception),
+ * either version 2, or any later version (collectively, the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.gnu.org/licenses/
+ *     http://www.gnu.org/software/classpath/license.html
+ *
+ * or as provided in the LICENSE.txt file that accompanied this code.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Apache Doris client adapter for Data-for-AI paths:
+ * MySQL-protocol JDBC query, HTTP Stream Load, Lake SPI catalog/scan/write/stream,
+ * feature store helpers and recsys sample SQL templates.
+ *
+ * <p>Upstream: <a href="https://doris.apache.org/">doris.apache.org</a>
+ * · <a href="https://github.com/apache/doris">apache/doris</a></p>
+ */
+package org.bytedeco.pytorch.utils.doris;

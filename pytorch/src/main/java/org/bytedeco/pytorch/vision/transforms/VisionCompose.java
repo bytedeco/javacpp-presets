@@ -33,46 +33,46 @@ import java.util.Random;
  * image→tensor pipelines (e.g. Resize → ToTensor → Normalize) work like Python torchvision.
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-public final class Compose implements Transform<Object, Object> {
-    private final List<Transform> transforms;
+public final class VisionCompose implements VisionTransform<Object, Object> {
+    private final List<VisionTransform> transforms;
 
-    public Compose(Transform... transforms) {
+    public VisionCompose(VisionTransform... transforms) {
         this(Arrays.asList(transforms));
     }
 
-    public Compose(List<? extends Transform> transforms) {
+    public VisionCompose(List<? extends VisionTransform> transforms) {
         Objects.requireNonNull(transforms, "transforms");
         this.transforms = new ArrayList<>(transforms);
     }
 
-    public static Compose of(Transform... transforms) {
-        return new Compose(transforms);
+    public static VisionCompose of(VisionTransform... transforms) {
+        return new VisionCompose(transforms);
     }
 
-    public List<Transform> transforms() {
+    public List<VisionTransform> transforms() {
         return Collections.unmodifiableList(transforms);
     }
 
     @Override
     public Object forward(Object input) {
         Object x = input;
-        for (Transform t : transforms) {
+        for (VisionTransform t : transforms) {
             x = t.forward(x);
         }
         return x;
     }
 
     /** Randomly apply nested transforms with probability p. */
-    public static final class RandomApply implements Transform<Object, Object> {
-        private final List<Transform> transforms;
+    public static final class RandomApply implements VisionTransform<Object, Object> {
+        private final List<VisionTransform> transforms;
         private final double p;
         private final Random random;
 
-        public RandomApply(List<? extends Transform> transforms, double p) {
+        public RandomApply(List<? extends VisionTransform> transforms, double p) {
             this(transforms, p, new Random());
         }
 
-        public RandomApply(List<? extends Transform> transforms, double p, Random random) {
+        public RandomApply(List<? extends VisionTransform> transforms, double p, Random random) {
             this.transforms = new ArrayList<>(Objects.requireNonNull(transforms));
             this.p = p;
             this.random = random != null ? random : new Random();
@@ -84,7 +84,7 @@ public final class Compose implements Transform<Object, Object> {
                 return input;
             }
             Object x = input;
-            for (Transform t : transforms) {
+            for (VisionTransform t : transforms) {
                 x = t.forward(x);
             }
             return x;
@@ -92,15 +92,15 @@ public final class Compose implements Transform<Object, Object> {
     }
 
     /** Apply a single randomly selected transform. */
-    public static final class RandomChoice implements Transform<Object, Object> {
-        private final List<Transform> transforms;
+    public static final class RandomChoice implements VisionTransform<Object, Object> {
+        private final List<VisionTransform> transforms;
         private final Random random;
 
-        public RandomChoice(List<? extends Transform> transforms) {
+        public RandomChoice(List<? extends VisionTransform> transforms) {
             this(transforms, new Random());
         }
 
-        public RandomChoice(List<? extends Transform> transforms, Random random) {
+        public RandomChoice(List<? extends VisionTransform> transforms, Random random) {
             this.transforms = new ArrayList<>(Objects.requireNonNull(transforms));
             if (this.transforms.isEmpty()) {
                 throw new IllegalArgumentException("transforms empty");
@@ -110,31 +110,31 @@ public final class Compose implements Transform<Object, Object> {
 
         @Override
         public Object forward(Object input) {
-            Transform t = transforms.get(random.nextInt(transforms.size()));
+            VisionTransform t = transforms.get(random.nextInt(transforms.size()));
             return t.forward(input);
         }
     }
 
     /** Apply transforms in a random order. */
-    public static final class RandomOrder implements Transform<Object, Object> {
-        private final List<Transform> transforms;
+    public static final class RandomOrder implements VisionTransform<Object, Object> {
+        private final List<VisionTransform> transforms;
         private final Random random;
 
-        public RandomOrder(List<? extends Transform> transforms) {
+        public RandomOrder(List<? extends VisionTransform> transforms) {
             this(transforms, new Random());
         }
 
-        public RandomOrder(List<? extends Transform> transforms, Random random) {
+        public RandomOrder(List<? extends VisionTransform> transforms, Random random) {
             this.transforms = new ArrayList<>(Objects.requireNonNull(transforms));
             this.random = random != null ? random : new Random();
         }
 
         @Override
         public Object forward(Object input) {
-            List<Transform> order = new ArrayList<>(transforms);
+            List<VisionTransform> order = new ArrayList<>(transforms);
             Collections.shuffle(order, random);
             Object x = input;
-            for (Transform t : order) {
+            for (VisionTransform t : order) {
                 x = t.forward(x);
             }
             return x;

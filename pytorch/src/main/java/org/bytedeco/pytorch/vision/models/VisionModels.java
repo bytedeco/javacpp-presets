@@ -20,9 +20,6 @@
  * limitations under the License.
  */
 package org.bytedeco.pytorch.vision.models;
-import org.bytedeco.pytorch.nn.*;
-import org.bytedeco.pytorch.nn.options.*;
-import org.bytedeco.pytorch.nn.modules.*;
 
 import org.bytedeco.javacpp.LongPointer;
 import org.bytedeco.pytorch.Tensor;
@@ -30,7 +27,6 @@ import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.nn.modules.BatchNorm2dImpl;
 import org.bytedeco.pytorch.nn.modules.Conv2dImpl;
 import org.bytedeco.pytorch.nn.modules.LinearImpl;
-import org.bytedeco.pytorch.nn.modules.MaxPool2dImpl;
 import org.bytedeco.pytorch.nn.options.BatchNormOptions;
 import org.bytedeco.pytorch.nn.options.Conv2dOptions;
 
@@ -43,8 +39,8 @@ import static org.bytedeco.pytorch.global.torch.relu;
  * torchvision.models-style factories. Architectures are real {@link Module}s;
  * pretrained weights are optional (random init by default).
  */
-public final class Models {
-    private Models() {}
+public final class VisionModels {
+    private VisionModels() {}
 
     /** ExpandingArray&lt;2&gt; single-value ctor used by module options. */
     private static LongPointer exp2ptr(long v) {
