@@ -734,50 +734,73 @@ public final class VistaEngine {
                 boolean isCriticMlp = keyL.contains("critic") && !isGate;
                 boolean isNorm = keyL.contains("norm") || typeSimple.contains("norm")
                         || typeSimple.contains("layernorm") || typeSimple.contains("batchnorm");
-                boolean isPosEmbed = keyL.contains("position") || keyL.contains("pos_emb")
-                        || keyL.contains("posemb") || keyL.equals("pos");
+                // OneRec/HSTU/HLLM/LLM4Rec: pos_emb, positionEmbedding, pos_embedding, …
+                boolean isPosEmbed = isPosEmbedKey(keyL);
+                // Bare "embedding"/"embed" is ONLY a token table when the root looks like
+                // token ids (Long/Int). VQ/RQVAE register codebook as "embedding" but feed
+                // float latents into nearest-neighbour lookup — never call EmbeddingImpl
+                // with those floats (indices are computed inside parent forward).
+                boolean rootLooksLikeTokenIds = rootTensor != null && isIndexTensor(rootTensor);
                 boolean isTokenEmbed = keyL.contains("token") || keyL.contains("tok_emb")
-                        || keyL.contains("wte") || keyL.equals("embed") || keyL.equals("embedding")
+                        || keyL.contains("wte") || keyL.contains("tokenembedding")
+                        || keyL.equals("token_embedding") || keyL.equals("tokenembedding")
+                        || keyL.contains("item_emb") || keyL.equals("itemembedding")
+                        || ((keyL.equals("embed") || keyL.equals("embedding")) && rootLooksLikeTokenIds)
                         || (typeSimple.contains("embedding") && !isPosEmbed
-                            && (keyL.contains("token") || keyL.isEmpty() || keyL.contains("word")));
-                // Broader: first EmbeddingImpl-like child with multi-tensor inputs → tokens
+                            && (keyL.contains("token") || keyL.contains("word") || keyL.contains("item")));
                 if (!isPosEmbed && typeSimple.contains("embedding")
                         && (keyL.contains("token") || keyL.contains("word") || keyL.contains("item")
-                        || keyL.equals("tokenembedding") || keyL.equals("embedding")
-                        || keyL.equals("embed"))) {
+                        || keyL.equals("tokenembedding") || keyL.equals("token_embedding")
+                        || ((keyL.equals("embedding") || keyL.equals("embed")) && rootLooksLikeTokenIds))) {
                     isTokenEmbed = true;
                 }
-                if (keyL.contains("tokenembedding") || keyL.equals("token_embedding")) isTokenEmbed = true;
+                // Codebook / residual-VQ EmbeddingImpl: structural only (parent does NN lookup)
+                boolean isCodebookEmbed = !isPosEmbed && !isTokenEmbed
+                        && typeSimple.contains("embedding")
+                        && (keyL.equals("embedding") || keyL.equals("embed") || keyL.isEmpty())
+                        && rootTensor != null && isFloatTensor(rootTensor);
 
-                // ── Multi-tensor name routing (LLM4Rec: tokens→tokenEmb, pos→posEmb) ──
-                if (childIn == null && !tensorArgs.isEmpty()) {
-                    if (isPosEmbed && tensorArgs.size() > 1) {
-                        childIn = tensorArgs.get(1);
-                        tensorArgUsed[1] = true;
-                    } else if (isTokenEmbed) {
-                        childIn = tensorArgs.get(0);
-                        tensorArgUsed[0] = true;
-                    } else if (keyL.contains("time") && tensorArgs.size() > 1) {
-                        // HLLM/HSTU timeDiffs often arg[1]
-                        childIn = tensorArgs.get(1);
-                        tensorArgUsed[1] = true;
+                // ── Multi-tensor / synthesized routing for token & position embeds ──
+                // Generative models often take ONLY token ids and synthesize positions
+                // inside forward (OneRec / OneRecV2 / OpenOneRec / HSTU / HLLM). Vista must
+                // mirror that: never feed float activations or raw token ids into pos_emb.
+                if (childIn == null && isPosEmbed) {
+                    childIn = resolvePosEmbedInput(cm, tensorArgs, rootTensor, tensorArgUsed);
+                } else if (childIn == null && isTokenEmbed && !tensorArgs.isEmpty()) {
+                    Tensor tok = firstIndexTensor(tensorArgs);
+                    if (tok != null) {
+                        childIn = tok;
+                        markTensorArgUsed(tensorArgs, tensorArgUsed, tok);
+                    } else if (rootLooksLikeTokenIds) {
+                        childIn = rootTensor;
+                        if (!tensorArgs.isEmpty()) tensorArgUsed[0] = true;
                     }
+                } else if (childIn == null && keyL.contains("time") && tensorArgs.size() > 1) {
+                    // HLLM/HSTU timeDiffs often arg[1]
+                    childIn = tensorArgs.get(1);
+                    tensorArgUsed[1] = true;
+                } else if (childIn == null && isCodebookEmbed) {
+                    // Do not forward float latents into EmbeddingImpl — structural only.
+                    childIn = null;
                 }
 
                 // predict/head/critic-MLP paired with tower_i / expert_i by suffix
-                if (childIn == null && pairIdx != null && (keyL.contains("predict") || keyL.contains("head")
+                if (childIn == null && !isPosEmbed && !isTokenEmbed && !isCodebookEmbed
+                        && pairIdx != null && (keyL.contains("predict") || keyL.contains("head")
                         || keyL.startsWith("pred") || keyL.contains("output_layer")
                         || isCriticMlp)) {
                     childIn = findTagged(taggedOutputs, pairIdx,
                             "tower", "expert", "task", "branch", "critic", "bottom");
                     if (childIn == null && sharedTensor != null) childIn = sharedTensor;
                 }
-                if (childIn == null && (keyL.contains("bottom") || keyL.contains("shared")
+                if (childIn == null && !isPosEmbed && !isTokenEmbed && !isCodebookEmbed
+                        && (keyL.contains("bottom") || keyL.contains("shared")
                         || keyL.contains("backbone") || keyL.contains("trunk"))) {
                     childIn = firstNonNull(sharedTensor, embedOut, rootTensor);
                 }
                 // experts / towers fan-out from shared embed (exclude *gate*)
-                if (childIn == null && !isGate && (keyL.contains("tower") || keyL.contains("expert")
+                if (childIn == null && !isPosEmbed && !isTokenEmbed && !isCodebookEmbed
+                        && !isGate && (keyL.contains("tower") || keyL.contains("expert")
                         || keyL.startsWith("tower"))) {
                     childIn = firstNonNull(sharedTensor, embedOut);
                 }
@@ -787,8 +810,9 @@ public final class VistaEngine {
                     childIn = synthesizeGateInput(taggedOutputs, pairIdx, sharedTensor, embedOut);
                 }
                 // Norm / Linear / MLP after embeddings: prefer float activations, never raw Long ids
-                // (skip gates — already handled)
-                if (childIn == null && !isGate && (isNorm || keyL.contains("mlp") || keyL.contains("proj")
+                // (skip gates / pos / token embeds — already handled)
+                if (childIn == null && !isGate && !isPosEmbed && !isTokenEmbed && !isCodebookEmbed
+                        && (isNorm || keyL.contains("mlp") || keyL.contains("proj")
                         || keyL.contains("head") || keyL.contains("fc") || keyL.contains("linear")
                         || typeSimple.contains("linear") || typeSimple.contains("sequential")
                         || ModuleDiscovery.canChainChildrenAsSequential(cm))) {
@@ -798,7 +822,9 @@ public final class VistaEngine {
                     }
                 }
                 // Default: chain from previous successful float output, else root
-                if (childIn == null) {
+                // NEVER re-route pos/token/codebook embeds through this fallback — that is
+                // exactly how float activations were incorrectly fed into EmbeddingImpl.
+                if (childIn == null && !isPosEmbed && !isTokenEmbed && !isCodebookEmbed) {
                     Tensor prefer = firstNonNull(sharedTensor, embedOut, lastOut);
                     if (prefer != null && isFloatTensor(prefer)) {
                         childIn = prefer;
@@ -820,6 +846,15 @@ public final class VistaEngine {
                         && (isNorm || (typeSimple.contains("linear") && !typeSimple.contains("embedding")))) {
                     childIn = firstNonNull(sharedTensor, embedOut, lastOut);
                     if (childIn instanceof Tensor && !isFloatTensor((Tensor) childIn)) {
+                        childIn = null;
+                    }
+                }
+                // Hard guard: EmbeddingImpl always needs Long/Int indices
+                if (childIn instanceof Tensor && typeSimple.contains("embedding")
+                        && !typeSimple.contains("layer") && isFloatTensor((Tensor) childIn)) {
+                    if (isPosEmbed) {
+                        childIn = resolvePosEmbedInput(cm, tensorArgs, rootTensor, tensorArgUsed);
+                    } else {
                         childIn = null;
                     }
                 }
@@ -1239,6 +1274,10 @@ public final class VistaEngine {
     /**
      * After a structural emit, attach implied edges from the matching multi-arg
      * input(s) so the UI always shows flowing dashed arrows into the child.
+     *
+     * <p>Pos embeds: prefer an explicit positions slot (arg[1]) when present;
+     * otherwise wire from the token-id input (models synthesize arange positions
+     * from seq_len). Never invent a float activation source for EmbeddingImpl.
      */
     private void wireImpliedFromInputs(Module cm, String keyL, boolean isPosEmbed,
                                        boolean isTokenEmbed, boolean isNorm,
@@ -1255,10 +1294,20 @@ public final class VistaEngine {
             else return;
         }
         Tensor srcT = null;
-        if (isPosEmbed && tensorArgs.size() > 1) srcT = tensorArgs.get(1);
-        else if (isTokenEmbed || tensorArgs.size() == 1) srcT = tensorArgs.get(0);
-        else if (isNorm && tensorArgs.size() >= 1) srcT = tensorArgs.get(0);
-        else if (tensorArgs.size() > 1 && (keyL.contains("time") || keyL.contains("pos"))) {
+        if (isPosEmbed) {
+            // Prefer dedicated positions tensor; else token ids (seq_len source).
+            if (tensorArgs.size() > 1) {
+                Tensor cand = tensorArgs.get(1);
+                if (cand != null && !cand.isNull() && isIndexTensor(cand)) srcT = cand;
+            }
+            if (srcT == null) srcT = firstIndexTensor(tensorArgs);
+            if (srcT == null) srcT = tensorArgs.get(0);
+        } else if (isTokenEmbed) {
+            srcT = firstIndexTensor(tensorArgs);
+            if (srcT == null) srcT = tensorArgs.get(0);
+        } else if (isNorm && tensorArgs.size() >= 1) {
+            srcT = tensorArgs.get(0);
+        } else if (tensorArgs.size() > 1 && (keyL.contains("time") || keyL.contains("pos"))) {
             srcT = tensorArgs.get(1);
         } else {
             srcT = tensorArgs.get(0);
@@ -1274,6 +1323,190 @@ public final class VistaEngine {
         }
         inNode.addEdge(new GraphEdge(target, TensorUtils.formatDims(srcT),
                 TensorUtils.tensorKey(srcT), true));
+    }
+
+    /** Keys that name a positional Embedding table (not a token / codebook table). */
+    private static boolean isPosEmbedKey(String keyL) {
+        if (keyL == null || keyL.isEmpty()) return false;
+        return keyL.contains("position") || keyL.contains("pos_emb")
+                || keyL.contains("posemb") || keyL.contains("pos_embedding")
+                || keyL.equals("pos") || keyL.equals("positionalembedding")
+                || keyL.equals("positional_embedding")
+                || (keyL.startsWith("pos") && keyL.contains("emb"));
+    }
+
+    /** True when tensor holds discrete indices suitable for EmbeddingImpl. */
+    private static boolean isIndexTensor(Tensor t) {
+        if (t == null || t.isNull()) return false;
+        try {
+            org.bytedeco.pytorch.global.torch.ScalarType st = t.scalar_type().intern();
+            return st == org.bytedeco.pytorch.global.torch.ScalarType.Long
+                    || st == org.bytedeco.pytorch.global.torch.ScalarType.Int
+                    || st == org.bytedeco.pytorch.global.torch.ScalarType.Short
+                    || st == org.bytedeco.pytorch.global.torch.ScalarType.Byte
+                    || st == org.bytedeco.pytorch.global.torch.ScalarType.Char;
+        } catch (Throwable e) {
+            return false;
+        }
+    }
+
+    private static Tensor firstIndexTensor(List<Tensor> tensorArgs) {
+        if (tensorArgs == null) return null;
+        for (Tensor t : tensorArgs) {
+            if (t != null && !t.isNull() && isIndexTensor(t)) return t;
+        }
+        return null;
+    }
+
+    private static void markTensorArgUsed(List<Tensor> tensorArgs, boolean[] used, Tensor t) {
+        if (tensorArgs == null || used == null || t == null) return;
+        long key = TensorUtils.tensorKey(t);
+        for (int i = 0; i < tensorArgs.size() && i < used.length; i++) {
+            Tensor cand = tensorArgs.get(i);
+            if (cand != null && !cand.isNull() && TensorUtils.tensorKey(cand) == key) {
+                used[i] = true;
+                return;
+            }
+        }
+    }
+
+    /**
+     * Resolve input for a positional EmbeddingImpl.
+     *
+     * <ol>
+     *   <li>Explicit positions slot (arg[1]) when multi-arg and index-typed (LLM4Rec).</li>
+     *   <li>Otherwise synthesize {@code arange(T)} (or {@code arange(T)} expanded to
+     *       {@code [B,T]}) from the token-id tensor, clamped to the table size —
+     *       mirrors OneRec / HSTU / HLLM / OpenOneRec internal position construction.</li>
+     * </ol>
+     */
+    private Tensor resolvePosEmbedInput(Module posEmb, List<Tensor> tensorArgs,
+                                        Tensor rootTensor, boolean[] tensorArgUsed) {
+        // 1) Explicit positions argument
+        if (tensorArgs != null && tensorArgs.size() > 1) {
+            Tensor cand = tensorArgs.get(1);
+            if (cand != null && !cand.isNull() && isIndexTensor(cand)) {
+                if (tensorArgUsed != null && tensorArgUsed.length > 1) tensorArgUsed[1] = true;
+                return cand;
+            }
+            // Named multi-arg may put positions elsewhere — scan for a second index tensor
+            Tensor firstIdx = null;
+            for (int i = 0; i < tensorArgs.size(); i++) {
+                Tensor t = tensorArgs.get(i);
+                if (t == null || t.isNull() || !isIndexTensor(t)) continue;
+                if (firstIdx == null) {
+                    firstIdx = t;
+                    continue;
+                }
+                // second index tensor → treat as positions
+                if (tensorArgUsed != null && i < tensorArgUsed.length) tensorArgUsed[i] = true;
+                return t;
+            }
+        }
+        // 2) Synthesize from token sequence length
+        Tensor tokens = firstIndexTensor(tensorArgs);
+        if (tokens == null) tokens = (rootTensor != null && isIndexTensor(rootTensor)) ? rootTensor : null;
+        if (tokens == null || tokens.isNull()) return null;
+        if (tensorArgUsed != null) markTensorArgUsed(tensorArgs, tensorArgUsed, tokens);
+        return synthesizePositionIndices(posEmb, tokens);
+    }
+
+    /**
+     * Build Long position indices matching generative-model convention:
+     * {@code arange(0, T)} broadcast / expanded to token batch shape when needed,
+     * values clamped into {@code [0, num_embeddings)}.
+     */
+    private Tensor synthesizePositionIndices(Module posEmb, Tensor tokens) {
+        try {
+            long T;
+            long B = 1L;
+            int dim = (int) tokens.dim();
+            if (dim >= 2) {
+                B = tokens.size(0);
+                T = tokens.size(1);
+            } else if (dim == 1) {
+                T = tokens.size(0);
+            } else {
+                T = 1L;
+            }
+            if (T <= 0) T = 1L;
+
+            long vocab = embeddingNumEmbeddings(posEmb);
+            if (vocab > 0 && T > vocab) T = vocab; // avoid OOB; still show the node
+
+            org.bytedeco.pytorch.TensorOptions opts = new org.bytedeco.pytorch.TensorOptions()
+                    .dtype(new org.bytedeco.pytorch.ScalarTypeOptional(
+                            org.bytedeco.pytorch.global.torch.ScalarType.Long));
+            try {
+                opts = opts.device(new org.bytedeco.pytorch.DeviceOptional(tokens.device()));
+            } catch (Throwable ignored) {}
+
+            Tensor positions = org.bytedeco.pytorch.global.torch.arange(
+                    new org.bytedeco.pytorch.Scalar(0),
+                    new org.bytedeco.pytorch.Scalar((double) T),
+                    new org.bytedeco.pytorch.Scalar(1),
+                    opts);
+            // OneRec / OpenOneRec expand to [B, T]; HSTU / HLLM use [T] + unsqueeze in model.
+            // EmbeddingImpl accepts both; prefer [B,T] so output shape matches token emb.
+            if (dim >= 2 && B > 0) {
+                positions = positions.unsqueeze(0).expand(new long[]{B, T});
+            }
+            // Tag as synthetic so graph can still link from token input if needed
+            try {
+                long key = TensorUtils.tensorKey(positions);
+                String tokSrc = tensorSource.get(TensorUtils.tensorKey(tokens));
+                if (tokSrc != null && !tensorSource.containsKey(key)) {
+                    // Keep provenance on the token input node (positions are derived)
+                    tensorSource.put(key, tokSrc);
+                    tensorImplied.put(key, Boolean.TRUE);
+                }
+            } catch (Throwable ignored) {}
+            return positions;
+        } catch (Throwable e) {
+            return null;
+        }
+    }
+
+    /** Best-effort {@code EmbeddingImpl.options().num_embeddings()} / weight rows. */
+    private static long embeddingNumEmbeddings(Module m) {
+        if (m == null) return -1L;
+        try {
+            Module cm = ModuleDiscovery.concrete(m);
+            if (cm instanceof org.bytedeco.pytorch.nn.modules.EmbeddingImpl) {
+                org.bytedeco.pytorch.nn.modules.EmbeddingImpl emb =
+                        (org.bytedeco.pytorch.nn.modules.EmbeddingImpl) cm;
+                try {
+                    long n = emb.options().num_embeddings().get();
+                    if (n > 0) return n;
+                } catch (Throwable ignored) {}
+                try {
+                    Tensor w = emb.weight();
+                    if (w != null && !w.isNull() && w.dim() >= 1) return w.size(0);
+                } catch (Throwable ignored) {}
+            }
+        } catch (Throwable ignored) {}
+        // Reflective fallback for wrapped / as() modules
+        try {
+            Object opts = m.getClass().getMethod("options").invoke(m);
+            if (opts != null) {
+                Object ne = opts.getClass().getMethod("num_embeddings").invoke(opts);
+                if (ne instanceof org.bytedeco.javacpp.LongPointer) {
+                    long n = ((org.bytedeco.javacpp.LongPointer) ne).get();
+                    if (n > 0) return n;
+                } else if (ne instanceof Number) {
+                    long n = ((Number) ne).longValue();
+                    if (n > 0) return n;
+                }
+            }
+        } catch (Throwable ignored) {}
+        try {
+            Object w = m.getClass().getMethod("weight").invoke(m);
+            if (w instanceof Tensor) {
+                Tensor wt = (Tensor) w;
+                if (wt != null && !wt.isNull() && wt.dim() >= 1) return wt.size(0);
+            }
+        } catch (Throwable ignored) {}
+        return -1L;
     }
 
     private static boolean acceptsMapForward(Module m) {
