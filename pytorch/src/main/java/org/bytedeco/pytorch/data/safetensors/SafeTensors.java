@@ -6,6 +6,7 @@ import org.bytedeco.pytorch.nn.modules.container.*;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.FloatPointer;
 import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.pytorch.Device;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorOptions;
 import org.bytedeco.pytorch.global.torch;
@@ -26,12 +27,15 @@ import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -174,6 +178,146 @@ public final class SafeTensors {
      */
     public static void releasePinnedMaps() {
         PINNED_MAPS.clear();
+    }
+
+    // ---- torch.load / safetensors.torch.load_file parity -----------------------
+
+    /**
+     * Python {@code safetensors.torch.load_file(path)} / {@code torch.load(..., weights_only=True)}
+     * equivalent for a single {@code .safetensors} file (or a HF model directory / index).
+     *
+     * <p>Always returns {@code Map&lt;String, Tensor&gt;}. Use {@link #toModule} /
+     * {@link WeightBagModule#fromSafetensors} when a trainable Module is needed.
+     */
+    public static Map<String, Tensor> loadFile(File file) throws IOException {
+        return loadFile(file, LoadOptions.defaults());
+    }
+
+    public static Map<String, Tensor> loadFile(String path) throws IOException {
+        return loadFile(new File(path), LoadOptions.defaults());
+    }
+
+    public static Map<String, Tensor> loadFile(Path path) throws IOException {
+        return loadFile(path.toFile(), LoadOptions.defaults());
+    }
+
+    /**
+     * @param weightsOnly kept for API parity with {@code torch.load}; this method
+     *                    always returns a tensor map (never a Module)
+     * @param device      {@code map_location} target; {@code null} keeps host/mmap placement
+     * @param strict      reserved for inject paths; no-op for pure tensor maps
+     */
+    public static Map<String, Tensor> loadFile(File file, boolean weightsOnly,
+                                               Device device, boolean strict) throws IOException {
+        LoadOptions opts = LoadOptions.builder()
+                .weightsOnly(weightsOnly)
+                .mapLocation(device)
+                .strict(strict)
+                .build();
+        return loadFile(file, opts);
+    }
+
+    public static Map<String, Tensor> loadFile(String path, boolean weightsOnly,
+                                               Device device, boolean strict) throws IOException {
+        return loadFile(new File(path), weightsOnly, device, strict);
+    }
+
+    /**
+     * Full options path. When {@code file} is a directory or an {@code *.index.json},
+     * delegates to {@link ShardedSafeTensors}.
+     */
+    public static Map<String, Tensor> loadFile(File file, LoadOptions opts) throws IOException {
+        Objects.requireNonNull(file, "file");
+        if (opts == null) opts = LoadOptions.defaults();
+        if (file.isDirectory()) {
+            return ShardedSafeTensors.loadDirectory(file.toPath(), opts);
+        }
+        String name = file.getName().toLowerCase();
+        if (name.endsWith(".index.json") || name.endsWith("index.json")) {
+            return ShardedSafeTensors.loadIndex(file.toPath(), opts);
+        }
+        if (!file.isFile()) {
+            throw new IOException("not a file: " + file);
+        }
+        Map<String, Tensor> weights = loadAsTensors(file, opts.zeroCopy);
+        if (opts.dequantFp8) {
+            weights = ShardedSafeTensors.tryDequantFp8(weights);
+        }
+        return applyMapLocation(weights, opts);
+    }
+
+    public static Map<String, Tensor> loadFile(Path path, LoadOptions opts) throws IOException {
+        return loadFile(path.toFile(), opts);
+    }
+
+    public static Map<String, Tensor> loadFile(String path, LoadOptions opts) throws IOException {
+        return loadFile(new File(path), opts);
+    }
+
+    /**
+     * Apply {@link LoadOptions#mapLocation} and optional {@link LoadOptions#dtype}
+     * cast to every tensor. No-op when both are null.
+     *
+     * <p>Used by {@link ShardedSafeTensors} and {@link #loadFile} so device placement
+     * is consistent across single-file and multi-shard loads.
+     *
+     * <p>Note: these bindings expose {@code Tensor.to(Device, ScalarType)} (no
+     * single-arg {@code to(Device)}); we always pass the current scalar type when
+     * only moving device.
+     */
+    public static Map<String, Tensor> applyMapLocation(Map<String, Tensor> weights, LoadOptions opts) {
+        if (weights == null || weights.isEmpty()) return weights;
+        if (opts == null) return weights;
+        Device device = opts.mapLocation;
+        ScalarType dtype = opts.dtype;
+        if (device == null && dtype == null) return weights;
+
+        Map<String, Tensor> out = new LinkedHashMap<>(weights.size());
+        for (Map.Entry<String, Tensor> e : weights.entrySet()) {
+            String key = e.getKey();
+            Tensor t = e.getValue();
+            if (t == null) {
+                out.put(key, null);
+                continue;
+            }
+            try {
+                if (t.isNull() || !t.defined()) {
+                    out.put(key, t);
+                    continue;
+                }
+                Tensor moved = t;
+                if (device != null && dtype != null) {
+                    moved = t.to(device, dtype);
+                } else if (device != null) {
+                    moved = t.to(device, t.scalar_type());
+                } else {
+                    // dtype-only cast (stay on current device)
+                    moved = t.to(dtype);
+                }
+                // Retain so ByVal return is not GC'd under the map
+                if (moved != null && !moved.isNull()) {
+                    try { moved.retainReference(); } catch (Throwable ignored) {}
+                }
+                out.put(key, moved);
+            } catch (Throwable ex) {
+                System.err.println("SafeTensors.applyMapLocation: skip '" + key + "': " + ex);
+                out.put(key, t);
+            }
+        }
+        return out;
+    }
+
+    /**
+     * Move / cast a single tensor map without a full {@link LoadOptions} bag.
+     */
+    public static Map<String, Tensor> applyMapLocation(Map<String, Tensor> weights, Device device) {
+        if (device == null) return weights;
+        return applyMapLocation(weights, LoadOptions.builder().mapLocation(device).build());
+    }
+
+    public static Map<String, Tensor> applyMapLocation(Map<String, Tensor> weights, String deviceSpec) {
+        if (deviceSpec == null || deviceSpec.isBlank()) return weights;
+        return applyMapLocation(weights, LoadOptions.parseDevice(deviceSpec));
     }
 
     /** List tensor names without loading data. */
@@ -518,6 +662,22 @@ public final class SafeTensors {
     }
 
     // ---- buffer → Tensor ----------------------------------------------------
+
+    /**
+     * Pin a mmap buffer so GC cannot reclaim it while zero-copy tensors still
+     * point into it. Used by {@link SafeOpen#close()}.
+     */
+    public static void pinMappedBuffer(MappedByteBuffer buf) {
+        if (buf != null) PINNED_MAPS.add(buf);
+    }
+
+    /**
+     * Package/public bridge for {@link SafeOpen} copy path — same as private
+     * {@link #copyBufferToTensor}.
+     */
+    public static Tensor copyBufferToTensorPublic(ByteBuffer buf, long[] shape, SafeDType dtype) {
+        return copyBufferToTensor(buf, shape, dtype);
+    }
 
     private static Tensor fromMappedRegion(MappedByteBuffer whole, long start, long nbytes,
                                            long[] shape, SafeDType dtype) {

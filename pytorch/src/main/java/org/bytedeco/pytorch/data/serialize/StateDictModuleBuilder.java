@@ -14,23 +14,43 @@ import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.nn.modules.BatchNorm1dImpl;
 import org.bytedeco.pytorch.nn.modules.BatchNorm2dImpl;
 import org.bytedeco.pytorch.nn.modules.BatchNorm3dImpl;
+import org.bytedeco.pytorch.nn.modules.CELUImpl;
 import org.bytedeco.pytorch.nn.modules.Conv1dImpl;
 import org.bytedeco.pytorch.nn.modules.Conv2dImpl;
 import org.bytedeco.pytorch.nn.modules.Conv3dImpl;
+import org.bytedeco.pytorch.nn.modules.ConvTranspose1dImpl;
+import org.bytedeco.pytorch.nn.modules.ConvTranspose2dImpl;
+import org.bytedeco.pytorch.nn.modules.ConvTranspose3dImpl;
+import org.bytedeco.pytorch.nn.modules.ELUImpl;
+import org.bytedeco.pytorch.nn.modules.EmbeddingBagImpl;
 import org.bytedeco.pytorch.nn.modules.EmbeddingImpl;
+import org.bytedeco.pytorch.nn.modules.FlattenImpl;
+import org.bytedeco.pytorch.nn.modules.GLUImpl;
 import org.bytedeco.pytorch.nn.modules.GroupNormImpl;
+import org.bytedeco.pytorch.nn.modules.HardtanhImpl;
+import org.bytedeco.pytorch.nn.modules.InstanceNorm1dImpl;
+import org.bytedeco.pytorch.nn.modules.InstanceNorm2dImpl;
+import org.bytedeco.pytorch.nn.modules.InstanceNorm3dImpl;
 import org.bytedeco.pytorch.nn.modules.LayerNormImpl;
 import org.bytedeco.pytorch.nn.modules.DropoutImpl;
 import org.bytedeco.pytorch.nn.modules.GELUImpl;
 import org.bytedeco.pytorch.nn.modules.IdentityImpl;
 import org.bytedeco.pytorch.nn.modules.LeakyReLUImpl;
 import org.bytedeco.pytorch.nn.modules.LinearImpl;
+import org.bytedeco.pytorch.nn.modules.LogSoftmaxImpl;
+import org.bytedeco.pytorch.nn.modules.MishImpl;
+import org.bytedeco.pytorch.nn.modules.PReLUImpl;
+import org.bytedeco.pytorch.nn.modules.RReLUImpl;
 import org.bytedeco.pytorch.nn.modules.ReLU6Impl;
 import org.bytedeco.pytorch.nn.modules.ReLUImpl;
+import org.bytedeco.pytorch.nn.modules.SELUImpl;
 import org.bytedeco.pytorch.nn.modules.SiLUImpl;
 import org.bytedeco.pytorch.nn.modules.SigmoidImpl;
 import org.bytedeco.pytorch.nn.modules.SoftmaxImpl;
+import org.bytedeco.pytorch.nn.modules.SoftplusImpl;
+import org.bytedeco.pytorch.nn.modules.SoftsignImpl;
 import org.bytedeco.pytorch.nn.modules.TanhImpl;
+import org.bytedeco.pytorch.nn.modules.UnflattenImpl;
 import org.bytedeco.pytorch.nn.modules.container.SequentialImpl;
 import org.bytedeco.pytorch.nn.modules.container.StringSharedModuleDict;
 import org.bytedeco.pytorch.nn.modules.container.StringSharedModuleDictItem;
@@ -38,11 +58,18 @@ import org.bytedeco.pytorch.nn.options.BatchNormOptions;
 import org.bytedeco.pytorch.nn.options.Conv1dOptions;
 import org.bytedeco.pytorch.nn.options.Conv2dOptions;
 import org.bytedeco.pytorch.nn.options.Conv3dOptions;
+import org.bytedeco.pytorch.nn.options.ConvTranspose1dOptions;
+import org.bytedeco.pytorch.nn.options.ConvTranspose2dOptions;
+import org.bytedeco.pytorch.nn.options.ConvTranspose3dOptions;
 import org.bytedeco.pytorch.nn.options.DropoutOptions;
+import org.bytedeco.pytorch.nn.options.EmbeddingBagOptions;
 import org.bytedeco.pytorch.nn.options.EmbeddingOptions;
+import org.bytedeco.pytorch.nn.options.FlattenOptions;
 import org.bytedeco.pytorch.nn.options.GroupNormOptions;
+import org.bytedeco.pytorch.nn.options.InstanceNormOptions;
 import org.bytedeco.pytorch.nn.options.LayerNormOptions;
 import org.bytedeco.pytorch.nn.options.LinearOptions;
+import org.bytedeco.pytorch.nn.options.PReLUOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -93,27 +120,51 @@ public final class StateDictModuleBuilder {
     // ---- public types -------------------------------------------------------
 
     public enum LayerKind {
+        // ---- parameterized leaves (present in state-dict tensors) ----
         LINEAR,
         EMBEDDING,
+        EMBEDDING_BAG,
         LAYER_NORM,
+        /** Llama/Qwen-style RMSNorm: 1D weight, no bias (materialized as LayerNorm affine w/o bias). */
+        RMS_NORM,
         BATCH_NORM_1D,
         BATCH_NORM_2D,
         BATCH_NORM_3D,
+        INSTANCE_NORM_1D,
+        INSTANCE_NORM_2D,
+        INSTANCE_NORM_3D,
         GROUP_NORM,
         CONV_1D,
         CONV_2D,
         CONV_3D,
+        CONV_TRANSPOSE_1D,
+        CONV_TRANSPOSE_2D,
+        CONV_TRANSPOSE_3D,
+        /** Parametric ReLU — learnable slope weight (1D). */
+        PRELU,
         // ---- parameter-free (structure-only; never in state-dict tensors) ----
         RELU,
         RELU6,
         LEAKY_RELU,
+        RRELU,
         GELU,
         SILU,
+        MISH,
+        ELU,
+        CELU,
+        SELU,
         TANH,
+        HARDTANH,
         SIGMOID,
+        SOFTPLUS,
+        SOFTSIGN,
+        GLU,
         DROPOUT,
         IDENTITY,
         SOFTMAX,
+        LOG_SOFTMAX,
+        FLATTEN,
+        UNFLATTEN,
         /** Leaf tensors that could not be typed — raw Module + register_parameter. */
         PARAMETER_BAG,
         /** Intermediate container Module (no own tensors). */
@@ -155,20 +206,45 @@ public final class StateDictModuleBuilder {
     private static final Pattern EMB_NAME = Pattern.compile(
             "(?i)(^|[._])(emb(edding)?s?|embed|token_?emb|wte|wpe|word_?emb|"
                     + "item_?id|user_?id|user_gmf|item_gmf|user_mlp|item_mlp|"
-                    + "sparse|lookup|table)([._]|$)");
+                    + "sparse|lookup|table|patch_?embed|pos_?embed|class_?embed|"
+                    + "visual_?embed|image_?embed|vision_?embed)([._]|$)");
+    private static final Pattern EMB_BAG_NAME = Pattern.compile(
+            "(?i)(^|[._])(emb(edding)?_?bag|embeddingbag|sparse_?emb)([._]|$)");
     private static final Pattern LINEAR_NAME = Pattern.compile(
             "(?i)(^|[._])(fc|linear|dense|proj(ection)?|classifier|lm_?head|"
                     + "predict|mlp|ffn|feed_?forward|q_proj|k_proj|v_proj|"
-                    + "o_proj|out_proj|c_attn|c_proj|gate_proj|up_proj|down_proj)([._]|$)");
+                    + "o_proj|out_proj|c_attn|c_proj|gate_proj|up_proj|down_proj|"
+                    + "qkv|to_q|to_k|to_v|to_out|in_proj|out_proj|"
+                    + "query|key|value|visual_proj|text_proj|mm_proj|"
+                    + "cross_attn|multi_?head)([._]|$)");
     private static final Pattern LN_NAME = Pattern.compile(
-            "(?i)(^|[._])(ln|layer_?norm|layernorm|norm|rms_?norm|rmsnorm|"
-                    + "final_layer_norm|input_layernorm|post_attention_layernorm)([._]|$)");
+            "(?i)(^|[._])(ln|layer_?norm|layernorm|"
+                    + "final_layer_norm|input_layernorm|post_attention_layernorm|"
+                    + "pre_layernorm|post_layernorm|norm1|norm2|norm3|"
+                    + "ln_1|ln_2|ln_f|attn_ln|ffn_ln)([._]|$)");
+    private static final Pattern RMS_NAME = Pattern.compile(
+            "(?i)(^|[._])(rms_?norm|rmsnorm|rms)([._]|$)|"
+                    + "(?i)(input_layernorm|post_attention_layernorm|model\\.norm|"
+                    + "final_layernorm)$");
     private static final Pattern BN_NAME = Pattern.compile(
             "(?i)(^|[._])(bn|batch_?norm|batchnorm)([._]|$)");
+    private static final Pattern IN_NAME = Pattern.compile(
+            "(?i)(^|[._])(in|instance_?norm|instancenorm)([._]|$)");
     private static final Pattern GN_NAME = Pattern.compile(
             "(?i)(^|[._])(gn|group_?norm|groupnorm)([._]|$)");
     private static final Pattern CONV_NAME = Pattern.compile(
-            "(?i)(^|[._])(conv|convolution|depthwise|pointwise)([._]|$)");
+            "(?i)(^|[._])(conv|convolution|depthwise|pointwise|dwconv|pwconv)([._]|$)");
+    private static final Pattern CONV_TRANSPOSE_NAME = Pattern.compile(
+            "(?i)(^|[._])(conv_?transpose|deconv|convt|transposed_?conv|"
+                    + "up_?conv|upsample_?conv)([._]|$)");
+    private static final Pattern PRELU_NAME = Pattern.compile(
+            "(?i)(^|[._])(prelu)([._]|$)");
+    private static final Pattern VISION_HINT = Pattern.compile(
+            "(?i)(vision|visual|vit|clip|resnet|backbone|patch|stem|stage|"
+                    + "downsample|blocks?\\.\\d+|encoder\\.layers)");
+    private static final Pattern MULTIMODAL_HINT = Pattern.compile(
+            "(?i)(mm_projector|multi_?modal|vision_tower|image_tower|"
+                    + "audio_tower|cross_attn|q_former|perceiver)");
 
     // ---- public API ---------------------------------------------------------
 
@@ -494,7 +570,7 @@ public final class StateDictModuleBuilder {
 
     /**
      * Infer a parameter-free layer for a Sequential hole.
-     * Priority: explicit structureMeta → path-name heuristics → MLP pattern.
+     * Priority: explicit structureMeta → path-name heuristics → MLP / family pattern.
      */
     private static LayerInfo inferParamFree(String path, String metaKind,
                                             String seqPath, int index,
@@ -508,51 +584,100 @@ public final class StateDictModuleBuilder {
         }
 
         String leaf = leafNameOf(path);
+        String leafLower = leaf == null ? "" : leaf.toLowerCase(Locale.ROOT);
         String pathLower = path == null ? "" : path.toLowerCase(Locale.ROOT);
         String seqLower = seqPath == null ? "" : seqPath.toLowerCase(Locale.ROOT);
 
-        // Name-based (if meta stored kind under a named path somehow)
-        if (pathLower.contains("dropout") || leaf.toLowerCase(Locale.ROOT).contains("drop")) {
+        // ---- Name-based recognition table (enterprise param-free) ------------
+        if (pathLower.contains("dropout") || leafLower.contains("drop")) {
             hyper.put("p", 0.1);
             return new LayerInfo(path, LayerKind.DROPOUT, shapes, hyper, keys);
         }
-        if (pathLower.contains("relu6")) {
-            return new LayerInfo(path, LayerKind.RELU6, shapes, hyper, keys);
+        if (pathLower.contains("log_softmax") || pathLower.contains("logsoftmax")
+                || leafLower.contains("log_softmax") || leafLower.contains("logsoftmax")) {
+            hyper.put("dim", -1L);
+            return new LayerInfo(path, LayerKind.LOG_SOFTMAX, shapes, hyper, keys);
         }
-        if (pathLower.contains("leaky")) {
-            hyper.put("negative_slope", 0.01);
-            return new LayerInfo(path, LayerKind.LEAKY_RELU, shapes, hyper, keys);
-        }
-        if (pathLower.contains("gelu")) {
-            return new LayerInfo(path, LayerKind.GELU, shapes, hyper, keys);
-        }
-        if (pathLower.contains("silu") || pathLower.contains("swish")) {
-            return new LayerInfo(path, LayerKind.SILU, shapes, hyper, keys);
-        }
-        if (pathLower.contains("tanh")) {
-            return new LayerInfo(path, LayerKind.TANH, shapes, hyper, keys);
-        }
-        if (pathLower.contains("sigmoid")) {
-            return new LayerInfo(path, LayerKind.SIGMOID, shapes, hyper, keys);
-        }
-        if (pathLower.contains("softmax")) {
+        if (pathLower.contains("softmax") || leafLower.contains("softmax")) {
             hyper.put("dim", -1L);
             return new LayerInfo(path, LayerKind.SOFTMAX, shapes, hyper, keys);
         }
+        if (pathLower.contains("flatten") || leafLower.contains("flatten")) {
+            return new LayerInfo(path, LayerKind.FLATTEN, shapes, hyper, keys);
+        }
+        if (pathLower.contains("unflatten") || leafLower.contains("unflatten")) {
+            return new LayerInfo(path, LayerKind.UNFLATTEN, shapes, hyper, keys);
+        }
+        if (pathLower.contains("relu6") || leafLower.contains("relu6")) {
+            return new LayerInfo(path, LayerKind.RELU6, shapes, hyper, keys);
+        }
+        if (pathLower.contains("leaky") || leafLower.contains("leaky")) {
+            hyper.put("negative_slope", 0.01);
+            return new LayerInfo(path, LayerKind.LEAKY_RELU, shapes, hyper, keys);
+        }
+        if (pathLower.contains("rrelu") || leafLower.equals("rrelu")) {
+            return new LayerInfo(path, LayerKind.RRELU, shapes, hyper, keys);
+        }
+        if (pathLower.contains("prelu") || leafLower.equals("prelu")) {
+            // PReLU is parameterized; if we land here (no weight) fall back to LeakyReLU
+            hyper.put("negative_slope", 0.25);
+            return new LayerInfo(path, LayerKind.LEAKY_RELU, shapes, hyper, keys);
+        }
+        if (pathLower.contains("gelu") || leafLower.contains("gelu")) {
+            return new LayerInfo(path, LayerKind.GELU, shapes, hyper, keys);
+        }
+        if (pathLower.contains("silu") || pathLower.contains("swish")
+                || leafLower.contains("silu") || leafLower.contains("swish")) {
+            return new LayerInfo(path, LayerKind.SILU, shapes, hyper, keys);
+        }
+        if (pathLower.contains("mish") || leafLower.equals("mish")) {
+            return new LayerInfo(path, LayerKind.MISH, shapes, hyper, keys);
+        }
+        if (pathLower.contains("celu") || leafLower.equals("celu")) {
+            return new LayerInfo(path, LayerKind.CELU, shapes, hyper, keys);
+        }
+        if (pathLower.contains("selu") || leafLower.equals("selu")) {
+            return new LayerInfo(path, LayerKind.SELU, shapes, hyper, keys);
+        }
+        if (pathLower.contains("elu") || leafLower.equals("elu")) {
+            // after celu/selu checks
+            return new LayerInfo(path, LayerKind.ELU, shapes, hyper, keys);
+        }
+        if (pathLower.contains("hardtanh") || leafLower.contains("hardtanh")) {
+            return new LayerInfo(path, LayerKind.HARDTANH, shapes, hyper, keys);
+        }
+        if (pathLower.contains("softplus") || leafLower.contains("softplus")) {
+            return new LayerInfo(path, LayerKind.SOFTPLUS, shapes, hyper, keys);
+        }
+        if (pathLower.contains("softsign") || leafLower.contains("softsign")) {
+            return new LayerInfo(path, LayerKind.SOFTSIGN, shapes, hyper, keys);
+        }
+        if (pathLower.contains("glu") || leafLower.equals("glu")) {
+            return new LayerInfo(path, LayerKind.GLU, shapes, hyper, keys);
+        }
+        if (pathLower.contains("tanh") || leafLower.equals("tanh")) {
+            return new LayerInfo(path, LayerKind.TANH, shapes, hyper, keys);
+        }
+        if (pathLower.contains("sigmoid") || leafLower.contains("sigmoid")) {
+            return new LayerInfo(path, LayerKind.SIGMOID, shapes, hyper, keys);
+        }
+        if (pathLower.contains("identity") || leafLower.equals("id")
+                || leafLower.equals("identity") || leafLower.equals("noop")) {
+            return new LayerInfo(path, LayerKind.IDENTITY, shapes, hyper, keys);
+        }
         if (pathLower.contains("relu") || pathLower.contains("act")
-                || pathLower.contains("activation")) {
-            return new LayerInfo(path, LayerKind.RELU, shapes, hyper, keys);
+                || pathLower.contains("activation") || leafLower.contains("act")) {
+            // Family-aware default for generic "act"
+            LayerKind def = defaultActivationForContext(seqLower, pathLower);
+            return new LayerInfo(path, def, shapes, hyper, keys);
         }
 
-        // Sequential hole pattern (common MLP / residual FF):
-        //   Linear(i) → ReLU/GELU(i+1) → [Dropout(i+2)] → Linear(i+3)
+        // Sequential hole pattern (common MLP / residual FF / vision block):
+        //   Linear/Conv(i) → Act(i+1) → [Dropout(i+2)] → Linear/Conv(i+3)
         Integer lower = known.lowerKey(index);
         Integer higher = known.higherKey(index);
 
-        boolean transformerish = seqLower.contains("transformer") || seqLower.contains("ffn")
-                || seqLower.contains("feed_forward")
-                || seqLower.contains("encoder") || seqLower.contains("decoder");
-        // "mlp" alone is often ReLU (NCF/CTR); only GELU when clearly transformer FF.
+        LayerKind actDefault = defaultActivationForContext(seqLower, pathLower);
 
         if (lower != null && higher != null) {
             int gapStart = lower + 1;
@@ -560,27 +685,18 @@ public final class StateDictModuleBuilder {
             int gapSize = gapEnd - gapStart + 1;
             int posInGap = index - gapStart; // 0-based within gap
             if (gapSize == 1) {
-                // single hole between two Linears → activation
-                return new LayerInfo(path,
-                        transformerish ? LayerKind.GELU : LayerKind.RELU,
-                        shapes, hyper, keys);
+                return new LayerInfo(path, actDefault, shapes, hyper, keys);
             }
             if (gapSize == 2) {
-                // Linear → act → Dropout → Linear  (or act → act)
                 if (posInGap == 0) {
-                    return new LayerInfo(path,
-                            transformerish ? LayerKind.GELU : LayerKind.RELU,
-                            shapes, hyper, keys);
+                    return new LayerInfo(path, actDefault, shapes, hyper, keys);
                 }
                 hyper.put("p", 0.1);
                 return new LayerInfo(path, LayerKind.DROPOUT, shapes, hyper, keys);
             }
             if (gapSize >= 3) {
-                // Linear → act → Dropout → Identity… → Linear
                 if (posInGap == 0) {
-                    return new LayerInfo(path,
-                            transformerish ? LayerKind.GELU : LayerKind.RELU,
-                            shapes, hyper, keys);
+                    return new LayerInfo(path, actDefault, shapes, hyper, keys);
                 }
                 if (posInGap == 1) {
                     hyper.put("p", 0.1);
@@ -590,12 +706,10 @@ public final class StateDictModuleBuilder {
             }
         }
 
-        // Trailing holes after last Linear (e.g. final ReLU)
+        // Trailing holes after last parameterized leaf
         if (lower != null && higher == null) {
             if (index == lower + 1) {
-                return new LayerInfo(path,
-                        transformerish ? LayerKind.GELU : LayerKind.RELU,
-                        shapes, hyper, keys);
+                return new LayerInfo(path, actDefault, shapes, hyper, keys);
             }
             if (index == lower + 2) {
                 hyper.put("p", 0.1);
@@ -603,12 +717,44 @@ public final class StateDictModuleBuilder {
             }
         }
 
-        // Leading holes before first Linear — uncommon; Identity
-        // Default fallback: ReLU (most common activation)
+        // Leading holes / unknown — ReLU is the most common safe default
         return new LayerInfo(path, LayerKind.RELU, shapes, hyper, keys);
     }
 
-    /** Parse structure-meta value: {@code "RELU"}, {@code "DROPOUT:0.1"}, {@code "SOFTMAX:-1"}. */
+    /**
+     * Pick default activation by surrounding path context:
+     * <ul>
+     *   <li>Llama/Qwen/SwiGLU mlp → {@link LayerKind#SILU}</li>
+     *   <li>Transformer / ViT / BERT FFN → {@link LayerKind#GELU}</li>
+     *   <li>Vision CNN / ResNet → {@link LayerKind#RELU}</li>
+     *   <li>Recsys / CTR / generic mlp → {@link LayerKind#RELU}</li>
+     * </ul>
+     */
+    private static LayerKind defaultActivationForContext(String seqLower, String pathLower) {
+        String ctx = (seqLower == null ? "" : seqLower) + " " + (pathLower == null ? "" : pathLower);
+        if (ctx.contains("gate_proj") || ctx.contains("up_proj") || ctx.contains("swiglu")
+                || ctx.contains("silu") || ctx.contains("llama") || ctx.contains("mistral")
+                || ctx.contains("qwen") || ctx.contains("gemma")) {
+            return LayerKind.SILU;
+        }
+        if (ctx.contains("transformer") || ctx.contains("ffn") || ctx.contains("feed_forward")
+                || ctx.contains("encoder") || ctx.contains("decoder") || ctx.contains("bert")
+                || ctx.contains("vit") || ctx.contains("clip") || ctx.contains("gpt")
+                || ctx.contains("attention") || ctx.contains("blocks.")) {
+            return LayerKind.GELU;
+        }
+        if (ctx.contains("resnet") || ctx.contains("conv") || ctx.contains("backbone")
+                || ctx.contains("stem") || ctx.contains("stage")) {
+            return LayerKind.RELU;
+        }
+        // "mlp" alone is often ReLU (NCF/CTR); GELU only when clearly transformer FF.
+        return LayerKind.RELU;
+    }
+
+    /**
+     * Parse structure-meta value:
+     * {@code "RELU"}, {@code "DROPOUT:0.1"}, {@code "SOFTMAX:-1"}, {@code "RMS_NORM"}, …
+     */
     static LayerInfo parseMetaKind(String path, String meta,
                                    Map<String, long[]> shapes, List<String> keys) {
         Map<String, Object> hyper = new LinkedHashMap<>();
@@ -633,23 +779,73 @@ public final class StateDictModuleBuilder {
             case "LEAKY_RELU": case "LEAKYRELU": kind = LayerKind.LEAKY_RELU;
                 hyper.put("negative_slope", arg != null ? Double.parseDouble(arg) : 0.01);
                 break;
+            case "RRELU": kind = LayerKind.RRELU; break;
+            case "PRELU": kind = LayerKind.PRELU;
+                if (arg != null) {
+                    try { hyper.put("num_parameters", Long.parseLong(arg)); }
+                    catch (NumberFormatException ignored) { hyper.put("num_parameters", 1L); }
+                } else {
+                    hyper.put("num_parameters", 1L);
+                }
+                break;
             case "GELU": kind = LayerKind.GELU; break;
             case "SILU": case "SWISH": kind = LayerKind.SILU; break;
+            case "MISH": kind = LayerKind.MISH; break;
+            case "ELU": kind = LayerKind.ELU; break;
+            case "CELU": kind = LayerKind.CELU; break;
+            case "SELU": kind = LayerKind.SELU; break;
             case "TANH": kind = LayerKind.TANH; break;
+            case "HARDTANH": kind = LayerKind.HARDTANH; break;
             case "SIGMOID": kind = LayerKind.SIGMOID; break;
-            case "DROPOUT": case "DROPOUT1D": kind = LayerKind.DROPOUT;
+            case "SOFTPLUS": kind = LayerKind.SOFTPLUS; break;
+            case "SOFTSIGN": kind = LayerKind.SOFTSIGN; break;
+            case "GLU": kind = LayerKind.GLU; break;
+            case "DROPOUT": case "DROPOUT1D": case "DROPOUT2D": case "DROPOUT3D":
+                kind = LayerKind.DROPOUT;
                 hyper.put("p", arg != null ? Double.parseDouble(arg) : 0.5);
                 break;
-            case "IDENTITY": case "ID": kind = LayerKind.IDENTITY; break;
+            case "IDENTITY": case "ID": case "NOOP": kind = LayerKind.IDENTITY; break;
             case "SOFTMAX": kind = LayerKind.SOFTMAX;
                 hyper.put("dim", arg != null ? Long.parseLong(arg) : -1L);
                 break;
+            case "LOG_SOFTMAX": case "LOGSOFTMAX": kind = LayerKind.LOG_SOFTMAX;
+                hyper.put("dim", arg != null ? Long.parseLong(arg) : -1L);
+                break;
+            case "FLATTEN": kind = LayerKind.FLATTEN; break;
+            case "UNFLATTEN": kind = LayerKind.UNFLATTEN; break;
             case "LINEAR": kind = LayerKind.LINEAR; break;
             case "EMBEDDING": kind = LayerKind.EMBEDDING; break;
+            case "EMBEDDING_BAG": case "EMBEDDINGBAG": kind = LayerKind.EMBEDDING_BAG; break;
             case "LAYER_NORM": case "LAYERNORM": kind = LayerKind.LAYER_NORM; break;
+            case "RMS_NORM": case "RMSNORM": case "RMS": kind = LayerKind.RMS_NORM; break;
+            case "BATCH_NORM_1D": case "BATCHNORM1D": case "BN1D": kind = LayerKind.BATCH_NORM_1D; break;
+            case "BATCH_NORM_2D": case "BATCHNORM2D": case "BN2D": kind = LayerKind.BATCH_NORM_2D; break;
+            case "BATCH_NORM_3D": case "BATCHNORM3D": case "BN3D": kind = LayerKind.BATCH_NORM_3D; break;
+            case "INSTANCE_NORM_1D": case "INSTANCENORM1D": kind = LayerKind.INSTANCE_NORM_1D; break;
+            case "INSTANCE_NORM_2D": case "INSTANCENORM2D": kind = LayerKind.INSTANCE_NORM_2D; break;
+            case "INSTANCE_NORM_3D": case "INSTANCENORM3D": kind = LayerKind.INSTANCE_NORM_3D; break;
+            case "GROUP_NORM": case "GROUPNORM": kind = LayerKind.GROUP_NORM; break;
+            case "CONV_1D": case "CONV1D": kind = LayerKind.CONV_1D; break;
+            case "CONV_2D": case "CONV2D": kind = LayerKind.CONV_2D; break;
+            case "CONV_3D": case "CONV3D": kind = LayerKind.CONV_3D; break;
+            case "CONV_TRANSPOSE_1D": case "CONVTRANSPOSE1D": case "DECONV1D":
+                kind = LayerKind.CONV_TRANSPOSE_1D; break;
+            case "CONV_TRANSPOSE_2D": case "CONVTRANSPOSE2D": case "DECONV2D":
+                kind = LayerKind.CONV_TRANSPOSE_2D; break;
+            case "CONV_TRANSPOSE_3D": case "CONVTRANSPOSE3D": case "DECONV3D":
+                kind = LayerKind.CONV_TRANSPOSE_3D; break;
             case "SEQUENTIAL": kind = LayerKind.SEQUENTIAL; break;
+            case "CONTAINER": case "MODULE": case "COMPOSITE":
+            case "DECODER_LAYER": case "ATTENTION": case "SWIGLU_MLP": case "GPT2_MLP":
+                // structural tags from LLM/Vision builders — treat as container
+                kind = LayerKind.CONTAINER; break;
             default:
-                kind = LayerKind.RELU; // safe default for unknown param-free
+                // Unknown token: keep as IDENTITY rather than wrong ReLU when clearly not act
+                if (k.startsWith("__")) {
+                    kind = LayerKind.CONTAINER; // metadata keys like __llm.family
+                } else {
+                    kind = LayerKind.RELU; // safe default for unknown param-free
+                }
                 break;
         }
         return new LayerInfo(path, kind, shapes, hyper, keys);
@@ -661,10 +857,19 @@ public final class StateDictModuleBuilder {
                 case RELU: return new ReLUImpl();
                 case RELU6: return new ReLU6Impl();
                 case LEAKY_RELU: return new LeakyReLUImpl();
+                case RRELU: return new RReLUImpl();
                 case GELU: return new GELUImpl();
                 case SILU: return new SiLUImpl();
+                case MISH: return new MishImpl();
+                case ELU: return new ELUImpl();
+                case CELU: return new CELUImpl();
+                case SELU: return new SELUImpl();
                 case TANH: return new TanhImpl();
+                case HARDTANH: return new HardtanhImpl();
                 case SIGMOID: return new SigmoidImpl();
+                case SOFTPLUS: return new SoftplusImpl();
+                case SOFTSIGN: return new SoftsignImpl();
+                case GLU: return new GLUImpl();
                 case DROPOUT: {
                     double p = 0.5;
                     Object pv = info.hyper.get("p");
@@ -678,7 +883,18 @@ public final class StateDictModuleBuilder {
                     if (dv instanceof Number) dim = ((Number) dv).longValue();
                     return new SoftmaxImpl(dim);
                 }
+                case LOG_SOFTMAX: {
+                    long dim = -1L;
+                    Object dv = info.hyper.get("dim");
+                    if (dv instanceof Number) dim = ((Number) dv).longValue();
+                    return new LogSoftmaxImpl(dim);
+                }
+                case FLATTEN: return new FlattenImpl();
+                case UNFLATTEN:
+                    // Unflatten needs dim+sizes; without hypers use Identity placeholder
+                    return new IdentityImpl();
                 case SEQUENTIAL: return new SequentialImpl();
+                case CONTAINER: return new Module(leafNameOf(info.path == null ? "mod" : info.path));
                 default: return new IdentityImpl();
             }
         } catch (Throwable t) {
@@ -767,16 +983,28 @@ public final class StateDictModuleBuilder {
     private static boolean isParamFreeToken(String t) {
         if (t == null) return false;
         String u = t.toUpperCase(Locale.ROOT);
+        int colon = u.indexOf(':');
+        if (colon > 0) u = u.substring(0, colon);
         return u.startsWith("RELU") || u.startsWith("DROPOUT") || u.equals("GELU")
-                || u.equals("SILU") || u.equals("TANH") || u.equals("SIGMOID")
-                || u.equals("IDENTITY") || u.startsWith("SOFTMAX") || u.startsWith("LEAKY");
+                || u.equals("SILU") || u.equals("SWISH") || u.equals("MISH")
+                || u.equals("ELU") || u.equals("CELU") || u.equals("SELU")
+                || u.equals("TANH") || u.equals("HARDTANH") || u.equals("SIGMOID")
+                || u.equals("SOFTPLUS") || u.equals("SOFTSIGN") || u.equals("GLU")
+                || u.equals("IDENTITY") || u.equals("ID") || u.equals("NOOP")
+                || u.startsWith("SOFTMAX") || u.startsWith("LOG_SOFTMAX") || u.startsWith("LOGSOFTMAX")
+                || u.startsWith("LEAKY") || u.equals("RRELU")
+                || u.equals("FLATTEN") || u.equals("UNFLATTEN");
     }
 
     private static boolean isLeafToken(String t) {
         if (t == null) return false;
         String u = t.toUpperCase(Locale.ROOT);
-        return u.equals("LINEAR") || u.equals("EMBEDDING") || u.startsWith("LAYER_NORM")
-                || u.startsWith("BATCH_NORM") || u.startsWith("CONV") || u.startsWith("GROUP_NORM")
+        int colon = u.indexOf(':');
+        if (colon > 0) u = u.substring(0, colon);
+        return u.equals("LINEAR") || u.equals("EMBEDDING") || u.equals("EMBEDDING_BAG")
+                || u.startsWith("LAYER_NORM") || u.startsWith("RMS_NORM")
+                || u.startsWith("BATCH_NORM") || u.startsWith("INSTANCE_NORM")
+                || u.startsWith("CONV") || u.startsWith("GROUP_NORM") || u.equals("PRELU")
                 || isParamFreeToken(t);
     }
 
@@ -796,22 +1024,42 @@ public final class StateDictModuleBuilder {
         // 1) Java typed peer
         if (m instanceof SequentialImpl) return "SEQUENTIAL";
         if (m instanceof LinearImpl) return "LINEAR";
+        if (m instanceof EmbeddingBagImpl) return "EMBEDDING_BAG";
         if (m instanceof EmbeddingImpl) return "EMBEDDING";
         if (m instanceof LayerNormImpl) return "LAYER_NORM";
         if (m instanceof BatchNorm1dImpl) return "BATCH_NORM_1D";
         if (m instanceof BatchNorm2dImpl) return "BATCH_NORM_2D";
         if (m instanceof BatchNorm3dImpl) return "BATCH_NORM_3D";
+        if (m instanceof InstanceNorm1dImpl) return "INSTANCE_NORM_1D";
+        if (m instanceof InstanceNorm2dImpl) return "INSTANCE_NORM_2D";
+        if (m instanceof InstanceNorm3dImpl) return "INSTANCE_NORM_3D";
+        if (m instanceof GroupNormImpl) return "GROUP_NORM";
+        if (m instanceof ConvTranspose1dImpl) return "CONV_TRANSPOSE_1D";
+        if (m instanceof ConvTranspose2dImpl) return "CONV_TRANSPOSE_2D";
+        if (m instanceof ConvTranspose3dImpl) return "CONV_TRANSPOSE_3D";
         if (m instanceof Conv1dImpl) return "CONV_1D";
         if (m instanceof Conv2dImpl) return "CONV_2D";
         if (m instanceof Conv3dImpl) return "CONV_3D";
+        if (m instanceof PReLUImpl) return "PRELU";
         if (m instanceof ReLUImpl) return "RELU";
         if (m instanceof ReLU6Impl) return "RELU6";
         if (m instanceof GELUImpl) return "GELU";
         if (m instanceof SiLUImpl) return "SILU";
+        if (m instanceof MishImpl) return "MISH";
+        if (m instanceof ELUImpl) return "ELU";
+        if (m instanceof CELUImpl) return "CELU";
+        if (m instanceof SELUImpl) return "SELU";
         if (m instanceof LeakyReLUImpl) return "LEAKY_RELU";
+        if (m instanceof RReLUImpl) return "RRELU";
         if (m instanceof TanhImpl) return "TANH";
+        if (m instanceof HardtanhImpl) return "HARDTANH";
         if (m instanceof SigmoidImpl) return "SIGMOID";
+        if (m instanceof SoftplusImpl) return "SOFTPLUS";
+        if (m instanceof SoftsignImpl) return "SOFTSIGN";
+        if (m instanceof GLUImpl) return "GLU";
+        if (m instanceof LogSoftmaxImpl) return "LOG_SOFTMAX";
         if (m instanceof SoftmaxImpl) return "SOFTMAX";
+        if (m instanceof FlattenImpl) return "FLATTEN";
         if (m instanceof IdentityImpl) return "IDENTITY";
         if (m instanceof DropoutImpl) {
             double p = 0.5;
@@ -862,23 +1110,45 @@ public final class StateDictModuleBuilder {
         switch (u) {
             case "LINEAR": return "LINEAR";
             case "EMBEDDING": return "EMBEDDING";
+            case "EMBEDDINGBAG": return "EMBEDDING_BAG";
             case "LAYERNORM": return "LAYER_NORM";
+            case "RMSNORM": return "RMS_NORM";
             case "BATCHNORM1D": return "BATCH_NORM_1D";
             case "BATCHNORM2D": return "BATCH_NORM_2D";
             case "BATCHNORM3D": return "BATCH_NORM_3D";
+            case "INSTANCENORM1D": return "INSTANCE_NORM_1D";
+            case "INSTANCENORM2D": return "INSTANCE_NORM_2D";
+            case "INSTANCENORM3D": return "INSTANCE_NORM_3D";
             case "GROUPNORM": return "GROUP_NORM";
             case "CONV1D": return "CONV_1D";
             case "CONV2D": return "CONV_2D";
             case "CONV3D": return "CONV_3D";
+            case "CONVTRANSPOSE1D": return "CONV_TRANSPOSE_1D";
+            case "CONVTRANSPOSE2D": return "CONV_TRANSPOSE_2D";
+            case "CONVTRANSPOSE3D": return "CONV_TRANSPOSE_3D";
+            case "PRELU": return "PRELU";
             case "RELU": return "RELU";
             case "RELU6": return "RELU6";
             case "LEAKYRELU": return "LEAKY_RELU";
+            case "RRELU": return "RRELU";
             case "GELU": return "GELU";
             case "SILU": return "SILU";
+            case "MISH": return "MISH";
+            case "ELU": return "ELU";
+            case "CELU": return "CELU";
+            case "SELU": return "SELU";
             case "TANH": return "TANH";
+            case "HARDTANH": return "HARDTANH";
             case "SIGMOID": return "SIGMOID";
+            case "SOFTPLUS": return "SOFTPLUS";
+            case "SOFTSIGN": return "SOFTSIGN";
+            case "GLU": return "GLU";
             case "SOFTMAX": return "SOFTMAX";
-            case "DROPOUT": case "DROPOUT1D": return "DROPOUT:0.5";
+            case "LOGSOFTMAX": return "LOG_SOFTMAX";
+            case "FLATTEN": return "FLATTEN";
+            case "UNFLATTEN": return "UNFLATTEN";
+            case "DROPOUT": case "DROPOUT1D": case "DROPOUT2D": case "DROPOUT3D":
+                return "DROPOUT:0.5";
             case "IDENTITY": return "IDENTITY";
             case "SEQUENTIAL": return "SEQUENTIAL";
             case "MODULE": case "MODULEBASE": return null;
@@ -1055,6 +1325,7 @@ public final class StateDictModuleBuilder {
                 ? ""
                 : leafNameOf(path);
         String pathLower = path == null ? "" : path.toLowerCase(Locale.ROOT);
+        String leafLower = leaf.toLowerCase(Locale.ROOT);
 
         Tensor weight = roles.get("weight");
         Tensor bias = roles.get("bias");
@@ -1063,7 +1334,7 @@ public final class StateDictModuleBuilder {
 
         Map<String, Object> hyper = new LinkedHashMap<>();
 
-        // ---- BatchNorm family (running stats are decisive) ------------------
+        // ---- BatchNorm / InstanceNorm (running stats are decisive) ----------
         if (hasRunning || hasNumBatches) {
             long[] wShape = weight != null ? shapeOf(weight) : null;
             long numFeatures = 0;
@@ -1076,86 +1347,146 @@ public final class StateDictModuleBuilder {
             hyper.put("affine", weight != null || bias != null);
             hyper.put("track_running_stats", hasRunning);
 
+            boolean instanceHint = IN_NAME.matcher(path != null ? path : "").find()
+                    || IN_NAME.matcher(leaf).find()
+                    || pathLower.contains("instance");
+            if (instanceHint) {
+                LayerKind inKind = LayerKind.INSTANCE_NORM_1D;
+                if (pathLower.contains("2d") || leafLower.contains("2d") || pathLower.contains("in2")) {
+                    inKind = LayerKind.INSTANCE_NORM_2D;
+                } else if (pathLower.contains("3d") || leafLower.contains("3d") || pathLower.contains("in3")) {
+                    inKind = LayerKind.INSTANCE_NORM_3D;
+                } else if (VISION_HINT.matcher(pathLower).find()) {
+                    // vision backbones almost always use InstanceNorm2d / BatchNorm2d
+                    inKind = LayerKind.INSTANCE_NORM_2D;
+                }
+                return new LayerInfo(path, inKind, shapes, hyper, keys);
+            }
+
             LayerKind bnKind = LayerKind.BATCH_NORM_1D;
-            // Name hints for 2d/3d; default 1d (most common in state_dicts for channels-only)
-            if (pathLower.contains("2d") || pathLower.contains("bn2")
-                    || leaf.toLowerCase(Locale.ROOT).contains("2d")) {
+            if (pathLower.contains("2d") || pathLower.contains("bn2") || leafLower.contains("2d")) {
                 bnKind = LayerKind.BATCH_NORM_2D;
-            } else if (pathLower.contains("3d") || pathLower.contains("bn3")
-                    || leaf.toLowerCase(Locale.ROOT).contains("3d")) {
+            } else if (pathLower.contains("3d") || pathLower.contains("bn3") || leafLower.contains("3d")) {
                 bnKind = LayerKind.BATCH_NORM_3D;
-            } else if (BN_NAME.matcher(path).find() || BN_NAME.matcher(leaf).find()) {
-                // keep 1d default
-                bnKind = LayerKind.BATCH_NORM_1D;
+            } else if (VISION_HINT.matcher(pathLower).find() || CONV_NAME.matcher(path != null ? path : "").find()) {
+                // conv backbone → BN2d default
+                bnKind = LayerKind.BATCH_NORM_2D;
             }
             return new LayerInfo(path, bnKind, shapes, hyper, keys);
         }
 
-        // ---- Conv family (weight rank 3/4/5) --------------------------------
+        // ---- Conv / ConvTranspose family (weight rank 3/4/5) ----------------
         if (weight != null) {
             long[] ws = shapeOf(weight);
+            boolean transposeHint = CONV_TRANSPOSE_NAME.matcher(path != null ? path : "").find()
+                    || CONV_TRANSPOSE_NAME.matcher(leaf).find()
+                    || pathLower.contains("deconv") || pathLower.contains("transpose");
             if (ws.length == 3) {
-                // Conv1d: [out, in/groups, k]
+                // Conv1d / ConvTranspose1d: [out, in/groups, k]  (transpose same layout in state_dict)
                 hyper.put("out_channels", ws[0]);
                 hyper.put("in_channels", ws[1]);
                 hyper.put("kernel_size", ws[2]);
                 hyper.put("bias", bias != null);
-                return new LayerInfo(path, LayerKind.CONV_1D, shapes, hyper, keys);
+                return new LayerInfo(path,
+                        transposeHint ? LayerKind.CONV_TRANSPOSE_1D : LayerKind.CONV_1D,
+                        shapes, hyper, keys);
             }
             if (ws.length == 4) {
-                // Conv2d: [out, in/groups, kH, kW]
                 hyper.put("out_channels", ws[0]);
                 hyper.put("in_channels", ws[1]);
                 hyper.put("kernel_size", new long[]{ws[2], ws[3]});
                 hyper.put("bias", bias != null);
-                return new LayerInfo(path, LayerKind.CONV_2D, shapes, hyper, keys);
+                return new LayerInfo(path,
+                        transposeHint ? LayerKind.CONV_TRANSPOSE_2D : LayerKind.CONV_2D,
+                        shapes, hyper, keys);
             }
             if (ws.length == 5) {
                 hyper.put("out_channels", ws[0]);
                 hyper.put("in_channels", ws[1]);
                 hyper.put("kernel_size", new long[]{ws[2], ws[3], ws[4]});
                 hyper.put("bias", bias != null);
-                return new LayerInfo(path, LayerKind.CONV_3D, shapes, hyper, keys);
+                return new LayerInfo(path,
+                        transposeHint ? LayerKind.CONV_TRANSPOSE_3D : LayerKind.CONV_3D,
+                        shapes, hyper, keys);
             }
         }
 
         // ---- GroupNorm ------------------------------------------------------
         if (weight != null && shapeOf(weight).length == 1
-                && (GN_NAME.matcher(path).find() || GN_NAME.matcher(leaf).find())) {
+                && (GN_NAME.matcher(path != null ? path : "").find() || GN_NAME.matcher(leaf).find())) {
             long numChannels = shapeOf(weight)[0];
             hyper.put("num_channels", numChannels);
-            // num_groups unknown from weights alone — default 32 or 1
             long numGroups = guessNumGroups(numChannels);
             hyper.put("num_groups", numGroups);
             hyper.put("affine", true);
             return new LayerInfo(path, LayerKind.GROUP_NORM, shapes, hyper, keys);
         }
 
-        // ---- LayerNorm (1D weight/bias, no running stats) -------------------
+        // ---- PReLU (1D learnable weight, often named "weight" alone) --------
+        if (weight != null && shapeOf(weight).length == 1 && bias == null && roles.size() == 1
+                && (PRELU_NAME.matcher(path != null ? path : "").find() || PRELU_NAME.matcher(leaf).find())) {
+            long numParams = shapeOf(weight)[0];
+            hyper.put("num_parameters", numParams);
+            return new LayerInfo(path, LayerKind.PRELU, shapes, hyper, keys);
+        }
+
+        // ---- LayerNorm / RMSNorm (1D weight/bias, no running stats) ---------
         if (weight != null && shapeOf(weight).length == 1 && !hasRunning) {
-            boolean lnHint = LN_NAME.matcher(path).find() || LN_NAME.matcher(leaf).find();
-            boolean embHint = EMB_NAME.matcher(path).find() || EMB_NAME.matcher(leaf).find();
-            boolean linearHint = LINEAR_NAME.matcher(path).find() || LINEAR_NAME.matcher(leaf).find();
+            boolean rmsHint = RMS_NAME.matcher(path != null ? path : "").find()
+                    || RMS_NAME.matcher(leaf).find()
+                    || pathLower.contains("rms");
+            boolean lnHint = LN_NAME.matcher(path != null ? path : "").find()
+                    || LN_NAME.matcher(leaf).find()
+                    || pathLower.endsWith("norm") || leafLower.equals("norm")
+                    || leafLower.startsWith("ln");
+            boolean embHint = EMB_NAME.matcher(path != null ? path : "").find()
+                    || EMB_NAME.matcher(leaf).find();
+            boolean linearHint = LINEAR_NAME.matcher(path != null ? path : "").find()
+                    || LINEAR_NAME.matcher(leaf).find();
+
+            // Llama-style: 1D weight, no bias, rms / input_layernorm / model.norm
+            if (rmsHint && bias == null) {
+                long[] ns = shapeOf(weight);
+                hyper.put("normalized_shape", ns.clone());
+                hyper.put("elementwise_affine", true);
+                hyper.put("bias", false);
+                hyper.put("rms", true);
+                return new LayerInfo(path, LayerKind.RMS_NORM, shapes, hyper, keys);
+            }
             // Prefer LN when named as norm, or when only weight(+bias) 1D without emb/linear hints
-            if (lnHint || (!embHint && !linearHint && (bias != null || roles.size() <= 2))) {
+            if (lnHint || rmsHint || (!embHint && !linearHint && (bias != null || roles.size() <= 2))) {
                 long[] ns = shapeOf(weight);
                 hyper.put("normalized_shape", ns.clone());
                 hyper.put("elementwise_affine", true);
                 hyper.put("bias", bias != null);
+                // no-bias 1D norm on transformer paths → RMS even without explicit name
+                if (bias == null && (pathLower.contains("layers.") || pathLower.contains("h.")
+                        || pathLower.contains("blocks.") || pathLower.contains("encoder")
+                        || pathLower.contains("decoder"))) {
+                    hyper.put("rms", true);
+                    return new LayerInfo(path, LayerKind.RMS_NORM, shapes, hyper, keys);
+                }
                 return new LayerInfo(path, LayerKind.LAYER_NORM, shapes, hyper, keys);
             }
         }
 
-        // ---- Embedding vs Linear (2D weight) --------------------------------
+        // ---- Embedding / EmbeddingBag / Linear (2D weight) -----------------
         if (weight != null && shapeOf(weight).length == 2) {
             long[] ws = shapeOf(weight);
-            boolean embHint = EMB_NAME.matcher(path).find() || EMB_NAME.matcher(leaf).find();
-            boolean linearHint = LINEAR_NAME.matcher(path).find() || LINEAR_NAME.matcher(leaf).find();
+            boolean embBagHint = EMB_BAG_NAME.matcher(path != null ? path : "").find()
+                    || EMB_BAG_NAME.matcher(leaf).find();
+            boolean embHint = EMB_NAME.matcher(path != null ? path : "").find()
+                    || EMB_NAME.matcher(leaf).find();
+            boolean linearHint = LINEAR_NAME.matcher(path != null ? path : "").find()
+                    || LINEAR_NAME.matcher(leaf).find();
             boolean hasBias = bias != null;
 
-            // Embedding wins when name is emb-like and there is no bias — even if the
-            // name also matches a linear pattern (e.g. user_mlp / item_mlp / wte).
-            // Bias almost never exists on nn.Embedding; presence of bias ⇒ Linear.
+            if (embBagHint && !hasBias) {
+                hyper.put("num_embeddings", ws[0]);
+                hyper.put("embedding_dim", ws[1]);
+                return new LayerInfo(path, LayerKind.EMBEDDING_BAG, shapes, hyper, keys);
+            }
+            // Embedding wins when name is emb-like and there is no bias
             if (embHint && !hasBias) {
                 hyper.put("num_embeddings", ws[0]);
                 hyper.put("embedding_dim", ws[1]);
@@ -1163,19 +1494,16 @@ public final class StateDictModuleBuilder {
             }
             // Linear: explicit linear name, or bias present, or no emb hint
             if (linearHint || hasBias || !embHint) {
-                // weight is [out_features, in_features]
                 hyper.put("out_features", ws[0]);
                 hyper.put("in_features", ws[1]);
                 hyper.put("bias", hasBias);
                 return new LayerInfo(path, LayerKind.LINEAR, shapes, hyper, keys);
             }
-            // embHint && hasBias (rare) — still treat as Embedding by name
             hyper.put("num_embeddings", ws[0]);
             hyper.put("embedding_dim", ws[1]);
             return new LayerInfo(path, LayerKind.EMBEDDING, shapes, hyper, keys);
         }
 
-        // ---- Embedding without "weight" name? unlikely ----------------------
         // ---- fallback PARAMETER_BAG -----------------------------------------
         hyper.put("roles", new ArrayList<>(roles.keySet()));
         return new LayerInfo(path, LayerKind.PARAMETER_BAG, shapes, hyper, keys);
@@ -1194,7 +1522,12 @@ public final class StateDictModuleBuilder {
                     return makeLinear(info, roles, requiresGrad, clone);
                 case EMBEDDING:
                     return makeEmbedding(info, roles, requiresGrad, clone);
+                case EMBEDDING_BAG:
+                    return makeEmbeddingBag(info, roles, requiresGrad, clone);
                 case LAYER_NORM:
+                case RMS_NORM:
+                    // RMSNorm has no native LibTorch module in JavaCPP; materialize as
+                    // LayerNorm(affine, no bias) so weight loads + fine-tune still work.
                     return makeLayerNorm(info, roles, requiresGrad, clone);
                 case BATCH_NORM_1D:
                     return makeBatchNorm(info, roles, requiresGrad, clone, 1);
@@ -1202,6 +1535,12 @@ public final class StateDictModuleBuilder {
                     return makeBatchNorm(info, roles, requiresGrad, clone, 2);
                 case BATCH_NORM_3D:
                     return makeBatchNorm(info, roles, requiresGrad, clone, 3);
+                case INSTANCE_NORM_1D:
+                    return makeInstanceNorm(info, roles, requiresGrad, clone, 1);
+                case INSTANCE_NORM_2D:
+                    return makeInstanceNorm(info, roles, requiresGrad, clone, 2);
+                case INSTANCE_NORM_3D:
+                    return makeInstanceNorm(info, roles, requiresGrad, clone, 3);
                 case GROUP_NORM:
                     return makeGroupNorm(info, roles, requiresGrad, clone);
                 case CONV_1D:
@@ -1210,9 +1549,19 @@ public final class StateDictModuleBuilder {
                     return makeConv2d(info, roles, requiresGrad, clone);
                 case CONV_3D:
                     return makeConv3d(info, roles, requiresGrad, clone);
-                case RELU: case RELU6: case LEAKY_RELU: case GELU: case SILU:
-                case TANH: case SIGMOID: case DROPOUT: case IDENTITY: case SOFTMAX:
-                case SEQUENTIAL:
+                case CONV_TRANSPOSE_1D:
+                    return makeConvTranspose1d(info, roles, requiresGrad, clone);
+                case CONV_TRANSPOSE_2D:
+                    return makeConvTranspose2d(info, roles, requiresGrad, clone);
+                case CONV_TRANSPOSE_3D:
+                    return makeConvTranspose3d(info, roles, requiresGrad, clone);
+                case PRELU:
+                    return makePReLU(info, roles, requiresGrad, clone);
+                case RELU: case RELU6: case LEAKY_RELU: case RRELU:
+                case GELU: case SILU: case MISH: case ELU: case CELU: case SELU:
+                case TANH: case HARDTANH: case SIGMOID: case SOFTPLUS: case SOFTSIGN:
+                case GLU: case DROPOUT: case IDENTITY: case SOFTMAX: case LOG_SOFTMAX:
+                case FLATTEN: case UNFLATTEN: case SEQUENTIAL:
                     return materializeParamFree(info);
                 case PARAMETER_BAG:
                 default: {
@@ -1397,6 +1746,120 @@ public final class StateDictModuleBuilder {
         return conv;
     }
 
+    private static EmbeddingBagImpl makeEmbeddingBag(LayerInfo info, Map<String, Tensor> roles,
+                                                       boolean requiresGrad, boolean clone) {
+        long num = ((Number) info.hyper.get("num_embeddings")).longValue();
+        long dim = ((Number) info.hyper.get("embedding_dim")).longValue();
+        EmbeddingBagImpl emb = new EmbeddingBagImpl(new EmbeddingBagOptions(num, dim));
+        copyInto(emb.weight(), roles.get("weight"), requiresGrad, clone);
+        applyGrad(emb, requiresGrad);
+        return emb;
+    }
+
+    private static Module makeInstanceNorm(LayerInfo info, Map<String, Tensor> roles,
+                                            boolean requiresGrad, boolean clone, int dim) {
+        long numFeatures = ((Number) info.hyper.get("num_features")).longValue();
+        boolean affine = Boolean.TRUE.equals(info.hyper.get("affine"));
+        boolean track = Boolean.TRUE.equals(info.hyper.get("track_running_stats"));
+        InstanceNormOptions opt = new InstanceNormOptions(numFeatures)
+                .affine(affine)
+                .track_running_stats(track);
+        Module in;
+        switch (dim) {
+            case 2: in = new InstanceNorm2dImpl(opt); break;
+            case 3: in = new InstanceNorm3dImpl(opt); break;
+            default: in = new InstanceNorm1dImpl(opt); break;
+        }
+        try {
+            if (dim == 1) {
+                InstanceNorm1dImpl m = (InstanceNorm1dImpl) in;
+                if (roles.get("weight") != null) copyInto(m.weight(), roles.get("weight"), requiresGrad, clone);
+                if (roles.get("bias") != null) copyInto(m.bias(), roles.get("bias"), requiresGrad, clone);
+                if (roles.get("running_mean") != null) copyInto(m.running_mean(), roles.get("running_mean"), false, clone);
+                if (roles.get("running_var") != null) copyInto(m.running_var(), roles.get("running_var"), false, clone);
+            } else if (dim == 2) {
+                InstanceNorm2dImpl m = (InstanceNorm2dImpl) in;
+                if (roles.get("weight") != null) copyInto(m.weight(), roles.get("weight"), requiresGrad, clone);
+                if (roles.get("bias") != null) copyInto(m.bias(), roles.get("bias"), requiresGrad, clone);
+                if (roles.get("running_mean") != null) copyInto(m.running_mean(), roles.get("running_mean"), false, clone);
+                if (roles.get("running_var") != null) copyInto(m.running_var(), roles.get("running_var"), false, clone);
+            } else {
+                InstanceNorm3dImpl m = (InstanceNorm3dImpl) in;
+                if (roles.get("weight") != null) copyInto(m.weight(), roles.get("weight"), requiresGrad, clone);
+                if (roles.get("bias") != null) copyInto(m.bias(), roles.get("bias"), requiresGrad, clone);
+                if (roles.get("running_mean") != null) copyInto(m.running_mean(), roles.get("running_mean"), false, clone);
+                if (roles.get("running_var") != null) copyInto(m.running_var(), roles.get("running_var"), false, clone);
+            }
+        } catch (Throwable ignored) {}
+        applyGrad(in, requiresGrad);
+        return in;
+    }
+
+    private static ConvTranspose1dImpl makeConvTranspose1d(LayerInfo info, Map<String, Tensor> roles,
+                                                            boolean requiresGrad, boolean clone) {
+        long outC = ((Number) info.hyper.get("out_channels")).longValue();
+        long inC = ((Number) info.hyper.get("in_channels")).longValue();
+        long k = ((Number) info.hyper.get("kernel_size")).longValue();
+        boolean withBias = Boolean.TRUE.equals(info.hyper.get("bias"));
+        LongPointer kernel = new LongPointer(new long[]{k});
+        ConvTranspose1dOptions opt = new ConvTranspose1dOptions(inC, outC, kernel).bias(withBias);
+        ConvTranspose1dImpl conv = new ConvTranspose1dImpl(opt);
+        copyInto(conv.weight(), roles.get("weight"), requiresGrad, clone);
+        if (withBias && roles.get("bias") != null) {
+            copyInto(conv.bias(), roles.get("bias"), requiresGrad, clone);
+        }
+        applyGrad(conv, requiresGrad);
+        return conv;
+    }
+
+    private static ConvTranspose2dImpl makeConvTranspose2d(LayerInfo info, Map<String, Tensor> roles,
+                                                            boolean requiresGrad, boolean clone) {
+        long outC = ((Number) info.hyper.get("out_channels")).longValue();
+        long inC = ((Number) info.hyper.get("in_channels")).longValue();
+        long[] ks = (long[]) info.hyper.get("kernel_size");
+        boolean withBias = Boolean.TRUE.equals(info.hyper.get("bias"));
+        LongPointer kernel = new LongPointer(new long[]{ks[0], ks[1]});
+        ConvTranspose2dOptions opt = new ConvTranspose2dOptions(inC, outC, kernel).bias(withBias);
+        ConvTranspose2dImpl conv = new ConvTranspose2dImpl(opt);
+        copyInto(conv.weight(), roles.get("weight"), requiresGrad, clone);
+        if (withBias && roles.get("bias") != null) {
+            copyInto(conv.bias(), roles.get("bias"), requiresGrad, clone);
+        }
+        applyGrad(conv, requiresGrad);
+        return conv;
+    }
+
+    private static ConvTranspose3dImpl makeConvTranspose3d(LayerInfo info, Map<String, Tensor> roles,
+                                                            boolean requiresGrad, boolean clone) {
+        long outC = ((Number) info.hyper.get("out_channels")).longValue();
+        long inC = ((Number) info.hyper.get("in_channels")).longValue();
+        long[] ks = (long[]) info.hyper.get("kernel_size");
+        boolean withBias = Boolean.TRUE.equals(info.hyper.get("bias"));
+        LongPointer kernel = new LongPointer(new long[]{ks[0], ks[1], ks[2]});
+        ConvTranspose3dOptions opt = new ConvTranspose3dOptions(inC, outC, kernel).bias(withBias);
+        ConvTranspose3dImpl conv = new ConvTranspose3dImpl(opt);
+        copyInto(conv.weight(), roles.get("weight"), requiresGrad, clone);
+        if (withBias && roles.get("bias") != null) {
+            copyInto(conv.bias(), roles.get("bias"), requiresGrad, clone);
+        }
+        applyGrad(conv, requiresGrad);
+        return conv;
+    }
+
+    private static PReLUImpl makePReLU(LayerInfo info, Map<String, Tensor> roles,
+                                        boolean requiresGrad, boolean clone) {
+        long numParams = 1L;
+        Object np = info.hyper.get("num_parameters");
+        if (np instanceof Number) numParams = ((Number) np).longValue();
+        PReLUOptions opt = new PReLUOptions().num_parameters(numParams);
+        PReLUImpl prelu = new PReLUImpl(opt);
+        if (roles.get("weight") != null) {
+            copyInto(prelu.weight(), roles.get("weight"), requiresGrad, clone);
+        }
+        applyGrad(prelu, requiresGrad);
+        return prelu;
+    }
+
     // ---- raw attach / copy helpers ------------------------------------------
 
     private static void attachRaw(Module target,
@@ -1494,7 +1957,15 @@ public final class StateDictModuleBuilder {
                     if ("weight".equals(role)) return retainTensor(emb.weight());
                     break;
                 }
-                case LAYER_NORM: {
+                case EMBEDDING_BAG: {
+                    EmbeddingBagImpl emb = leaf.asEmbeddingBag();
+                    if (emb == null || emb.isNull()) break;
+                    if ("weight".equals(role)) return retainTensor(emb.weight());
+                    break;
+                }
+                case LAYER_NORM:
+                case RMS_NORM: {
+                    // RMS_NORM is materialized as LayerNorm(affine, no bias).
                     LayerNormImpl ln = leaf.asLayerNorm();
                     if (ln == null || ln.isNull()) break;
                     if ("weight".equals(role)) return retainTensor(ln.weight());
@@ -1531,6 +2002,43 @@ public final class StateDictModuleBuilder {
                     if ("num_batches_tracked".equals(role)) return retainTensor(m.num_batches_tracked());
                     break;
                 }
+                case INSTANCE_NORM_1D: {
+                    InstanceNorm1dImpl m = leaf.asInstanceNorm1d();
+                    if (m == null || m.isNull()) break;
+                    if ("weight".equals(role)) return retainTensor(m.weight());
+                    if ("bias".equals(role)) return retainTensor(m.bias());
+                    if ("running_mean".equals(role)) return retainTensor(m.running_mean());
+                    if ("running_var".equals(role)) return retainTensor(m.running_var());
+                    if ("num_batches_tracked".equals(role)) return retainTensor(m.num_batches_tracked());
+                    break;
+                }
+                case INSTANCE_NORM_2D: {
+                    InstanceNorm2dImpl m = leaf.asInstanceNorm2d();
+                    if (m == null || m.isNull()) break;
+                    if ("weight".equals(role)) return retainTensor(m.weight());
+                    if ("bias".equals(role)) return retainTensor(m.bias());
+                    if ("running_mean".equals(role)) return retainTensor(m.running_mean());
+                    if ("running_var".equals(role)) return retainTensor(m.running_var());
+                    if ("num_batches_tracked".equals(role)) return retainTensor(m.num_batches_tracked());
+                    break;
+                }
+                case INSTANCE_NORM_3D: {
+                    InstanceNorm3dImpl m = leaf.asInstanceNorm3d();
+                    if (m == null || m.isNull()) break;
+                    if ("weight".equals(role)) return retainTensor(m.weight());
+                    if ("bias".equals(role)) return retainTensor(m.bias());
+                    if ("running_mean".equals(role)) return retainTensor(m.running_mean());
+                    if ("running_var".equals(role)) return retainTensor(m.running_var());
+                    if ("num_batches_tracked".equals(role)) return retainTensor(m.num_batches_tracked());
+                    break;
+                }
+                case GROUP_NORM: {
+                    GroupNormImpl gn = leaf.asGroupNorm();
+                    if (gn == null || gn.isNull()) break;
+                    if ("weight".equals(role)) return retainTensor(gn.weight());
+                    if ("bias".equals(role)) return retainTensor(gn.bias());
+                    break;
+                }
                 case CONV_1D: {
                     Conv1dImpl c = leaf.asConv1d();
                     if (c == null || c.isNull()) break;
@@ -1550,6 +2058,33 @@ public final class StateDictModuleBuilder {
                     if (c == null || c.isNull()) break;
                     if ("weight".equals(role)) return retainTensor(c.weight());
                     if ("bias".equals(role)) return retainTensor(c.bias());
+                    break;
+                }
+                case CONV_TRANSPOSE_1D: {
+                    ConvTranspose1dImpl c = leaf.asConvTranspose1d();
+                    if (c == null || c.isNull()) break;
+                    if ("weight".equals(role)) return retainTensor(c.weight());
+                    if ("bias".equals(role)) return retainTensor(c.bias());
+                    break;
+                }
+                case CONV_TRANSPOSE_2D: {
+                    ConvTranspose2dImpl c = leaf.asConvTranspose2d();
+                    if (c == null || c.isNull()) break;
+                    if ("weight".equals(role)) return retainTensor(c.weight());
+                    if ("bias".equals(role)) return retainTensor(c.bias());
+                    break;
+                }
+                case CONV_TRANSPOSE_3D: {
+                    ConvTranspose3dImpl c = leaf.asConvTranspose3d();
+                    if (c == null || c.isNull()) break;
+                    if ("weight".equals(role)) return retainTensor(c.weight());
+                    if ("bias".equals(role)) return retainTensor(c.bias());
+                    break;
+                }
+                case PRELU: {
+                    PReLUImpl p = leaf.asPReLU();
+                    if (p == null || p.isNull()) break;
+                    if ("weight".equals(role)) return retainTensor(p.weight());
                     break;
                 }
                 default:

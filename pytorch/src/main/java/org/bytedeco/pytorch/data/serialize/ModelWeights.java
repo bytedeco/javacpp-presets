@@ -2,8 +2,11 @@ package org.bytedeco.pytorch.data.serialize;
 import org.bytedeco.pytorch.optim.options.*;
 import org.bytedeco.pytorch.optim.*;
 
+import org.bytedeco.pytorch.Device;
 import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.data.safetensors.LoadOptions;
 import org.bytedeco.pytorch.data.safetensors.SafeTensors;
+import org.bytedeco.pytorch.data.safetensors.ShardedSafeTensors;
 import org.bytedeco.pytorch.nn.Module;
 
 import java.io.File;
@@ -17,6 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Auto-detect weight file format and load as {@code Map&lt;String, Tensor&gt;}.
@@ -25,11 +29,13 @@ import java.util.Map;
  * <ul>
  *   <li>{@code .safetensors} — native JavaCPP path ({@link SafeTensors})</li>
  *   <li>{@code .pth} / {@code .pt} — Python {@code torch.save} ZIP → {@link TorchPthReader}</li>
+ *   <li>HF model directories / {@code model.safetensors.index.json} → {@link ShardedSafeTensors}</li>
  *   <li>magic-byte sniff when extension is missing/wrong</li>
  * </ul>
  *
  * <p>Optional: convert Python checkpoints to safetensors next to the source so
- * subsequent loads skip pickle entirely.
+ * subsequent loads skip pickle entirely. Honours {@link LoadOptions}
+ * ({@code weights_only}, {@code map_location}, {@code strict}, zero-copy, dtype).
  */
 public final class ModelWeights {
     public enum Format { SAFETENSORS, TORCH_PTH_ZIP, UNKNOWN }
@@ -67,10 +73,31 @@ public final class ModelWeights {
      *                         sibling {@code .safetensors} for faster reloads
      */
     public static Map<String, Tensor> load(File file, boolean convertPthToSafe) throws IOException {
+        return load(file, convertPthToSafe, LoadOptions.defaults());
+    }
+
+    /**
+     * Full options path — {@code torch.load}-compatible.
+     * When {@code opts.weightsOnly} is true (or always for this method), returns
+     * only the tensor map. Directories / index.json are accepted.
+     */
+    public static Map<String, Tensor> load(File file, boolean convertPthToSafe, LoadOptions opts)
+            throws IOException {
+        Objects.requireNonNull(file, "file");
+        if (opts == null) opts = LoadOptions.defaults();
+
+        if (file.isDirectory()) {
+            return loadFromDirectory(file.toPath(), convertPthToSafe, opts);
+        }
+        String lower = file.getName().toLowerCase(Locale.ROOT);
+        if (lower.endsWith("index.json")) {
+            return ShardedSafeTensors.loadIndex(file.toPath(), opts);
+        }
+
         Format fmt = detect(file);
         switch (fmt) {
             case SAFETENSORS:
-                return SafeTensors.loadAsTensors(file, true);
+                return SafeTensors.loadFile(file, opts);
             case TORCH_PTH_ZIP: {
                 Map<String, Tensor> sd = TorchPthReader.loadStateDict(file);
                 if (convertPthToSafe && !sd.isEmpty()) {
@@ -83,7 +110,7 @@ public final class ModelWeights {
                         }
                     }
                 }
-                return sd;
+                return SafeTensors.applyMapLocation(sd, opts);
             }
             default:
                 throw new IOException("Unrecognized weight format: " + file
@@ -91,12 +118,33 @@ public final class ModelWeights {
         }
     }
 
+    /** {@code torch.load(path, map_location=..., weights_only=True)} style. */
+    public static Map<String, Tensor> load(File file, LoadOptions opts) throws IOException {
+        return load(file, /*convertPthToSafe=*/true, opts);
+    }
+
+    public static Map<String, Tensor> load(File file, Device mapLocation, boolean weightsOnly)
+            throws IOException {
+        return load(file, true, LoadOptions.builder()
+                .mapLocation(mapLocation)
+                .weightsOnly(weightsOnly)
+                .build());
+    }
+
     public static Map<String, Tensor> load(Path path) throws IOException {
         return load(path.toFile());
     }
 
+    public static Map<String, Tensor> load(Path path, LoadOptions opts) throws IOException {
+        return load(path.toFile(), opts);
+    }
+
     public static Map<String, Tensor> load(String path) throws IOException {
         return load(new File(path));
+    }
+
+    public static Map<String, Tensor> load(String path, LoadOptions opts) throws IOException {
+        return load(new File(path), opts);
     }
 
     /**
@@ -105,8 +153,14 @@ public final class ModelWeights {
      * @return parameters written
      */
     public static int loadIntoModule(Module module, File file, boolean strict) throws IOException {
-        Map<String, Tensor> w = load(file, true);
+        Map<String, Tensor> w = load(file, true, LoadOptions.builder().strict(strict).build());
         return SafeTensors.loadIntoModule(module, w, strict);
+    }
+
+    public static int loadIntoModule(Module module, File file, LoadOptions opts) throws IOException {
+        if (opts == null) opts = LoadOptions.defaults();
+        Map<String, Tensor> w = load(file, true, opts);
+        return SafeTensors.loadIntoModule(module, w, opts.strict);
     }
 
     /**
@@ -131,16 +185,37 @@ public final class ModelWeights {
     }
 
     public static WeightBagModule toModule(File file, boolean requiresGrad) throws IOException {
-        // Delegate to WeightBagModule loaders (structure meta + Sequential gap-fill)
-        return WeightBagModule.fromFile(file, requiresGrad);
+        return toModule(file, requiresGrad, LoadOptions.defaults());
+    }
+
+    public static WeightBagModule toModule(File file, boolean requiresGrad, LoadOptions opts)
+            throws IOException {
+        // Delegate to WeightBagModule loaders (structure meta + Sequential gap-fill + opts)
+        return WeightBagModule.fromFile(file, requiresGrad, opts);
+    }
+
+    public static WeightBagModule toModule(File file, boolean requiresGrad,
+                                            Device mapLocation, boolean strict) throws IOException {
+        return toModule(file, requiresGrad, LoadOptions.builder()
+                .mapLocation(mapLocation)
+                .strict(strict)
+                .build());
     }
 
     public static WeightBagModule toModule(Path path) throws IOException {
         return toModule(path.toFile());
     }
 
+    public static WeightBagModule toModule(Path path, LoadOptions opts) throws IOException {
+        return toModule(path.toFile(), true, opts);
+    }
+
     public static WeightBagModule toModule(String path) throws IOException {
         return toModule(new File(path));
+    }
+
+    public static WeightBagModule toModule(String path, LoadOptions opts) throws IOException {
+        return toModule(new File(path), true, opts);
     }
 
     /**
@@ -152,13 +227,26 @@ public final class ModelWeights {
 
     public static WeightBagModule toModuleFromDirectory(Path dir, boolean requiresGrad)
             throws IOException {
-        Map<String, Tensor> w = loadFromDirectory(dir, true);
+        return toModuleFromDirectory(dir, requiresGrad, LoadOptions.defaults());
+    }
+
+    public static WeightBagModule toModuleFromDirectory(Path dir, boolean requiresGrad,
+                                                         LoadOptions opts) throws IOException {
+        if (opts == null) opts = LoadOptions.defaults();
+        // Prefer sharded HF layout (index + shards) when present
+        try {
+            if (Files.isDirectory(dir) && !ShardedSafeTensors.resolveShards(dir).isEmpty()) {
+                return WeightBagModule.fromSafetensors(dir.toFile(), requiresGrad, opts);
+            }
+        } catch (IOException ignored) {}
+        Map<String, Tensor> w = loadFromDirectory(dir, true, opts);
         return WeightBagModule.fromTyped(w, requiresGrad);
     }
 
     /**
      * Scan a directory for weight files in preference order:
-     * model.safetensors → *.safetensors shards → model.pth / pytorch_model.bin / *.pth.
+     * model.safetensors.index.json → model.safetensors → *.safetensors shards
+     * → model.pth / pytorch_model.bin / *.pth.
      */
     public static Map<String, Tensor> loadFromDirectory(Path dir) throws IOException {
         return loadFromDirectory(dir, true);
@@ -166,13 +254,30 @@ public final class ModelWeights {
 
     public static Map<String, Tensor> loadFromDirectory(Path dir, boolean convertPthToSafe)
             throws IOException {
+        return loadFromDirectory(dir, convertPthToSafe, LoadOptions.defaults());
+    }
+
+    public static Map<String, Tensor> loadFromDirectory(Path dir, boolean convertPthToSafe,
+                                                         LoadOptions opts) throws IOException {
         if (dir == null || !Files.isDirectory(dir)) {
             throw new IOException("not a directory: " + dir);
         }
-        // Prefer safetensors
+        if (opts == null) opts = LoadOptions.defaults();
+
+        // Prefer HF index / numbered shards via ShardedSafeTensors
+        try {
+            List<Path> shards = ShardedSafeTensors.resolveShards(dir);
+            if (!shards.isEmpty()) {
+                return ShardedSafeTensors.loadDirectory(dir, opts);
+            }
+        } catch (IOException ignored) {
+            // fall through to legacy scan
+        }
+
+        // Prefer single safetensors
         Path single = dir.resolve("model.safetensors");
         if (Files.isRegularFile(single)) {
-            return SafeTensors.loadAsTensors(single.toFile(), true);
+            return SafeTensors.loadFile(single.toFile(), opts);
         }
         List<Path> safes = new ArrayList<>();
         try (DirectoryStream<Path> ds = Files.newDirectoryStream(dir, "*.safetensors")) {
@@ -186,9 +291,12 @@ public final class ModelWeights {
             safes.sort(Path::compareTo);
             Map<String, Tensor> all = new LinkedHashMap<>();
             for (Path p : safes) {
-                all.putAll(SafeTensors.loadAsTensors(p.toFile(), true));
+                all.putAll(SafeTensors.loadAsTensors(p.toFile(), opts.zeroCopy));
             }
-            return all;
+            if (opts.dequantFp8) {
+                all = ShardedSafeTensors.tryDequantFp8(all);
+            }
+            return SafeTensors.applyMapLocation(all, opts);
         }
         // Fall back to .pth / .pt / pytorch_model.bin
         for (String name : new String[]{
@@ -196,7 +304,7 @@ public final class ModelWeights {
         }) {
             Path p = dir.resolve(name);
             if (Files.isRegularFile(p)) {
-                return load(p.toFile(), convertPthToSafe);
+                return load(p.toFile(), convertPthToSafe, opts);
             }
         }
         List<Path> pths = new ArrayList<>();
@@ -214,7 +322,7 @@ public final class ModelWeights {
             Map<String, Tensor> all = new LinkedHashMap<>();
             for (Path p : pths) {
                 try {
-                    all.putAll(load(p.toFile(), convertPthToSafe));
+                    all.putAll(load(p.toFile(), convertPthToSafe, opts));
                 } catch (IOException ignored) { /* skip non-torch bins */ }
             }
             if (!all.isEmpty()) return all;

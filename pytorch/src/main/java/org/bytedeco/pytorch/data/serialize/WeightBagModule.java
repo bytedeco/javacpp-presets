@@ -5,11 +5,14 @@ import org.bytedeco.pytorch.nn.*;
 import org.bytedeco.pytorch.nn.modules.*;
 import org.bytedeco.pytorch.optim.*;
 
+import org.bytedeco.pytorch.Device;
 import org.bytedeco.pytorch.StringTensorDict;
 import org.bytedeco.pytorch.StringTensorDictItem;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorVector;
+import org.bytedeco.pytorch.data.safetensors.LoadOptions;
 import org.bytedeco.pytorch.data.safetensors.SafeTensors;
+import org.bytedeco.pytorch.data.safetensors.ShardedSafeTensors;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.nn.ModulePrinter;
 import org.bytedeco.pytorch.nn.modules.EmbeddingImpl;
@@ -17,6 +20,7 @@ import org.bytedeco.pytorch.nn.modules.LinearImpl;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -474,10 +478,42 @@ public class WeightBagModule extends Module {
     }
 
     public static WeightBagModule fromSafetensors(File file, boolean requiresGrad) throws IOException {
+        return fromSafetensors(file, requiresGrad, LoadOptions.defaults());
+    }
+
+    /**
+     * Load with full {@link LoadOptions} (zeroCopy, map_location/device, dtype, dequantFp8).
+     *
+     * <p>When {@code opts.weightsOnly} is true this still builds a Module — use
+     * {@link SafeTensors#loadFile(File, LoadOptions)} for a pure tensor map.
+     * Directory / index inputs are accepted (sharded HF checkpoints).
+     */
+    public static WeightBagModule fromSafetensors(File file, boolean requiresGrad, LoadOptions opts)
+            throws IOException {
         Objects.requireNonNull(file, "file");
-        if (!file.isFile()) throw new IOException("not a file: " + file);
-        Map<String, Tensor> sd = SafeTensors.loadAsTensors(file, /*zeroCopy=*/true);
-        Map<String, String> meta = SafeTensors.readMetadata(file);
+        if (opts == null) opts = LoadOptions.defaults();
+
+        Map<String, Tensor> sd;
+        Map<String, String> meta = null;
+        if (file.isDirectory()) {
+            sd = ShardedSafeTensors.loadDirectory(file.toPath(), opts);
+            // Prefer metadata from the first usable shard when present
+            try {
+                List<Path> shards = ShardedSafeTensors.resolveShards(file.toPath());
+                if (!shards.isEmpty()) meta = SafeTensors.readMetadata(shards.get(0).toFile());
+            } catch (Throwable ignored) {}
+        } else if (file.getName().toLowerCase(Locale.ROOT).endsWith("index.json")) {
+            sd = ShardedSafeTensors.loadIndex(file.toPath(), opts);
+        } else {
+            if (!file.isFile()) throw new IOException("not a file: " + file);
+            sd = SafeTensors.loadAsTensors(file, opts.zeroCopy);
+            if (opts.dequantFp8) {
+                sd = ShardedSafeTensors.tryDequantFp8(sd);
+            }
+            sd = SafeTensors.applyMapLocation(sd, opts);
+            meta = SafeTensors.readMetadata(file);
+        }
+
         Map<String, String> structure = null;
         if (meta != null) {
             String enc = meta.get("module_structure");
@@ -486,7 +522,22 @@ public class WeightBagModule extends Module {
                 structure = StateDictModuleBuilder.decodeStructureMeta(enc);
             }
         }
-        return new WeightBagModule(sd, requiresGrad, true, true, structure);
+        // clone=true so bag owns storage even when source was mmap/zero-copy
+        return new WeightBagModule(sd, requiresGrad, /*clone=*/true, /*typed=*/true, structure);
+    }
+
+    /**
+     * Python-style flags: {@code map_location} + {@code strict} (strict reserved for
+     * inject paths; structure rebuild always soft-fills missing param-free layers).
+     */
+    public static WeightBagModule fromSafetensors(File file, boolean requiresGrad,
+                                                   Device mapLocation, boolean strict)
+            throws IOException {
+        LoadOptions opts = LoadOptions.builder()
+                .mapLocation(mapLocation)
+                .strict(strict)
+                .build();
+        return fromSafetensors(file, requiresGrad, opts);
     }
 
     public static WeightBagModule fromSafetensors(String path) throws IOException {
@@ -495,6 +546,16 @@ public class WeightBagModule extends Module {
 
     public static WeightBagModule fromSafetensors(Path path) throws IOException {
         return fromSafetensors(path.toFile());
+    }
+
+    public static WeightBagModule fromSafetensors(String path, boolean requiresGrad, LoadOptions opts)
+            throws IOException {
+        return fromSafetensors(new File(path), requiresGrad, opts);
+    }
+
+    public static WeightBagModule fromSafetensors(Path path, boolean requiresGrad, LoadOptions opts)
+            throws IOException {
+        return fromSafetensors(path.toFile(), requiresGrad, opts);
     }
 
     /**
@@ -506,21 +567,68 @@ public class WeightBagModule extends Module {
     }
 
     public static WeightBagModule fromFile(File file, boolean requiresGrad) throws IOException {
+        return fromFile(file, requiresGrad, LoadOptions.defaults());
+    }
+
+    /**
+     * Auto-detect + honour {@link LoadOptions} for safetensors paths (single file,
+     * directory, or index). For Python {@code .pth} only {@code requiresGrad} applies
+     * (map_location is applied post-load when possible).
+     */
+    public static WeightBagModule fromFile(File file, boolean requiresGrad, LoadOptions opts)
+            throws IOException {
         Objects.requireNonNull(file, "file");
+        if (opts == null) opts = LoadOptions.defaults();
+
+        if (file.isDirectory()) {
+            // Prefer sharded safetensors under HF-style layout
+            try {
+                if (!ShardedSafeTensors.resolveShards(file.toPath()).isEmpty()) {
+                    return fromSafetensors(file, requiresGrad, opts);
+                }
+            } catch (IOException ignored) {}
+            return ModelWeights.toModuleFromDirectory(file.toPath(), requiresGrad, opts);
+        }
+
+        String lower = file.getName().toLowerCase(Locale.ROOT);
+        if (lower.endsWith("index.json") || lower.endsWith(".safetensors")) {
+            return fromSafetensors(file, requiresGrad, opts);
+        }
+
         ModelWeights.Format fmt = ModelWeights.detect(file);
         switch (fmt) {
             case SAFETENSORS:
-                return fromSafetensors(file, requiresGrad);
-            case TORCH_PTH_ZIP:
-                return fromPythonPth(file, requiresGrad);
+                return fromSafetensors(file, requiresGrad, opts);
+            case TORCH_PTH_ZIP: {
+                WeightBagModule bag = fromPythonPth(file, requiresGrad);
+                if (opts.mapLocation != null || opts.dtype != null) {
+                    // Best-effort: move owned params
+                    Map<String, Tensor> moved = SafeTensors.applyMapLocation(bag.stateDict(), opts);
+                    return new WeightBagModule(moved, requiresGrad, /*clone=*/true, true,
+                            bag.structureMeta());
+                }
+                return bag;
+            }
             default:
-                // last resort: try javacpp path (clearer error)
                 return fromJavacppPth(file, requiresGrad);
         }
     }
 
+    public static WeightBagModule fromFile(File file, boolean requiresGrad,
+                                            Device mapLocation, boolean strict) throws IOException {
+        return fromFile(file, requiresGrad, LoadOptions.builder()
+                .mapLocation(mapLocation)
+                .strict(strict)
+                .build());
+    }
+
     public static WeightBagModule fromFile(String path) throws IOException {
         return fromFile(new File(path));
+    }
+
+    public static WeightBagModule fromFile(String path, boolean requiresGrad, LoadOptions opts)
+            throws IOException {
+        return fromFile(new File(path), requiresGrad, opts);
     }
 
     // ---- factories ----------------------------------------------------------

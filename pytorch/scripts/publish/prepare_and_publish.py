@@ -56,7 +56,11 @@ M2_LOCAL = Path.home() / ".m2/repository"
 GROUP_ID = os.environ.get("PUBLISH_GROUP_ID", "io.github.mullerhai")
 GROUP_PATH = GROUP_ID.replace(".", "/")
 OLD_GROUP = "org.bytedeco"
-SUFFIX = os.environ.get("PUBLISH_SUFFIX", "beta-06")
+SUFFIX = os.environ.get("PUBLISH_SUFFIX", "beta-07")
+# When re-releasing platform POMs only (property expansion fix), set
+#   PUBLISH_SUFFIX=beta-08 NATIVE_SUFFIX=beta-07
+# so aggregator GAVs are new while classifier jars keep the already-published native versions.
+NATIVE_SUFFIX = os.environ.get("NATIVE_SUFFIX", SUFFIX)
 JAVACPP_BASE = os.environ.get("JAVACPP_BASE", "1.5.14")
 OPENBLAS_LIB = os.environ.get("OPENBLAS_LIB", "0.3.33")
 CUDA_LIB = os.environ.get("CUDA_LIB", "13.3-9.24")
@@ -65,6 +69,8 @@ FFMPEG_LIB = os.environ.get("FFMPEG_LIB", "8.1.1")
 OPENCV_LIB = os.environ.get("OPENCV_LIB", "4.13.0")
 CPYTHON_LIB = os.environ.get("CPYTHON_LIB", "3.14.6")
 NUMPY_LIB = os.environ.get("NUMPY_LIB", "2.5.0")
+TENSORRT_LIB = os.environ.get("TENSORRT_LIB", "11.1")
+TRITONSERVER_LIB = os.environ.get("TRITONSERVER_LIB", "2.70.0")
 
 JAVACPP_VERSION = os.environ.get("JAVACPP_VERSION", f"{JAVACPP_BASE}-{SUFFIX}")
 OPENBLAS_VERSION = os.environ.get("OPENBLAS_VERSION", f"{OPENBLAS_LIB}-{JAVACPP_BASE}-{SUFFIX}")
@@ -74,7 +80,20 @@ FFMPEG_VERSION = os.environ.get("FFMPEG_VERSION", f"{FFMPEG_LIB}-{JAVACPP_BASE}-
 OPENCV_VERSION = os.environ.get("OPENCV_VERSION", f"{OPENCV_LIB}-{JAVACPP_BASE}-{SUFFIX}")
 CPYTHON_VERSION = os.environ.get("CPYTHON_VERSION", f"{CPYTHON_LIB}-{JAVACPP_BASE}-{SUFFIX}")
 NUMPY_VERSION = os.environ.get("NUMPY_VERSION", f"{NUMPY_LIB}-{JAVACPP_BASE}-{SUFFIX}")
-OPENCV_VERSION = os.environ.get("OPENCV_VERSION", f"{OPENCV_LIB}-{JAVACPP_BASE}-{SUFFIX}")
+TENSORRT_VERSION = os.environ.get("TENSORRT_VERSION", f"{TENSORRT_LIB}-{JAVACPP_BASE}-{SUFFIX}")
+TRITONSERVER_VERSION = os.environ.get("TRITONSERVER_VERSION", f"{TRITONSERVER_LIB}-{JAVACPP_BASE}-{SUFFIX}")
+
+# Native (non-platform) coordinates — may differ from platform re-release suffix
+JAVACPP_NATIVE_VERSION = os.environ.get("JAVACPP_NATIVE_VERSION", f"{JAVACPP_BASE}-{NATIVE_SUFFIX}")
+OPENBLAS_NATIVE_VERSION = os.environ.get("OPENBLAS_NATIVE_VERSION", f"{OPENBLAS_LIB}-{JAVACPP_BASE}-{NATIVE_SUFFIX}")
+CUDA_NATIVE_VERSION = os.environ.get("CUDA_NATIVE_VERSION", f"{CUDA_LIB}-{JAVACPP_BASE}-{NATIVE_SUFFIX}")
+PYTORCH_NATIVE_VERSION = os.environ.get("PYTORCH_NATIVE_VERSION", f"{PYTORCH_LIB}-{JAVACPP_BASE}-{NATIVE_SUFFIX}")
+FFMPEG_NATIVE_VERSION = os.environ.get("FFMPEG_NATIVE_VERSION", f"{FFMPEG_LIB}-{JAVACPP_BASE}-{NATIVE_SUFFIX}")
+OPENCV_NATIVE_VERSION = os.environ.get("OPENCV_NATIVE_VERSION", f"{OPENCV_LIB}-{JAVACPP_BASE}-{NATIVE_SUFFIX}")
+CPYTHON_NATIVE_VERSION = os.environ.get("CPYTHON_NATIVE_VERSION", f"{CPYTHON_LIB}-{JAVACPP_BASE}-{NATIVE_SUFFIX}")
+NUMPY_NATIVE_VERSION = os.environ.get("NUMPY_NATIVE_VERSION", f"{NUMPY_LIB}-{JAVACPP_BASE}-{NATIVE_SUFFIX}")
+TENSORRT_NATIVE_VERSION = os.environ.get("TENSORRT_NATIVE_VERSION", f"{TENSORRT_LIB}-{JAVACPP_BASE}-{NATIVE_SUFFIX}")
+TRITONSERVER_NATIVE_VERSION = os.environ.get("TRITONSERVER_NATIVE_VERSION", f"{TRITONSERVER_LIB}-{JAVACPP_BASE}-{NATIVE_SUFFIX}")
 
 GPG_KEY_ID = os.environ.get("GPG_KEY_ID", "7AD293084072FD9F")
 
@@ -107,6 +126,8 @@ VERSION_MAP = {
     f"{OPENCV_LIB}-{JAVACPP_BASE}-SNAPSHOT": OPENCV_VERSION,
     f"{CPYTHON_LIB}-{JAVACPP_BASE}-SNAPSHOT": CPYTHON_VERSION,
     f"{NUMPY_LIB}-{JAVACPP_BASE}-SNAPSHOT": NUMPY_VERSION,
+    f"{TENSORRT_LIB}-{JAVACPP_BASE}-SNAPSHOT": TENSORRT_VERSION,
+    f"{TRITONSERVER_LIB}-{JAVACPP_BASE}-SNAPSHOT": TRITONSERVER_VERSION,
     # unresolved parent property forms that may appear in raw source poms
     f"{OPENBLAS_LIB}-${{project.parent.version}}": OPENBLAS_VERSION,
     f"{CUDA_LIB}-${{project.parent.version}}": CUDA_VERSION,
@@ -115,6 +136,8 @@ VERSION_MAP = {
     f"{OPENCV_LIB}-${{project.parent.version}}": OPENCV_VERSION,
     f"{CPYTHON_LIB}-${{project.parent.version}}": CPYTHON_VERSION,
     f"{NUMPY_LIB}-${{project.parent.version}}": NUMPY_VERSION,
+    f"{TENSORRT_LIB}-${{project.parent.version}}": TENSORRT_VERSION,
+    f"{TRITONSERVER_LIB}-${{project.parent.version}}": TRITONSERVER_VERSION,
     "${project.parent.version}": JAVACPP_VERSION,
 }
 
@@ -152,6 +175,10 @@ PUBLISHED_ARTIFACTS = {
     "pytorch",
     "pytorch-platform",
     "pytorch-platform-gpu",
+    "tensorrt",
+    "tensorrt-platform",
+    "tritonserver",
+    "tritonserver-platform",
 }
 
 # CUDA redistributable native packages (NVIDIA libs packaged by JavaCPP)
@@ -405,6 +432,46 @@ ARTIFACTS: list[Artifact] = [
         require_javadoc=False,
         require_sources=True,
     ),
+    Artifact(
+        artifact_id="tensorrt",
+        old_version=f"{TENSORRT_LIB}-{JAVACPP_BASE}-SNAPSHOT",
+        new_version=TENSORRT_VERSION,
+        description="JavaCPP Presets for TensorRT (mullerhai fork release)",
+        classifiers=[
+            "linux-arm64",
+            "linux-x86_64",
+            "windows-x86_64",
+        ],
+    ),
+    Artifact(
+        artifact_id="tensorrt-platform",
+        old_version=f"{TENSORRT_LIB}-{JAVACPP_BASE}-SNAPSHOT",
+        new_version=TENSORRT_VERSION,
+        description="JavaCPP Presets Platform for TensorRT (mullerhai fork release)",
+        classifiers=[],
+        require_javadoc=False,
+        require_sources=True,
+    ),
+    Artifact(
+        artifact_id="tritonserver",
+        old_version=f"{TRITONSERVER_LIB}-{JAVACPP_BASE}-SNAPSHOT",
+        new_version=TRITONSERVER_VERSION,
+        description="JavaCPP Presets for Triton Inference Server (mullerhai fork release)",
+        classifiers=[
+            "linux-arm64",
+            "linux-x86_64",
+            "windows-x86_64",
+        ],
+    ),
+    Artifact(
+        artifact_id="tritonserver-platform",
+        old_version=f"{TRITONSERVER_LIB}-{JAVACPP_BASE}-SNAPSHOT",
+        new_version=TRITONSERVER_VERSION,
+        description="JavaCPP Presets Platform for Triton Inference Server (mullerhai fork release)",
+        classifiers=[],
+        require_javadoc=False,
+        require_sources=True,
+    ),
 ]
 
 # CUDA redistributable packages — opt-in only (large natives; skipped for beta-06).
@@ -518,31 +585,41 @@ def staged_dir(art: Artifact, stage: Path) -> Path:
 
 
 def find_file(base: Path, artifact_id: str, version: str, classifier: str | None, ext: str) -> Path | None:
-    """Find SNAPSHOT or timestamped equivalent. Skips corrupted/incomplete files."""
-    if classifier:
-        name = f"{artifact_id}-{version}-{classifier}.{ext}"
-    else:
-        name = f"{artifact_id}-{version}.{ext}"
+    """Find SNAPSHOT or timestamped equivalent. Prefer newest mtime; skip corrupt jars."""
+    if not base.exists():
+        return None
 
     def is_valid_jar(path: Path) -> bool:
         """Check if file is a valid (non-empty, non-corrupt) JAR."""
         if not path.exists() or path.stat().st_size == 0:
             return False
-        # For JARs, check if it's at least a minimal size (empty javadoc is ~2KB, real ones are bigger)
-        # But we can't do full ZIP validation here without being too slow
-        # Just check size > 100 bytes as a basic sanity check
         if path.stat().st_size < 100:
             return False
+        if path.suffix == ".jar":
+            try:
+                with zipfile.ZipFile(path) as zf:
+                    # Opening + reading central directory catches truncated/corrupt stubs.
+                    # Full CRC scan (testzip) only for small jars; large natives are too slow.
+                    _ = zf.namelist()
+                    if path.stat().st_size < (32 << 20):
+                        if zf.testzip() is not None:
+                            return False
+            except zipfile.BadZipFile:
+                return False
+            except Exception:
+                return False
         return True
 
-    # For SNAPSHOT version, only use if valid
+    candidates: list[Path] = []
+
+    # literal SNAPSHOT name
     if classifier:
         snapshot_name = f"{artifact_id}-{version}-{classifier}.{ext}"
     else:
         snapshot_name = f"{artifact_id}-{version}.{ext}"
     snapshot_candidate = base / snapshot_name
     if snapshot_candidate.exists() and is_valid_jar(snapshot_candidate):
-        return snapshot_candidate
+        candidates.append(snapshot_candidate)
 
     # timestamped: artifact-1.5.14-20260714.002819-98-sources.jar
     if classifier:
@@ -553,11 +630,14 @@ def find_file(base: Path, artifact_id: str, version: str, classifier: str | None
         pattern = re.compile(
             rf"^{re.escape(artifact_id)}-{re.escape(version.replace('-SNAPSHOT', ''))}-\d{{8}}\.\d{{6}}-\d+\.{re.escape(ext)}$"
         )
-    matches = [p for p in base.iterdir() if p.is_file() and pattern.match(p.name) and is_valid_jar(p)]
-    if not matches:
+    for p in base.iterdir():
+        if p.is_file() and pattern.match(p.name) and is_valid_jar(p):
+            candidates.append(p)
+
+    if not candidates:
         return None
-    # pick newest by mtime
-    return max(matches, key=lambda p: p.stat().st_mtime)
+    # Always pick newest by mtime (user requirement; critical for pytorch self-builds)
+    return max(candidates, key=lambda p: p.stat().st_mtime)
 
 
 def minimal_javadoc_jar(artifact_id: str, version: str, out: Path) -> None:
@@ -701,6 +781,14 @@ def rewrite_pom_xml(src_pom: Path, art: Artifact) -> str:
         f"{NUMPY_LIB}-${{project.parent.version}}",
         f"{NUMPY_LIB}-{JAVACPP_BASE}-SNAPSHOT",
     )
+    raw = raw.replace(
+        f"{TENSORRT_LIB}-${{project.parent.version}}",
+        f"{TENSORRT_LIB}-{JAVACPP_BASE}-SNAPSHOT",
+    )
+    raw = raw.replace(
+        f"{TRITONSERVER_LIB}-${{project.parent.version}}",
+        f"{TRITONSERVER_LIB}-{JAVACPP_BASE}-SNAPSHOT",
+    )
     # generic parent version substitution last
     raw = raw.replace("${project.parent.version}", f"{JAVACPP_BASE}-SNAPSHOT")
 
@@ -755,28 +843,36 @@ def rewrite_pom_xml(src_pom: Path, art: Artifact) -> str:
     #    Linux would declare io.github.mullerhai:cuda:13.3-9.24-1.5.14-beta-03 later).
     DROP_ARTIFACTS: set[str] = set()  # cuda is published under io.github.mullerhai now
     ver_map = {
-        "javacpp": JAVACPP_VERSION,
+        # platform aggregators → current PUBLISH_SUFFIX (may be beta-08 re-release)
         "javacpp-platform": JAVACPP_VERSION,
-        "openblas": OPENBLAS_VERSION,
         "openblas-platform": OPENBLAS_VERSION,
-        "cuda": CUDA_VERSION,
         "cuda-platform": CUDA_VERSION,
-        "ffmpeg": FFMPEG_VERSION,
         "ffmpeg-platform": FFMPEG_VERSION,
-        "opencv": OPENCV_VERSION,
         "opencv-platform": OPENCV_VERSION,
-        "cpython": CPYTHON_VERSION,
         "cpython-platform": CPYTHON_VERSION,
-        "numpy": NUMPY_VERSION,
         "numpy-platform": NUMPY_VERSION,
-        "pytorch": PYTORCH_VERSION,
         "pytorch-platform": PYTORCH_VERSION,
         "pytorch-platform-gpu": PYTORCH_VERSION,
+        "tensorrt-platform": TENSORRT_VERSION,
+        "tritonserver-platform": TRITONSERVER_VERSION,
+        # native modules + classifiers → NATIVE_SUFFIX (already on Central)
+        "javacpp": JAVACPP_NATIVE_VERSION,
+        "openblas": OPENBLAS_NATIVE_VERSION,
+        "cuda": CUDA_NATIVE_VERSION,
+        "ffmpeg": FFMPEG_NATIVE_VERSION,
+        "opencv": OPENCV_NATIVE_VERSION,
+        "cpython": CPYTHON_NATIVE_VERSION,
+        "numpy": NUMPY_NATIVE_VERSION,
+        "pytorch": PYTORCH_NATIVE_VERSION,
+        "tensorrt": TENSORRT_NATIVE_VERSION,
+        "tritonserver": TRITONSERVER_NATIVE_VERSION,
     }
     for rid in CUDA_REDIST_IDS:
-        ver_map[rid] = CUDA_VERSION
+        ver_map[rid] = CUDA_NATIVE_VERSION
     for rid in CUDA_PLATFORM_REDIST_IDS:
         ver_map[rid] = CUDA_VERSION
+
+    module_id = _module_id_for(art)
 
     # Collect dependency parents so we can remove nodes safely
     to_remove: list[tuple[ET.Element, ET.Element]] = []
@@ -795,6 +891,15 @@ def rewrite_pom_xml(src_pom: Path, art: Artifact) -> str:
                     v_el = c
             aid = (a.text or "").strip() if a is not None else ""
             gid = (g.text or "").strip() if g is not None else ""
+            # Resolve placeholders before matching (source platform POMs use these)
+            if aid in ("${javacpp.moduleId}", "${project.artifactId}"):
+                aid = module_id
+                if a is not None:
+                    a.text = module_id
+            if gid in ("${project.groupId}",):
+                gid = GROUP_ID
+                if g is not None:
+                    g.text = GROUP_ID
 
             # Explicit drop list only (empty = ship everything we rewrite)
             if aid in DROP_ARTIFACTS:
@@ -840,9 +945,122 @@ def rewrite_pom_xml(src_pom: Path, art: Artifact) -> str:
     if text_child(root, "packaging") is None:
         set_or_create(root, "packaging", art.packaging)
 
+    # Critical for Central consumers (Maven/Coursier/sbt): expand every
+    # ${javacpp.platform.*}/${javacpp.moduleId}/${project.*} left after dropping parent.
+    expand_javacpp_placeholders(root, art)
+
     # Pretty-ish serialization
     rough = ET.tostring(root, encoding="utf-8", xml_declaration=True)
     return rough.decode("utf-8")
+
+
+def _module_id_for(art: Artifact) -> str:
+    aid = art.artifact_id
+    if aid.endswith("-platform-gpu"):
+        return aid[: -len("-platform-gpu")]
+    if aid.startswith("cuda-platform-redist"):
+        # cuda-platform-redist -> cuda-redist ; cuda-platform-redist-cublas -> cuda-redist-cublas
+        return "cuda-redist" + aid[len("cuda-platform-redist") :]
+    if aid.endswith("-platform"):
+        return aid[: -len("-platform")]
+    return aid
+
+
+def _platform_extension_for(art: Artifact, root: ET.Element | None = None) -> str:
+    """Return classifier extension (e.g. '-gpu') from POM properties or artifact id."""
+    if root is not None:
+        for props in root:
+            if strip_ns(props.tag) != "properties":
+                continue
+            for p in props:
+                if strip_ns(p.tag) == "javacpp.platform.extension" and p.text:
+                    return (p.text or "").strip()
+    if art.artifact_id.endswith("-platform-gpu") or art.artifact_id.endswith("-gpu"):
+        return "-gpu"
+    return ""
+
+
+# Host platforms that appear as ${javacpp.platform.<name>}
+_PLATFORM_HOSTS = [
+    "android-arm",
+    "android-arm64",
+    "android-x86",
+    "android-x86_64",
+    "ios-arm64",
+    "ios-x86_64",
+    "linux-armhf",
+    "linux-arm64",
+    "linux-ppc64le",
+    "linux-riscv64",
+    "linux-x86",
+    "linux-x86_64",
+    "macosx-arm64",
+    "macosx-x86_64",
+    "windows-arm64",
+    "windows-x86",
+    "windows-x86_64",
+]
+
+
+def expand_javacpp_placeholders(root: ET.Element, art: Artifact) -> None:
+    """Expand JavaCPP platform POM placeholders so Coursier/sbt can resolve classifiers.
+
+    bytedeco source POMs keep:
+      <classifier>${javacpp.platform.linux-x86_64}</classifier>
+    with parent defining javacpp.platform.linux-x86_64 = linux-x86_64${extension}.
+    We drop the parent for Central, so these MUST become concrete strings
+    (e.g. linux-x86_64-gpu for pytorch-platform-gpu).
+    """
+    module_id = _module_id_for(art)
+    extension = _platform_extension_for(art, root)
+    # Prefer explicit property javacpp.moduleId if present
+    for props in root:
+        if strip_ns(props.tag) != "properties":
+            continue
+        for p in props:
+            if strip_ns(p.tag) == "javacpp.moduleId" and p.text and p.text.strip():
+                module_id = p.text.strip()
+
+    platform_map = {h: f"{h}{extension}" for h in _PLATFORM_HOSTS}
+
+    def expand_text(s: str | None) -> str | None:
+        if s is None:
+            return None
+        out = s
+        out = out.replace("${project.groupId}", GROUP_ID)
+        out = out.replace("${project.version}", art.new_version)
+        out = out.replace("${javacpp.moduleId}", module_id)
+        out = out.replace("${javacpp.platform.extension}", extension)
+        for host, concrete in platform_map.items():
+            out = out.replace(f"${{javacpp.platform.{host}}}", concrete)
+        # leftover empty platform props (profile-cleared) → empty classifier (drop later)
+        out = re.sub(r"\$\{javacpp\.platform\.[^}]+\}", "", out)
+        return out
+
+    # Expand all element texts under the POM
+    for el in root.iter():
+        if el.text and "${" in el.text:
+            el.text = expand_text(el.text)
+        if el.tail and "${" in el.tail:
+            el.tail = expand_text(el.tail)
+
+    # Drop dependency blocks whose classifier became empty (disabled platforms)
+    for parent in list(root.iter()):
+        for block in list(parent):
+            if strip_ns(block.tag) != "dependency":
+                continue
+            clf = None
+            for c in block:
+                if strip_ns(c.tag) == "classifier":
+                    clf = c
+                    break
+            if clf is not None and (clf.text is None or not str(clf.text).strip()):
+                parent.remove(block)
+
+    # Remove <properties> — everything needed is expanded; keeps POM self-contained
+    for c in list(root):
+        if strip_ns(c.tag) == "properties":
+            root.remove(c)
 
 
 def _dep(gid: str, aid: str, ver: str, opt: bool = False) -> str:
@@ -898,6 +1116,14 @@ def build_minimal_pom(art: Artifact) -> str:
         deps = "\n" + dep("javacpp", JAVACPP_VERSION)
     elif aid == "cuda-platform":
         deps = "\n" + dep("javacpp", JAVACPP_VERSION) + "\n" + dep("cuda", CUDA_VERSION)
+    elif aid == "tensorrt":
+        deps = "\n" + dep("javacpp", JAVACPP_VERSION) + "\n" + dep("cuda", CUDA_VERSION)
+    elif aid == "tensorrt-platform":
+        deps = "\n" + dep("javacpp", JAVACPP_VERSION) + "\n" + dep("tensorrt", TENSORRT_VERSION)
+    elif aid == "tritonserver":
+        deps = "\n" + dep("javacpp", JAVACPP_VERSION)
+    elif aid == "tritonserver-platform":
+        deps = "\n" + dep("javacpp", JAVACPP_VERSION) + "\n" + dep("tritonserver", TRITONSERVER_VERSION)
     else:
         deps = ""
 
@@ -1003,6 +1229,8 @@ def synthetic_platform_pom(art: Artifact) -> str:
         "cuda": ["linux-x86_64", "linux-arm64", "windows-x86_64"],
         "pytorch": ["macosx-arm64", "macosx-x86_64", "linux-x86_64", "linux-arm64", "windows-x86_64"],
         "pytorch-platform-gpu": [],  # aggregator only
+        "tensorrt": ["linux-x86_64", "linux-arm64", "windows-x86_64"],
+        "tritonserver": ["linux-x86_64", "linux-arm64", "windows-x86_64"],
     }
     classifiers = class_map.get(base, [])
     deps = [
@@ -1156,19 +1384,47 @@ def stage_artifact(art: Artifact, stage: Path) -> list[Path]:
 
 
 def selected_artifacts(only: list[str] | None = None) -> list[Artifact]:
-    """Filter ARTIFACTS by --only list (exact id or prefix like 'cuda-redist')."""
+    """Filter ARTIFACTS by --only list.
+
+    Matching rules (intentionally narrow — one package at a time):
+      - exact artifactId
+      - trailing ``*`` prefix: ``cuda-redist*`` selects all cuda-redist*
+      - auto companion: ``foo`` also selects ``foo-platform``
+        (``pytorch`` → ``pytorch-platform``; ``cuda-redist`` → ``cuda-platform-redist``)
+      - alias: ``pytorch-gpu`` → ``pytorch-platform-gpu``
+      - ``cuda`` does NOT select ``cuda-redist*``
+    """
     if not only:
         return list(ARTIFACTS)
     selected: list[Artifact] = []
+    seen: set[str] = set()
     for art in ARTIFACTS:
         for pat in only:
             pat = pat.strip()
             if not pat:
                 continue
-            if art.artifact_id == pat or art.artifact_id.startswith(pat + "-") or (
-                pat.endswith("*") and art.artifact_id.startswith(pat[:-1])
+            aid = art.artifact_id
+            match = False
+            if aid == pat:
+                match = True
+            elif pat.endswith("*") and aid.startswith(pat[:-1]):
+                match = True
+            elif aid == f"{pat}-platform":
+                # --only pytorch → also pytorch-platform
+                match = True
+            elif (
+                pat.startswith("cuda-")
+                and "redist" in pat
+                and aid == "cuda-platform-" + pat[len("cuda-") :]
             ):
+                # --only cuda-redist → cuda-platform-redist
+                # --only cuda-redist-cublas → cuda-platform-redist-cublas
+                match = True
+            elif pat in ("pytorch-gpu", "pytorch-platform-gpu") and aid == "pytorch-platform-gpu":
+                match = True
+            if match and aid not in seen:
                 selected.append(art)
+                seen.add(aid)
                 break
     if not selected:
         raise SystemExit(f"No artifacts matched --only={only}. Known: {[a.artifact_id for a in ARTIFACTS]}")
@@ -1178,12 +1434,19 @@ def selected_artifacts(only: list[str] | None = None) -> list[Artifact]:
 def stage_all(stage: Path, only: list[str] | None = None) -> None:
     arts = selected_artifacts(only)
     if stage.exists():
-        # When filtering, only wipe the selected artifact dirs (preserve others if any)
+        # Always fully wipe the stage dir used for this run.
+        # Selective wipe by new_version only left leftover beta-XX trees that
+        # sign_all would then re-sign and re-bundle (seen with beta-06 mixed in).
         if only:
             for art in arts:
-                d = staged_dir(art, stage)
-                if d.exists():
-                    shutil.rmtree(d)
+                # wipe ALL versions under this artifact id in this stage
+                art_root = stage / GROUP_PATH / art.artifact_id
+                if art_root.exists():
+                    shutil.rmtree(art_root)
+            # also drop any other leftover artifact trees in an --only isolated stage
+            # (isolated dirs are named staging-only-*; safe to fully clear)
+            if stage.name.startswith("staging-only-"):
+                shutil.rmtree(stage)
         else:
             shutil.rmtree(stage)
     stage.mkdir(parents=True, exist_ok=True)
@@ -1218,8 +1481,14 @@ def bundle_all(stage: Path, bundle_dir: Path) -> Path:
       io/github/mullerhai/<artifact>/<version>/<files>
     """
     bundle_dir.mkdir(parents=True, exist_ok=True)
-    stamp = time.strftime("%Y%m%d-%H%M%S")
-    zip_path = bundle_dir / f"mullerhai-javacpp-stack-{SUFFIX}-{stamp}.zip"
+    # Include pid + fractional seconds so parallel --only publishes never clobber
+    # each other's zip (second-resolution stamps collided under concurrent runs).
+    stamp = time.strftime("%Y%m%d-%H%M%S") + f"-{os.getpid()}-{int(time.time() * 1000) % 1000:03d}"
+    # Derive a short label from stage dir name when isolated (staging-only-foo)
+    label = ""
+    if stage.name.startswith("staging-only-"):
+        label = "-" + stage.name[len("staging-only-") :][:48]
+    zip_path = bundle_dir / f"mullerhai-javacpp-stack-{SUFFIX}{label}-{stamp}.zip"
     if zip_path.exists():
         zip_path.unlink()
 
@@ -1310,59 +1579,60 @@ def upload_bundle(zip_path: Path, publishing_type: str = "USER_MANAGED") -> str:
     netrc_path = Path(tempfile.gettempdir()) / "muller_netrc"
     netrc_path.write_text(f"machine central.sonatype.com login {user} password {pwd}\n", encoding="utf-8")
 
+    # Large multipart uploads over HTTP/2 often return empty body on Central Portal.
+    # Force HTTP/1.1; write body to file and capture HTTP status via -w.
+    body_path = Path(tempfile.gettempdir()) / f"central_upload_body_{os.getpid()}.txt"
     cmd = [
-        "curl", "-s", "-X", "POST",
-        "-n",  # use .netrc for auth
-        "--netrc-file", str(netrc_path),
-        "-F", f"bundle=@{zip_path};type=application/zip",
+        "curl",
+        "-sS",
+        "-X",
+        "POST",
+        "--http1.1",
+        "-n",
+        "--netrc-file",
+        str(netrc_path),
+        "-F",
+        f"bundle=@{zip_path};type=application/zip",
         f"https://central.sonatype.com/api/v1/publisher/upload?publishingType={publishing_type}&name={zip_path.stem}",
-        "--connect-timeout", "60",
-        "--max-time", "3600",
-        "-v",
+        "--connect-timeout",
+        "120",
+        "--max-time",
+        "7200",
+        "-o",
+        str(body_path),
+        "-w",
+        "HTTP_CODE=%{http_code} SIZE_UPLOAD=%{size_upload} TIME=%{time_total}\n",
     ]
 
-    log(f"  running: curl -F bundle=@{zip_path.name} ...")
+    log(f"  running: curl --http1.1 -F bundle=@{zip_path.name} ...")
 
     start_time = time.time()
-    proc = subprocess.Popen(
-        cmd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-
-    # Stream stderr to capture progress output
-    import select
-    stderr_lines = []
-    while True:
-        # Use select for non-blocking read
-        r, _, _ = select.select([proc.stderr], [], [], 1)
-        if r:
-            line = proc.stderr.readline()
-            if line:
-                stderr_lines.append(line.decode("utf-8", errors="replace"))
-                # Print progress lines
-                if b"%" in line or b"MiB" in line:
-                    print(f"  curl: {line.decode('utf-8', errors='replace').strip()}", end="", flush=True)
-            elif proc.poll() is not None:
-                break
-        else:
-            # Timeout, check if process ended
-            if proc.poll() is not None:
-                break
-
-    stdout, _ = proc.communicate()
+    proc = subprocess.run(cmd, capture_output=True, text=True)
     elapsed = time.time() - start_time
     netrc_path.unlink(missing_ok=True)
 
     log(f"  upload completed in {elapsed:.1f}s")
-
+    if proc.stdout:
+        log(f"  curl meta: {proc.stdout.strip()}")
     if proc.returncode != 0:
-        log(f"  curl stderr: {''.join(stderr_lines[-10:])}")
+        log(f"  curl stderr: {(proc.stderr or '')[-1000:]}")
         raise SystemExit(f"Upload failed with return code {proc.returncode}")
 
-    deployment_id = stdout.decode("utf-8", errors="replace").strip()
+    deployment_id = body_path.read_text(encoding="utf-8", errors="replace").strip() if body_path.exists() else ""
+    body_path.unlink(missing_ok=True)
+
+    http_code = None
+    if proc.stdout and "HTTP_CODE=" in proc.stdout:
+        try:
+            http_code = proc.stdout.split("HTTP_CODE=")[1].split()[0]
+        except Exception:
+            http_code = None
+
+    if http_code and http_code not in ("200", "201", "202"):
+        log(f"  unexpected HTTP {http_code}: {deployment_id[:500]}")
+        raise SystemExit(f"Upload failed HTTP {http_code}: {deployment_id[:200]}")
+
     if not deployment_id or "{" in deployment_id:
-        # Might be JSON error response
         log(f"  unexpected response: {deployment_id[:500]}")
         raise SystemExit(f"Upload failed: {deployment_id[:200]}")
 
@@ -1489,6 +1759,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--publish", action="store_true", help="After upload validation, call publish API")
     parser.add_argument("--bundle-file", type=Path, help="Existing bundle zip for upload")
     parser.add_argument(
+        "--no-wait",
+        action="store_true",
+        help="Upload and return immediately without polling Central deployment status",
+    )
+    parser.add_argument(
         "--only",
         action="append",
         default=None,
@@ -1542,6 +1817,10 @@ def main(argv: list[str] | None = None) -> int:
                 raise SystemExit("No bundle zip found; run bundle first")
             z = bundles[-1]
         dep_id = upload_bundle(z, publishing_type=args.publishing_type)
+        if args.no_wait:
+            log(f"Upload submitted (no-wait). deploymentId={dep_id}")
+            log("Review later: https://central.sonatype.com/publishing/deployments")
+            return 0
         data = poll_status(dep_id)
         if args.publish and (data.get("deploymentState") == "VALIDATED"):
             publish_deployment(dep_id)
@@ -1570,6 +1849,11 @@ def main(argv: list[str] | None = None) -> int:
         install_local(stage_dir, only=only)
         if args.upload:
             dep_id = upload_bundle(z, publishing_type=args.publishing_type)
+            if args.no_wait:
+                log(f"Upload submitted (no-wait). deploymentId={dep_id}")
+                log(f"Bundle: {z}")
+                log("Review later: https://central.sonatype.com/publishing/deployments")
+                return 0
             data = poll_status(dep_id)
             if args.publish and (data.get("deploymentState") == "VALIDATED"):
                 publish_deployment(dep_id)
