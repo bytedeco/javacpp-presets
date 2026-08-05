@@ -1,4 +1,5 @@
 package org.bytedeco.pytorch.nn.functional;
+import org.bytedeco.pytorch.nn.modules.*;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Properties;

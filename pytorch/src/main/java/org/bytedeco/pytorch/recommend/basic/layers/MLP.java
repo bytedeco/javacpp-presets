@@ -54,6 +54,19 @@ public class MLP extends Module {
     }
 
     private final SequentialImpl sequential;
+    private int moduleCounter = 0;
+
+    private void addModule(Module m) {
+        String name = "layer_" + moduleCounter++;
+        sequential.push_back(name, m);
+        register_module(name, m);
+    }
+
+    private void addModule(String name, Module m) {
+        // allow explicit names but still register
+        sequential.push_back(name, m);
+        register_module(name, m);
+    }
 
     public MLP(long inputDim, long[] hiddenDims) {
         this(inputDim, hiddenDims, 1L, "relu", 0.0f, false, false, true, DeviceSupport.backend());
@@ -74,54 +87,54 @@ public class MLP extends Module {
 
         if (hiddenDims != null) {
             for (long dim : hiddenDims) {
-                sequential.push_back(new LinearImpl(prevDim, dim));
+            addModule(new LinearImpl(prevDim, dim));
 
                 if (useLayerNorm) {
                     LongVector vec = new LongVector(1);
                     vec.put(0, dim);
-                    sequential.push_back(new LayerNormImpl(vec));
+                addModule(new LayerNormImpl(vec));
                 } else if (useBatchNorm && !"relu".equals(activation)) {
-                    sequential.push_back(new BatchNorm1dImpl(new BatchNormOptions(dim)));
+                addModule(new BatchNorm1dImpl(new BatchNormOptions(dim)));
                 }
 
                 String act = activation == null ? "relu" : activation.toLowerCase();
                 switch (act) {
                     case "relu":
-                        sequential.push_back(new ReLUImpl());
+                    addModule(new ReLUImpl());
                         break;
                     case "sigmoid":
-                        sequential.push_back(new SigmoidImpl());
+                    addModule(new SigmoidImpl());
                         break;
                     case "tanh":
-                        sequential.push_back(new TanhImpl());
+                    addModule(new TanhImpl());
                         break;
                     case "silu":
                     case "swish":
-                        sequential.push_back(new SiLUImpl());
+                    addModule(new SiLUImpl());
                         break;
                     case "gelu":
-                        sequential.push_back(new GELUImpl());
+                    addModule(new GELUImpl());
                         break;
                     case "prelu":
-                        sequential.push_back(new PReLUImpl());
+                    addModule(new PReLUImpl());
                         break;
                     case "leaky_relu":
                     case "leakyrelu":
-                        sequential.push_back(new LeakyReLUImpl());
+                    addModule(new LeakyReLUImpl());
                         break;
                     case "none":
                     case "identity":
-                        sequential.push_back(new IdentityImpl());
+                    addModule(new IdentityImpl());
                         break;
                     default:
-                        sequential.push_back(new ReLUImpl());
+                    addModule(new ReLUImpl());
                         break;
                 }
 
                 if (dropout > 0) {
                     // Use functional wrapper to avoid ambiguity between DropoutImpl forward overloads
                     // (e.g., forward(Tensor) vs forward(Tensor, boolean)) which can cause native crashes.
-                    sequential.push_back(new FunctionalDropout(dropout));
+                addModule(new FunctionalDropout(dropout));
                 }
 
                 prevDim = dim;
@@ -129,7 +142,7 @@ public class MLP extends Module {
         }
 
         if (outputLayer) {
-            sequential.push_back(new LinearImpl(prevDim, outputDim));
+            addModule(new LinearImpl(prevDim, outputDim));
         }
 
         // Register so parameters() sees Linear weights (Scala omitted this).
@@ -158,6 +171,7 @@ public class MLP extends Module {
             if (x.numel() == 0) {
                 throw new IllegalArgumentException("Input tensor has no elements");
             }
+            // Use SequentialImpl.forward to execute the composed modules
             return sequential.forward(x);
         } catch (RuntimeException e) {
             System.err.println("[MLP] Forward pass failed: " + e.getMessage());
