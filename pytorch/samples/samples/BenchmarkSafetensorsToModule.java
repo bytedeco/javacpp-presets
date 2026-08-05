@@ -1,4 +1,8 @@
 package samples;
+import org.bytedeco.pytorch.nn.modules.*;
+import org.bytedeco.pytorch.nn.modules.container.*;
+import org.bytedeco.pytorch.optim.*;
+import org.bytedeco.pytorch.optim.options.*;
 
 import org.bytedeco.pytorch.Scalar;
 import org.bytedeco.pytorch.Tensor;

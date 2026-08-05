@@ -133,7 +133,7 @@ public final class VistaRender {
         sb.append("<div id=\"err-").append(uniqueId).append("\" class=\"vx-err\" hidden></div>");
         sb.append("<div class=\"vx-toast\" id=\"toast-").append(uniqueId).append("\" hidden></div>");
 
-        sb.append("<div class=\"vx-body\" style=\"height:").append(height).append("px\">");
+        sb.append("<div class=\"vx-body\" style=\"min-height:").append(height).append("px\">");
         sb.append("<div class=\"vx-stage\" id=\"stage-").append(uniqueId).append("\">");
         sb.append("<div class=\"vx-bg-blobs\" aria-hidden=\"true\"></div>");
         sb.append("<svg id=\"svg-").append(uniqueId).append("\" xmlns=\"http://www.w3.org/2000/svg\">");
@@ -265,8 +265,8 @@ public final class VistaRender {
         sb.append(".vx-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:100;");
         sb.append("background:var(--ink);color:var(--bg2);padding:10px 18px;border-radius:999px;font-size:12px;font-weight:700;");
         sb.append("box-shadow:var(--shadow)}");
-        sb.append(".vx-body{display:grid;grid-template-columns:1fr minmax(280px,340px);gap:0;min-height:").append(height).append("px;");
-        sb.append("border-bottom:1px solid var(--line);transition:grid-template-columns .22s ease}");
+        sb.append(".vx-body{display:grid;grid-template-columns:1fr minmax(280px,340px);gap:0;flex:1;min-height:").append(height).append("px;");
+        sb.append("transition:grid-template-columns .22s ease}");
         sb.append(".vx-body.drawer-closed{grid-template-columns:1fr 0px}");
         sb.append("@media(max-width:980px){.vx-body{grid-template-columns:1fr}.vx-drawer{max-height:40vh}");
         sb.append(".vx-body.drawer-closed .vx-drawer{max-height:0;border-top:0}}");
@@ -334,7 +334,9 @@ public final class VistaRender {
         sb.append("padding:4px 8px;font-size:10px;font-weight:700;cursor:pointer;color:var(--ink)}");
         sb.append(".vx-shape-btn:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--bg2))}");
         sb.append(".vx-shape-btn.active{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--bg2))}");
-        sb.append(".vx-foot{padding:8px 14px;font-size:11px;color:var(--muted)}");
+        sb.append(".vx-foot{position:sticky;bottom:0;z-index:30;padding:6px 14px;font-size:11px;color:var(--muted);");
+        sb.append("background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);");
+        sb.append("border-top:1px solid var(--line);text-align:center;flex-shrink:0}");
         sb.append(".vx-foot a{color:var(--accent);text-decoration:none;font-weight:700}");
 
         // SVG nodes — NO css transform on .vn
@@ -440,7 +442,7 @@ public final class VistaRender {
         s.append("const framePos={};\n");
         // Per-node style overrides {fill,stroke,badge,shape} — soft flat defaults below
         s.append("const styleOverride={};\n");
-        s.append("const NW=200, NH=78, HG=58, VG=40;\n");
+        s.append("const NW=200, NH=78, HG=90, VG=70;\n");
         s.append("const THEMES={cute:'🍡',dark:'🌙',office:'💼'};\n");
         // Flat soft pastel palette (12)
         s.append("const PALETTE=[\n");
@@ -611,7 +613,9 @@ public final class VistaRender {
         s.append("      const ra=typeOf(a)==='Input'?-1:typeOf(a)==='Output'?1:0;\n");
         s.append("      const rb=typeOf(b)==='Input'?-1:typeOf(b)==='Output'?1:0;\n");
         s.append("      if(ra!==rb) return ra-rb;\n");
-        s.append("      return String(labelOf(a)).localeCompare(String(labelOf(b)));\n");
+        // Natural sort: handles numeric suffixes like "0","1","2","10" correctly
+        s.append("      const la=String(labelOf(a)), lb=String(labelOf(b));\n");
+        s.append("      return la.localeCompare(lb, undefined, {numeric:true, sensitivity:'base'});\n");
         s.append("    });\n");
         s.append("    const depth = rev ? (maxL - l) : l;\n");
         s.append("    const crossSpan = Math.max(0, row.length*stepCross - (isVert?HG*0.55:VG));\n");
@@ -712,7 +716,7 @@ public final class VistaRender {
         s.append("    if(members.length<1) return;\n");
         s.append("    let minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9;\n");
         s.append("    members.forEach(m=>{const p=pos[m]; minX=Math.min(minX,p.x); minY=Math.min(minY,p.y); maxX=Math.max(maxX,p.x+NW); maxY=Math.max(maxY,p.y+NH);});\n");
-        s.append("    const pad=12;\n");
+        s.append("    const pad=20;\n");
         s.append("    // Auto-compute frame bbox from members; if user pinned the frame, keep its origin\n");
         s.append("    let fx=minX-pad, fy=minY-pad-10;\n");
         s.append("    const fw=maxX-minX+pad*2, fh=maxY-minY+pad*2+10;\n");
@@ -845,9 +849,14 @@ public final class VistaRender {
         s.append("function onClick(n,g){\n");
         s.append("  const members=parentToNodes[n]||childrenOf[n]||[];\n");
         s.append("  if(members.length||collapsed.has(n)){\n");
-        s.append("    if(collapsed.has(n)) collapsed.delete(n); else collapsed.add(n);\n");
-        // Do NOT reset pinned node positions on collapse/expand — keep user layout
-        s.append("    selectedName=n; render();\n");
+        s.append("    if(collapsed.has(n)){\n");
+        s.append("      collapsed.delete(n);\n");
+        // Reset positions of newly visible children so they get properly re-laid out
+        s.append("      const resetKids=parentToNodes[n]||childrenOf[n]||[];\n");
+        s.append("      resetKids.forEach(m=>{ if(pos[m]) pos[m]._auto=true; });\n");
+        s.append("      if(framePos[n]) framePos[n]._auto=true;\n");
+        s.append("    } else { collapsed.add(n); }\n");
+        s.append("    selectedName=n; render(); fit();\n");
         s.append("    const ng=world.querySelector('g[data-node=\"'+CSS.escape(n)+'\"]');\n");
         s.append("    if(ng){ ng.classList.add('selected','pulse'); selected=ng; }\n");
         s.append("  } else {\n");

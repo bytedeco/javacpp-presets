@@ -1,4 +1,5 @@
 package samples;
+import org.bytedeco.pytorch.data.*;
 
 import org.bytedeco.pytorch.dataframe.Column;
 import org.bytedeco.pytorch.dataframe.DataFrame;

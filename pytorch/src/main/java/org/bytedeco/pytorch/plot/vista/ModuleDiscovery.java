@@ -69,14 +69,23 @@ public final class ModuleDiscovery {
      * for built-ins).
      *
      * <p>Order: registry {@link ModuleAsHelper#recover} → already-concrete class
-     * → {@code asXxx()} from demangled C++ name → reflective as-walk → original.
+     * → {@code asXxx()} dynamic_cast walk → original.
      */
     public static Module concrete(Module m) {
         if (m == null || m.isNull()) return m;
-        Module recovered = recover(m);
-        // If we already have a typed Java peer, use it; otherwise avoid calling
-        // asXxx() native helpers which can trigger native dynamic_cast crashes.
-        return recovered;
+        // Fast path: already a typed Java peer (not bare Module)
+        if (m.getClass() != Module.class) {
+            return m;
+        }
+        try {
+            // recoverTyped walks asXxx() helpers (C++ dynamic_cast) to recover
+            // the concrete *Impl type for bare Module pointers from
+            // named_children(). All asXxx() are @NoException(true) → null-safe.
+            Module typed = ModuleAsHelper.recoverTyped(m);
+            return typed != null ? typed : m;
+        } catch (Throwable e) {
+            return m;
+        }
     }
 
     public static boolean isContainer(Module m) {

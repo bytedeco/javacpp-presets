@@ -1,4 +1,5 @@
 package samples;
+import org.bytedeco.pytorch.nn.modules.*;
 
 import org.bytedeco.pytorch.llm.accelerate.Accelerator;
 import org.bytedeco.pytorch.llm.deepspeed.DeepSpeed;

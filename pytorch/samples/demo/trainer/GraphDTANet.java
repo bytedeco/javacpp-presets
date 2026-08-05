@@ -1,4 +1,5 @@
 package samples.demo.trainer;
+import org.bytedeco.pytorch.nn.options.*;
 import org.bytedeco.pytorch.nn.modules.container.*;
 import org.bytedeco.pytorch.nn.modules.*;
 

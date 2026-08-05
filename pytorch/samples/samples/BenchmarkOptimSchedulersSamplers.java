@@ -1,4 +1,8 @@
 package samples;
+import org.bytedeco.pytorch.data.sampler.*;
+import org.bytedeco.pytorch.optim.*;
+import org.bytedeco.pytorch.optim.options.*;
+import org.bytedeco.pytorch.optim.schedulers.*;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.pytorch.NoGradGuard;

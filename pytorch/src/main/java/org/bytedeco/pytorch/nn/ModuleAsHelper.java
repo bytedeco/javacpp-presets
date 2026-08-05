@@ -66,6 +66,66 @@ public final class ModuleAsHelper {
         return known != null ? known : module;
     }
 
+    /**
+     * Recover a typed Java peer for a bare {@link Module} by walking the
+     * built-in {@code asXxx()} helpers (C++ {@code dynamic_cast}). Unlike
+     * {@link #recover}, this works for modules obtained from
+     * {@code named_children()} that were never registered via
+     * {@link #remember} (e.g. children pushed via typed
+     * {@code SequentialImpl.push_back(LinearImpl)} overloads).
+     *
+     * <p>All {@code asXxx()} helpers are generated with
+     * {@code @NoException(true)} so they return {@code null} instead of
+     * throwing when the underlying C++ object is not of the requested type.
+     *
+     * <p><b>Caution:</b> Only a curated subset of {@code asXxx()} helpers is
+     * tried — walking all 80+ helpers can trigger a native
+     * {@code dynamic_cast} crash (SIGSEGV in {@code __cxxabiv1::dyn_cast})
+     * for certain module types. The curated list covers the layers most
+     * commonly found inside recommend-model Sequentials.
+     *
+     * @return the typed module, or the original bare module if no asXxx
+     *         helper matched (e.g. user-defined Module subclass).
+     */
+    public static Module recoverTyped(Module module) {
+        if (module == null || module.isNull()) {
+            return module;
+        }
+        Module known = REGISTRY.get(keyOf(module));
+        if (known != null && known.getClass() != Module.class) {
+            return known;
+        }
+        // Curated safe subset — avoids the dyn_cast crash triggered by
+        // walking all asXxx() helpers indiscriminately.
+        String[] safeAs = {
+            "asLinear", "asReLU", "asGELU", "asSiLU", "asSigmoid", "asTanh",
+            "asDropout", "asLayerNorm", "asBatchNorm1d", "asBatchNorm2d",
+            "asEmbedding", "asSequential", "asModuleList", "asModuleDict",
+            "asConv1d", "asConv2d", "asMaxPool2d", "asAvgPool2d",
+            "asAdaptiveAvgPool1d", "asAdaptiveAvgPool2d",
+            "asFlatten", "asIdentity", "asSoftmax", "asLogSoftmax",
+            "asELU", "asLeakyReLU", "asPReLU", "asTanhshrink",
+            "asBilinear", "asLazyLinear", "asLazyBatchNorm1d",
+            "asMultiheadAttention", "asTransformerEncoder",
+            "asTransformerEncoderLayer"
+        };
+        for (String name : safeAs) {
+            try {
+                java.lang.reflect.Method m = Module.class.getMethod(name);
+                Object cast = m.invoke(module);
+                if (cast instanceof Module && !((Module) cast).isNull()) {
+                    Module typed = (Module) cast;
+                    remember(typed);
+                    return typed;
+                }
+            } catch (NoSuchMethodException ignored) {
+            } catch (Throwable ignored) {
+                // asXxx may still crash for exotic types; skip and continue
+            }
+        }
+        return module;
+    }
+
     public static boolean hasForwardOverride(Module module, Class<?>... parameterTypes) {
         if (module == null || module.getClass() == Module.class) {
             return false;
@@ -175,7 +235,7 @@ public final class ModuleAsHelper {
      * the underlying C++ object isn't a recognised built-in type.
      * The result is a 2-element array: {@code [cast, implClass]}.
      */
-    private static Object[] findUnderlyingType(Module module) {
+    public static Object[] findUnderlyingType(Module module) {
         Method[] methods = Module.class.getMethods();
         // Filter to asXxx methods that return a Module subclass and
         // have no parameters — that's the shape the JavaCPP generator

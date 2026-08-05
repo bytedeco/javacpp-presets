@@ -1,4 +1,6 @@
 package samples;
+import org.bytedeco.pytorch.distributed.*;
+import org.bytedeco.pytorch.profiler.*;
 
 import org.bytedeco.pytorch.profiler.ActivityTypeSet;
 import org.bytedeco.pytorch.profiler.ExperimentalConfig;

@@ -94,10 +94,10 @@ public class ShowVistaAllRecommend {
                 Features.sequence("click_seq", 200, 8, "mean"));
         List<Feature> userFeats = Arrays.asList(
                 Features.sparse("user_id", 500, 8),
-                Features.sparse("u_age", 20, 4));
+                Features.sparse("u_age", 20, 8));
         List<Feature> itemFeats = Arrays.asList(
                 Features.sparse("item_id", 1000, 8),
-                Features.sparse("cate_id", 50, 4));
+                Features.sparse("cate_id", 50, 8));
         List<String> twoTasks = Arrays.asList("classification", "classification");
         // MetaHeac registers critic_<taskName>_i — task names must be unique
         List<String> metaTasks = Arrays.asList("ctr", "cvr");

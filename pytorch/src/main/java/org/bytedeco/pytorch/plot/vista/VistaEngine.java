@@ -13,6 +13,7 @@ import org.bytedeco.pytorch.NoGradGuard;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.nn.ModuleAsHelper;
+import org.bytedeco.pytorch.nn.modules.LinearImpl;
 import org.bytedeco.pytorch.nn.modules.container.SequentialImpl;
 
 /**
@@ -85,6 +86,11 @@ public final class VistaEngine {
     private String currentOp;
     /** Depth of open leaf-module frames — free ops inside opaque leaves are suppressed. */
     private int insideLeafModuleDepth;
+    /** True when traceLeafModule is called as a structural fallback (from
+     *  runForwardSafe). When true, preTraceOp must NOT create constant nodes
+     *  for untagged input tensors — they are structural placeholders, not
+     *  real constants. */
+    private boolean structuralFallback;
 
     public VistaEngine(VistaOptions options) {
         this.options = options == null ? VistaOptions.defaults() : options;
@@ -360,6 +366,8 @@ public final class VistaEngine {
         Tensor lastTensor = null;
         String lastNodeName = null; // track last emitted node for structural chaining
         boolean broken = false;
+        List<String> structChildNames = new ArrayList<>();
+        List<String> allChildNames = new ArrayList<>();
         try {
             for (int i = 0; i < kids.size(); i++) {
                 ModuleChildren.NamedChild child = kids.get(i);
@@ -369,11 +377,15 @@ public final class VistaEngine {
                     // first node under the next structural child so the UI shows
                     // continued flow even when runtime forward failed.
                     String leaf = emitStructuralChildReturning(child.module, child.key, stackDepth + 1);
+                    if (leaf != null) { structChildNames.add(leaf); allChildNames.add(leaf); }
                     if (leaf != null) {
                         // Link from the last known node (tensor source or structural)
                         String fromNode = lastNodeName;
                         if (fromNode == null && lastTensor != null) {
                             fromNode = tensorSource.get(TensorUtils.tensorKey(lastTensor));
+                        }
+                        if (fromNode == null) {
+                            fromNode = lastSuccessfulOp;
                         }
                         if (fromNode != null) linkImplied(fromNode, leaf);
                         lastNodeName = leaf;
@@ -383,12 +395,22 @@ public final class VistaEngine {
                 }
                 try {
                     Tensor out = runForward(child.module, current, stackDepth + 1);
+                    if (out == null || out.isNull()) {
+                        // Retry with a 2D-flattened input when the child is a
+                        // Linear/MLP-like layer that expects a matmul-compatible
+                        // input but received a 3D+ embedding tensor (e.g. DeepFM
+                        // feeds (4,1,8) into MLP whose first Linear expects (4,8)).
+                        Tensor flat = flattenForRetry(current);
+                        if (flat != null) {
+                            out = runForward(child.module, flat, stackDepth + 1);
+                        }
+                    }
                     if (out != null && !out.isNull()) {
                         lastTensor = out;
                         current = out;
                         // Update lastNodeName from tensor source
                         String src = tensorSource.get(TensorUtils.tensorKey(out));
-                        if (src != null) lastNodeName = src;
+                        if (src != null) { lastNodeName = src; allChildNames.add(src); }
                     } else {
                         // Child produced nothing usable — keep structure for the rest
                         broken = true;
@@ -400,12 +422,25 @@ public final class VistaEngine {
                                 if (fromNode == null && lastTensor != null) {
                                     fromNode = tensorSource.get(TensorUtils.tensorKey(lastTensor));
                                 }
+                                if (fromNode == null) {
+                                    fromNode = lastSuccessfulOp;
+                                }
                                 if (fromNode != null) linkImplied(fromNode, leaf);
                                 lastNodeName = leaf;
                             }
                         }
                     }
                 } catch (Throwable childEx) {
+                    // Shape mismatch? Retry with a 2D-flattened input — many
+                    // recommend models do view(batch, -1) before MLP/Linear.
+                    Tensor retryOut = retryWithFlatten(child.module, current, stackDepth, childEx);
+                    if (retryOut != null && !retryOut.isNull()) {
+                        lastTensor = retryOut;
+                        current = retryOut;
+                        String src = tensorSource.get(TensorUtils.tensorKey(retryOut));
+                        if (src != null) { lastNodeName = src; allChildNames.add(src); }
+                        continue;
+                    }
                     // Record partial failure but NEVER abort the rest of the Sequential —
                     // missing ReLU/Linear after a failed Linear is worse than a failed flag.
                     if (graph.exception() == null) {
@@ -424,6 +459,9 @@ public final class VistaEngine {
                             if (fromNode == null && lastTensor != null) {
                                 fromNode = tensorSource.get(TensorUtils.tensorKey(lastTensor));
                             }
+                            if (fromNode == null) {
+                                fromNode = lastSuccessfulOp;
+                            }
                             if (fromNode != null) linkImplied(fromNode, leaf);
                             lastNodeName = leaf;
                         }
@@ -433,12 +471,135 @@ public final class VistaEngine {
                     current = null;
                 }
             }
+
+            // Fallback: if the chain broke and structural children have no
+            // outgoing edges, try whole-module forward and wire them to the
+            // real output source. This prevents EmbeddingImpl structural nodes
+            // from becoming sinks that get incorrectly connected to model output.
+            if (broken && !structChildNames.isEmpty()) {
+                try {
+                    Tensor whole = callForward(m, inputs);
+                    if (whole != null && !whole.isNull()) {
+                        long key = TensorUtils.tensorKey(whole);
+                        String realSource = tensorSource.get(key);
+                        if (realSource == null && containerName != null) {
+                            realSource = containerName;
+                            tensorSource.put(key, containerName);
+                        }
+                        if (realSource != null) {
+                            lastTensor = whole;
+                            for (String sname : allChildNames) {
+                                if (sname == null || sname.equals(realSource)) continue;
+                                GraphNode sn = graph.adjList().get(sname);
+                                if (sn == null) continue;
+                                if (!sn.edges().isEmpty()) continue;
+                                sn.addEdge(new GraphEdge(realSource, "", 0L, false));
+                            }
+                        }
+                    }
+                } catch (Throwable ignored) {}
+            }
         } finally {
             if (containerName != null) {
                 endContainerFrame(containerName);
             }
         }
         return lastTensor;
+    }
+
+    /**
+     * Flatten a 3D+ tensor to 2D {@code (batch, -1)} for retry when a Linear/MLP
+     * child rejects a multi-dimensional embedding input. Returns null when the
+     * input is already 2D or cannot be flattened (not a Tensor, null, etc.).
+     */
+    private Tensor flattenForRetry(Object current) {
+        if (!(current instanceof Tensor)) return null;
+        Tensor t = (Tensor) current;
+        if (t.isNull()) return null;
+        try {
+            int dim = (int) t.dim();
+            if (dim <= 1) return null; // nothing to flatten
+            if (dim == 2) return null; // already 2D
+            long batch = t.size(0);
+            if (batch <= 0) return null;
+            Tensor flat = t.view(batch, -1);
+            // Inherit tensorSource from the original so preTraceOp doesn't
+            // create a spurious constant node for the reshaped tensor.
+            String src = tensorSource.get(TensorUtils.tensorKey(t));
+            if (src != null) tensorSource.put(TensorUtils.tensorKey(flat), src);
+            return flat;
+        } catch (Throwable ignored) {
+            return null;
+        }
+    }
+
+    /**
+     * Try to reshape {@code input} so its last dimension matches the
+     * {@code in_features} of a LinearImpl layer. When the total numel is
+     * divisible by {@code inFeatures}, produces {@code (batch, inFeatures)}.
+     * Returns null when not applicable.
+     */
+    private Tensor reshapeForLinear(Module child, Object current) {
+        if (!(current instanceof Tensor)) return null;
+        Tensor t = (Tensor) current;
+        if (t.isNull()) return null;
+        try {
+            Module typed = ModuleDiscovery.concrete(child);
+            if (!(typed instanceof LinearImpl)) return null;
+            LinearImpl lin = (LinearImpl) typed;
+            Tensor w = lin.weight();
+            if (w == null || w.isNull()) return null;
+            long inFeatures = w.size(1);
+            if (inFeatures <= 0) return null;
+            long numel = t.numel();
+            if (numel % inFeatures != 0) return null;
+            long batch = numel / inFeatures;
+            if (batch <= 0) return null;
+            Tensor reshaped = t.view(batch, inFeatures);
+            // Inherit tensorSource from the original so preTraceOp doesn't
+            // create a spurious constant node for the reshaped tensor.
+            String src = tensorSource.get(TensorUtils.tensorKey(t));
+            if (src != null) tensorSource.put(TensorUtils.tensorKey(reshaped), src);
+            return reshaped;
+        } catch (Throwable ignored) {
+            return null;
+        }
+    }
+
+    /**
+     * Retry a child forward after reshaping the input. Used when the
+     * original forward threw a shape-mismatch error (e.g. "mat1 and mat2 shapes
+     * cannot be multiplied"). This mirrors the common {@code view(batch, -1)}
+     * pattern in recommend model forwards (DeepFM, …).
+     *
+     * <p>Strategy: try Linear-weight-aware reshape first (matches in_features),
+     * then fall back to plain 2D flatten.
+     *
+     * @return the retry output, or null if retry was not applicable / failed
+     */
+    private Tensor retryWithFlatten(Module child, Object current, int stackDepth, Throwable originalEx) {
+        String msg = String.valueOf(originalEx.getMessage());
+        boolean shapeMismatch = msg.contains("cannot be multiplied")
+                || msg.contains("shapes cannot be")
+                || msg.contains("size mismatch")
+                || msg.contains("RuntimeError: mat1 and mat2");
+        if (!shapeMismatch) return null;
+        // Strategy 1: reshape to match Linear's expected in_features
+        Tensor reshaped = reshapeForLinear(child, current);
+        if (reshaped != null) {
+            try {
+                Tensor out = runForward(child, reshaped, stackDepth + 1);
+                if (out != null && !out.isNull()) return out;
+            } catch (Throwable ignored) {}
+        }
+        // Strategy 2: plain 2D flatten
+        Tensor flat = flattenForRetry(current);
+        if (flat != null) {
+            try {
+                return runForward(child, flat, stackDepth + 1);
+            } catch (Throwable ignored) {}
+        }
+        return null;
     }
 
     /**
@@ -476,6 +637,22 @@ public final class VistaEngine {
             }
         } catch (Throwable ignored) {}
         return false;
+    }
+
+    private String lastRecordedChildName(Module module) {
+        if (module == null) return null;
+        try {
+            Module m = ModuleDiscovery.concrete(module);
+            Long id = moduleId(m);
+            List<String> names = moduleToNodeNames.get(id);
+            if (names != null) {
+                for (int i = names.size() - 1; i >= 0; i--) {
+                    String n = names.get(i);
+                    if (graph.adjList().containsKey(n)) return n;
+                }
+            }
+        } catch (Throwable ignored) {}
+        return null;
     }
 
     /**
@@ -636,6 +813,7 @@ public final class VistaEngine {
         Tensor embedOut = null;
         List<Tensor> embedParts = new ArrayList<>();
         List<String> embedNodeNames = new ArrayList<>();
+        List<String> allChildNodeNames = new ArrayList<>();
         Tensor sharedTensor = null;
         Map<String, Tensor> taggedOutputs = new HashMap<>();
         Tensor lastOut = null;
@@ -659,14 +837,15 @@ public final class VistaEngine {
                             taggedOutputs.put(key.toLowerCase(), out);
                             embedParts.add(out);
                             String srcName = tensorSource.get(TensorUtils.tensorKey(out));
-                            if (srcName != null) embedNodeNames.add(srcName);
+                            if (srcName != null) { embedNodeNames.add(srcName); allChildNodeNames.add(srcName); }
                             continue;
                         }
                     } catch (Throwable ignored) {}
                 }
                 if (childIn == null) {
                     // Structural fallback — still show the EmbeddingLayer tree
-                    emitStructuralChild(cm, key, stackDepth + 1);
+                    String sname = emitStructuralChildReturning(cm, key, stackDepth + 1);
+                    if (sname != null) allChildNodeNames.add(sname);
                     anyChild = true;
                     continue;
                 }
@@ -679,14 +858,22 @@ public final class VistaEngine {
                         taggedOutputs.put(key.toLowerCase(), out);
                         embedParts.add(out);
                         String srcName = tensorSource.get(TensorUtils.tensorKey(out));
-                        if (srcName != null) embedNodeNames.add(srcName);
+                        if (srcName != null) { embedNodeNames.add(srcName); allChildNodeNames.add(srcName); }
                     } else if (!hasRecordedChild(cm)) {
-                        emitStructuralChild(cm, key, stackDepth + 1);
+                        String sname = emitStructuralChildReturning(cm, key, stackDepth + 1);
+                        if (sname != null) allChildNodeNames.add(sname);
+                    } else {
+                        String sname = lastRecordedChildName(cm);
+                        if (sname != null) allChildNodeNames.add(sname);
                     }
                 } catch (Throwable childEx) {
                     noteChildException(childEx);
                     if (!hasRecordedChild(cm)) {
-                        emitStructuralChild(cm, key, stackDepth + 1);
+                        String sname = emitStructuralChildReturning(cm, key, stackDepth + 1);
+                        if (sname != null) allChildNodeNames.add(sname);
+                    } else {
+                        String sname = lastRecordedChildName(cm);
+                        if (sname != null) allChildNodeNames.add(sname);
                     }
                 }
             }
@@ -729,7 +916,8 @@ public final class VistaEngine {
                     }
                 }
                 if (childIn == null) {
-                    emitStructuralChild(cm, key, stackDepth + 1);
+                    String sname = emitStructuralChildReturning(cm, key, stackDepth + 1);
+                    if (sname != null) allChildNodeNames.add(sname);
                     anyChild = true;
                     continue;
                 }
@@ -740,13 +928,23 @@ public final class VistaEngine {
                         lastOut = out;
                         successCount++;
                         taggedOutputs.put(key.toLowerCase(), out);
+                        String sname = tensorSource.get(TensorUtils.tensorKey(out));
+                        if (sname != null) allChildNodeNames.add(sname);
                     } else if (!hasRecordedChild(cm)) {
-                        emitStructuralChild(cm, key, stackDepth + 1);
+                        String sname = emitStructuralChildReturning(cm, key, stackDepth + 1);
+                        if (sname != null) allChildNodeNames.add(sname);
+                    } else {
+                        String sname = lastRecordedChildName(cm);
+                        if (sname != null) allChildNodeNames.add(sname);
                     }
                 } catch (Throwable childEx) {
                     noteChildException(childEx);
                     if (!hasRecordedChild(cm)) {
-                        emitStructuralChild(cm, key, stackDepth + 1);
+                        String sname = emitStructuralChildReturning(cm, key, stackDepth + 1);
+                        if (sname != null) allChildNodeNames.add(sname);
+                    } else {
+                        String sname = lastRecordedChildName(cm);
+                        if (sname != null) allChildNodeNames.add(sname);
                     }
                 }
             }
@@ -892,7 +1090,8 @@ public final class VistaEngine {
                     }
                 }
                 if (childIn == null) {
-                    emitStructuralChild(cm, key, stackDepth + 1);
+                    String sname = emitStructuralChildReturning(cm, key, stackDepth + 1);
+                    if (sname != null) allChildNodeNames.add(sname);
                     // Still wire an implied edge from the best-matching input so the
                     // graph shows the connection even when real forward can't run.
                     wireImpliedFromInputs(cm, keyL, isPosEmbed, isTokenEmbed, isNorm, tensorArgs);
@@ -906,6 +1105,8 @@ public final class VistaEngine {
                         lastOut = out;
                         successCount++;
                         taggedOutputs.put(keyL, out);
+                        String sname = tensorSource.get(TensorUtils.tensorKey(out));
+                        if (sname != null) allChildNodeNames.add(sname);
                         if (keyL.contains("bottom") || keyL.contains("shared")
                                 || keyL.contains("backbone") || keyL.contains("trunk")) {
                             sharedTensor = out;
@@ -923,14 +1124,22 @@ public final class VistaEngine {
                             sharedTensor = out;
                         }
                     } else if (!hasRecordedChild(cm)) {
-                        emitStructuralChild(cm, key, stackDepth + 1);
+                        String sname = emitStructuralChildReturning(cm, key, stackDepth + 1);
+                        if (sname != null) allChildNodeNames.add(sname);
                         wireImpliedFromInputs(cm, keyL, isPosEmbed, isTokenEmbed, isNorm, tensorArgs);
+                    } else {
+                        String sname = lastRecordedChildName(cm);
+                        if (sname != null) allChildNodeNames.add(sname);
                     }
                 } catch (Throwable childEx) {
                     noteChildException(childEx);
                     if (!hasRecordedChild(cm)) {
-                        emitStructuralChild(cm, key, stackDepth + 1);
+                        String sname = emitStructuralChildReturning(cm, key, stackDepth + 1);
+                        if (sname != null) allChildNodeNames.add(sname);
                         wireImpliedFromInputs(cm, keyL, isPosEmbed, isTokenEmbed, isNorm, tensorArgs);
+                    } else {
+                        String sname = lastRecordedChildName(cm);
+                        if (sname != null) allChildNodeNames.add(sname);
                     }
                 }
             }
@@ -985,12 +1194,32 @@ public final class VistaEngine {
                     if (whole != null && !whole.isNull()) {
                         // Tag output provenance to the container frame name if present
                         long key = TensorUtils.tensorKey(whole);
-                        if (!tensorSource.containsKey(key) && frame != null) {
+                        String realSource = tensorSource.get(key);
+                        if (realSource == null && frame != null) {
+                            realSource = frame;
                             tensorSource.put(key, frame);
                         }
                         lastOut = whole;
                         // Clear poison exception if whole forward worked
                         graph.setException(null);
+                        // Wire all child nodes (especially EmbeddingImpl structural
+                        // nodes that failed due to MPS/device issues) to the real
+                        // output source so they don't become sinks that get
+                        // incorrectly connected to the model output.
+                        if (realSource != null) {
+                            for (String sname : allChildNodeNames) {
+                                if (sname == null || sname.equals(realSource)) continue;
+                                GraphNode sn = graph.adjList().get(sname);
+                                if (sn == null) continue;
+                                boolean hasEdge = false;
+                                for (GraphEdge ge : sn.edges()) {
+                                    if (realSource.equals(ge.target())) { hasEdge = true; break; }
+                                }
+                                if (!hasEdge) {
+                                    sn.addEdge(new GraphEdge(realSource, "", 0L, false));
+                                }
+                            }
+                        }
                     }
                 } catch (Throwable wholeEx) {
                     noteChildException(wholeEx);
@@ -1009,6 +1238,30 @@ public final class VistaEngine {
                     if (graph.nodeCount() >= 4) {
                         graph.setException(null);
                     }
+                }
+            }
+
+            // Final pass: wire any child nodes that still have no outgoing
+            // edges to the best available target (sharedTensor/embedOut/lastOut
+            // source). This prevents EmbeddingImpl structural nodes from
+            // becoming sinks that get incorrectly connected to model output.
+            String bestTarget = null;
+            if (lastOut != null && !lastOut.isNull()) {
+                bestTarget = tensorSource.get(TensorUtils.tensorKey(lastOut));
+            }
+            if (bestTarget == null && sharedTensor != null && !sharedTensor.isNull()) {
+                bestTarget = tensorSource.get(TensorUtils.tensorKey(sharedTensor));
+            }
+            if (bestTarget == null && embedOut != null && !embedOut.isNull()) {
+                bestTarget = tensorSource.get(TensorUtils.tensorKey(embedOut));
+            }
+            if (bestTarget != null) {
+                for (String sname : allChildNodeNames) {
+                    if (sname == null || sname.equals(bestTarget)) continue;
+                    GraphNode sn = graph.adjList().get(sname);
+                    if (sn == null) continue;
+                    if (!sn.edges().isEmpty()) continue;
+                    sn.addEdge(new GraphEdge(bestTarget, "", 0L, false));
                 }
             }
         } finally {
@@ -1063,6 +1316,7 @@ public final class VistaEngine {
         String frame = beginContainerFrame(m);
         List<Tensor> parts = new ArrayList<>();
         List<String> partNames = new ArrayList<>();
+        List<String> structChildNames = new ArrayList<>();
         try {
             // Prefer real EmbeddingLayer.forward(Map) — one shot, correct dims.
             // Still expand children structurally so tables are visible.
@@ -1104,15 +1358,25 @@ public final class VistaEngine {
                             if (src != null) partNames.add(src);
                         }
                     } catch (Throwable ex) {
-                        // traceLeafModule already created a failed node via preTraceOp;
-                        // only emit structural fallback if nothing was recorded yet.
+                        // traceLeafModule failed (e.g. MPS placeholder storage issue
+                        // after callForward moved tensors to device). Emit a
+                        // structural node and record it for later wiring to the
+                        // real output source (cat node).
                         if (!hasRecordedChild(cm)) {
-                            emitStructuralChild(cm, key, stackDepth + 1);
+                            String sname = emitStructuralChildReturning(cm, key, stackDepth + 1);
+                            if (sname != null) structChildNames.add(sname);
+                        } else {
+                            String sname = lastRecordedChildName(cm);
+                            if (sname != null) structChildNames.add(sname);
                         }
                     }
                 } else {
                     if (!hasRecordedChild(cm)) {
-                        emitStructuralChild(cm, key, stackDepth + 1);
+                        String sname = emitStructuralChildReturning(cm, key, stackDepth + 1);
+                        if (sname != null) structChildNames.add(sname);
+                    } else {
+                        String sname = lastRecordedChildName(cm);
+                        if (sname != null) structChildNames.add(sname);
                     }
                 }
             }
@@ -1122,9 +1386,11 @@ public final class VistaEngine {
                 // Create a proper operation node so downstream modules can
                 // trace edges from it (container frames are not in adjList).
                 long key = TensorUtils.tensorKey(real);
-                if (!tensorSource.containsKey(key)) {
+                String realSource = tensorSource.get(key);
+                if (realSource == null) {
                     if (!partNames.isEmpty()) {
-                        tensorSource.put(key, partNames.get(partNames.size() - 1));
+                        realSource = partNames.get(partNames.size() - 1);
+                        tensorSource.put(key, realSource);
                     } else {
                         // Create a synthetic cat/embed node for the combined output
                         globalNodeCounter++;
@@ -1137,16 +1403,43 @@ public final class VistaEngine {
                         recordParentBookkeeping(catName);
                         graph.nodeToAncestors().put(catName, currentAncestors());
                         tensorSource.put(key, catName);
-                        // Wire edges from the individual embed parts that did succeed
-                        for (int pi = 0; pi < parts.size(); pi++) {
-                            String src = pi < partNames.size() ? partNames.get(pi)
-                                    : tensorSource.get(TensorUtils.tensorKey(parts.get(pi)));
-                            if (src == null) continue;
-                            GraphNode sn = graph.adjList().get(src);
-                            if (sn == null) continue;
-                            sn.addEdge(new GraphEdge(catName,
+                        realSource = catName;
+                    }
+                }
+                // Wire edges from each traced EmbeddingImpl part to the real
+                // output source (cat node or last part). Without this, the
+                // individual EmbeddingImpl nodes have no outgoing edges and
+                // become "sinks" that the fan-out logic incorrectly connects
+                // directly to the model output.
+                if (realSource != null) {
+                    for (int pi = 0; pi < parts.size(); pi++) {
+                        String src = pi < partNames.size() ? partNames.get(pi)
+                                : tensorSource.get(TensorUtils.tensorKey(parts.get(pi)));
+                        if (src == null || src.equals(realSource)) continue;
+                        GraphNode sn = graph.adjList().get(src);
+                        if (sn == null) continue;
+                        boolean hasEdge = false;
+                        for (GraphEdge ge : sn.edges()) {
+                            if (realSource.equals(ge.target())) { hasEdge = true; break; }
+                        }
+                        if (!hasEdge) {
+                            sn.addEdge(new GraphEdge(realSource,
                                     TensorUtils.formatDims(parts.get(pi)),
                                     TensorUtils.tensorKey(parts.get(pi)), false));
+                        }
+                    }
+                    // Also wire structural child nodes (from failed traceLeafModule)
+                    // to the real output source so they don't become sinks.
+                    for (String sname : structChildNames) {
+                        if (sname == null || sname.equals(realSource)) continue;
+                        GraphNode sn = graph.adjList().get(sname);
+                        if (sn == null) continue;
+                        boolean hasEdge = false;
+                        for (GraphEdge ge : sn.edges()) {
+                            if (realSource.equals(ge.target())) { hasEdge = true; break; }
+                        }
+                        if (!hasEdge) {
+                            sn.addEdge(new GraphEdge(realSource, "", 0L, false));
                         }
                     }
                 }
@@ -1211,6 +1504,7 @@ public final class VistaEngine {
                     emitStructuralChild(cm, moduleToAttrName.get(moduleId(cm)), stackDepth);
                 } else {
                     // Try one more time as leaf to at least get a failed node with type info
+                    structuralFallback = true;
                     try {
                         return traceLeafModule(cm, inputs, stackDepth);
                     } catch (Throwable e2) {
@@ -1219,6 +1513,8 @@ public final class VistaEngine {
                         if (!hasRecordedChild(cm)) {
                             emitStructuralChild(cm, moduleToAttrName.get(moduleId(cm)), stackDepth);
                         }
+                    } finally {
+                        structuralFallback = false;
                     }
                 }
             }
@@ -1699,7 +1995,7 @@ public final class VistaEngine {
                 String existingName = existing.get(i);
                 if (graph.adjList().containsKey(existingName)) {
                     // Reuse: update display metadata but keep the existing node
-                    // (its edges, failed flag, and type are already correct).
+                    // (its edges and type are already correct).
                     String indexed = moduleToAttrName.get(id);
                     String useAttr = null;
                     if (indexed != null && !indexed.isEmpty()) useAttr = indexed;
@@ -1707,6 +2003,11 @@ public final class VistaEngine {
                     if (useAttr != null) graph.nodeToAttrName().put(existingName, useAttr);
                     graph.graphNodeDisplayNames().put(existingName, displayNameFor(m, typeSimple));
                     graph.moduleInfo().put(existingName, ModuleInfoCollector.collect(m));
+                    // Clear failed flag: structural nodes are placeholders, not
+                    // runtime-traced nodes. A prior traceLeafModule attempt may
+                    // have set failed=true, but the structural emission treats
+                    // this as a known-existing module, not a failed trace.
+                    graph.adjList().get(existingName).setFailed(false);
                     return existingName;
                 }
             }
@@ -1865,7 +2166,7 @@ public final class VistaEngine {
                 if (src != null) {
                     src.addEdge(new GraphEdge(opName, dims, edgeDataId, implied));
                 }
-            } else if (options.showNonGradientNodes()) {
+            } else if (options.showNonGradientNodes() && !structuralFallback) {
                 // Untagged tensor → Constant node (torchvista non-gradient path).
                 // Skip tensors that are likely parameters (requires_grad) or
                 // intermediate computation results (not real constants).
@@ -2227,7 +2528,7 @@ public final class VistaEngine {
             if (t != null && !t.isNull()) {
                 long tid = TensorUtils.tensorKey(t);
                 String source = tensorSource.get(tid);
-                if (source != null) {
+                if (source != null && !source.contains("EmbeddingImpl")) {
                     GraphNode src = graph.adjList().get(source);
                     if (src != null) {
                         String dims = TensorUtils.formatDims(t);
@@ -2263,7 +2564,28 @@ public final class VistaEngine {
                 }
             }
         }
-        // Collect sinks (modules with no outgoing edges)
+        // Compute the downstream target of the first EmbeddingImpl that has
+        // edges (from real tracing). This is used to wire orphaned EmbeddingImpl
+        // siblings — they model the concatenation that happens inside
+        // feature-embedding modules whose forward expects a Map input (which
+        // we cannot trace with Tensor[]).
+        String embedDownstream = null;
+        for (Map.Entry<String, GraphNode> e : graph.adjList().entrySet()) {
+            String name = e.getKey();
+            if (!name.contains("EmbeddingImpl")) continue;
+            GraphNode node = e.getValue();
+            if (!node.edges().isEmpty()) {
+                for (GraphEdge edge : node.edges()) {
+                    String tgt = edge.target();
+                    if (!tgt.equals("output") && !tgt.contains("output")
+                            && graph.adjList().containsKey(tgt)) {
+                        if (embedDownstream == null) embedDownstream = tgt;
+                    }
+                }
+            }
+        }
+
+        // Collect sinks (modules with no outgoing edges to existing nodes)
         List<String> sinks = new ArrayList<>();
         for (Map.Entry<String, GraphNode> e : graph.adjList().entrySet()) {
             String name = e.getKey();
@@ -2274,7 +2596,24 @@ public final class VistaEngine {
                     || node.nodeType() == NodeType.PARAMETER) {
                 continue;
             }
-            if (!node.edges().isEmpty()) continue;
+            // Only count edges that point to nodes actually in the graph —
+            // edges to removed container frames don't count.
+            boolean hasRealEdge = false;
+            for (GraphEdge edge : node.edges()) {
+                if (graph.adjList().containsKey(edge.target())) {
+                    hasRealEdge = true;
+                    break;
+                }
+            }
+            if (hasRealEdge) continue;
+            // When we have a real downstream target for EmbeddingImpl nodes,
+            // skip them from sink-fan-out — they are feature extractors whose
+            // outputs are consumed downstream, not final outputs. But when no
+            // downstream target was found (e.g. EmbeddingImpl IS the last
+            // module), let them participate normally.
+            if (embedDownstream != null && name.contains("EmbeddingImpl")) {
+                continue;
+            }
             sinks.add(name);
         }
         // Pair sinks to outputs by index when counts match; else fan-in all sinks → all outs
@@ -2300,6 +2639,27 @@ public final class VistaEngine {
                     String target = outs.get(i % outs.size());
                     String dims = inDimHint.getOrDefault(sinks.get(i), metaShape(target, "(out)"));
                     node.addEdge(new GraphEdge(target, dims));
+                }
+            }
+        }
+
+        // Wire orphaned EmbeddingImpl nodes to the downstream target found
+        // earlier. This connects sibling EmbeddingImpl nodes that couldn't be
+        // traced (Map-input forwards) to the same consumer as the one that was.
+        if (embedDownstream != null) {
+            for (Map.Entry<String, GraphNode> e : graph.adjList().entrySet()) {
+                String name = e.getKey();
+                if (!name.contains("EmbeddingImpl")) continue;
+                GraphNode node = e.getValue();
+                boolean hasRealEdge = false;
+                for (GraphEdge edge : node.edges()) {
+                    if (graph.adjList().containsKey(edge.target())) {
+                        hasRealEdge = true;
+                        break;
+                    }
+                }
+                if (!hasRealEdge) {
+                    node.addEdge(new GraphEdge(embedDownstream, "", 0L, false));
                 }
             }
         }
