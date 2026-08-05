@@ -12,6 +12,7 @@ import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.nn.modules.container.ModuleListImpl;
 import org.bytedeco.pytorch.recommend.DeviceSupport;
 import org.bytedeco.pytorch.recommend.basic.layers.MLP;
 
@@ -30,9 +31,12 @@ public class CGC extends Module {
     private final int nExpertSpecific;
     private final int nExpertShared;
     private final boolean hasSharedGate;
-    private final List<MLP> expertsSpecific = new ArrayList<>();
-    private final List<MLP> expertsShared = new ArrayList<>();
-    private final List<MLP> gatesSpecific = new ArrayList<>();
+//    private final List<MLP> expertsSpecific = new ArrayList<>();
+//    private final List<MLP> expertsShared = new ArrayList<>();
+//    private final List<MLP> gatesSpecific = new ArrayList<>();
+    private final ModuleListImpl expertsSpecific = new ModuleListImpl();
+    private final ModuleListImpl expertsShared = new ModuleListImpl();
+    private final ModuleListImpl gatesSpecific = new ModuleListImpl();
     private final MLP gateShared; // nullable when last level
 
     public CGC(
@@ -70,21 +74,21 @@ public class CGC extends Module {
             MLP m = new MLP(inputDims, expertDims, expertLast, expertActivation, expertDropout,
                     false, false, false, device);
             register_module("expert_specific_" + i, m);
-            expertsSpecific.add(m);
+            expertsSpecific.insert(i,m);
         }
 
         for (int i = 0; i < nExpertShared; i++) {
             MLP m = new MLP(inputDims, expertDims, expertLast, expertActivation, expertDropout,
                     false, false, false, device);
             register_module("expert_shared_" + i, m);
-            expertsShared.add(m);
+            expertsShared.insert(i,m);
         }
 
         for (int i = 0; i < nTask; i++) {
             MLP m = new MLP(inputDims, new long[]{nExpertPerTask}, nExpertPerTask, "softmax", 0.0f,
                     false, false, false, device);
             register_module("gate_specific_" + i, m);
-            gatesSpecific.add(m);
+            gatesSpecific.insert(i,m);
         }
 
         if (hasSharedGate) {

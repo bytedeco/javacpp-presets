@@ -14,6 +14,8 @@ import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.global.torch.ScalarType;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.nn.modules.LinearImpl;
+import org.bytedeco.pytorch.nn.modules.container.ModuleDictImpl;
+import org.bytedeco.pytorch.nn.modules.container.ModuleListImpl;
 import org.bytedeco.pytorch.nn.options.LinearOptions;
 import org.bytedeco.pytorch.recommend.DeviceSupport;
 import org.bytedeco.pytorch.recommend.basic.features.Feature;
@@ -41,8 +43,11 @@ public class AutoInt extends Module {
     private final int embedDim;
     private final long dims;
     private final EmbeddingLayer sparseEmbedding;
-    private final Map<String, LinearImpl> denseEmbeddings = new LinkedHashMap<>();
-    private final List<InteractingLayer> interactingLayers = new ArrayList<>();
+//    private final Map<String, LinearImpl> denseEmbeddings = new LinkedHashMap<>();
+//    private final List<InteractingLayer> interactingLayers = new ArrayList<>();
+
+    private final ModuleDictImpl denseEmbeddings = new ModuleDictImpl();
+    private final ModuleListImpl interactingLayers = new ModuleListImpl();
     private final LR linear;
     private final LinearImpl attnLinear;
     private final MLP mlp; // nullable
@@ -72,13 +77,13 @@ public class AutoInt extends Module {
         for (Feature fea : this.denseFeatures) {
             LinearImpl proj = new LinearImpl(new LinearOptions(1L, embedDim).bias(false));
             register_module("dense_" + fea.name(), proj);
-            denseEmbeddings.put(fea.name(), proj);
+            denseEmbeddings.insert(fea.name(), proj);
         }
 
         for (int i = 0; i < numLayers; i++) {
             InteractingLayer layer = new InteractingLayer(embedDim, numAttnHeads, dropout, true, device);
             register_module("interacting_" + i, layer);
-            interactingLayers.add(layer);
+            interactingLayers.insert(i, layer);
         }
 
         this.linear = new LR(dims, false, device);
@@ -101,7 +106,7 @@ public class AutoInt extends Module {
         List<Tensor> denseEmbList = new ArrayList<>();
         for (Feature fea : denseFeatures) {
             Tensor v = denseFeats.get(fea.name()).toType(ScalarType.Float).view(-1L, 1L, 1L);
-            LinearImpl proj = denseEmbeddings.get(fea.name());
+            LinearImpl proj = (LinearImpl)denseEmbeddings.get(fea.name());
             denseEmbList.add(proj.forward(v));
         }
 
@@ -121,9 +126,12 @@ public class AutoInt extends Module {
         Tensor embedXFlat = embedX.view(embedX.size(0), -1L);
 
         Tensor attnOut = embedX;
-        for (InteractingLayer layer : interactingLayers) {
-            attnOut = layer.forward(attnOut);
+        for (int i = 0; i < interactingLayers.size(); i++) {
+            attnOut = interactingLayers.get(i).forward(attnOut);
         }
+//        for (InteractingLayer layer : interactingLayers) {
+//            attnOut = layer.forward(attnOut);
+//        }
 
         Tensor attnOutFlat = attnOut.view(attnOut.size(0), -1L);
         Tensor yAttn = attnLinear.forward(attnOutFlat);

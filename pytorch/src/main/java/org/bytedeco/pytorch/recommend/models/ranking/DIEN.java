@@ -16,6 +16,7 @@ import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.global.torch.ScalarType;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.nn.modules.GRUImpl;
+import org.bytedeco.pytorch.nn.modules.container.ModuleListImpl;
 import org.bytedeco.pytorch.nn.options.GRUOptions;
 import org.bytedeco.pytorch.recommend.DeviceSupport;
 import org.bytedeco.pytorch.recommend.basic.features.Feature;
@@ -39,8 +40,10 @@ public class DIEN extends Module {
     private final List<SequenceFeature> sequenceFeatures;
     private final long historyDim;
     private final EmbeddingLayer embedding;
-    private final List<GRUImpl> interestExtractorLayers = new ArrayList<>();
-    private final List<RankingAUGRU> interestEvolvingLayers = new ArrayList<>();
+//    private final List<GRUImpl> interestExtractorLayers = new ArrayList<>();
+//    private final List<RankingAUGRU> interestEvolvingLayers = new ArrayList<>();
+    private final ModuleListImpl interestExtractorLayers = new ModuleListImpl();
+    private final ModuleListImpl interestEvolvingLayers = new ModuleListImpl();
     private final MLP mlp;
 
     public DIEN(List<? extends Feature> features, List<SequenceFeature> sequenceFeatures) {
@@ -78,13 +81,13 @@ public class DIEN extends Module {
             opts.batch_first().put(true);
             GRUImpl gru = new GRUImpl(opts);
             register_module("interest_extractor_" + i, gru);
-            interestExtractorLayers.add(gru);
+            interestExtractorLayers.insert(i,gru);
         }
 
         for (int i = 0; i < this.sequenceFeatures.size(); i++) {
             RankingAUGRU augru = new RankingAUGRU(this.sequenceFeatures.get(i).embedDim(), device);
             register_module("interest_evolving_" + i, augru);
-            interestEvolvingLayers.add(augru);
+            interestEvolvingLayers.insert(i,augru);
         }
 
         // Top MLP — activation fixed to "dice" as in the paper.
@@ -112,7 +115,7 @@ public class DIEN extends Module {
             long seqLen = seq.size(1);
             Tensor targetEmb = (gruOut.dim() == 3L) ? gruOut.select(1, seqLen - 1) : gruOut;
 
-            Tensor[] augruOut = interestEvolvingLayers.get(i).run(gruOut, targetEmb, mask);
+            Tensor[] augruOut =((RankingAUGRU)interestEvolvingLayers.get(i)).run(gruOut, targetEmb, mask);
             interestOut.add(augruOut[1].unsqueeze(1L)); // lastHidden
         }
 

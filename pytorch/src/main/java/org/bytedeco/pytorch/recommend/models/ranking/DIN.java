@@ -12,6 +12,7 @@ import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.nn.modules.container.ModuleListImpl;
 import org.bytedeco.pytorch.recommend.DeviceSupport;
 import org.bytedeco.pytorch.recommend.basic.features.Feature;
 import org.bytedeco.pytorch.recommend.basic.features.SequenceFeature;
@@ -37,7 +38,8 @@ public class DIN extends Module {
     private final int targetDim;
     private final int allDims;
     private final EmbeddingLayer embedding;
-    private final List<DINActivationUnit> attentionLayers = new ArrayList<>();
+//    private final List<DINActivationUnit> attentionLayers = new ArrayList<>();
+    private final ModuleListImpl attentionLayers = new ModuleListImpl();
     private final MLP mlp;
 
     public DIN(List<? extends Feature> features, List<SequenceFeature> sequenceFeatures) {
@@ -72,10 +74,12 @@ public class DIN extends Module {
         this.embedding = new EmbeddingLayer(allFeats, 8, device);
         register_module("embedding", embedding);
 
+        int layerCnt = 0;
         for (SequenceFeature sf : this.sequenceFeatures) {
             DINActivationUnit unit = new DINActivationUnit(sf.embedDim(), attentionUnits, device);
             register_module("attentionUnit_" + sf.name(), unit);
-            attentionLayers.add(unit);
+            attentionLayers.insert(layerCnt,unit);
+            layerCnt++;
         }
 
         this.mlp = new MLP(allDims, mlpDims, 1L, "dice", dropout, false, device);

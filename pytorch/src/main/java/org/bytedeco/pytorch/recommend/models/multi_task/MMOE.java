@@ -13,6 +13,7 @@ import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.nn.modules.container.ModuleListImpl;
 import org.bytedeco.pytorch.recommend.DeviceSupport;
 import org.bytedeco.pytorch.recommend.basic.features.Feature;
 import org.bytedeco.pytorch.recommend.basic.layers.EmbeddingLayer;
@@ -34,10 +35,15 @@ public class MMOE extends Module {
     private final int nTask;
     private final int nExpert;
     private final EmbeddingLayer embedding;
-    private final List<MLP> experts = new ArrayList<>();
-    private final List<MLP> gates = new ArrayList<>();
-    private final List<MLP> towers = new ArrayList<>();
-    private final List<PredictionLayer> predictLayers = new ArrayList<>();
+//    private final List<MLP> experts = new ArrayList<>();
+//    private final List<MLP> gates = new ArrayList<>();
+//    private final List<MLP> towers = new ArrayList<>();
+//    private final List<PredictionLayer> predictLayers = new ArrayList<>();
+
+    private final ModuleListImpl experts = new ModuleListImpl();
+    private final ModuleListImpl gates = new ModuleListImpl();
+    private final ModuleListImpl towers = new ModuleListImpl();
+    private final ModuleListImpl predictLayers = new ModuleListImpl();
 
     public MMOE(List<? extends Feature> features, List<String> taskTypes) {
         this(features, taskTypes, 4, Collections.emptyMap(), Collections.emptyList(),
@@ -90,7 +96,7 @@ public class MMOE extends Module {
             MLP m = new MLP(inputDims, expertDims, expertLast, expertActivation, expertDropout,
                     false, false, false, device);
             register_module("expert_" + i, m);
-            experts.add(m);
+            experts.insert(i, m);
         }
 
         // Gates — activation "softmax": MLP falls back to ReLU for unknown acts (mirrors Scala MLP).
@@ -99,7 +105,7 @@ public class MMOE extends Module {
             MLP m = new MLP(inputDims, new long[]{nExpert}, nExpert, "softmax", 0.0f,
                     false, false, false, device);
             register_module("gate_" + i, m);
-            gates.add(m);
+            gates.insert(i, m);
         }
 
         if (towerParamsList == null) towerParamsList = Collections.emptyList();
@@ -117,13 +123,13 @@ public class MMOE extends Module {
                     ? ((Number) params.get("dropout")).floatValue() : 0.0f;
             MLP m = new MLP(expertLast, dims, 1L, activation, dropout, false, false, true, device);
             register_module("tower_" + i, m);
-            towers.add(m);
+            towers.insert(i, m);
         }
 
         for (int i = 0; i < nTask; i++) {
             PredictionLayer m = new PredictionLayer(taskTypes.get(i));
             register_module("predictLayer_" + i, m);
-            predictLayers.add(m);
+            predictLayers.insert(i, m);
         }
     }
 

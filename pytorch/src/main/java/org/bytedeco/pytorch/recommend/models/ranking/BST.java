@@ -20,6 +20,7 @@ import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.nn.modules.EmbeddingImpl;
+import org.bytedeco.pytorch.nn.modules.container.ModuleListImpl;
 import org.bytedeco.pytorch.nn.options.EmbeddingOptions;
 import org.bytedeco.pytorch.recommend.DeviceSupport;
 import org.bytedeco.pytorch.recommend.basic.features.Feature;
@@ -51,7 +52,8 @@ public class BST extends Module {
     private final MLP mlp;
     // Encoder layers constructed for API parity / future use (Scala also builds them).
     @SuppressWarnings("unused")
-    private final List<BSTEncoderLayer> encoderLayers = new ArrayList<>();
+//    private final List<BSTEncoderLayer> encoderLayers = new ArrayList<>();
+    private final ModuleListImpl encoderLayers = new ModuleListImpl();
 
     public BST(List<? extends Feature> features,
                List<SequenceFeature> sequenceFeatures,
@@ -109,7 +111,7 @@ public class BST extends Module {
         for (int i = 0; i < numLayers; i++) {
             BSTEncoderLayer layer = new BSTEncoderLayer(itemDim, numHeads, dropout, device);
             register_module("encoder_" + i, layer);
-            encoderLayers.add(layer);
+            encoderLayers.insert(i, layer);
         }
 
         long allDims = itemDim + tgtDim;

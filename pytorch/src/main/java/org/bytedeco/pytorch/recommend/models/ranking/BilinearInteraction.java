@@ -12,6 +12,7 @@ import org.bytedeco.pytorch.Device;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.nn.modules.LinearImpl;
+import org.bytedeco.pytorch.nn.modules.container.ModuleListImpl;
 import org.bytedeco.pytorch.recommend.DeviceSupport;
 
 import java.util.ArrayList;
@@ -32,7 +33,8 @@ public class BilinearInteraction extends Module {
     private final int numFields;
     private final String bilinearType;
     private final LinearImpl sharedWeight;          // field_all
-    private final List<LinearImpl> fieldWeights;    // field_each / field_interaction
+//    private final List<LinearImpl> fieldWeights;    // field_each / field_interaction
+    private final ModuleListImpl fieldWeights = new ModuleListImpl();
 
     public BilinearInteraction(int embedDim, int numFields, String bilinearType) {
         this(embedDim, numFields, bilinearType, DeviceSupport.backend());
@@ -47,17 +49,17 @@ public class BilinearInteraction extends Module {
         if ("field_all".equals(bilinearType)) {
             this.sharedWeight = new LinearImpl(embedDim, embedDim);
             register_module("bilinear_weight", sharedWeight);
-            this.fieldWeights = null;
+//            this.fieldWeights = null;
             if (device != null && !"cpu".equals(device)) {
                 sharedWeight.to(new Device(device), false);
             }
         } else {
             this.sharedWeight = null;
-            this.fieldWeights = new ArrayList<>(numFields);
+//            this.fieldWeights = new ArrayList<>(numFields);
             for (int i = 0; i < numFields; i++) {
                 LinearImpl w = new LinearImpl(embedDim, embedDim);
                 register_module("bilinear_weight_" + i, w);
-                fieldWeights.add(w);
+                fieldWeights.insert(i,w);
                 if (device != null && !"cpu".equals(device)) {
                     w.to(new Device(device), false);
                 }

@@ -37,7 +37,12 @@ public final class GraphNode {
     }
 
     public void addEdge(GraphEdge edge) {
-        if (edge != null) edges.add(edge);
+        if (edge == null) return;
+        // Deduplicate: skip if an edge to the same target already exists
+        for (GraphEdge existing : edges) {
+            if (Objects.equals(existing.target(), edge.target())) return;
+        }
+        edges.add(edge);
     }
 
     public boolean failed() {

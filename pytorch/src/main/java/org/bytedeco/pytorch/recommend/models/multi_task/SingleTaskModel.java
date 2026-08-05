@@ -11,6 +11,7 @@ import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.nn.modules.container.ModuleListImpl;
 import org.bytedeco.pytorch.recommend.DeviceSupport;
 import org.bytedeco.pytorch.recommend.basic.features.Feature;
 import org.bytedeco.pytorch.recommend.basic.layers.EmbeddingLayer;
@@ -29,9 +30,12 @@ public class SingleTaskModel extends Module {
     }
 
     private final int nTask;
-    private final List<EmbeddingLayer> taskEmbeddings = new ArrayList<>();
-    private final List<MLP> taskBottoms = new ArrayList<>();
-    private final List<MLP> taskTowers = new ArrayList<>();
+//    private final List<EmbeddingLayer> taskEmbeddings = new ArrayList<>();
+//    private final List<MLP> taskBottoms = new ArrayList<>();
+//    private final List<MLP> taskTowers = new ArrayList<>();
+    private final ModuleListImpl taskEmbeddings = new ModuleListImpl();
+    private final ModuleListImpl taskBottoms = new ModuleListImpl();
+    private final ModuleListImpl taskTowers = new ModuleListImpl();
 
     public SingleTaskModel(List<? extends Feature> features, List<String> taskNames) {
         this(features, taskNames, 8, new long[]{128L}, new long[]{64L}, 0.2f, DeviceSupport.backend());
@@ -58,24 +62,24 @@ public class SingleTaskModel extends Module {
         for (int i = 0; i < nTask; i++) {
             EmbeddingLayer emb = new EmbeddingLayer(featList, embedDim, device);
             register_module("embedding_" + i, emb);
-            taskEmbeddings.add(emb);
+            taskEmbeddings.insert(i, emb);
 
             MLP bottom = new MLP(inputDims, bottomDims, bottomLast, "relu", dropout,
                     false, false, false, device);
             register_module("bottom_" + i, bottom);
-            taskBottoms.add(bottom);
+            taskBottoms.insert(i, bottom);
 
             MLP tower = new MLP(bottomLast, towerDims, 1L, "relu", dropout,
                     false, false, true, device);
             register_module("tower_" + i, tower);
-            taskTowers.add(tower);
+            taskTowers.insert(i, tower);
         }
     }
 
     public Tensor forward(Map<String, Tensor> x) {
         TensorVector outputs = new TensorVector();
         for (int i = 0; i < nTask; i++) {
-            Tensor embeddings = taskEmbeddings.get(i).forward(x, Collections.emptyMap(), true);
+            Tensor embeddings = ((EmbeddingLayer)taskEmbeddings.get(i)).forward(x, Collections.emptyMap(), true);
             Tensor bottomOut = taskBottoms.get(i).forward(embeddings);
             Tensor towerOut = taskTowers.get(i).forward(bottomOut);
             outputs.push_back(torch.sigmoid(towerOut));

@@ -13,6 +13,7 @@ import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.nn.modules.container.ModuleListImpl;
 import org.bytedeco.pytorch.recommend.DeviceSupport;
 import org.bytedeco.pytorch.recommend.basic.features.Feature;
 import org.bytedeco.pytorch.recommend.basic.layers.CrossLayer;
@@ -38,10 +39,14 @@ public class EDCN extends Module {
     private final int dims;
     private final int nCrossLayers;
     private final EmbeddingLayer embedding;
-    private final List<CrossLayer> crossLayers = new ArrayList<>();
-    private final List<MLP> mlps = new ArrayList<>();
-    private final List<BridgeModule> bridges = new ArrayList<>();
-    private final List<RegulationModule> regulationModules = new ArrayList<>();
+//    private final List<CrossLayer> crossLayers = new ArrayList<>();
+//    private final List<MLP> mlps = new ArrayList<>();
+//    private final List<BridgeModule> bridges = new ArrayList<>();
+//    private final List<RegulationModule> regulationModules = new ArrayList<>();
+    private final ModuleListImpl crossLayers = new ModuleListImpl();
+    private final ModuleListImpl mlps = new ModuleListImpl();
+    private final ModuleListImpl bridges = new ModuleListImpl();
+    private final ModuleListImpl regulationModules = new ModuleListImpl();
     private final LR finalLinear;
 
     public EDCN(List<? extends Feature> features) {
@@ -88,21 +93,21 @@ public class EDCN extends Module {
         for (int i = 0; i < nCrossLayers; i++) {
             CrossLayer crossLayer = new CrossLayer(dims, device);
             register_module("cross_" + i, crossLayer);
-            crossLayers.add(crossLayer);
+            crossLayers.insert(i,crossLayer);
 
             // Python: mlp dims forced to [dims, dims], outputLayer=false
             MLP mlp = new MLP(dims, new long[]{dims, dims}, dims, activation, dropout,
                     false, false, false, device);
             register_module("mlp_" + i, mlp);
-            mlps.add(mlp);
+            mlps.insert(i,mlp);
 
             BridgeModule bridge = new BridgeModule(dims, bridgeType, device);
             register_module("bridge_" + i, bridge);
-            bridges.add(bridge);
+            bridges.insert(i,bridge);
 
             RegulationModule reg = new RegulationModule(numFields, feaDimsArr, temperature, useRegulationModule);
             register_module("regulation_" + i, reg);
-            regulationModules.add(reg);
+            regulationModules.insert(i,reg);
         }
 
         this.finalLinear = new LR(dims * 3L, false, device);
@@ -120,7 +125,7 @@ public class EDCN extends Module {
     public Tensor forward(Map<String, Tensor> sparseFeats) {
         Tensor embedX = embedding.forward(sparseFeats, java.util.Collections.emptyMap(), true); // (B, dims)
 
-        T_TensorTensor_T firstReg = regulationModules.get(0).forwardReg(embedX);
+        T_TensorTensor_T firstReg = ((RegulationModule)regulationModules.get(0)).forwardReg(embedX);
         Tensor crossI = firstReg.get0();
         Tensor deepI = firstReg.get1();
         Tensor cross0 = crossI;
@@ -128,7 +133,7 @@ public class EDCN extends Module {
 
         for (int i = 0; i < nCrossLayers; i++) {
             if (i > 0) {
-                T_TensorTensor_T reg = regulationModules.get(i).forwardReg(bridgeI);
+                T_TensorTensor_T reg = ((RegulationModule)regulationModules.get(i)).forwardReg(bridgeI);
                 crossI = reg.get0();
                 deepI = reg.get1();
             }

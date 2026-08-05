@@ -15,6 +15,7 @@ import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.nn.modules.LinearImpl;
+import org.bytedeco.pytorch.nn.modules.container.ModuleListImpl;
 import org.bytedeco.pytorch.nn.options.LinearOptions;
 import org.bytedeco.pytorch.recommend.DeviceSupport;
 import org.bytedeco.pytorch.recommend.basic.features.Feature;
@@ -39,9 +40,12 @@ public class OMoE extends Module {
     private final int numExperts;
     private final int numSparseFeatures;
     private final EmbeddingLayer embedding;
-    private final List<MLP> expertsList = new ArrayList<>();
+//    private final List<MLP> expertsList = new ArrayList<>();
+//    private final LinearImpl gate;
+//    private final List<MLP> towersList = new ArrayList<>();
+    private final ModuleListImpl expertsList = new ModuleListImpl();
     private final LinearImpl gate;
-    private final List<MLP> towersList = new ArrayList<>();
+    private final ModuleListImpl towersList = new ModuleListImpl();
 
     public OMoE(List<Feature> features, List<String> taskNames) {
         this(features, taskNames, 8, 4, new long[]{128L}, new long[]{64L}, 0.2f, DeviceSupport.backend());
@@ -88,7 +92,7 @@ public class OMoE extends Module {
             MLP expert = new MLP(embedDim, expertDims, expertLast, "relu", dropout, false, false, false, device);
             expert.to(targetDevice, false);
             register_module("expert_" + i, expert);
-            expertsList.add(expert);
+            expertsList.insert(i,expert);
         }
 
         LinearOptions opts = new LinearOptions(embedDim, numExperts);
@@ -99,7 +103,7 @@ public class OMoE extends Module {
         for (int i = 0; i < nTask; i++) {
             MLP tower = new MLP((int) expertLast, towerDims, 1L, "relu", dropout, false, false, true, device);
             register_module("tower_" + i, tower);
-            towersList.add(tower);
+            towersList.insert(i,tower);
         }
     }
 
@@ -113,9 +117,12 @@ public class OMoE extends Module {
         Tensor gateWeights = torch.softmax(gate.forward(pooled), 1);
 
         List<Tensor> expertOutputs = new ArrayList<>();
-        for (MLP expert : expertsList) {
-            expertOutputs.add(expert.forward(pooled));
+        for (int i = 0; i < expertsList.size(); i++) {
+            expertOutputs.add(expertsList.get(i).forward(pooled));
         }
+//        for (MLP expert : expertsList) {
+//            expertOutputs.add(expert.forward(pooled));
+//        }
 
         Tensor combined = null;
         for (int i = 0; i < expertOutputs.size(); i++) {
@@ -124,8 +131,12 @@ public class OMoE extends Module {
         }
 
         List<Tensor> outputs = new ArrayList<>();
-        for (MLP tower : towersList) {
-            outputs.add(torch.sigmoid(tower.forward(combined)));
+//        for (MLP tower : towersList) {
+//            outputs.add(torch.sigmoid(tower.forward(combined)));
+//        }
+        for (int i = 0; i < towersList.size(); i++) {
+            outputs.add(torch.sigmoid(towersList.get(i).forward(combined)));
+
         }
 
         TensorVector vec = new TensorVector(outputs.toArray(new Tensor[0]));

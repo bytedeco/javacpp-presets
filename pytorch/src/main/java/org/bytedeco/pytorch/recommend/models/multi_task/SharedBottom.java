@@ -12,6 +12,7 @@ import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.nn.modules.container.ModuleListImpl;
 import org.bytedeco.pytorch.recommend.DeviceSupport;
 import org.bytedeco.pytorch.recommend.basic.features.Feature;
 import org.bytedeco.pytorch.recommend.basic.layers.EmbeddingLayer;
@@ -33,8 +34,11 @@ public class SharedBottom extends Module {
     private final int nTask;
     private final EmbeddingLayer embedding;
     private final MLP bottomMlp;
-    private final List<MLP> towers = new ArrayList<>();
-    private final List<PredictionLayer> predictLayers = new ArrayList<>();
+    private final ModuleListImpl towers = new ModuleListImpl();
+    private final ModuleListImpl predictLayers = new ModuleListImpl();
+
+//    private final List<MLP> towers = new ArrayList<>();
+//    private final List<PredictionLayer> predictLayers = new ArrayList<>();
 
     public SharedBottom(List<? extends Feature> features, List<String> taskTypes) {
         this(features, taskTypes, Collections.emptyMap(), Collections.emptyList(), DeviceSupport.backend());
@@ -97,13 +101,13 @@ public class SharedBottom extends Module {
                     ? ((Number) params.get("dropout")).floatValue() : 0.0f;
             MLP m = new MLP(towerLast, dims, 1L, activation, dropout, false, false, true, device);
             register_module("tower_" + i, m);
-            towers.add(m);
+            towers.insert(i, m);
         }
 
         for (int i = 0; i < nTask; i++) {
             PredictionLayer m = new PredictionLayer(taskTypes.get(i));
             register_module("predictLayer_" + i, m);
-            predictLayers.add(m);
+            predictLayers.insert(i, m);
         }
     }
 

@@ -13,6 +13,7 @@ import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.nn.modules.container.ModuleListImpl;
 import org.bytedeco.pytorch.recommend.DeviceSupport;
 import org.bytedeco.pytorch.recommend.basic.features.Feature;
 import org.bytedeco.pytorch.recommend.basic.layers.EmbeddingLayer;
@@ -32,10 +33,14 @@ public class AITM extends Module {
 
     private final int nTask;
     private final EmbeddingLayer embedding;
-    private final List<MLP> bottoms = new ArrayList<>();
-    private final List<MLP> towers = new ArrayList<>();
-    private final List<MLP> infoGates = new ArrayList<>();
-    private final List<AttentionLayer> aits = new ArrayList<>();
+//    private final List<MLP> bottoms = new ArrayList<>();
+//    private final List<MLP> towers = new ArrayList<>();
+//    private final List<MLP> infoGates = new ArrayList<>();
+    private final ModuleListImpl bottoms = new ModuleListImpl();
+    private final ModuleListImpl towers = new ModuleListImpl();
+    private final ModuleListImpl infoGates = new ModuleListImpl();
+//    private final List<AttentionLayer> aits = new ArrayList<>();
+    private final ModuleListImpl aitsList = new ModuleListImpl();
 
     public AITM(
             List<Feature> features,
@@ -89,7 +94,8 @@ public class AITM extends Module {
             MLP bottom = new MLP(inputDims, bottomDims, bottomLast, bottomActivation, bottomDropout,
                     false, false, false, device);
             register_module("bottom_" + i, bottom);
-            bottoms.add(bottom);
+//            bottoms.add(bottom);
+            bottoms.insert(i,bottom);
         }
 
         for (int i = 0; i < nTask; i++) {
@@ -107,20 +113,22 @@ public class AITM extends Module {
             MLP tower = new MLP(bottomLast, toLongArray(tDims), 1L, activation, dropout,
                     false, false, true, device);
             register_module("tower_" + i, tower);
-            towers.add(tower);
+            towers.insert(i,tower);
         }
 
         for (int i = 1; i < nTask; i++) {
             MLP gate = new MLP(bottomLast, new long[]{bottomLast}, bottomLast, "relu", 0.0f,
                     false, false, false, device);
-            infoGates.add(gate);
+            infoGates.insert(i-1,gate);
             register_module("infoGate_" + (infoGates.size() - 1), gate);
         }
 
         for (int i = 1; i < nTask; i++) {
             AttentionLayer ait = new AttentionLayer((int) bottomLast, device);
-            aits.add(ait);
-            register_module("ait_" + (aits.size() - 1), ait);
+//            aits.add(ait);
+            aitsList.insert(i-1,ait);
+            register_module("ait_" + (aitsList.size() - 1), ait);
+//            register_module("ait_" + (aits.size() - 1), ait);
         }
     }
 
@@ -138,7 +146,8 @@ public class AITM extends Module {
                     towerInputs.get(k + 1).unsqueeze(1),
                     info);
             Tensor aitInput = torch.cat(aitVec, 1);
-            towerInputs.set(k + 1, aits.get(k).forward(aitInput));
+            towerInputs.set(k + 1, aitsList.get(k).forward(aitInput));
+//            towerInputs.set(k + 1, aits.get(k).forward(aitInput));
         }
 
         List<Tensor> ys = new ArrayList<>();

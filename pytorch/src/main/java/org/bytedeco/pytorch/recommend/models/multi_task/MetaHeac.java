@@ -16,6 +16,8 @@ import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.global.torch.ScalarType;
 import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.nn.modules.container.ModuleDictImpl;
+import org.bytedeco.pytorch.nn.modules.container.ModuleListImpl;
 import org.bytedeco.pytorch.recommend.DeviceSupport;
 import org.bytedeco.pytorch.recommend.basic.features.Feature;
 import org.bytedeco.pytorch.recommend.basic.features.Features;
@@ -43,11 +45,16 @@ public class MetaHeac extends Module {
     private final int numSparseFeatures;
     private final Device targetDevice;
     private final EmbeddingLayer embedding;
-    private final Map<String, MetaEmbedding> taskEmbeddingsMap = new LinkedHashMap<>();
-    private final List<MLP> expertsList = new ArrayList<>();
     private final MetaLinear expertGate;
+//    private final Map<String, MetaEmbedding> taskEmbeddingsMap = new LinkedHashMap<>();
+//    private final List<MLP> expertsList = new ArrayList<>();
+//    private final Map<String, List<MLP>> taskCriticsMap = new LinkedHashMap<>();
+//    private final Map<String, MetaLinear> criticGatesMap = new LinkedHashMap<>();
+
+    private final ModuleDictImpl taskEmbeddingsMap = new ModuleDictImpl();
+    private final ModuleListImpl expertsList = new ModuleListImpl();
     private final Map<String, List<MLP>> taskCriticsMap = new LinkedHashMap<>();
-    private final Map<String, MetaLinear> criticGatesMap = new LinkedHashMap<>();
+    private final ModuleDictImpl criticGatesMap = new ModuleDictImpl();
 
     public MetaHeac(List<Feature> features, List<String> taskNames) {
         this(features, taskNames, 8, new long[]{128L, 64L}, new long[]{32L, 16L}, 4, 5, 0.2f, DeviceSupport.backend());
@@ -102,14 +109,14 @@ public class MetaHeac extends Module {
             String name = "taskEmbedding_" + i;
             MetaEmbedding emb = new MetaEmbedding(taskNum, embedDim, device);
             register_module(name, emb);
-            taskEmbeddingsMap.put(name, emb);
+            taskEmbeddingsMap.insert(name, emb);
         }
 
         for (int i = 0; i < expertNum; i++) {
             String name = "expert_" + i;
             MLP expert = new MLP(sparseDim, bottomDims, bottomLast, "relu", dropout, false, false, false, device);
             register_module(name, expert);
-            expertsList.add(expert);
+            expertsList.insert(i,expert);
         }
 
         this.expertGate = new MetaLinear(embedDim * 2L, expertNum, device);
@@ -132,7 +139,7 @@ public class MetaHeac extends Module {
             MetaLinear gate = new MetaLinear(embedDim * 2L, criticNum, device);
             gate.to(targetDevice, false);
             register_module(name, gate);
-            criticGatesMap.put(name, gate);
+            criticGatesMap.insert(name, gate);
         }
     }
 
@@ -145,8 +152,8 @@ public class MetaHeac extends Module {
         Tensor taskIdxCuda = taskIdx.to(targetDevice, ScalarType.Long);
 
         List<Tensor> expertOutputs = new ArrayList<>();
-        for (MLP expert : expertsList) {
-            expertOutputs.add(expert.forward(emb));
+        for (int i = 0; i < expertsList.size(); i++) {
+            expertOutputs.add(expertsList.get(i).forward(emb));
         }
 
         Map<String, Tensor> result = new LinkedHashMap<>();
@@ -193,9 +200,12 @@ public class MetaHeac extends Module {
         Tensor pooled = emb.view(batchSize, (long) numSparseFeatures, (long) embedDim).mean(1);
 
         List<Tensor> expertOutputs = new ArrayList<>();
-        for (MLP expert : expertsList) {
-            expertOutputs.add(expert.forward(emb));
+        for (int i = 0; i < expertsList.size(); i++) {
+            expertOutputs.add(expertsList.get(i).forward(emb));
         }
+//        for (MLP expert : expertsList) {
+//            expertOutputs.add(expert.forward(emb));
+//        }
 
         Map<String, Tensor> result = new LinkedHashMap<>();
         for (int idx = 0; idx < taskNames.size(); idx++) {

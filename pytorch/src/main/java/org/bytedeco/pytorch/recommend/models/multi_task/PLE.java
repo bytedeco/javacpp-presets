@@ -13,6 +13,7 @@ import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.nn.modules.container.ModuleListImpl;
 import org.bytedeco.pytorch.recommend.DeviceSupport;
 import org.bytedeco.pytorch.recommend.basic.features.Feature;
 import org.bytedeco.pytorch.recommend.basic.layers.EmbeddingLayer;
@@ -34,9 +35,13 @@ public class PLE extends Module {
     private final int nTask;
     private final int nLevel;
     private final EmbeddingLayer embedding;
-    private final List<CGC> cgcRefs = new ArrayList<>();
-    private final List<MLP> towers = new ArrayList<>();
-    private final List<PredictionLayer> predictLayers = new ArrayList<>();
+//    private final List<CGC> cgcRefs = new ArrayList<>();
+//    private final List<MLP> towers = new ArrayList<>();
+//    private final List<PredictionLayer> predictLayers = new ArrayList<>();
+
+    private final ModuleListImpl cgcRefs = new ModuleListImpl();
+    private final ModuleListImpl towers = new ModuleListImpl();
+    private final ModuleListImpl predictLayers = new ModuleListImpl();
 
     public PLE(List<Feature> features, List<String> taskTypes) {
         this(features, taskTypes, 3, 1, 1, Collections.emptyMap(), Collections.emptyList(), DeviceSupport.backend());
@@ -95,7 +100,7 @@ public class PLE extends Module {
             CGC cgc = new CGC(level + 1, nLevel, nTask, nExpertSpecific, nExpertShared,
                     levelInput, expertParams, device);
             register_module("cgc_" + level, cgc);
-            cgcRefs.add(cgc);
+            cgcRefs.insert(level, cgc);
         }
 
         for (int i = 0; i < nTask; i++) {
@@ -115,13 +120,13 @@ public class PLE extends Module {
             long[] towerDims = toLongArray(tDims);
             MLP m = new MLP(expertLast, towerDims, 1L, activation, dropout, false, false, true, device);
             register_module("tower_" + i, m);
-            towers.add(m);
+            towers.insert(i, m);
         }
 
         for (int i = 0; i < nTask; i++) {
             PredictionLayer m = new PredictionLayer(taskTypes.get(i));
             register_module("predictLayer_" + i, m);
-            predictLayers.add(m);
+            predictLayers.insert(i, m);
         }
     }
 
@@ -135,7 +140,8 @@ public class PLE extends Module {
         }
 
         for (int level = 0; level < nLevel; level++) {
-            pleInputs = cgcRefs.get(level).forward(pleInputs);
+
+            pleInputs = ((CGC)cgcRefs.get(level)).forward(pleInputs);
         }
 
         List<Tensor> ys = new ArrayList<>();

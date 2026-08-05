@@ -1,14 +1,7 @@
 package org.bytedeco.pytorch.plot.vista;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
 import org.bytedeco.pytorch.NoGradGuard;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.nn.Module;
@@ -379,13 +372,9 @@ public final class VistaEngine {
                     String leaf = emitStructuralChildReturning(child.module, child.key, stackDepth + 1);
                     if (leaf != null) { structChildNames.add(leaf); allChildNames.add(leaf); }
                     if (leaf != null) {
-                        // Link from the last known node (tensor source or structural)
                         String fromNode = lastNodeName;
                         if (fromNode == null && lastTensor != null) {
                             fromNode = tensorSource.get(TensorUtils.tensorKey(lastTensor));
-                        }
-                        if (fromNode == null) {
-                            fromNode = lastSuccessfulOp;
                         }
                         if (fromNode != null) linkImplied(fromNode, leaf);
                         lastNodeName = leaf;
@@ -422,11 +411,20 @@ public final class VistaEngine {
                                 if (fromNode == null && lastTensor != null) {
                                     fromNode = tensorSource.get(TensorUtils.tensorKey(lastTensor));
                                 }
-                                if (fromNode == null) {
-                                    fromNode = lastSuccessfulOp;
-                                }
                                 if (fromNode != null) linkImplied(fromNode, leaf);
                                 lastNodeName = leaf;
+                            }
+                        } else {
+                            // Node already created by preTraceOp — still need to
+                            // link from previous node and update lastNodeName.
+                            String existing = lastRecordedChildName(child.module);
+                            if (existing != null) {
+                                String fromNode = lastNodeName;
+                                if (fromNode == null && lastTensor != null) {
+                                    fromNode = tensorSource.get(TensorUtils.tensorKey(lastTensor));
+                                }
+                                if (fromNode != null) linkImplied(fromNode, existing);
+                                lastNodeName = existing;
                             }
                         }
                     }
@@ -454,16 +452,24 @@ public final class VistaEngine {
                     if (!hasRecordedChild(child.module)) {
                         String leaf = emitStructuralChildReturning(child.module, child.key, stackDepth + 1);
                         if (leaf != null) {
-                            // Link from the last known node, not just lastTensor
                             String fromNode = lastNodeName;
                             if (fromNode == null && lastTensor != null) {
                                 fromNode = tensorSource.get(TensorUtils.tensorKey(lastTensor));
                             }
-                            if (fromNode == null) {
-                                fromNode = lastSuccessfulOp;
-                            }
                             if (fromNode != null) linkImplied(fromNode, leaf);
                             lastNodeName = leaf;
+                        }
+                    } else {
+                        // Node already created by preTraceOp — still need to
+                        // link from previous node and update lastNodeName.
+                        String existing = lastRecordedChildName(child.module);
+                        if (existing != null) {
+                            String fromNode = lastNodeName;
+                            if (fromNode == null && lastTensor != null) {
+                                fromNode = tensorSource.get(TensorUtils.tensorKey(lastTensor));
+                            }
+                            if (fromNode != null) linkImplied(fromNode, existing);
+                            lastNodeName = existing;
                         }
                     }
                     broken = true;
@@ -963,6 +969,9 @@ public final class VistaEngine {
                 Object childIn = null;
                 boolean isGate = keyL.contains("gate");
                 boolean isCriticMlp = keyL.contains("critic") && !isGate;
+                boolean isPredictLayer = keyL.contains("predict") || keyL.startsWith("pred")
+                        || keyL.contains("output_layer")
+                        || (keyL.contains("head") && !keyL.contains("gate"));
                 boolean isNorm = keyL.contains("norm") || typeSimple.contains("norm")
                         || typeSimple.contains("layernorm") || typeSimple.contains("batchnorm");
                 // OneRec/HSTU/HLLM/LLM4Rec: pos_emb, positionEmbedding, pos_embedding, …
@@ -1021,8 +1030,7 @@ public final class VistaEngine {
                         || keyL.startsWith("pred") || keyL.contains("output_layer")
                         || isCriticMlp)) {
                     childIn = findTagged(taggedOutputs, pairIdx,
-                            "tower", "expert", "task", "branch", "critic", "bottom");
-                    if (childIn == null && sharedTensor != null) childIn = sharedTensor;
+                            "tower", "task", "branch", "critic", "bottom");
                 }
                 if (childIn == null && !isPosEmbed && !isTokenEmbed && !isCodebookEmbed
                         && (keyL.contains("bottom") || keyL.contains("shared")
@@ -1030,6 +1038,12 @@ public final class VistaEngine {
                     childIn = firstNonNull(sharedTensor, embedOut, rootTensor);
                 }
                 // experts / towers fan-out from shared embed (exclude *gate*)
+                // AITM: tower_i receives bottom_i's output by index pairing,
+                // not the raw shared embedding.
+                if (childIn == null && !isPosEmbed && !isTokenEmbed && !isCodebookEmbed
+                        && !isGate && keyL.contains("tower") && pairIdx != null) {
+                    childIn = findTagged(taggedOutputs, pairIdx, "bottom", "ait");
+                }
                 if (childIn == null && !isPosEmbed && !isTokenEmbed && !isCodebookEmbed
                         && !isGate && (keyL.contains("tower") || keyL.contains("expert")
                         || keyL.startsWith("tower"))) {
@@ -1037,11 +1051,57 @@ public final class VistaEngine {
                 }
                 // gates FIRST — before generic linear/mlp chain (MetaLinear is
                 // canChainChildrenAsSequential and would otherwise steal raw embed).
+                // AITM infoGate_k receives bottom_k's output (information transfer).
+                if (childIn == null && isGate && keyL.contains("infogate") && pairIdx != null) {
+                    childIn = findTagged(taggedOutputs, pairIdx, "bottom");
+                }
                 if (childIn == null && isGate) {
                     childIn = synthesizeGateInput(taggedOutputs, pairIdx, sharedTensor, embedOut);
                 }
                 // Norm / Linear / MLP after embeddings: prefer float activations, never raw Long ids
                 // (skip gates / pos / token embeds — already handled)
+                // AITM ait_k (AttentionLayer) receives cat(bottom_(k+1), infoGate_k).
+                // Both have already run by the time ait_k is processed, so create a
+                // cat node joining their outputs.
+                if (childIn == null && !isGate && !isPosEmbed && !isTokenEmbed && !isCodebookEmbed
+                        && keyL.contains("ait") && pairIdx != null) {
+                    int kIdx = Integer.parseInt(pairIdx);
+                    String nextIdx = String.valueOf(kIdx + 1);
+                    Tensor bottomNext = findTagged(taggedOutputs, nextIdx, "bottom");
+                    Tensor infoGate = findTagged(taggedOutputs, pairIdx, "infogate", "gate");
+                    if (bottomNext != null && infoGate != null) {
+                        try {
+                            org.bytedeco.pytorch.TensorVector tv =
+                                    new org.bytedeco.pytorch.TensorVector(bottomNext, infoGate);
+                            Tensor catOut = org.bytedeco.pytorch.global.torch.cat(tv, 1L);
+                            globalNodeCounter++;
+                            String catName = "cat_" + globalNodeCounter;
+                            graph.graphNodeNameToWithoutSuffix().put(catName, "cat");
+                            graph.graphNodeDisplayNames().put(catName, "cat(bottom,gate)");
+                            graph.nodeToModulePath().put(catName, "torch");
+                            GraphNode catNode = GraphNode.of(NodeType.OPERATION);
+                            graph.adjList().put(catName, catNode);
+                            String bottomSrc = tensorSource.get(TensorUtils.tensorKey(bottomNext));
+                            String gateSrc = tensorSource.get(TensorUtils.tensorKey(infoGate));
+                            if (bottomSrc != null) {
+                                GraphNode bn = graph.adjList().get(bottomSrc);
+                                if (bn != null) bn.addEdge(new GraphEdge(catName, "", 0L, true));
+                            }
+                            if (gateSrc != null) {
+                                GraphNode gn = graph.adjList().get(gateSrc);
+                                if (gn != null) gn.addEdge(new GraphEdge(catName, "", 0L, true));
+                            }
+                            tensorSource.put(TensorUtils.tensorKey(catOut), catName);
+                            childIn = catOut;
+                        } catch (Throwable ignored) {
+                            childIn = firstNonNull(bottomNext, infoGate,
+                                    firstNonNull(sharedTensor, embedOut));
+                        }
+                    } else {
+                        childIn = firstNonNull(bottomNext, infoGate,
+                                firstNonNull(sharedTensor, embedOut));
+                    }
+                }
                 if (childIn == null && !isGate && !isPosEmbed && !isTokenEmbed && !isCodebookEmbed
                         && (isNorm || keyL.contains("mlp") || keyL.contains("proj")
                         || keyL.contains("head") || keyL.contains("fc") || keyL.contains("linear")
@@ -1055,7 +1115,12 @@ public final class VistaEngine {
                 // Default: chain from previous successful float output, else root
                 // NEVER re-route pos/token/codebook embeds through this fallback — that is
                 // exactly how float activations were incorrectly fed into EmbeddingImpl.
-                if (childIn == null && !isPosEmbed && !isTokenEmbed && !isCodebookEmbed) {
+                // Skip predictLayer — it should only receive tower output, not
+                // sharedTensor/embedOut. If tower failed, predictLayer will be
+                // emitted structurally and wired to tower's last node in
+                // post-processing.
+                if (childIn == null && !isPosEmbed && !isTokenEmbed && !isCodebookEmbed
+                        && !isPredictLayer) {
                     Tensor prefer = firstNonNull(sharedTensor, embedOut, lastOut);
                     if (prefer != null && isFloatTensor(prefer)) {
                         childIn = prefer;
@@ -1094,7 +1159,11 @@ public final class VistaEngine {
                     if (sname != null) allChildNodeNames.add(sname);
                     // Still wire an implied edge from the best-matching input so the
                     // graph shows the connection even when real forward can't run.
-                    wireImpliedFromInputs(cm, keyL, isPosEmbed, isTokenEmbed, isNorm, tensorArgs);
+                    // Skip predictLayer — its input is wired in post-processing
+                    // to the matching tower's last node.
+                    if (!isPredictLayer) {
+                        wireImpliedFromInputs(cm, keyL, isPosEmbed, isTokenEmbed, isNorm, tensorArgs);
+                    }
                     anyChild = true;
                     continue;
                 }
@@ -1107,7 +1176,14 @@ public final class VistaEngine {
                         taggedOutputs.put(keyL, out);
                         String sname = tensorSource.get(TensorUtils.tensorKey(out));
                         if (sname != null) allChildNodeNames.add(sname);
-                        if (keyL.contains("bottom") || keyL.contains("shared")
+                        // Per-task bottoms (AITM: bottom_0, bottom_1, …) must NOT
+                        // hijack sharedTensor — otherwise bottom_1 receives
+                        // bottom_0's output instead of the embedding. Only a bare
+                        // "bottom" (SharedBottom) or shared/backbone/trunk updates
+                        // the shared trunk.
+                        boolean isPerTaskBottom = keyL.contains("bottom") && pairIdx != null;
+                        if ((keyL.contains("bottom") && !isPerTaskBottom)
+                                || keyL.contains("shared")
                                 || keyL.contains("backbone") || keyL.contains("trunk")) {
                             sharedTensor = out;
                         }
@@ -1241,26 +1317,103 @@ public final class VistaEngine {
                 }
             }
 
+            // Post-process: wire predictLayer/head nodes to their matching
+            // tower/expert's last structural node. When tower forward failed,
+            // predictLayer has no real tensor input and would otherwise be
+            // left unconnected (or incorrectly wired to sharedTensor/output
+            // by the final sink-fan-out pass). Also collect predictLayer node
+            // names so the Final pass below can skip them — predictLayer
+            // should connect to output, not to bestTarget (which may be a
+            // sibling predictLayer).
+            Set<String> predictLayerNodes = new HashSet<>();
+            for (ModuleChildren.NamedChild predKid : kids) {
+                String pk = predKid.key == null ? "" : predKid.key.toLowerCase();
+                boolean isPredLayer = pk.contains("predict") || pk.startsWith("pred")
+                        || pk.contains("output_layer")
+                        || (pk.contains("head") && !pk.contains("gate"));
+                if (!isPredLayer) continue;
+                String predIdx = trailingIndex(pk);
+                if (predIdx == null) continue;
+                // Match predictLayer_i to tower_i (prefer "tower" over "expert"
+                // since both share the same index suffix).
+                Module towerMod = null;
+                for (ModuleChildren.NamedChild tk : kids) {
+                    String tkKey = tk.key == null ? "" : tk.key.toLowerCase();
+                    if (!tkKey.contains("tower")) continue;
+                    String tkIdx = trailingIndex(tkKey);
+                    if (predIdx.equals(tkIdx)) {
+                        towerMod = ModuleDiscovery.concrete(tk.module);
+                        break;
+                    }
+                }
+                if (towerMod == null) continue;
+                String towerLast = findLastLeafInGraph(towerMod);
+                if (towerLast == null) continue;
+                String predNode = findLastLeafInGraph(predKid.module);
+                if (predNode == null) continue;
+                predictLayerNodes.add(predNode);
+                // Remove any existing incoming edges to predictLayer from
+                // non-tower nodes (e.g. sharedTensor, expert, gate) that were
+                // created by wireImpliedFromInputs or the Default fallback.
+                for (Map.Entry<String, GraphNode> entry : graph.adjList().entrySet()) {
+                    if (entry.getKey().equals(towerLast)) continue;
+                    entry.getValue().edges().removeIf(ge -> predNode.equals(ge.target()));
+                }
+                // Add the correct tower → predictLayer edge if not already present
+                GraphNode tn = graph.adjList().get(towerLast);
+                if (tn != null) {
+                    boolean already = false;
+                    for (GraphEdge ge : tn.edges()) {
+                        if (predNode.equals(ge.target())) { already = true; break; }
+                    }
+                    if (!already) {
+                        tn.addEdge(new GraphEdge(predNode, "", 0L, true));
+                    }
+                }
+                // Also remove any wrong outgoing edges from towerLast (e.g.
+                // towerLast → output added by sink-fan-out) since towerLast
+                // should feed predictLayer, not output directly.
+                GraphNode tNode = graph.adjList().get(towerLast);
+                if (tNode != null) {
+                    tNode.edges().removeIf(ge -> "output".equals(ge.target())
+                            || ge.target().startsWith("output"));
+                }
+            }
+
             // Final pass: wire any child nodes that still have no outgoing
             // edges to the best available target (sharedTensor/embedOut/lastOut
             // source). This prevents EmbeddingImpl structural nodes from
-            // becoming sinks that get incorrectly connected to model output.
+            // becoming sinks that get incorrectly connected to model output.// Prefer sharedTensor/embedOut over lastOut — lastOut is the last
+            // child's output which may be a parallel branch endpoint (expert,
+            // gate, tower) that should NOT receive fan-in from siblings.
             String bestTarget = null;
-            if (lastOut != null && !lastOut.isNull()) {
-                bestTarget = tensorSource.get(TensorUtils.tensorKey(lastOut));
-            }
-            if (bestTarget == null && sharedTensor != null && !sharedTensor.isNull()) {
+            if (sharedTensor != null && !sharedTensor.isNull()) {
                 bestTarget = tensorSource.get(TensorUtils.tensorKey(sharedTensor));
             }
             if (bestTarget == null && embedOut != null && !embedOut.isNull()) {
                 bestTarget = tensorSource.get(TensorUtils.tensorKey(embedOut));
             }
+            if (bestTarget == null && lastOut != null && !lastOut.isNull()) {
+                bestTarget = tensorSource.get(TensorUtils.tensorKey(lastOut));
+            }
             if (bestTarget != null) {
                 for (String sname : allChildNodeNames) {
                     if (sname == null || sname.equals(bestTarget)) continue;
+                    if (predictLayerNodes.contains(sname)) continue;
                     GraphNode sn = graph.adjList().get(sname);
                     if (sn == null) continue;
                     if (!sn.edges().isEmpty()) continue;
+                    // Skip nodes that already have incoming edges — they are
+                    // parallel branch endpoints (expert/gate/tower outputs)
+                    // whose output is consumed downstream, not orphans.
+                    boolean hasIncoming = false;
+                    for (GraphNode gn : graph.adjList().values()) {
+                        for (GraphEdge ge : gn.edges()) {
+                            if (sname.equals(ge.target())) { hasIncoming = true; break; }
+                        }
+                        if (hasIncoming) break;
+                    }
+                    if (hasIncoming) continue;
                     sn.addEdge(new GraphEdge(bestTarget, "", 0L, false));
                 }
             }
@@ -1388,11 +1541,11 @@ public final class VistaEngine {
                 long key = TensorUtils.tensorKey(real);
                 String realSource = tensorSource.get(key);
                 if (realSource == null) {
-                    if (!partNames.isEmpty()) {
-                        realSource = partNames.get(partNames.size() - 1);
+                    int totalCount = partNames.size() + structChildNames.size();
+                    if (totalCount <= 1 && !partNames.isEmpty()) {
+                        realSource = partNames.get(0);
                         tensorSource.put(key, realSource);
                     } else {
-                        // Create a synthetic cat/embed node for the combined output
                         globalNodeCounter++;
                         String catName = "cat_" + globalNodeCounter;
                         graph.graphNodeNameToWithoutSuffix().put(catName, "cat");
@@ -2035,6 +2188,30 @@ public final class VistaEngine {
         return nodeName;
     }
 
+    /**
+     * Recursively find the last leaf node (present in adjList) for a module by
+     * walking its children. Container frames are registered in
+     * {@code moduleToNodeNames} but are NOT added to {@code adjList}, so we must
+     * descend into children to find the actual graph node representing the
+     * module's output.
+     */
+    private String findLastLeafInGraph(Module m) {
+        Module concrete = ModuleDiscovery.concrete(m);
+        List<String> nodes = moduleToNodeNames.get(moduleId(concrete));
+        if (nodes != null) {
+            for (int i = nodes.size() - 1; i >= 0; i--) {
+                String n = nodes.get(i);
+                if (graph.adjList().containsKey(n)) return n;
+            }
+        }
+        List<ModuleChildren.NamedChild> kids = ModuleChildren.list(concrete);
+        for (int i = kids.size() - 1; i >= 0; i--) {
+            String leaf = findLastLeafInGraph(kids.get(i).module);
+            if (leaf != null) return leaf;
+        }
+        return null;
+    }
+
     private void linkImplied(String from, String to) {
         if (from == null || to == null || from.equals(to)) return;
         GraphNode src = graph.adjList().get(from);
@@ -2088,7 +2265,13 @@ public final class VistaEngine {
             // trace_op
             traceOp(nodeName, output, false);
         } catch (Throwable e) {
-            // Node stays failed=true (set in preTraceOp); propagate
+            // Clear failed flag: the module exists in the model structure,
+            // we just couldn't trace its runtime behavior. It should appear
+            // as a normal structural node, not a "FAILED" node.
+            GraphNode failedNode = graph.adjList().get(nodeName);
+            if (failedNode != null) {
+                failedNode.setFailed(false);
+            }
             throw e instanceof RuntimeException
                     ? (RuntimeException) e
                     : new RuntimeException(e);
@@ -2586,7 +2769,13 @@ public final class VistaEngine {
         }
 
         // Collect sinks (modules with no outgoing edges to existing nodes)
+        // Also classify sinks by their attr-name role for combining-op detection.
         List<String> sinks = new ArrayList<>();
+        List<String> expertSinks = new ArrayList<>();
+        List<String> towerSinks = new ArrayList<>();
+        List<String> gateSinks = new ArrayList<>();
+        List<String> predictLayerSinks = new ArrayList<>();
+        List<String> aitSinks = new ArrayList<>();
         for (Map.Entry<String, GraphNode> e : graph.adjList().entrySet()) {
             String name = e.getKey();
             GraphNode node = e.getValue();
@@ -2614,10 +2803,262 @@ public final class VistaEngine {
             if (embedDownstream != null && name.contains("EmbeddingImpl")) {
                 continue;
             }
+            // Classify by attr name for combining-op detection
+            String attrName = graph.nodeToAttrName().get(name);
+            String attrL = attrName == null ? "" : attrName.toLowerCase();
+            if (attrL.contains("expert")) {
+                expertSinks.add(name);
+                continue; // experts feed towers/gates, not output
+            }
+            if (attrL.contains("tower")) {
+                towerSinks.add(name);
+            }
+            if (attrL.contains("gate")) {
+                gateSinks.add(name);
+                continue; // gates classified separately — added to sinks
+                          // only when no towers exist (see below)
+            }
+            // AITM: collect bottom / infoGate / ait sinks separately so they
+            // can be wired to their real downstream consumers (ait → tower)
+            // instead of being dropped as "intermediate" with no edges.
+            if (attrL.contains("ait")) {
+                aitSinks.add(name);
+                continue;
+            }
+            if (attrL.contains("infogate") || attrL.contains("bottom")) {
+                continue; // wired via AITM section below
+            }
+            if (attrL.contains("predict") || attrL.startsWith("pred")
+                    || attrL.contains("output_layer")
+                    || (attrL.contains("head") && !attrL.contains("gate"))) {
+                predictLayerSinks.add(name);
+            }
+            // Exclude intermediate layer types that should never be final
+            // sinks. These are wired as sinks spuriously when the tracing
+            // engine cannot find their real downstream consumer.
+            if (attrL.contains("embedding")) {
+                continue;
+            }
             sinks.add(name);
         }
-        // Pair sinks to outputs by index when counts match; else fan-in all sinks → all outs
-        if (!sinks.isEmpty()) {
+
+        // MoE / MMOE / OMoE: when experts and towers coexist, insert a
+        // combine operation that represents the gate-weighted sum of expert
+        // outputs. The gate produces per-expert weights, experts produce
+        // outputs, and the combine op weights and sums them before feeding
+        // the result into tower INPUT nodes (heads), not tower tail nodes.
+        if (!expertSinks.isEmpty() && !towerSinks.isEmpty()) {
+            // Find tower head nodes: tower-attributed nodes that have an
+            // incoming edge from a non-tower node (the tower entry point).
+            Set<String> towerHeads = new LinkedHashSet<>();
+            for (Map.Entry<String, GraphNode> te : graph.adjList().entrySet()) {
+                String tName = te.getKey();
+                String tAttr = graph.nodeToAttrName().get(tName);
+                String tL = tAttr == null ? "" : tAttr.toLowerCase();
+                if (!tL.contains("tower")) continue;
+                for (Map.Entry<String, GraphNode> se : graph.adjList().entrySet()) {
+                    if (se.getKey().equals(tName)) continue;
+                    String sAttr = graph.nodeToAttrName().get(se.getKey());
+                    String sL = sAttr == null ? "" : sAttr.toLowerCase();
+                    if (sL.contains("tower")) continue; // skip tower-internal edges
+                    for (GraphEdge edge : se.getValue().edges()) {
+                        if (tName.equals(edge.target())) {
+                            towerHeads.add(tName);
+                            break;
+                        }
+                    }
+                    if (towerHeads.contains(tName)) break;
+                }
+            }
+
+            // Create moe_combine operation node representing the gate-weighted
+            // sum of expert outputs (select → unsqueeze → mul → add loop).
+            globalNodeCounter++;
+            String moeCombineName = "moe_combine_" + globalNodeCounter;
+            graph.graphNodeNameToWithoutSuffix().put(moeCombineName, "moe_combine");
+            graph.graphNodeDisplayNames().put(moeCombineName, "moe_combine");
+            graph.nodeToModulePath().put(moeCombineName, "torch");
+            GraphNode moeCombineNode = GraphNode.of(NodeType.OPERATION);
+            graph.adjList().put(moeCombineName, moeCombineNode);
+
+            // Connect gate → moe_combine (gate output is the weight vector)
+            for (String gate : gateSinks) {
+                GraphNode gn = graph.adjList().get(gate);
+                if (gn != null) {
+                    gn.addEdge(new GraphEdge(moeCombineName, "", 0L, true));
+                }
+            }
+
+            // Connect experts → moe_combine (expert outputs are weighted & summed)
+            for (String expert : expertSinks) {
+                GraphNode en = graph.adjList().get(expert);
+                if (en != null) {
+                    en.addEdge(new GraphEdge(moeCombineName, "", 0L, true));
+                }
+            }
+
+            // Connect moe_combine → tower heads, and remove the spurious edges
+            // from non-tower nodes (e.g. pooled/cat) to tower heads since the
+            // real tower input is the gate-weighted combination, not the raw
+            // pooled embedding.
+            for (String head : towerHeads) {
+                for (Map.Entry<String, GraphNode> se : graph.adjList().entrySet()) {
+                    if (se.getKey().equals(head) || se.getKey().equals(moeCombineName)) continue;
+                    String sAttr = graph.nodeToAttrName().get(se.getKey());
+                    String sL = sAttr == null ? "" : sAttr.toLowerCase();
+                    if (sL.contains("tower")) continue; // keep tower-internal edges
+                    se.getValue().edges().removeIf(edge -> head.equals(edge.target()));
+                }
+                moeCombineNode.addEdge(new GraphEdge(head, "", 0L, true));
+            }
+
+            // Gate is no longer a sink — it feeds moe_combine
+            gateSinks.clear();
+
+            // Re-collect sinks after wiring experts/gate → moe_combine → towers
+            sinks.removeIf(s -> {
+                GraphNode n = graph.adjList().get(s);
+                if (n == null) return true;
+                for (GraphEdge edge : n.edges()) {
+                    if (graph.adjList().containsKey(edge.target())) return true;
+                }
+                return false;
+            });
+        } else if (!expertSinks.isEmpty() && !gateSinks.isEmpty()
+                && towerSinks.isEmpty() && predictLayerSinks.isEmpty()) {
+            // CGC-like: no towers, no predictLayers, experts feed gates, gate
+            // outputs are final. Wire experts → gates (all-to-all) and let
+            // gates be sinks.
+            for (String expert : expertSinks) {
+                for (String gate : gateSinks) {
+                    GraphNode en = graph.adjList().get(expert);
+                    if (en != null) {
+                        en.addEdge(new GraphEdge(gate, "", 0L, true));
+                    }
+                }
+            }
+            // Gates become sinks now
+            sinks.addAll(gateSinks);
+        } else if (!aitSinks.isEmpty()) {
+            // AITM: AttentionLayer (ait_k) q/k/v children are sinks because the
+            // attention computation (Q*K→softmax→*V→sum) can't be traced. Group
+            // ait sinks by their ait index, create an "ait_out" operation node
+            // per group, wire q/k/v → ait_out, then ait_out → tower_(k+1) head.
+            // Also remove the spurious bottom_(k+1) → tower_(k+1) edge since
+            // tower_(k+1) should receive ait_k's output, not bottom_(k+1)'s.
+            Map<String, List<String>> aitGroups = new LinkedHashMap<>();
+            for (String s : aitSinks) {
+                String attr = graph.nodeToAttrName().get(s);
+                String aL = attr == null ? "" : attr.toLowerCase();
+                // Extract ait index: ait_0.q_layer → "0"
+                int idx = aL.indexOf("ait_");
+                String grp = "0";
+                if (idx >= 0) {
+                    int start = idx + 4;
+                    int end = start;
+                    while (end < aL.length() && Character.isDigit(aL.charAt(end))) end++;
+                    if (end > start) grp = aL.substring(start, end);
+                }
+                aitGroups.computeIfAbsent(grp, k -> new ArrayList<>()).add(s);
+            }
+            for (Map.Entry<String, List<String>> ag : aitGroups.entrySet()) {
+                String kIdx = ag.getKey();
+                List<String> members = ag.getValue();
+                // Create ait_out operation node
+                globalNodeCounter++;
+                String aitOutName = "ait_out_" + globalNodeCounter;
+                graph.graphNodeNameToWithoutSuffix().put(aitOutName, "ait_out");
+                graph.graphNodeDisplayNames().put(aitOutName, "ait_out");
+                graph.nodeToModulePath().put(aitOutName, "torch");
+                GraphNode aitOutNode = GraphNode.of(NodeType.OPERATION);
+                graph.adjList().put(aitOutName, aitOutNode);
+                // Wire q/k/v → ait_out
+                for (String m : members) {
+                    GraphNode mn = graph.adjList().get(m);
+                    if (mn != null) {
+                        mn.addEdge(new GraphEdge(aitOutName, "", 0L, true));
+                    }
+                }
+                // Find tower_(k+1) head: tower-attributed node whose attr
+                // contains tower_(k+1) and has an incoming edge from a
+                // non-tower node.
+                int nextIdx = Integer.parseInt(kIdx) + 1;
+                String towerKey = "tower_" + nextIdx;
+                String towerHead = null;
+                for (Map.Entry<String, GraphNode> te : graph.adjList().entrySet()) {
+                    String tName = te.getKey();
+                    String tAttr = graph.nodeToAttrName().get(tName);
+                    String tL = tAttr == null ? "" : tAttr.toLowerCase();
+                    if (!tL.contains(towerKey)) continue;
+                    // Check if this node has an incoming edge from a non-tower node
+                    for (Map.Entry<String, GraphNode> se : graph.adjList().entrySet()) {
+                        if (se.getKey().equals(tName)) continue;
+                        String sAttr = graph.nodeToAttrName().get(se.getKey());
+                        String sL = sAttr == null ? "" : sAttr.toLowerCase();
+                        if (sL.contains("tower")) continue;
+                        for (GraphEdge edge : se.getValue().edges()) {
+                            if (tName.equals(edge.target())) {
+                                towerHead = tName;
+                                break;
+                            }
+                        }
+                        if (towerHead != null) break;
+                    }
+                    if (towerHead != null) break;
+                }
+                if (towerHead != null) {
+                    // Remove spurious non-tower edges to towerHead (e.g. bottom_(k+1))
+                    final String th = towerHead;
+                    for (Map.Entry<String, GraphNode> se : graph.adjList().entrySet()) {
+                        if (se.getKey().equals(th) || se.getKey().equals(aitOutName)) continue;
+                        String sAttr = graph.nodeToAttrName().get(se.getKey());
+                        String sL = sAttr == null ? "" : sAttr.toLowerCase();
+                        if (sL.contains("tower")) continue;
+                        se.getValue().edges().removeIf(edge -> th.equals(edge.target()));
+                    }
+                    // Wire ait_out → tower_(k+1) head
+                    aitOutNode.addEdge(new GraphEdge(towerHead, "", 0L, true));
+                }
+            }
+        } else {
+            // No expert-tower or expert-gate pairing. Gates are final outputs
+            // only when no towers AND no predictLayers exist; otherwise gates
+            // are intermediate (they produce weights, not final outputs).
+            if (towerSinks.isEmpty() && predictLayerSinks.isEmpty()) {
+                sinks.addAll(gateSinks);
+            }
+        }
+
+        // Determine the combining operation when multiple sinks feed a single
+        // output. Multi-task models (predictLayer/head/tower sinks) use
+        // torch.cat; DeepFM-like models (different branch types like
+        // linear/fm/mlp) use element-wise add.
+        boolean needCombineOp = sinks.size() > 1 && outs.size() == 1;
+        String combineOpName = null;
+        if (needCombineOp) {
+            // cat: multi-task outputs (predictLayer, head, tower) are concatenated
+            // add: ensemble outputs (linear, fm, mlp, etc.) are summed
+            boolean useCat = !predictLayerSinks.isEmpty()
+                    || !towerSinks.isEmpty();
+            globalNodeCounter++;
+            combineOpName = (useCat ? "cat_" : "add_") + globalNodeCounter;
+            String opLabel = useCat ? "cat" : "add";
+            String opDisplay = useCat ? "cat(tasks)" : "add";
+            graph.graphNodeNameToWithoutSuffix().put(combineOpName, opLabel);
+            graph.graphNodeDisplayNames().put(combineOpName, opDisplay);
+            graph.nodeToModulePath().put(combineOpName, "torch");
+            GraphNode combineNode = GraphNode.of(NodeType.OPERATION);
+            graph.adjList().put(combineOpName, combineNode);
+            // Wire all sinks → combine op → output
+            String primaryOut = outs.get(0);
+            for (String sink : sinks) {
+                GraphNode node = graph.adjList().get(sink);
+                String dims = inDimHint.getOrDefault(sink, "(out)");
+                node.addEdge(new GraphEdge(combineOpName, dims));
+            }
+            combineNode.addEdge(new GraphEdge(primaryOut, "(out)"));
+        } else if (!sinks.isEmpty()) {
+            // Pair sinks to outputs by index when counts match; else fan-in all sinks → all outs
             if (sinks.size() == outs.size()) {
                 for (int i = 0; i < sinks.size(); i++) {
                     GraphNode node = graph.adjList().get(sinks.get(i));
@@ -2662,6 +3103,97 @@ public final class VistaEngine {
                     node.addEdge(new GraphEdge(embedDownstream, "", 0L, false));
                 }
             }
+        }
+
+        // Post-processing: when multiple Module nodes connect directly to a
+        // single output, insert a combining operation (cat/add) node. This
+        // happens when the tracing engine wires multiple return-tensor sources
+        // to the same output, bypassing the sink-fan-out logic above.
+        for (String outName : new ArrayList<>(outputNodeSet)) {
+            List<String> allIncoming = new ArrayList<>();
+            for (Map.Entry<String, GraphNode> e : graph.adjList().entrySet()) {
+                String name = e.getKey();
+                if (name.equals(outName)) continue;
+                GraphNode node = e.getValue();
+                for (GraphEdge edge : node.edges()) {
+                    if (outName.equals(edge.target())) {
+                        allIncoming.add(name);
+                        break;
+                    }
+                }
+            }
+            if (allIncoming.size() <= 1) continue;
+            // Multiple incoming nodes — filter out intermediate layers that
+            // were spuriously wired to output. Only real sinks participate
+            // in the combining operation.
+            List<String> incoming = new ArrayList<>();
+            List<String> toRemove = new ArrayList<>();
+            for (String name : allIncoming) {
+                GraphNode node = graph.adjList().get(name);
+                boolean hasOtherEdges = false;
+                for (GraphEdge edge : node.edges()) {
+                    if (!outName.equals(edge.target())
+                            && graph.adjList().containsKey(edge.target())) {
+                        hasOtherEdges = true;
+                        break;
+                    }
+                }
+                String attrName = graph.nodeToAttrName().get(name);
+                String attrL = attrName == null ? "" : attrName.toLowerCase();
+                boolean isIntermediate = attrL.contains("gate")
+                        || attrL.contains("bottom")
+                        || attrL.contains("infogate")
+                        || attrL.contains("ait")
+                        || attrL.contains("expert")
+                        || attrL.contains("embedding");
+                if (hasOtherEdges || isIntermediate) {
+                    toRemove.add(name);
+                } else {
+                    incoming.add(name);
+                }
+            }
+            for (String src : toRemove) {
+                GraphNode sn = graph.adjList().get(src);
+                if (sn != null) {
+                    sn.edges().removeIf(ge -> outName.equals(ge.target()));
+                }
+            }
+            if (incoming.size() <= 1) continue;
+            boolean hasOp = false;
+            for (String src : incoming) {
+                GraphNode n = graph.adjList().get(src);
+                if (n != null && n.nodeType() == NodeType.OPERATION) {
+                    hasOp = true;
+                    break;
+                }
+            }
+            if (hasOp) continue;
+            boolean useCat = false;
+            for (String src : incoming) {
+                String attrName = graph.nodeToAttrName().get(src);
+                String attrL = attrName == null ? "" : attrName.toLowerCase();
+                if (attrL.contains("predict") || attrL.startsWith("pred")
+                        || attrL.contains("tower") || attrL.contains("head")
+                        || attrL.contains("output_layer")) {
+                    useCat = true;
+                    break;
+                }
+            }
+            globalNodeCounter++;
+            String combineName = (useCat ? "cat_" : "add_") + globalNodeCounter;
+            String opLabel = useCat ? "cat" : "add";
+            graph.graphNodeNameToWithoutSuffix().put(combineName, opLabel);
+            graph.graphNodeDisplayNames().put(combineName, useCat ? "cat(tasks)" : "add");
+            graph.nodeToModulePath().put(combineName, "torch");
+            GraphNode combineNode = GraphNode.of(NodeType.OPERATION);
+            graph.adjList().put(combineName, combineNode);
+            for (String src : incoming) {
+                GraphNode sn = graph.adjList().get(src);
+                if (sn == null) continue;
+                sn.edges().removeIf(ge -> outName.equals(ge.target()));
+                sn.addEdge(new GraphEdge(combineName, "(out)"));
+            }
+            combineNode.addEdge(new GraphEdge(outName, "(out)"));
         }
     }
 

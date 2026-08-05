@@ -27,6 +27,7 @@ import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.nn.modules.BCEWithLogitsLossImpl;
 import org.bytedeco.pytorch.nn.modules.LinearImpl;
+import org.bytedeco.pytorch.nn.modules.container.ModuleListImpl;
 import org.bytedeco.pytorch.nn.options.LinearOptions;
 import org.bytedeco.pytorch.recommend.DeviceSupport;
 import org.bytedeco.pytorch.recommend.TensorHelpers;
@@ -50,7 +51,8 @@ public class TransformerDCN extends Module {
 
     private final TransformerDCNFeatureEmbedding featEmb;
     private final SequenceTransformer seqTransformer;
-    private final LinearImpl[] crossLayers;
+//    private final LinearImpl[] crossLayers;
+    private final ModuleListImpl crossLayers = new ModuleListImpl();
     private final MLP parallelDNN;
     private final MLP finalMLP;
     private final BCEWithLogitsLossImpl bceLoss;
@@ -108,12 +110,14 @@ public class TransformerDCN extends Module {
         this.dcnInDim = batchFeatDim + itemInfoDim + seqTransformer.outputDim();
 
         // FuxiCTR CrossNetV2: Linear with bias, X += X0 * Linear(X)
-        this.crossLayers = new LinearImpl[this.dcnCrossLayers];
+//        this.crossLayers = new LinearImpl[this.dcnCrossLayers];
+//        this.dcnCrossLayers = new ModuleListImpl();
         for (int i = 0; i < this.dcnCrossLayers; i++) {
             LinearImpl layer = new LinearImpl(
                     new LinearOptions(dcnInDim, dcnInDim).bias(true));
             register_module("cross_" + i, layer);
-            crossLayers[i] = layer;
+//            crossLayers[i] = layer;
+            crossLayers.insert(i, layer);
         }
 
         // parallel_dnn: hidden_units=[1024,512,256], output_dim=None
@@ -234,8 +238,8 @@ public class TransformerDCN extends Module {
     private Tensor crossForward(Tensor x) {
         Tensor x0 = x;
         Tensor xl = x;
-        for (int i = 0; i < crossLayers.length; i++) {
-            Tensor projected = crossLayers[i].forward(xl);
+        for (int i = 0; i < crossLayers.size(); i++) {
+            Tensor projected = crossLayers.get(i).forward(xl);
             xl = xl.add(x0.mul(projected));
         }
         return xl;

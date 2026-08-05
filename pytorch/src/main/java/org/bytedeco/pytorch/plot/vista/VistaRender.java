@@ -270,13 +270,13 @@ public final class VistaRender {
         sb.append(".vx-body.drawer-closed{grid-template-columns:1fr 0px}");
         sb.append("@media(max-width:980px){.vx-body{grid-template-columns:1fr}.vx-drawer{max-height:40vh}");
         sb.append(".vx-body.drawer-closed .vx-drawer{max-height:0;border-top:0}}");
-        sb.append(".vx-stage{position:relative;overflow:hidden;background:var(--bg2);");
+        sb.append(".vx-stage{position:relative;overflow:auto;background:var(--bg2);");
         sb.append("background-image:radial-gradient(circle at 1px 1px, color-mix(in srgb,var(--accent) 12%,transparent) 1px, transparent 0);");
         sb.append("background-size:20px 20px}");
         sb.append(".vx-bg-blobs{pointer-events:none;position:absolute;inset:0;opacity:.55;");
         sb.append("background:radial-gradient(520px 260px at 18% 28%,color-mix(in srgb,var(--accent2) 14%,transparent),transparent),");
         sb.append("radial-gradient(480px 240px at 82% 72%,color-mix(in srgb,var(--accent) 12%,transparent),transparent)}");
-        sb.append(".vx-stage svg{width:100%;height:100%;display:block;cursor:grab;touch-action:none}");
+        sb.append(".vx-stage svg{min-width:100%;min-height:100%;display:block;cursor:grab;touch-action:none}");
         sb.append(".vx-stage svg:active{cursor:grabbing}");
         sb.append(".vx-hint{position:absolute;left:12px;bottom:12px;font-size:10px;color:var(--muted);font-weight:600;");
         sb.append("background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(8px);");
@@ -436,7 +436,7 @@ public final class VistaRender {
         s.append("const exportMenu=document.getElementById('export-menu-'+ID);\n");
         s.append("if(raw.error_message){errBox.hidden=false;errBox.textContent='⚠️ '+raw.error_message;}\n");
 
-        s.append("let transform={x:28,y:36,k:1}, selected=null, selectedName=null;\n");
+        s.append("let transform={k:1}, selected=null, selectedName=null;\n");
         s.append("let orient='LR'; // LR | RL | TB | BT\n");
         s.append("const collapsed=new Set(), pos={};\n");
         s.append("const framePos={};\n");
@@ -640,8 +640,18 @@ public final class VistaRender {
         s.append("  });\n");
         s.append("  return edges;}\n");
 
-        s.append("function applyT(){world.setAttribute('transform','translate('+transform.x+','+transform.y+') scale('+transform.k+')');\n");
-        s.append("  zoomLab.textContent=Math.round(transform.k*100)+'%';}\n");
+        s.append("function applyT(){\n");
+        s.append("  zoomLab.textContent=Math.round(transform.k*100)+'%';\n");
+        s.append("  const vb=svg.getAttribute('viewBox');\n");
+        s.append("  if(vb){world.setAttribute('transform','scale('+transform.k+')');return;}\n");
+        s.append("  let mnx=1e9,mny=1e9,mxx=-1e9,mxy=-1e9,has=false;\n");
+        s.append("  Object.keys(pos).forEach(n=>{const p=pos[n];if(!p)return;has=true;mnx=Math.min(mnx,p.x);mny=Math.min(mny,p.y);mxx=Math.max(mxx,p.x+NW);mxy=Math.max(mxy,p.y+NH);});\n");
+        s.append("  if(!has){svg.style.width='100%';svg.style.height='100%';world.setAttribute('transform','scale('+transform.k+')');return;}\n");
+        s.append("  const pad=80;\n");
+        s.append("  const offX=-mnx*transform.k+pad, offY=-mny*transform.k+pad;\n");
+        s.append("  world.setAttribute('transform','translate('+offX+','+offY+') scale('+transform.k+')');\n");
+        s.append("  const w=(mxx-mnx)*transform.k+pad*2, h=(mxy-mny)*transform.k+pad*2;\n");
+        s.append("  svg.style.width=Math.max(stage.clientWidth,w)+'px';svg.style.height=Math.max(stage.clientHeight,h)+'px';}\n");
 
         s.append("function drawShape(g, st, failed){\n");
         s.append("  const shape=st.shape||'round'; let el;\n");
@@ -1103,33 +1113,39 @@ public final class VistaRender {
 
         s.append("let panning=false, px=0, py=0;\n");
         s.append("svg.addEventListener('pointerdown',ev=>{if(ev.button!==0)return; panning=true; px=ev.clientX; py=ev.clientY; svg.setPointerCapture(ev.pointerId);});\n");
-        s.append("svg.addEventListener('pointermove',ev=>{if(!panning)return; transform.x+=ev.clientX-px; transform.y+=ev.clientY-py; px=ev.clientX; py=ev.clientY; applyT();});\n");
+        s.append("svg.addEventListener('pointermove',ev=>{if(!panning)return; stage.scrollLeft-=(ev.clientX-px); stage.scrollTop-=(ev.clientY-py); px=ev.clientX; py=ev.clientY;});\n");
         s.append("svg.addEventListener('pointerup',()=>{panning=false;});\n");
         s.append("svg.addEventListener('wheel',ev=>{\n");
         s.append("  ev.preventDefault();\n");
         s.append("  const rect=svg.getBoundingClientRect(); const mx=ev.clientX-rect.left, my=ev.clientY-rect.top;\n");
         s.append("  const scale=ev.deltaY<0?1.12:1/1.12;\n");
         s.append("  const nk=Math.min(3.5, Math.max(0.12, transform.k*scale));\n");
-        s.append("  transform.x=mx-(mx-transform.x)*(nk/transform.k);\n");
-        s.append("  transform.y=my-(my-transform.y)*(nk/transform.k);\n");
+        s.append("  const ratio=nk/transform.k, pad=80;\n");
+        s.append("  const oldSL=stage.scrollLeft, oldST=stage.scrollTop;\n");
         s.append("  transform.k=nk; applyT();\n");
+        s.append("  stage.scrollLeft=oldSL+(mx-pad)*(ratio-1);\n");
+        s.append("  stage.scrollTop=oldST+(my-pad)*(ratio-1);\n");
         s.append("},{passive:false});\n");
 
         s.append("function fit(){\n");
         s.append("  const vis=visibleNodes(); let minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9, any=false;\n");
         s.append("  vis.forEach(n=>{const p=pos[n]; if(!p)return; any=true; minX=Math.min(minX,p.x); minY=Math.min(minY,p.y); maxX=Math.max(maxX,p.x+NW); maxY=Math.max(maxY,p.y+NH);});\n");
-        s.append("  if(!any){transform={x:28,y:36,k:1}; applyT(); return;}\n");
-        s.append("  const pad=52; const w=Math.max(100, stage.clientWidth-pad*2), h=Math.max(100, stage.clientHeight-pad*2);\n");
+        s.append("  if(!any){transform={k:1}; applyT(); return;}\n");
+        s.append("  const pad=80; const w=Math.max(100, stage.clientWidth-pad*2), h=Math.max(100, stage.clientHeight-pad*2);\n");
         s.append("  const bw=Math.max(1,maxX-minX), bh=Math.max(1,maxY-minY);\n");
         s.append("  const k=Math.min(w/bw, h/bh, 1.5);\n");
-        s.append("  transform.k=k; transform.x=pad-minX*k+(w-bw*k)/2; transform.y=pad-minY*k+(h-bh*k)/2; applyT();\n");
+        s.append("  transform.k=k; applyT();\n");
+        s.append("  const cW=bw*k+pad*2, cH=bh*k+pad*2;\n");
+        s.append("  stage.scrollLeft=Math.max(0,(cW-stage.clientWidth)/2);\n");
+        s.append("  stage.scrollTop=Math.max(0,(cH-stage.clientHeight)/2);\n");
         s.append("}\n");
         s.append("function zoomBy(factor){\n");
-        s.append("  const rect=svg.getBoundingClientRect(); const mx=rect.width/2, my=rect.height/2;\n");
+        s.append("  const cx=stage.scrollLeft+stage.clientWidth/2, cy=stage.scrollTop+stage.clientHeight/2;\n");
         s.append("  const nk=Math.min(3.5, Math.max(0.12, transform.k*factor));\n");
-        s.append("  transform.x=mx-(mx-transform.x)*(nk/transform.k);\n");
-        s.append("  transform.y=my-(my-transform.y)*(nk/transform.k);\n");
+        s.append("  const ratio=nk/transform.k, pad=80;\n");
         s.append("  transform.k=nk; applyT();\n");
+        s.append("  stage.scrollLeft=(cx-pad)*ratio+pad-stage.clientWidth/2;\n");
+        s.append("  stage.scrollTop=(cy-pad)*ratio+pad-stage.clientHeight/2;\n");
         s.append("}\n");
         s.append("function setOrient(o){\n");
         s.append("  orient=o;\n");
@@ -1313,7 +1329,7 @@ public final class VistaRender {
         s.append("      svg.setAttribute('width', String(Math.max(600, Math.round(vbW))));\n");
         s.append("      svg.setAttribute('height', String(Math.max(400, Math.round(vbH))));\n");
         s.append("      // Reset pan/zoom so world is identity under the viewBox\n");
-        s.append("      transform={x:0,y:0,k:1}; applyT();\n");
+        s.append("      transform={k:1}; applyT();\n");
         s.append("    }\n");
         s.append("  } catch(err) { console.warn(err); }\n");
         s.append("  toast('PDF：已展开并居中全图，请在打印框选择「存储为 PDF」');\n");
