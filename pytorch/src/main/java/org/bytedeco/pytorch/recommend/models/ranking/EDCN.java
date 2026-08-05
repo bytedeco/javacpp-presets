@@ -125,7 +125,7 @@ public class EDCN extends Module {
     public Tensor forward(Map<String, Tensor> sparseFeats) {
         Tensor embedX = embedding.forward(sparseFeats, java.util.Collections.emptyMap(), true); // (B, dims)
 
-        T_TensorTensor_T firstReg = ((RegulationModule)regulationModules.get(0)).forwardReg(embedX);
+        T_TensorTensor_T firstReg = regulationModules.get(0).forwardT_TensorTensor_T(embedX);
         Tensor crossI = firstReg.get0();
         Tensor deepI = firstReg.get1();
         Tensor cross0 = crossI;
@@ -133,7 +133,7 @@ public class EDCN extends Module {
 
         for (int i = 0; i < nCrossLayers; i++) {
             if (i > 0) {
-                T_TensorTensor_T reg = ((RegulationModule)regulationModules.get(i)).forwardReg(bridgeI);
+                T_TensorTensor_T reg = regulationModules.get(i).forwardT_TensorTensor_T(bridgeI);
                 crossI = reg.get0();
                 deepI = reg.get1();
             }

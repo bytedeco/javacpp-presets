@@ -5,6 +5,12 @@
  *   java -cp ... samples.recommend.SmokeCriteoRanking
  */
 package samples.recommend;
+import org.bytedeco.pytorch.data.*;
+import org.bytedeco.pytorch.data.datasets.*;
+import org.bytedeco.pytorch.data.dataloader.*;
+import org.bytedeco.pytorch.nn.modules.*;
+import org.bytedeco.pytorch.optim.*;
+import org.bytedeco.pytorch.optim.options.*;
 
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.data.Example;

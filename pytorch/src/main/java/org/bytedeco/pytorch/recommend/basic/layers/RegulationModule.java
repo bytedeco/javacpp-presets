@@ -81,6 +81,11 @@ public class RegulationModule extends Module {
         return forwardReg(x, false);
     }
 
+    @Override
+    public T_TensorTensor_T forwardT_TensorTensor_T(Tensor x) {
+        return forwardReg(x, false);
+    }
+
     public T_TensorTensor_T forwardReg(Tensor x, boolean r) {
         if (!useRegulation) {
             return new T_TensorTensor_T(x, x);

@@ -35,11 +35,11 @@ public class PLE extends Module {
     private final int nTask;
     private final int nLevel;
     private final EmbeddingLayer embedding;
-//    private final List<CGC> cgcRefs = new ArrayList<>();
+    private final List<CGC> cgcRefs = new ArrayList<>();
 //    private final List<MLP> towers = new ArrayList<>();
 //    private final List<PredictionLayer> predictLayers = new ArrayList<>();
 
-    private final ModuleListImpl cgcRefs = new ModuleListImpl();
+//    private final ModuleListImpl cgcRefs = new ModuleListImpl();
     private final ModuleListImpl towers = new ModuleListImpl();
     private final ModuleListImpl predictLayers = new ModuleListImpl();
 
@@ -100,7 +100,7 @@ public class PLE extends Module {
             CGC cgc = new CGC(level + 1, nLevel, nTask, nExpertSpecific, nExpertShared,
                     levelInput, expertParams, device);
             register_module("cgc_" + level, cgc);
-            cgcRefs.insert(level, cgc);
+            cgcRefs.add(cgc);
         }
 
         for (int i = 0; i < nTask; i++) {

@@ -41,9 +41,9 @@ public class DIEN extends Module {
     private final long historyDim;
     private final EmbeddingLayer embedding;
 //    private final List<GRUImpl> interestExtractorLayers = new ArrayList<>();
-//    private final List<RankingAUGRU> interestEvolvingLayers = new ArrayList<>();
+    private final List<RankingAUGRU> interestEvolvingLayers = new ArrayList<>();
     private final ModuleListImpl interestExtractorLayers = new ModuleListImpl();
-    private final ModuleListImpl interestEvolvingLayers = new ModuleListImpl();
+//    private final ModuleListImpl interestEvolvingLayers = new ModuleListImpl();
     private final MLP mlp;
 
     public DIEN(List<? extends Feature> features, List<SequenceFeature> sequenceFeatures) {
@@ -87,7 +87,7 @@ public class DIEN extends Module {
         for (int i = 0; i < this.sequenceFeatures.size(); i++) {
             RankingAUGRU augru = new RankingAUGRU(this.sequenceFeatures.get(i).embedDim(), device);
             register_module("interest_evolving_" + i, augru);
-            interestEvolvingLayers.insert(i,augru);
+            interestEvolvingLayers.add(augru);
         }
 
         // Top MLP — activation fixed to "dice" as in the paper.

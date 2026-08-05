@@ -13,6 +13,7 @@ import org.bytedeco.pytorch.Device;
 import org.bytedeco.pytorch.LongVector;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.nn.functional.FunctionalDropout;
 import org.bytedeco.pytorch.nn.modules.BatchNorm1dImpl;
 import org.bytedeco.pytorch.nn.modules.DropoutImpl;
 import org.bytedeco.pytorch.nn.modules.GELUImpl;
@@ -118,9 +119,9 @@ public class MLP extends Module {
                 }
 
                 if (dropout > 0) {
-                    DropoutImpl dropoutLayer = new DropoutImpl(dropout);
-                    dropoutCount++;
-                    sequential.push_back("dropout_" + dropoutCount, dropoutLayer);
+                    // Use functional wrapper to avoid ambiguity between DropoutImpl forward overloads
+                    // (e.g., forward(Tensor) vs forward(Tensor, boolean)) which can cause native crashes.
+                    sequential.push_back(new FunctionalDropout(dropout));
                 }
 
                 prevDim = dim;

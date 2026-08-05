@@ -30,10 +30,10 @@ public class SingleTaskModel extends Module {
     }
 
     private final int nTask;
-//    private final List<EmbeddingLayer> taskEmbeddings = new ArrayList<>();
+    private final List<EmbeddingLayer> taskEmbeddings = new ArrayList<>();
 //    private final List<MLP> taskBottoms = new ArrayList<>();
 //    private final List<MLP> taskTowers = new ArrayList<>();
-    private final ModuleListImpl taskEmbeddings = new ModuleListImpl();
+//    private final ModuleListImpl taskEmbeddings = new ModuleListImpl();
     private final ModuleListImpl taskBottoms = new ModuleListImpl();
     private final ModuleListImpl taskTowers = new ModuleListImpl();
 
@@ -62,7 +62,7 @@ public class SingleTaskModel extends Module {
         for (int i = 0; i < nTask; i++) {
             EmbeddingLayer emb = new EmbeddingLayer(featList, embedDim, device);
             register_module("embedding_" + i, emb);
-            taskEmbeddings.insert(i, emb);
+            taskEmbeddings.add(emb);
 
             MLP bottom = new MLP(inputDims, bottomDims, bottomLast, "relu", dropout,
                     false, false, false, device);
