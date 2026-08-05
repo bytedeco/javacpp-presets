@@ -1913,7 +1913,12 @@ public final class VistaEngine {
 
         for (Tensor t : outputTensors) {
             long key = TensorUtils.tensorKey(t);
-            tensorSource.put(key, opName);
+            // Prefer earlier source mapping — do not overwrite existing mapping which
+            // may represent the true origin of this tensor (prevents later ops
+            // from stealing index/embedding sources).
+            if (!tensorSource.containsKey(key)) {
+                tensorSource.put(key, opName);
+            }
             if (impliedEdge) {
                 tensorImplied.put(key, true);
             } else {
