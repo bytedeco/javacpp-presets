@@ -40,9 +40,9 @@ public class DIEN extends Module {
     private final List<SequenceFeature> sequenceFeatures;
     private final long historyDim;
     private final EmbeddingLayer embedding;
-//    private final List<GRUImpl> interestExtractorLayers = new ArrayList<>();
+    private final List<GRUImpl> interestExtractorLayers = new ArrayList<>();
     private final List<RankingAUGRU> interestEvolvingLayers = new ArrayList<>();
-    private final ModuleListImpl interestExtractorLayers = new ModuleListImpl();
+//    private final ModuleListImpl interestExtractorLayers = new ModuleListImpl();
 //    private final ModuleListImpl interestEvolvingLayers = new ModuleListImpl();
     private final MLP mlp;
 
@@ -81,7 +81,7 @@ public class DIEN extends Module {
             opts.batch_first().put(true);
             GRUImpl gru = new GRUImpl(opts);
             register_module("interest_extractor_" + i, gru);
-            interestExtractorLayers.insert(i,gru);
+            interestExtractorLayers.add(i, gru);
         }
 
         for (int i = 0; i < this.sequenceFeatures.size(); i++) {
