@@ -42,7 +42,7 @@ public class DIEN extends Module {
     private final EmbeddingLayer embedding;
     private final List<GRUImpl> interestExtractorLayers = new ArrayList<>();
     private final List<RankingAUGRU> interestEvolvingLayers = new ArrayList<>();
-//    private final ModuleListImpl interestExtractorLayers = new ModuleListImpl();
+//    private final ModuleListImpl interestExtractorLayers = new ModuleListImpl(); //  - ranking/DIEN : RuntimeException: Module::forward_tuple_tensor_tensor(input) is not implemented for GruImpl Exception raised from forward_tuple_tensor_tensor at /Users/muller/Documents/code/rust/javacpp-presets/pytorch/cppbuild/macosx-arm64/pytorch/torch/include/to...
 //    private final ModuleListImpl interestEvolvingLayers = new ModuleListImpl();
     private final MLP mlp;
 

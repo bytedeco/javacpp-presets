@@ -42,11 +42,11 @@ public class EDCN extends Module {
 //    private final List<CrossLayer> crossLayers = new ArrayList<>();
 //    private final List<MLP> mlps = new ArrayList<>();
 //    private final List<BridgeModule> bridges = new ArrayList<>();
-//    private final List<RegulationModule> regulationModules = new ArrayList<>();
+    private final List<RegulationModule> regulationModules = new ArrayList<>();
     private final ModuleListImpl crossLayers = new ModuleListImpl();
     private final ModuleListImpl mlps = new ModuleListImpl();
     private final ModuleListImpl bridges = new ModuleListImpl();
-    private final ModuleListImpl regulationModules = new ModuleListImpl();
+//    private final ModuleListImpl regulationModules = new ModuleListImpl(); //  - ranking/EDCN : RuntimeException: Module::forward_tuple_tensor_tensor(input) is not implemented for RegulationModule Exception raised from forward_tuple_tensor_tensor at /Users/muller/Documents/code/rust/javacpp-presets/pytorch/cppbuild/macosx-arm64/pytorch/torch/include/to...
     private final LR finalLinear;
 
     public EDCN(List<? extends Feature> features) {
@@ -107,7 +107,7 @@ public class EDCN extends Module {
 
             RegulationModule reg = new RegulationModule(numFields, feaDimsArr, temperature, useRegulationModule);
             register_module("regulation_" + i, reg);
-            regulationModules.insert(i,reg);
+            regulationModules.add(i,reg);
         }
 
         this.finalLinear = new LR(dims * 3L, false, device);
