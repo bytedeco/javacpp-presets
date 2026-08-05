@@ -54,18 +54,21 @@ public class MLP extends Module {
     }
 
     private final SequentialImpl sequential;
+    private final java.util.List<Module> modules = new java.util.ArrayList<>();
     private int moduleCounter = 0;
 
     private void addModule(Module m) {
         String name = "layer_" + moduleCounter++;
         sequential.push_back(name, m);
         register_module(name, m);
+        modules.add(m);
     }
 
     private void addModule(String name, Module m) {
         // allow explicit names but still register
         sequential.push_back(name, m);
         register_module(name, m);
+        modules.add(m);
     }
 
     public MLP(long inputDim, long[] hiddenDims) {
@@ -171,8 +174,15 @@ public class MLP extends Module {
             if (x.numel() == 0) {
                 throw new IllegalArgumentException("Input tensor has no elements");
             }
-            // Use SequentialImpl.forward to execute the composed modules
-            return sequential.forward(x);
+            // Execute modules in Java to avoid native SequentialImpl dispatch issues
+            Tensor out = x;
+            for (Module m : modules) {
+                out = m.forward(out);
+                if (out == null) {
+                    throw new RuntimeException("Module " + m + " returned null tensor during forward");
+                }
+            }
+            return out;
         } catch (RuntimeException e) {
             System.err.println("[MLP] Forward pass failed: " + e.getMessage());
             try {
