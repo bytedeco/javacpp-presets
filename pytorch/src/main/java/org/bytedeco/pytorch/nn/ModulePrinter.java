@@ -12,6 +12,7 @@ import org.bytedeco.pytorch.TensorVector;
 import org.bytedeco.pytorch.nn.modules.container.SharedModuleVector;
 import org.bytedeco.pytorch.nn.modules.container.StringSharedModuleDict;
 import org.bytedeco.pytorch.nn.modules.container.StringSharedModuleDictItem;
+import org.bytedeco.pytorch.plot.vista.ModuleDiscovery;
 
 /**
  * Mirrors Python {@code print(model)} for JavaCPP {@link Module}.
@@ -108,21 +109,12 @@ public final class ModulePrinter {
      * → {@code torch::nn::SequentialImpl}.
      */
     private static String getTypeName(Module m) {
-        String raw = null;
+        if (m == null) return "null";
         try {
-            BytePointer bp = m.name();
-            if (bp != null && !bp.isNull()) {
-                raw = bp.getString();
-            }
-        } catch (Throwable ignored) {}
-        if (raw == null || raw.isEmpty()) {
-            try {
-                raw = m.getClass().getSimpleName();
-            } catch (Throwable e) {
-                return "Module";
-            }
+            return ModuleDiscovery.typeName(m);
+        } catch (Throwable ignored) {
+            try { return m.getClass().getSimpleName(); } catch (Throwable e) { return "Module"; }
         }
-        return demangleTypeName(raw);
     }
 
     /**

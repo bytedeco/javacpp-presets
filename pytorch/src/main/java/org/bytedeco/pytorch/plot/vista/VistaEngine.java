@@ -358,14 +358,27 @@ public final class VistaEngine {
 
         Object current = inputs;
         Tensor lastTensor = null;
+        String lastNodeName = null; // track last emitted node for structural chaining
         boolean broken = false;
         try {
             for (int i = 0; i < kids.size(); i++) {
                 ModuleChildren.NamedChild child = kids.get(i);
                 if (broken || current == null) {
-                    // Chain is broken — still emit remaining kids as structure so
-                    // ReLU / Dropout / Linear after a failed hop are NOT lost.
-                    emitStructuralChild(child.module, child.key, stackDepth + 1);
+                    // Chain is broken — emit remaining kids structurally but also
+                    // keep implied chaining from the last successful child to the
+                    // first node under the next structural child so the UI shows
+                    // continued flow even when runtime forward failed.
+                    String leaf = emitStructuralChildReturning(child.module, child.key, stackDepth + 1);
+                    if (leaf != null) {
+                        // Link from the last known node (tensor source or structural)
+                        String fromNode = lastNodeName;
+                        if (fromNode == null && lastTensor != null) {
+                            fromNode = tensorSource.get(TensorUtils.tensorKey(lastTensor));
+                        }
+                        if (fromNode != null) linkImplied(fromNode, leaf);
+                        lastNodeName = leaf;
+                    }
+                    broken = true;
                     continue;
                 }
                 try {
@@ -373,12 +386,23 @@ public final class VistaEngine {
                     if (out != null && !out.isNull()) {
                         lastTensor = out;
                         current = out;
+                        // Update lastNodeName from tensor source
+                        String src = tensorSource.get(TensorUtils.tensorKey(out));
+                        if (src != null) lastNodeName = src;
                     } else {
                         // Child produced nothing usable — keep structure for the rest
                         broken = true;
                         // If runForward already recorded a node, fine; otherwise structural
                         if (!hasRecordedChild(child.module)) {
-                            emitStructuralChild(child.module, child.key, stackDepth + 1);
+                            String leaf = emitStructuralChildReturning(child.module, child.key, stackDepth + 1);
+                            if (leaf != null) {
+                                String fromNode = lastNodeName;
+                                if (fromNode == null && lastTensor != null) {
+                                    fromNode = tensorSource.get(TensorUtils.tensorKey(lastTensor));
+                                }
+                                if (fromNode != null) linkImplied(fromNode, leaf);
+                                lastNodeName = leaf;
+                            }
                         }
                     }
                 } catch (Throwable childEx) {
@@ -393,7 +417,16 @@ public final class VistaEngine {
                         }
                     }
                     if (!hasRecordedChild(child.module)) {
-                        emitStructuralChild(child.module, child.key, stackDepth + 1);
+                        String leaf = emitStructuralChildReturning(child.module, child.key, stackDepth + 1);
+                        if (leaf != null) {
+                            // Link from the last known node, not just lastTensor
+                            String fromNode = lastNodeName;
+                            if (fromNode == null && lastTensor != null) {
+                                fromNode = tensorSource.get(TensorUtils.tensorKey(lastTensor));
+                            }
+                            if (fromNode != null) linkImplied(fromNode, leaf);
+                            lastNodeName = leaf;
+                        }
                     }
                     broken = true;
                     // Do not feed a failed/null tensor into the next layer
@@ -1071,20 +1104,50 @@ public final class VistaEngine {
                             if (src != null) partNames.add(src);
                         }
                     } catch (Throwable ex) {
-                        emitStructuralChild(cm, key, stackDepth + 1);
+                        // traceLeafModule already created a failed node via preTraceOp;
+                        // only emit structural fallback if nothing was recorded yet.
+                        if (!hasRecordedChild(cm)) {
+                            emitStructuralChild(cm, key, stackDepth + 1);
+                        }
                     }
                 } else {
-                    emitStructuralChild(cm, key, stackDepth + 1);
+                    if (!hasRecordedChild(cm)) {
+                        emitStructuralChild(cm, key, stackDepth + 1);
+                    }
                 }
             }
 
             if (real != null && !real.isNull()) {
-                // Prefer real forward output for downstream chaining
+                // Prefer real forward output for downstream chaining.
+                // Create a proper operation node so downstream modules can
+                // trace edges from it (container frames are not in adjList).
                 long key = TensorUtils.tensorKey(real);
                 if (!tensorSource.containsKey(key)) {
-                    // attribute to last embed part or the container
                     if (!partNames.isEmpty()) {
                         tensorSource.put(key, partNames.get(partNames.size() - 1));
+                    } else {
+                        // Create a synthetic cat/embed node for the combined output
+                        globalNodeCounter++;
+                        String catName = "cat_" + globalNodeCounter;
+                        graph.graphNodeNameToWithoutSuffix().put(catName, "cat");
+                        graph.graphNodeDisplayNames().put(catName, "cat(embed)");
+                        graph.nodeToModulePath().put(catName, "torch");
+                        GraphNode catNode = GraphNode.of(NodeType.OPERATION);
+                        graph.adjList().put(catName, catNode);
+                        recordParentBookkeeping(catName);
+                        graph.nodeToAncestors().put(catName, currentAncestors());
+                        tensorSource.put(key, catName);
+                        // Wire edges from the individual embed parts that did succeed
+                        for (int pi = 0; pi < parts.size(); pi++) {
+                            String src = pi < partNames.size() ? partNames.get(pi)
+                                    : tensorSource.get(TensorUtils.tensorKey(parts.get(pi)));
+                            if (src == null) continue;
+                            GraphNode sn = graph.adjList().get(src);
+                            if (sn == null) continue;
+                            sn.addEdge(new GraphEdge(catName,
+                                    TensorUtils.formatDims(parts.get(pi)),
+                                    TensorUtils.tensorKey(parts.get(pi)), false));
+                        }
                     }
                 }
                 return real;
@@ -1552,8 +1615,8 @@ public final class VistaEngine {
     /** @return last leaf node name emitted (for implied-edge chaining), or null */
     private String emitStructuralChildReturning(Module child, String attrName, int stackDepth) {
         Module m = ModuleDiscovery.concrete(child);
-        // Sequential / single-child MLP wrappers: emit kids in order with implied edges
-        // so Linear→ReLU→Linear chain is visible even when real forward couldn't run.
+
+        // 1) Sequential-like containers: chain children in-order with implied edges
         if ((ModuleDiscovery.isSequential(m) || ModuleDiscovery.canChainChildrenAsSequential(m))
                 && ModuleChildren.hasChildren(m)
                 && !ModuleDiscovery.isTracedLeaf(m, stackDepth, options.forcedModuleTracingDepth())) {
@@ -1564,14 +1627,14 @@ public final class VistaEngine {
                 for (ModuleChildren.NamedChild c : ModuleChildren.list(m)) {
                     String leaf = emitStructuralChildReturning(c.module, c.key, stackDepth + 1);
                     if (leaf != null) {
-                        if (prevNode != null) linkImplied(prevNode, leaf);
-                        // If nested container emitted a chain, link to its *first* via
-                        // walking: we only have last; also try to link prev→first of nested
-                        // by using the node just before last in insertion order when needed.
-                        prevNode = leaf;
-                        lastNode = leaf;
-                        // For nested multi-leaf containers, also chain through intermediate
-                        // nodes that share this container as ancestor — already linked inside.
+                        // Prefer to link from previous node to the first node emitted for this child
+                        Long cid = moduleId(ModuleDiscovery.concrete(c.module));
+                        java.util.List<String> childNames = moduleToNodeNames.get(cid);
+                        String firstChild = (childNames != null && !childNames.isEmpty()) ? childNames.get(0) : leaf;
+                        String lastChild = (childNames != null && !childNames.isEmpty()) ? childNames.get(childNames.size() - 1) : leaf;
+                        if (prevNode != null && firstChild != null) linkImplied(prevNode, firstChild);
+                        prevNode = lastChild;
+                        lastNode = lastChild;
                     }
                 }
             } finally {
@@ -1579,19 +1642,40 @@ public final class VistaEngine {
             }
             return lastNode;
         }
-        if (ModuleChildren.hasChildren(m) && !ModuleDiscovery.isBuiltinLeaf(m)
+
+        // 2) Non-builtin composite with children: prefer chaining unless it's a
+        //    list/dict/parameter collection which should remain parallel/transparent.
+        if (ModuleChildren.hasChildren(m)
+                && !ModuleDiscovery.isBuiltinLeaf(m)
                 && !ModuleDiscovery.isTracedLeaf(m, stackDepth, options.forcedModuleTracingDepth())) {
+            boolean forceParallel = ModuleDiscovery.isModuleListLike(m)
+                    || ModuleDiscovery.isModuleDictLike(m)
+                    || ModuleDiscovery.isParameterListLike(m)
+                    || ModuleDiscovery.isParameterDictLike(m);
+
             String frame = beginContainerFrame(m);
             String lastNode = null;
             try {
-                String prevNode = null;
-                for (ModuleChildren.NamedChild c : ModuleChildren.list(m)) {
-                    String leaf = emitStructuralChildReturning(c.module, c.key, stackDepth + 1);
-                    if (leaf != null) {
-                        // Parallel kids of a non-sequential container: no forced chain,
-                        // but still record last for parent sequential wrappers.
-                        lastNode = leaf;
-                        if (prevNode == null) prevNode = leaf;
+                if (forceParallel) {
+                    // Emit children structurally in parallel (no implied chaining)
+                    for (ModuleChildren.NamedChild c : ModuleChildren.list(m)) {
+                        String leaf = emitStructuralChildReturning(c.module, c.key, stackDepth + 1);
+                        if (leaf != null) lastNode = leaf;
+                    }
+                } else {
+                    // Prefer chaining for composites that are logically sequential
+                    String prevNode = null;
+                    for (ModuleChildren.NamedChild c : ModuleChildren.list(m)) {
+                        String leaf = emitStructuralChildReturning(c.module, c.key, stackDepth + 1);
+                        if (leaf != null) {
+                            Long cid = moduleId(ModuleDiscovery.concrete(c.module));
+                            java.util.List<String> childNames = moduleToNodeNames.get(cid);
+                            String firstChild = (childNames != null && !childNames.isEmpty()) ? childNames.get(0) : leaf;
+                            String lastChild = (childNames != null && !childNames.isEmpty()) ? childNames.get(childNames.size() - 1) : leaf;
+                            if (prevNode != null && firstChild != null) linkImplied(prevNode, firstChild);
+                            prevNode = lastChild;
+                            lastNode = lastChild;
+                        }
                     }
                 }
             } finally {
@@ -1599,11 +1683,35 @@ public final class VistaEngine {
             }
             return lastNode;
         }
+
+        // Leaf node
         return emitStructuralLeaf(m, attrName);
     }
 
     private String emitStructuralLeaf(Module m, String attrName) {
         String typeSimple = ModuleDiscovery.simpleTypeName(m);
+        long id = moduleId(m);
+        // If we've already emitted nodes for this module (via traceLeafModule or
+        // a prior structural emit), reuse the last one to avoid duplicates.
+        java.util.List<String> existing = moduleToNodeNames.get(id);
+        if (existing != null && !existing.isEmpty()) {
+            for (int i = existing.size() - 1; i >= 0; i--) {
+                String existingName = existing.get(i);
+                if (graph.adjList().containsKey(existingName)) {
+                    // Reuse: update display metadata but keep the existing node
+                    // (its edges, failed flag, and type are already correct).
+                    String indexed = moduleToAttrName.get(id);
+                    String useAttr = null;
+                    if (indexed != null && !indexed.isEmpty()) useAttr = indexed;
+                    else if (attrName != null && !attrName.isEmpty()) useAttr = attrName;
+                    if (useAttr != null) graph.nodeToAttrName().put(existingName, useAttr);
+                    graph.graphNodeDisplayNames().put(existingName, displayNameFor(m, typeSimple));
+                    graph.moduleInfo().put(existingName, ModuleInfoCollector.collect(m));
+                    return existingName;
+                }
+            }
+        }
+
         String nodeName = nextModuleNodeName(typeSimple, m);
         graph.graphNodeNameToWithoutSuffix().put(nodeName, typeSimple);
         graph.nodeToModulePath().put(nodeName, packagePathFor(m));
@@ -1629,7 +1737,15 @@ public final class VistaEngine {
     private void linkImplied(String from, String to) {
         if (from == null || to == null || from.equals(to)) return;
         GraphNode src = graph.adjList().get(from);
-        if (src == null) return;
+        GraphNode dst = graph.adjList().get(to);
+        if (src == null || dst == null) return;
+        // prefer linking to the first leaf under dst if dst is a container frame
+        if (dst.nodeType() != NodeType.MODULE && graph.parentModuleToNodes().containsKey(to)) {
+            java.util.List<String> kids = graph.parentModuleToNodes().get(to);
+            if (kids != null && !kids.isEmpty()) {
+                to = kids.get(0);
+            }
+        }
         for (GraphEdge e : src.edges()) {
             if (to.equals(e.target())) return;
         }
@@ -1639,8 +1755,17 @@ public final class VistaEngine {
     private Tensor traceLeafModule(Module module, Object inputs, int stackDepth) {
         Module m = ModuleDiscovery.concrete(module);
         String typeSimple = ModuleDiscovery.simpleTypeName(m);
-        String nodeName = nextModuleNodeName(typeSimple, m);
         NodeType nodeType = NodeType.MODULE;
+
+        // Reuse an existing structural node if present to avoid duplicates
+        long id = moduleId(m);
+        java.util.List<String> existing = moduleToNodeNames.get(id);
+        String nodeName;
+        if (existing != null && !existing.isEmpty()) {
+            nodeName = existing.get(existing.size() - 1);
+        } else {
+            nodeName = nextModuleNodeName(typeSimple, m);
+        }
 
         graph.graphNodeNameToWithoutSuffix().put(nodeName, typeSimple);
         graph.graphNodeDisplayNames().put(nodeName, displayNameFor(m, typeSimple));
@@ -1713,8 +1838,17 @@ public final class VistaEngine {
     private void preTraceOp(String opName, NodeType nodeType, Object inputs) {
         List<Tensor> inputTensors = TensorUtils.extractTensors(inputs);
 
-        GraphNode node = GraphNode.failed(nodeType); // failed until trace_op succeeds
-        graph.adjList().put(opName, node);
+        GraphNode node;
+        if (graph.adjList().containsKey(opName)) {
+            // Reuse existing structural node — do NOT override failed status.
+            // A node that was already successfully traced (failed=false) must
+            // stay successful; only fresh nodes start as failed until traceOp
+            // proves them successful.
+            node = graph.adjList().get(opName);
+        } else {
+            node = GraphNode.failed(nodeType); // failed until trace_op succeeds
+            graph.adjList().put(opName, node);
+        }
 
         for (Tensor inp : inputTensors) {
             long key = TensorUtils.tensorKey(inp);
@@ -1732,21 +1866,27 @@ public final class VistaEngine {
                     src.addEdge(new GraphEdge(opName, dims, edgeDataId, implied));
                 }
             } else if (options.showNonGradientNodes()) {
-                // Untagged tensor → Constant node (torchvista non-gradient path)
-                // Skip raw inputs that were already registered as Input nodes —
-                // tagInputs always sets tensorSource, so this branch is for
-                // constants created inside modules (buffers, literals as tensors).
-                globalNodeCounter++;
-                String tensorNodeName = "tensor_" + globalNodeCounter;
-                GraphNode c = GraphNode.of(NodeType.CONSTANT);
-                graph.adjList().put(tensorNodeName, c);
-                String dims = TensorUtils.formatDims(inp);
-                c.addEdge(new GraphEdge(opName, dims, key, false));
-                graph.nodeToAncestors().put(tensorNodeName, currentAncestors());
-                constantNodeNames.add(tensorNodeName);
-                graph.graphNodeDisplayNames().put(tensorNodeName, "tensor");
-                graph.graphNodeNameToWithoutSuffix().put(tensorNodeName, "tensor");
-                tensorSource.put(key, tensorNodeName);
+                // Untagged tensor → Constant node (torchvista non-gradient path).
+                // Skip tensors that are likely parameters (requires_grad) or
+                // intermediate computation results (not real constants).
+                // Only create a constant node for truly standalone tensor literals.
+                boolean isParam = false;
+                try {
+                    isParam = inp.requires_grad();
+                } catch (Throwable ignored) {}
+                if (!isParam) {
+                    globalNodeCounter++;
+                    String tensorNodeName = "tensor_" + globalNodeCounter;
+                    GraphNode c = GraphNode.of(NodeType.CONSTANT);
+                    graph.adjList().put(tensorNodeName, c);
+                    String dims = TensorUtils.formatDims(inp);
+                    c.addEdge(new GraphEdge(opName, dims, key, false));
+                    graph.nodeToAncestors().put(tensorNodeName, currentAncestors());
+                    constantNodeNames.add(tensorNodeName);
+                    graph.graphNodeDisplayNames().put(tensorNodeName, "tensor");
+                    graph.graphNodeNameToWithoutSuffix().put(tensorNodeName, "tensor");
+                    tensorSource.put(key, tensorNodeName);
+                }
             }
         }
 

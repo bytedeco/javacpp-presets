@@ -74,48 +74,8 @@ public final class ModuleDiscovery {
     public static Module concrete(Module m) {
         if (m == null || m.isNull()) return m;
         Module recovered = recover(m);
-        if (recovered.getClass() != Module.class) {
-            return recovered;
-        }
-        // Try asXxx from demangled / simple name: LinearImpl → asLinear()
-        String simple = simpleTypeName(recovered);
-        if (simple.endsWith("Impl")) {
-            simple = simple.substring(0, simple.length() - "Impl".length());
-        }
-        if (!simple.isEmpty() && !simple.equals("Module")) {
-            try {
-                java.lang.reflect.Method asMethod = Module.class.getMethod("as" + simple);
-                Object cast = asMethod.invoke(recovered);
-                if (cast instanceof Module) {
-                    Module typed = (Module) cast;
-                    if (!typed.isNull()) {
-                        ModuleAsHelper.remember(typed);
-                        return typed;
-                    }
-                }
-            } catch (Throwable ignored) {}
-        }
-        // Slow path: walk every asXxx() helper (same idea as ModuleAsHelper.findUnderlyingType)
-        try {
-            for (java.lang.reflect.Method method : Module.class.getMethods()) {
-                String name = method.getName();
-                if (!name.startsWith("as") || name.equals("as") || method.getParameterCount() != 0) {
-                    continue;
-                }
-                Class<?> ret = method.getReturnType();
-                if (!Module.class.isAssignableFrom(ret) || ret == Module.class) continue;
-                try {
-                    Object cast = method.invoke(recovered);
-                    if (cast instanceof Module) {
-                        Module typed = (Module) cast;
-                        if (!typed.isNull()) {
-                            ModuleAsHelper.remember(typed);
-                            return typed;
-                        }
-                    }
-                } catch (Throwable ignored) {}
-            }
-        } catch (Throwable ignored) {}
+        // If we already have a typed Java peer, use it; otherwise avoid calling
+        // asXxx() native helpers which can trigger native dynamic_cast crashes.
         return recovered;
     }
 
@@ -124,29 +84,18 @@ public final class ModuleDiscovery {
         Module typed = recover(m);
         Class<?> c = typed.getClass();
         if (CONTAINER_CLASSES.contains(c)) return true;
-        // asXxx helpers — pointer may be bare Module wrapping SequentialImpl etc.
-        try {
-            if (typed.asSequential() != null && !typed.asSequential().isNull()) return true;
-        } catch (Throwable ignored) {}
-        try {
-            if (typed.asModuleList() != null && !typed.asModuleList().isNull()) return true;
-        } catch (Throwable ignored) {}
-        try {
-            if (typed.asModuleDict() != null && !typed.asModuleDict().isNull()) return true;
-        } catch (Throwable ignored) {}
-        try {
-            if (typed.asParameterList() != null && !typed.asParameterList().isNull()) return true;
-        } catch (Throwable ignored) {}
-        try {
-            if (typed.asParameterDict() != null && !typed.asParameterDict().isNull()) return true;
-        } catch (Throwable ignored) {}
-        // Name-based fallback (demangled C++ name)
+        // Avoid calling native asXxx helpers — rely on Java-side peer types and
+        // demangled type name heuristics instead.
+        if (typed instanceof SequentialImpl || typed instanceof ModuleListImpl
+                || typed instanceof ModuleDictImpl || typed instanceof ParameterListImpl
+                || typed instanceof ParameterDictImpl) return true;
+        // Name-based fallback (demangled or Java class simple name)
         String name = typeName(typed);
-        return name.contains("Sequential")
+        return name != null && (name.contains("Sequential")
                 || name.contains("ModuleList")
                 || name.contains("ModuleDict")
                 || name.contains("ParameterList")
-                || name.contains("ParameterDict");
+                || name.contains("ParameterDict"));
     }
 
     /**
@@ -169,60 +118,46 @@ public final class ModuleDiscovery {
         if (m == null || m.isNull()) return false;
         Module typed = recover(m);
         if (typed instanceof SequentialImpl) return true;
-        try {
-            SequentialImpl s = typed.asSequential();
-            return s != null && !s.isNull();
-        } catch (Throwable e) {
-            return typeName(typed).contains("Sequential");
-        }
+        // Prefer Java-side typed check and type-name heuristic; avoid native asSequential
+        if (typed instanceof SequentialImpl) return true;
+        String nm = typeName(typed);
+        return nm != null && nm.contains("Sequential");
     }
 
     public static boolean isModuleListLike(Module m) {
         if (m == null || m.isNull()) return false;
         Module typed = recover(m);
         if (typed instanceof ModuleListImpl) return true;
-        try {
-            ModuleListImpl s = typed.asModuleList();
-            return s != null && !s.isNull();
-        } catch (Throwable e) {
-            return typeName(typed).contains("ModuleList");
-        }
+        if (typed instanceof ModuleListImpl) return true;
+        String nm = typeName(typed);
+        return nm != null && nm.contains("ModuleList");
     }
 
     public static boolean isModuleDictLike(Module m) {
         if (m == null || m.isNull()) return false;
         Module typed = recover(m);
         if (typed instanceof ModuleDictImpl) return true;
-        try {
-            ModuleDictImpl s = typed.asModuleDict();
-            return s != null && !s.isNull();
-        } catch (Throwable e) {
-            return typeName(typed).contains("ModuleDict");
-        }
+        if (typed instanceof ModuleDictImpl) return true;
+        String nm = typeName(typed);
+        return nm != null && nm.contains("ModuleDict");
     }
 
     public static boolean isParameterListLike(Module m) {
         if (m == null || m.isNull()) return false;
         Module typed = recover(m);
         if (typed instanceof ParameterListImpl) return true;
-        try {
-            ParameterListImpl s = typed.asParameterList();
-            return s != null && !s.isNull();
-        } catch (Throwable e) {
-            return typeName(typed).contains("ParameterList");
-        }
+        if (typed instanceof ParameterListImpl) return true;
+        String nm = typeName(typed);
+        return nm != null && nm.contains("ParameterList");
     }
 
     public static boolean isParameterDictLike(Module m) {
         if (m == null || m.isNull()) return false;
         Module typed = recover(m);
         if (typed instanceof ParameterDictImpl) return true;
-        try {
-            ParameterDictImpl s = typed.asParameterDict();
-            return s != null && !s.isNull();
-        } catch (Throwable e) {
-            return typeName(typed).contains("ParameterDict");
-        }
+        if (typed instanceof ParameterDictImpl) return true;
+        String nm = typeName(typed);
+        return nm != null && nm.contains("ParameterDict");
     }
 
     /**
@@ -454,16 +389,14 @@ public final class ModuleDiscovery {
         if (m == null || m.isNull()) return "null";
         Module typed = recover(m);
         try {
-            org.bytedeco.javacpp.BytePointer bp = typed.name();
-            if (bp != null && !bp.isNull()) {
-                String raw = bp.getString();
-                if (raw != null && !raw.isEmpty()) {
-                    return demangle(raw);
-                }
+            // Avoid calling native Module::name() which can crash in some native
+            // environments (bridged JavaCPP peers). Use Java-side class name and
+            // demangle JavaCPP-generated names when present.
+            String cname = typed.getClass().getSimpleName();
+            if (cname != null && cname.startsWith("JavaCPP_")) {
+                return demangle(cname);
             }
-        } catch (Throwable ignored) {}
-        try {
-            return typed.getClass().getSimpleName();
+            return cname != null && !cname.isEmpty() ? cname : "Module";
         } catch (Throwable e) {
             return "Module";
         }
