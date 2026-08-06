@@ -838,6 +838,164 @@ public final class DataFrame implements AutoCloseable, Serializable {
         return org.bytedeco.pytorch.utils.duckdb.DuckDB.open(dbFile);
     }
 
+    // ---- I/O: Doris / Hudi / Iceberg / Paimon / Gravitino / MinIO / MySQL ----
+
+    // === Doris (MySQL-protocol query + stream load) ===
+    public static org.bytedeco.pytorch.dataframe.DataFrame readDoris(org.bytedeco.pytorch.utils.doris.DorisOptions options) throws Exception {
+        return org.bytedeco.pytorch.utils.doris.Doris.readTable(options);
+    }
+
+    public static org.bytedeco.pytorch.dataframe.DataFrame queryDoris(org.bytedeco.pytorch.utils.doris.DorisOptions options, String sql) throws Exception {
+        return org.bytedeco.pytorch.utils.doris.Doris.query(options, sql);
+    }
+
+    public void writeDoris(org.bytedeco.pytorch.utils.doris.DorisOptions options) throws Exception {
+        org.bytedeco.pytorch.utils.doris.Doris.write(options, this);
+    }
+
+    // === Iceberg ===
+    public static org.bytedeco.pytorch.dataframe.DataFrame readIceberg(org.bytedeco.pytorch.utils.iceberg.IcebergOptions options) throws Exception {
+        return org.bytedeco.pytorch.utils.iceberg.Iceberg.read(options);
+    }
+
+    public void writeIceberg(org.bytedeco.pytorch.utils.iceberg.IcebergOptions options) throws Exception {
+        org.bytedeco.pytorch.utils.lake.LakeWrite w = org.bytedeco.pytorch.utils.iceberg.Iceberg.write(options);
+        try (org.bytedeco.pytorch.utils.lake.LakeWrite _w = w) {
+            _w.write(this);
+            _w.commit();
+        }
+    }
+
+    // === Hudi ===
+    public static org.bytedeco.pytorch.dataframe.DataFrame readHudi(org.bytedeco.pytorch.utils.hudi.HudiOptions options) throws Exception {
+        return org.bytedeco.pytorch.utils.hudi.Hudi.read(options);
+    }
+
+    public void writeHudi(org.bytedeco.pytorch.utils.hudi.HudiOptions options) throws Exception {
+        org.bytedeco.pytorch.utils.lake.LakeWrite w = org.bytedeco.pytorch.utils.hudi.Hudi.write(options);
+        try (org.bytedeco.pytorch.utils.lake.LakeWrite _w = w) {
+            _w.write(this);
+            _w.commit();
+        }
+    }
+
+    // === Paimon ===
+    public static org.bytedeco.pytorch.dataframe.DataFrame readPaimon(org.bytedeco.pytorch.utils.paimon.PaimonOptions options) throws Exception {
+        return org.bytedeco.pytorch.utils.paimon.Paimon.read(options);
+    }
+
+    public void writePaimon(org.bytedeco.pytorch.utils.paimon.PaimonOptions options) throws Exception {
+        org.bytedeco.pytorch.utils.lake.LakeWrite w = org.bytedeco.pytorch.utils.paimon.Paimon.write(options);
+        try (org.bytedeco.pytorch.utils.lake.LakeWrite _w = w) {
+            _w.write(this);
+            _w.commit();
+        }
+    }
+
+    // === Gravitino ===
+    public static org.bytedeco.pytorch.dataframe.DataFrame readGravitino(org.bytedeco.pytorch.utils.gravitino.GravitinoOptions options) throws Exception {
+        return org.bytedeco.pytorch.utils.gravitino.Gravitino.read(options);
+    }
+
+    public void writeGravitino(org.bytedeco.pytorch.utils.gravitino.GravitinoOptions options) throws Exception {
+        org.bytedeco.pytorch.utils.lake.LakeWrite w = org.bytedeco.pytorch.utils.gravitino.Gravitino.write(options);
+        try (org.bytedeco.pytorch.utils.lake.LakeWrite _w = w) {
+            _w.write(this);
+            _w.commit();
+        }
+    }
+
+    // === MinIO / S3 helpers (delegates to dataframe.minio.Minio) ===
+    public int toMinio(org.bytedeco.pytorch.utils.minio.Minio client, org.bytedeco.pytorch.utils.minio.MinioOptions options) {
+        return org.bytedeco.pytorch.dataframe.minio.Minio.toMinio(this, client, options);
+    }
+
+    public int toMinio(org.bytedeco.pytorch.utils.minio.Minio client, String bucket, String objectKey) {
+        return org.bytedeco.pytorch.dataframe.minio.Minio.toMinio(this, client, bucket, objectKey);
+    }
+
+    public static org.bytedeco.pytorch.dataframe.DataFrame readMinio(org.bytedeco.pytorch.utils.minio.Minio client, org.bytedeco.pytorch.utils.minio.MinioOptions options) {
+        return org.bytedeco.pytorch.dataframe.minio.Minio.readMinio(client, options);
+    }
+
+    public static org.bytedeco.pytorch.dataframe.DataFrame readMinio(String uri, org.bytedeco.pytorch.utils.minio.MinioOptions options) {
+        return org.bytedeco.pytorch.dataframe.minio.Minio.readMinio(uri, options);
+    }
+
+    // === MySQL convenience (requires JDBC driver on classpath) ===
+    public static org.bytedeco.pytorch.dataframe.DataFrame readMySQL(String jdbcUrl, String sql, String user, String password) throws Exception {
+        try (java.sql.Connection c = java.sql.DriverManager.getConnection(jdbcUrl, user, password)) {
+            return readSql(c, sql);
+        }
+    }
+
+    public void toMySQL(String jdbcUrl, String table, String user, String password) throws Exception {
+        try (java.sql.Connection c = java.sql.DriverManager.getConnection(jdbcUrl, user, password)) {
+            toSql(c, table);
+        }
+    }
+
+    // ---- ORM / JDBC convenience ---------------------------------
+
+    /**
+     * Execute a simple SELECT * FROM [database.]table with optional LIMIT and
+     * materialise results into a DataFrame. Uses low-level {@code JdbcUtils}
+     * to extract JDBC types.
+     */
+    public static DataFrame queryJdbcToDataFrame(String jdbcUrl, String user, String password,
+                                                String database, String table, int limit) throws Exception {
+        Objects.requireNonNull(jdbcUrl, "jdbcUrl");
+        Objects.requireNonNull(table, "table");
+        String qualified;
+        if (database != null && !database.isBlank()) {
+            qualified = org.bytedeco.pytorch.utils.orm.jdbc.JdbcUtils.quoteIdent(database)
+                    + "." + org.bytedeco.pytorch.utils.orm.jdbc.JdbcUtils.quoteIdent(table);
+        } else {
+            qualified = org.bytedeco.pytorch.utils.orm.jdbc.JdbcUtils.quoteIdent(table);
+        }
+        String sql = "SELECT * FROM " + qualified + (limit > 0 ? " LIMIT " + limit : "");
+
+        try (java.sql.Connection c = (user == null || user.isEmpty())
+                ? java.sql.DriverManager.getConnection(jdbcUrl)
+                : java.sql.DriverManager.getConnection(jdbcUrl, user, password);
+             java.sql.PreparedStatement ps = c.prepareStatement(sql);
+             java.sql.ResultSet rs = ps.executeQuery()) {
+
+            java.sql.ResultSetMetaData meta = rs.getMetaData();
+            String[] labels = org.bytedeco.pytorch.utils.orm.jdbc.JdbcUtils.columnLabels(meta);
+            java.util.List<java.util.Map<String, Object>> rows = new java.util.ArrayList<>();
+            while (rs.next()) {
+                Object[] vals = org.bytedeco.pytorch.utils.orm.jdbc.JdbcUtils.readRow(rs);
+                java.util.Map<String, Object> map = new java.util.LinkedHashMap<>();
+                for (int i = 0; i < labels.length; i++) map.put(labels[i], vals[i]);
+                rows.add(map);
+            }
+            return org.bytedeco.pytorch.utils.orm.dataframe.DataFrameMapper.fromMaps(rows);
+        }
+    }
+
+    /**
+     * ORM-style query: run a table scan and map rows directly into bean instances
+     * using the existing DataFrameMapper / MapToBeanMapper framework.
+     *
+     * Example: ormQuery("jdbc:mysql://host:9030/", "", null, "db", "users", 100, User.class)
+     */
+    public static <T> java.util.List<T> ormQuery(String jdbcUrl, String user, String password,
+                                                String database, String table, int limit,
+                                                Class<T> beanType) throws Exception {
+        DataFrame df = queryJdbcToDataFrame(jdbcUrl, user, password, database, table, limit);
+        return org.bytedeco.pytorch.utils.orm.dataframe.DataFrameMapper.toBeans(df, beanType);
+    }
+
+    /** Convenience overloads without explicit user/password. */
+    public static DataFrame queryJdbcToDataFrame(String jdbcUrl, String database, String table, int limit) throws Exception {
+        return queryJdbcToDataFrame(jdbcUrl, null, null, database, table, limit);
+    }
+
+    public static <T> java.util.List<T> ormQuery(String jdbcUrl, String database, String table, int limit, Class<T> beanType) throws Exception {
+        return ormQuery(jdbcUrl, null, null, database, table, limit, beanType);
+    }
+
     // ---- AI batch embedding façade ----
 
     /**
