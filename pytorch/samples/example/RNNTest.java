@@ -1,4 +1,6 @@
 package example;
+import org.bytedeco.pytorch.nn.*;
+import org.bytedeco.pytorch.nn.modules.container.*;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.pytorch.T_TensorT_TensorTensor_T_T;
@@ -9,7 +11,7 @@ import org.bytedeco.pytorch.nn.modules.*;
 import org.bytedeco.pytorch.nn.modules.container.SequentialImpl;
 import org.bytedeco.pytorch.nn.options.*;
 
-//import org.bytedeco.pytorch.ASMoutput;
+//import org.bytedeco.pytorch.nn.ASMoutput;
 
 public class RNNTest {
     public static void main(String[] args) {

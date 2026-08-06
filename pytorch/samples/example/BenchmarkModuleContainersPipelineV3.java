@@ -1,4 +1,7 @@
 package example;
+import org.bytedeco.pytorch.nn.modules.*;
+import org.bytedeco.pytorch.nn.modules.container.*;
+import org.bytedeco.pytorch.optim.options.*;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.PointerScope;

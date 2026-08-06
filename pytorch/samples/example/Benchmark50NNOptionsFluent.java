@@ -1,4 +1,5 @@
 package example;
+import org.bytedeco.pytorch.enumtype.*;
 
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.LongPointer;

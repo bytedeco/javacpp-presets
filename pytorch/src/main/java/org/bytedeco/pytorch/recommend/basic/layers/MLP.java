@@ -172,7 +172,16 @@ public class MLP extends Module {
             // Execute modules in Java to avoid native SequentialImpl dispatch issues
             Tensor out = x;
             for (int i = 0; i < sequential.children().size(); i++) {   // or use the registry if you want
-                out = sequential.children().get(i).forward(out);                   // this uses the typed Java wrappers
+                var module = sequential.children().get(i);
+                if(module instanceof LinearImpl){
+                    LinearImpl linear = (LinearImpl) module;
+                    System.out.println("MLP Layer " + i + " linear weight shape: " + java.util.Arrays.toString(linear.weight().shape()));
+                    System.out.println("MLP Layer " + i + " linear in_features: " + linear.options().in_features().get());
+                    System.out.println("MLP Layer " + i + " linear out_features: " + linear.options().out_features().get());
+                }
+                System.out.println("MLP Layer " + i + " shape: " + java.util.Arrays.toString(out.shape()));
+                System.out.println("MLP Layer " + i + " dtype: " + out.dtype().toScalarType().name());
+                out = module.forward(out);                   // this uses the typed Java wrappers
             }
 
             return out;

@@ -1,4 +1,6 @@
 package example;
+import org.bytedeco.pytorch.nn.modules.*;
+import org.bytedeco.pytorch.nn.modules.container.*;
 
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Loader;

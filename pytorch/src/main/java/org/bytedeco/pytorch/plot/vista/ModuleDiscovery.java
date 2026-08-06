@@ -90,11 +90,9 @@ public final class ModuleDiscovery {
 
     public static boolean isContainer(Module m) {
         if (m == null || m.isNull()) return false;
-        Module typed = recover(m);
+        Module typed = concrete(m);
         Class<?> c = typed.getClass();
         if (CONTAINER_CLASSES.contains(c)) return true;
-        // Avoid calling native asXxx helpers — rely on Java-side peer types and
-        // demangled type name heuristics instead.
         if (typed instanceof SequentialImpl || typed instanceof ModuleListImpl
                 || typed instanceof ModuleDictImpl || typed instanceof ParameterListImpl
                 || typed instanceof ParameterDictImpl) return true;
@@ -114,7 +112,7 @@ public final class ModuleDiscovery {
      */
     public static boolean hasForwardMethod(Module m) {
         if (m == null || m.isNull()) return false;
-        Module typed = recover(m);
+        Module typed = concrete(m);
         if (isModuleListLike(typed) || isModuleDictLike(typed)
                 || isParameterListLike(typed) || isParameterDictLike(typed)) {
             return false;
@@ -125,9 +123,7 @@ public final class ModuleDiscovery {
 
     public static boolean isSequential(Module m) {
         if (m == null || m.isNull()) return false;
-        Module typed = recover(m);
-        if (typed instanceof SequentialImpl) return true;
-        // Prefer Java-side typed check and type-name heuristic; avoid native asSequential
+        Module typed = concrete(m);
         if (typed instanceof SequentialImpl) return true;
         String nm = typeName(typed);
         return nm != null && nm.contains("Sequential");
@@ -135,8 +131,7 @@ public final class ModuleDiscovery {
 
     public static boolean isModuleListLike(Module m) {
         if (m == null || m.isNull()) return false;
-        Module typed = recover(m);
-        if (typed instanceof ModuleListImpl) return true;
+        Module typed = concrete(m);
         if (typed instanceof ModuleListImpl) return true;
         String nm = typeName(typed);
         return nm != null && nm.contains("ModuleList");
@@ -144,8 +139,7 @@ public final class ModuleDiscovery {
 
     public static boolean isModuleDictLike(Module m) {
         if (m == null || m.isNull()) return false;
-        Module typed = recover(m);
-        if (typed instanceof ModuleDictImpl) return true;
+        Module typed = concrete(m);
         if (typed instanceof ModuleDictImpl) return true;
         String nm = typeName(typed);
         return nm != null && nm.contains("ModuleDict");
@@ -153,8 +147,7 @@ public final class ModuleDiscovery {
 
     public static boolean isParameterListLike(Module m) {
         if (m == null || m.isNull()) return false;
-        Module typed = recover(m);
-        if (typed instanceof ParameterListImpl) return true;
+        Module typed = concrete(m);
         if (typed instanceof ParameterListImpl) return true;
         String nm = typeName(typed);
         return nm != null && nm.contains("ParameterList");
@@ -162,8 +155,7 @@ public final class ModuleDiscovery {
 
     public static boolean isParameterDictLike(Module m) {
         if (m == null || m.isNull()) return false;
-        Module typed = recover(m);
-        if (typed instanceof ParameterDictImpl) return true;
+        Module typed = concrete(m);
         if (typed instanceof ParameterDictImpl) return true;
         String nm = typeName(typed);
         return nm != null && nm.contains("ParameterDict");
