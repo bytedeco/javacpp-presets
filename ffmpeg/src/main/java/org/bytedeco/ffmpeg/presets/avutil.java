@@ -68,7 +68,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(value = "macosx", preload = {"atomic@.1"},
                                     preloadpath = {"/usr/local/lib/gcc/13/", "/usr/local/lib/gcc/12/", "/usr/local/lib/gcc/11/", "/usr/local/lib/gcc/10/", "/usr/local/lib/gcc/9/",
                                                    "/usr/local/lib/gcc/8/", "/usr/local/lib/gcc/7/", "/usr/local/lib/gcc/6/", "/usr/local/lib/gcc/5/"}),
-        @Platform(value = "windows", includepath = {"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload = "avutil-60"),
+        @Platform(value = "windows", includepath = {"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload = {"libwinpthread-1", "avutil-60"}),
         @Platform(extension = "-gpl")
     }
 )

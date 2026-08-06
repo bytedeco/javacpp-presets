@@ -191,12 +191,12 @@ public static final int PY_RELEASE_LEVEL_FINAL =  0xF;     /* Serial should be 0
 /*--start constants--*/
 public static final int PY_MAJOR_VERSION =        3;
 public static final int PY_MINOR_VERSION =        14;
-public static final int PY_MICRO_VERSION =        6;
+public static final int PY_MICRO_VERSION =        7;
 public static final int PY_RELEASE_LEVEL =        PY_RELEASE_LEVEL_FINAL;
 public static final int PY_RELEASE_SERIAL =       0;
 
 /* Version as a string */
-public static final String PY_VERSION =              "3.14.6";
+public static final String PY_VERSION =              "3.14.7";
 /*--end constants--*/
 
 
@@ -408,8 +408,14 @@ public static final int HAVE_CTERMID = 1;
 /* Define if you have the 'ctermid_r' function. */
 /* #undef HAVE_CTERMID_R */
 
+/* Define if you have the 'ESCDELAY' variable. */
+public static final int HAVE_CURSES_ESCDELAY = 1;
+
 /* Define if you have the 'filter' function. */
 public static final int HAVE_CURSES_FILTER = 1;
+
+/* Define if you have the 'getmouse' function with the X/Open signature. */
+public static final int HAVE_CURSES_GETMOUSE = 1;
 
 /* Define to 1 if you have the <curses.h> header file. */
 public static final int HAVE_CURSES_H = 1;
@@ -432,8 +438,17 @@ public static final int HAVE_CURSES_RESIZETERM = 1;
 /* Define if you have the 'resize_term' function. */
 public static final int HAVE_CURSES_RESIZE_TERM = 1;
 
+/* Define if you have the 'set_escdelay' function. */
+public static final int HAVE_CURSES_SET_ESCDELAY = 1;
+
+/* Define if you have the 'set_tabsize' function. */
+public static final int HAVE_CURSES_SET_TABSIZE = 1;
+
 /* Define if you have the 'syncok' function. */
 public static final int HAVE_CURSES_SYNCOK = 1;
+
+/* Define if you have the 'TABSIZE' variable. */
+public static final int HAVE_CURSES_TABSIZE = 1;
 
 /* Define if you have the 'typeahead' function. */
 public static final int HAVE_CURSES_TYPEAHEAD = 1;
@@ -520,6 +535,9 @@ public static final int HAVE_DLFCN_H = 1;
 
 /* Define to 1 if you have the 'dlopen' function. */
 // #define HAVE_DLOPEN 1
+
+/* Define to 1 if you have the 'dl_iterate_phdr' function. */
+public static final int HAVE_DL_ITERATE_PHDR = 1;
 
 /* Define to 1 if you have the 'dup' function. */
 public static final int HAVE_DUP = 1;
@@ -1576,6 +1594,9 @@ public static final int HAVE_SYNC = 1;
 /* Define to 1 if you have the 'sysconf' function. */
 public static final int HAVE_SYSCONF = 1;
 
+/* Define to 1 if you have the 'sysctlbyname' function. */
+/* #undef HAVE_SYSCTLBYNAME */
+
 /* Define to 1 if you have the <sysexits.h> header file. */
 public static final int HAVE_SYSEXITS_H = 1;
 
@@ -1679,6 +1700,9 @@ public static final int HAVE_SYS_STAT_H = 1;
 
 /* Define to 1 if you have the <sys/syscall.h> header file. */
 public static final int HAVE_SYS_SYSCALL_H = 1;
+
+/* Define to 1 if you have the <sys/sysctl.h> header file. */
+/* #undef HAVE_SYS_SYSCTL_H */
 
 /* Define to 1 if you have the <sys/sysmacros.h> header file. */
 public static final int HAVE_SYS_SYSMACROS_H = 1;
@@ -2241,6 +2265,9 @@ public static final int _Py_HACL_CAN_COMPILE_VEC128 = 1;
 
 /* HACL* library can compile SIMD256 implementations */
 public static final int _Py_HACL_CAN_COMPILE_VEC256 = 1;
+
+/* Thread stack size set by the linker (in bytes). */
+/* #undef _Py_LINKER_THREAD_STACK_SIZE */
 
 /* Define to 1 if the machine stack grows down (default); 0 if it grows up. */
 public static final int _Py_STACK_GROWS_DOWN = 1;
@@ -13268,6 +13295,16 @@ public static native Int_PyOS_InputHook PyOS_InputHook(); public static native v
     PyCompilerFlags flags);
 
 
+@NoException public static native PyObject Py_CompileStringFlags(
+    @Cast("const char*") BytePointer str,
+    @Cast("const char*") BytePointer filename,
+    int start,
+    PyCompilerFlags flags);
+@NoException public static native PyObject Py_CompileStringFlags(
+    String str,
+    String filename,
+    int start,
+    PyCompilerFlags flags);
 @NoException public static native PyObject Py_CompileStringExFlags(
     @Cast("const char*") BytePointer str,
     @Cast("const char*") BytePointer filename,

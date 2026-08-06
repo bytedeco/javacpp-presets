@@ -159,6 +159,27 @@ diff -ruN tesseract-5.5.3/src/ccutil/ccutil.cpp tesseract-5.5.3-patch/src/ccutil
            datadir = subdir;
          }
        }
+diff -ruN tesseract-5.5.3/src/classify/intfx.cpp tesseract-5.5.3-patch/src/classify/intfx.cpp
+--- tesseract-5.5.3/src/classify/intfx.cpp	2026-07-25 03:27:02.000000000 +0900
++++ tesseract-5.5.3-patch/src/classify/intfx.cpp	2026-08-05 16:18:27.908508600 +0900
+@@ -50,13 +50,14 @@
+ ----------------------------------------------------------------------------**/
+ 
+ void InitIntegerFX() {
+-  static std::once_flag flag;
+-  std::call_once(flag, []() {
++  static int flag = 0;
++  if (!flag) {
++    flag = 1;
+     for (int i = 0; i < INT_CHAR_NORM_RANGE; ++i) {
+       cos_table[i] = cos(i * 2 * M_PI / INT_CHAR_NORM_RANGE + M_PI);
+       sin_table[i] = sin(i * 2 * M_PI / INT_CHAR_NORM_RANGE + M_PI);
+     }
+-  });
++  };
+ }
+ 
+ // Returns a vector representing the direction of a feature with the given
 diff -ruN tesseract-5.5.3/unittest/pagesegmode_test.cc tesseract-5.5.3-patch/unittest/pagesegmode_test.cc
 --- tesseract-5.5.3/unittest/pagesegmode_test.cc	2026-07-25 03:27:02.000000000 +0900
 +++ tesseract-5.5.3-patch/unittest/pagesegmode_test.cc	2026-07-31 20:51:25.274856499 +0900

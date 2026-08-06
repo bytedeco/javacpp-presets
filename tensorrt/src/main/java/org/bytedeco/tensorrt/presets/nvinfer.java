@@ -156,7 +156,8 @@ public class nvinfer implements LoadEnabled, InfoMapper {
                              "nvinfer1::IOneHotLayer", "nvinfer1::IKVCacheUpdateLayer", "nvinfer1::IRotaryEmbeddingLayer", "nvinfer1::IDistCollectiveLayer", "nvinfer1::IMoELayer").purify())
                .put(new Info("nvinfer1::IGpuAllocator::free").javaNames("_free"))
                .put(new Info("nvinfer1::IGpuAllocator", "nvinfer1::IProfiler", "nvinfer1::ILogger", "nvinfer1::IInt8Calibrator", "nvinfer1::IInt8EntropyCalibrator",
-                             "nvinfer1::IInt8EntropyCalibrator2", "nvinfer1::IInt8MinMaxCalibrator", "nvinfer1::IInt8LegacyCalibrator", "nvinfer1::IVersionedInterface").virtualize())
+                             "nvinfer1::IInt8EntropyCalibrator2", "nvinfer1::IInt8MinMaxCalibrator", "nvinfer1::IInt8LegacyCalibrator", "nvinfer1::IVersionedInterface",
+                             "nvinfer1::v_1_0::ILogger").virtualize())
                .put(new Info("nvinfer1::IPluginRegistry::getPluginCreatorList").javaText(
                              "public native @Cast(\"nvinfer1::IPluginCreator*const*\") PointerPointer getPluginCreatorList(IntPointer numCreators);"))
                .put(new Info("nvinfer1::IPluginRegistry::getAllCreators").javaText(

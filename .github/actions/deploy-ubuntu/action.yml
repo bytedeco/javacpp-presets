@@ -90,7 +90,9 @@ runs:
         export CODENAME=$UBUNTU_CODENAME
 
         HOST_ARCH=$(dpkg --print-architecture)   # amd64 or arm64
+        BROKEN_CROSS="freeglut3-dev:$ARCH libva-dev:$ARCH"
         if [[ "$ARCH" != "$HOST_ARCH" ]]; then
+          BROKEN_CROSS=
           # https://github.com/actions/runner-images/issues/675
           $SUDO gem install apt-spy2
           $SUDO apt-spy2 check
@@ -122,7 +124,7 @@ runs:
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
         $SUDO apt-get update
-        $SUDO apt-get -y install python3 python3-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH libpulse-dev:$ARCH libva-dev:$ARCH libdrm-dev:$ARCH libudev-dev:$ARCH
+        $SUDO apt-get -y install python3 python3-minimal rpm $BROKEN_CROSS libasound2-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH libpulse-dev:$ARCH libdrm-dev:$ARCH libudev-dev:$ARCH
         $SUDO apt-get -y install build-essential pkgconf ccache clang $TOOLCHAIN openjdk-8-jdk ant python3-pip swig git file wget zstd unzip tar bzip2 gzip patch autoconf-archive autogen automake cmake make ninja-build libtool bison flex perl nasm ragel curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev libdrm-dev libxcb-glx0-dev libwayland-dev wayland-protocols qtbase5-dev qtwayland5
 
         export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-$HOST_ARCH/
