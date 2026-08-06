@@ -142,7 +142,9 @@ public class MLP extends Module {
                 prevDim = dim;
             }
         }
-        addModule(new LinearImpl(prevDim, outputDim));
+        if (outputLayer || hiddenDims == null || hiddenDims.length == 0) {
+            addModule(new LinearImpl(prevDim, outputDim));
+        }
         // Register so parameters() sees Linear weights (Scala omitted this).
         register_module("sequential", sequential);
 
@@ -162,39 +164,18 @@ public class MLP extends Module {
 
     @Override
     public Tensor forward(Tensor x) {
-        try {
-            if (x == null) {
-                throw new IllegalArgumentException("Input tensor cannot be null");
-            }
-            if (x.numel() == 0) {
-                throw new IllegalArgumentException("Input tensor has no elements");
-            }
-            // Execute modules in Java to avoid native SequentialImpl dispatch issues
-            Tensor out = x;
-            for (int i = 0; i < sequential.children().size(); i++) {   // or use the registry if you want
-                var module = sequential.children().get(i);
-                if(module instanceof LinearImpl){
-                    LinearImpl linear = (LinearImpl) module;
-                    System.out.println("MLP Layer " + i + " linear weight shape: " + java.util.Arrays.toString(linear.weight().shape()));
-                    System.out.println("MLP Layer " + i + " linear in_features: " + linear.options().in_features().get());
-                    System.out.println("MLP Layer " + i + " linear out_features: " + linear.options().out_features().get());
-                }
-                System.out.println("MLP Layer " + i + " shape: " + java.util.Arrays.toString(out.shape()));
-                System.out.println("MLP Layer " + i + " dtype: " + out.dtype().toScalarType().name());
-                out = module.forward(out);                   // this uses the typed Java wrappers
-            }
-
-            return out;
-        } catch (RuntimeException e) {
-            System.err.println("[MLP] Forward pass failed: " + e.getMessage());
-            try {
-                System.err.println("[MLP] Input shape: " + java.util.Arrays.toString(x.shape())
-                        + ", dtype: " + x.dtype());
-            } catch (Throwable ignored) {
-            }
-            e.printStackTrace();
-            throw e;
+        if (x == null) {
+            throw new IllegalArgumentException("Input tensor cannot be null");
         }
+        if (x.numel() == 0) {
+            throw new IllegalArgumentException("Input tensor has no elements");
+        }
+        Tensor out = x;
+        for (int i = 0; i < sequential.children().size(); i++) {
+            var module = sequential.children().get(i);
+            out = module.forward(out);
+        }
+        return out;
     }
 }
 

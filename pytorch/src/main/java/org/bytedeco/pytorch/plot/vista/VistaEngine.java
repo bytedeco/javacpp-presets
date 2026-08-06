@@ -846,6 +846,7 @@ public final class VistaEngine {
         Tensor lastOut = null;
         boolean anyChild = false;
         int successCount = 0;
+        int downstreamSuccess = 0;
 
         try {
             // Pass 1a — feature embeddings (need Map)
@@ -1065,6 +1066,13 @@ public final class VistaEngine {
                         && !isGate && keyL.contains("tower") && pairIdx != null) {
                     childIn = findTagged(taggedOutputs, pairIdx, "bottom", "ait");
                 }
+                // MoE (MMOE/PLE): tower receives gated mixture of experts —
+                // use any available expert output (all experts share the same
+                // output dim) so the tower's first Linear gets a compatible input.
+                if (childIn == null && !isPosEmbed && !isTokenEmbed && !isCodebookEmbed
+                        && !isGate && keyL.contains("tower")) {
+                    childIn = findAnyTagged(taggedOutputs, "expert");
+                }
                 if (childIn == null && !isPosEmbed && !isTokenEmbed && !isCodebookEmbed
                         && !isGate && (keyL.contains("tower") || keyL.contains("expert")
                         || keyL.startsWith("tower"))) {
@@ -1194,6 +1202,7 @@ public final class VistaEngine {
                     if (out != null && !out.isNull()) {
                         lastOut = out;
                         successCount++;
+                        downstreamSuccess++;
                         taggedOutputs.put(keyL, out);
                         String sname = tensorSource.get(TensorUtils.tensorKey(out));
                         if (sname != null) allChildNodeNames.add(sname);
@@ -1285,35 +1294,81 @@ public final class VistaEngine {
 
             // Hybrid: if many kids failed shape-wise but whole module can run,
             // run whole-module once to attach real output dims (doesn't remove structure).
-            if (successCount == 0 && lastOut == null) {
+            boolean allDownstreamFailed = downstreamSuccess == 0 && !otherKids.isEmpty();
+            if ((successCount == 0 && lastOut == null) || allDownstreamFailed) {
                 try {
                     Tensor whole = callForward(m, inputs);
                     if (whole != null && !whole.isNull()) {
-                        // Tag output provenance to the container frame name if present
+                        // Tag output provenance — create a proper operation node
+                        // (e.g. "add" for DeepFM's linearOut.add(fmOut).add(mlpOut))
+                        // so it appears in adjList and can receive edges.
                         long key = TensorUtils.tensorKey(whole);
                         String realSource = tensorSource.get(key);
-                        if (realSource == null && frame != null) {
-                            realSource = frame;
-                            tensorSource.put(key, frame);
+                        if (realSource == null) {
+                            globalNodeCounter++;
+                            String opName = "output_op_" + globalNodeCounter;
+                            graph.graphNodeNameToWithoutSuffix().put(opName, "output");
+                            graph.graphNodeDisplayNames().put(opName, "add");
+                            graph.nodeToModulePath().put(opName, "torch");
+                            GraphNode opNode = GraphNode.of(NodeType.OPERATION);
+                            graph.adjList().put(opName, opNode);
+                            recordParentBookkeeping(opName);
+                            graph.nodeToAncestors().put(opName, currentAncestors());
+                            tensorSource.put(key, opName);
+                            realSource = opName;
                         }
                         lastOut = whole;
                         // Clear poison exception if whole forward worked
                         graph.setException(null);
-                        // Wire all child nodes (especially EmbeddingImpl structural
-                        // nodes that failed due to MPS/device issues) to the real
-                        // output source so they don't become sinks that get
-                        // incorrectly connected to the model output.
+
+                        // Embedding source for wiring embedding → failed children
+                        String embedSource = null;
+                        if (sharedTensor != null && !sharedTensor.isNull()) {
+                            embedSource = tensorSource.get(TensorUtils.tensorKey(sharedTensor));
+                        }
+                        if (embedSource == null && embedOut != null && !embedOut.isNull()) {
+                            embedSource = tensorSource.get(TensorUtils.tensorKey(embedOut));
+                        }
+
+                        // Wire all child nodes to the real output source so they
+                        // don't become sinks. Also wire embedding → failed children
+                        // so the graph shows: embedding → child → output.
                         if (realSource != null) {
                             for (String sname : allChildNodeNames) {
                                 if (sname == null || sname.equals(realSource)) continue;
                                 GraphNode sn = graph.adjList().get(sname);
                                 if (sn == null) continue;
-                                boolean hasEdge = false;
+
+                                // child → output
+                                boolean hasOutEdge = false;
                                 for (GraphEdge ge : sn.edges()) {
-                                    if (realSource.equals(ge.target())) { hasEdge = true; break; }
+                                    if (realSource.equals(ge.target())) { hasOutEdge = true; break; }
                                 }
-                                if (!hasEdge) {
+                                if (!hasOutEdge) {
                                     sn.addEdge(new GraphEdge(realSource, "", 0L, false));
+                                }
+
+                                // embedding → child (only for children with no incoming edges)
+                                if (embedSource != null && !sname.equals(embedSource)) {
+                                    boolean hasIncoming = false;
+                                    for (GraphNode gn : graph.adjList().values()) {
+                                        for (GraphEdge ge : gn.edges()) {
+                                            if (sname.equals(ge.target())) { hasIncoming = true; break; }
+                                        }
+                                        if (hasIncoming) break;
+                                    }
+                                    if (!hasIncoming) {
+                                        GraphNode es = graph.adjList().get(embedSource);
+                                        if (es != null) {
+                                            boolean hasEmbEdge = false;
+                                            for (GraphEdge ge : es.edges()) {
+                                                if (sname.equals(ge.target())) { hasEmbEdge = true; break; }
+                                            }
+                                            if (!hasEmbEdge) {
+                                                es.addEdge(new GraphEdge(sname, "", 0L, false));
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -2073,6 +2128,13 @@ public final class VistaEngine {
                     if (k.contains(p)) return e.getValue();
                 }
             }
+        }
+        return null;
+    }
+
+    private static Tensor findAnyTagged(Map<String, Tensor> tagged, String prefix) {
+        for (Map.Entry<String, Tensor> e : tagged.entrySet()) {
+            if (e.getKey().contains(prefix)) return e.getValue();
         }
         return null;
     }
