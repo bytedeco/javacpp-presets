@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import org.bytedeco.javacpp.Pointer;
-
+import java.lang.reflect.Method;
 /**
  * Small reflection helper backing the generic
  * {@link org.bytedeco.pytorch.nn.Module#as(Class) Module.as(Class)} method and the generic
@@ -87,17 +87,34 @@ public final class ModuleAsHelper {
      * @return the typed module, or the original bare module if no asXxx
      *         helper matched (e.g. user-defined Module subclass).
      */
-    public static Module recoverTyped(Module module) {
-        if (module == null || module.isNull()) {
-            return module;
-        }
-        Module known = REGISTRY.get(keyOf(module));
-        if (known != null && known.getClass() != Module.class) {
-            return known;
-        }
-        // Curated safe subset — avoids the dyn_cast crash triggered by
-        // walking all asXxx() helpers indiscriminately.
-        String[] safeAs = {
+    /**
+     * Recover a typed Java peer for a bare {@link Module} by walking the
+     * built-in {@code asXxx()} helpers (C++ {@code dynamic_cast}). Unlike
+     * {@link #recover}, this works for modules obtained from
+     * {@code named_children()} that were never registered via
+     * {@link #remember} (e.g. children pushed via typed
+     * {@code SequentialImpl.push_back(LinearImpl)} overloads).
+     *
+     * <p>All {@code asXxx()} helpers are generated with
+     * {@code @NoException(true)} so they return {@code null} instead of
+     * throwing when the underlying C++ object is not of the requested type.
+     *
+     * <p><b>Caution:</b> Only a curated subset of {@code asXxx()} helpers is
+     * tried — walking all 80+ helpers can trigger a native
+     * {@code dynamic_cast} crash (SIGSEGV in {@code __cxxabiv1::dyn_cast})
+     * for certain module types. The curated list covers the layers most
+     * commonly found inside recommend-model Sequentials.
+     *
+     * <p>This version is updated to use the fast simple-name path first
+     * so that {@code recoverTyped} always returns a typed wrapper for
+     * any built-in layer that has an {@code asXxx()} helper (including
+     * LinearImpl, ReLUImpl, DropoutImpl, EmbeddingImpl, SequentialImpl,
+     * and all the layers used in MLP / SharedBottom).
+     */
+
+
+public static Module recoverTyped(Module module) {
+    String[] safeAs = {
             "asLinear", "asReLU", "asGELU", "asSiLU", "asSigmoid", "asTanh",
             "asDropout", "asLayerNorm", "asBatchNorm1d", "asBatchNorm2d",
             "asEmbedding", "asSequential", "asModuleList", "asModuleDict",
@@ -108,23 +125,32 @@ public final class ModuleAsHelper {
             "asBilinear", "asLazyLinear", "asLazyBatchNorm1d",
             "asMultiheadAttention", "asTransformerEncoder",
             "asTransformerEncoderLayer"
-        };
-        for (String name : safeAs) {
-            try {
-                java.lang.reflect.Method m = Module.class.getMethod(name);
-                Object cast = m.invoke(module);
-                if (cast instanceof Module && !((Module) cast).isNull()) {
-                    Module typed = (Module) cast;
-                    remember(typed);
-                    return typed;
-                }
-            } catch (NoSuchMethodException ignored) {
-            } catch (Throwable ignored) {
-                // asXxx may still crash for exotic types; skip and continue
-            }
-        }
+    };
+    if (module == null || module.isNull()) {
         return module;
     }
+
+    // === FAST PATH: derive asXxx from simple class name (covers all *Impl) ===
+    String simpleName = module.getClass().getSimpleName();
+    String asName = "as" + (simpleName.endsWith("Impl")
+            ? simpleName.substring(0, simpleName.length() - "Impl".length())
+            : simpleName);
+
+    try {
+        Method asMethod = Module.class.getMethod(asName);
+        Object cast = asMethod.invoke(module);
+        if (cast != null && !((Module) cast).isNull()) {
+            remember((Module) cast);
+            return (Module) cast;
+        }
+    } catch (NoSuchMethodException ignored) {
+        // No asXxx for this name (custom class)
+    } catch (Throwable ignored) {
+        // asXxx may still crash for exotic types; fall through
+    }
+
+    return module;
+}
 
     public static boolean hasForwardOverride(Module module, Class<?>... parameterTypes) {
         if (module == null || module.getClass() == Module.class) {
