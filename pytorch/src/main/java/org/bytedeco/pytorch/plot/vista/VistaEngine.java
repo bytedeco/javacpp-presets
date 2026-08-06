@@ -1141,6 +1141,23 @@ public final class VistaEngine {
                         childIn = rootTensor;
                     }
                 }
+                // CGC/PLE: when input is a multi-tensor List, route each
+                // expert/gate to the tensor matching its index suffix. Shared
+                // experts/gates get the last tensor (shared input).
+                if (childIn == null && !isPosEmbed && !isTokenEmbed && !isCodebookEmbed
+                        && tensorArgs.size() > 1 && pairIdx != null
+                        && (keyL.contains("expert") || keyL.contains("gate"))) {
+                    try {
+                        int idx = Integer.parseInt(pairIdx);
+                        if (keyL.contains("shared")) {
+                            childIn = tensorArgs.get(tensorArgs.size() - 1);
+                            tensorArgUsed[tensorArgs.size() - 1] = true;
+                        } else if (idx < tensorArgs.size()) {
+                            childIn = tensorArgs.get(idx);
+                            tensorArgUsed[idx] = true;
+                        }
+                    } catch (NumberFormatException ignored) {}
+                }
                 // Default: chain from previous successful float output, else root
                 // NEVER re-route pos/token/codebook embeds through this fallback — that is
                 // exactly how float activations were incorrectly fed into EmbeddingImpl.
@@ -1330,16 +1347,24 @@ public final class VistaEngine {
                             embedSource = tensorSource.get(TensorUtils.tensorKey(embedOut));
                         }
 
-                        // Wire all child nodes to the real output source so they
-                        // don't become sinks. Also wire embedding → failed children
-                        // so the graph shows: embedding → child → output.
+                        // Build a set of embedding source node names so we can
+                        // distinguish them from downstream modules (linear/fm/mlp).
+                        // Embedding nodes must NOT connect directly to the output op —
+                        // they feed into the downstream modules which then feed output.
+                        Set<String> embedNodeSet = new HashSet<>(embedNodeNames);
+                        if (embedSource != null) embedNodeSet.add(embedSource);
+
+                        // Wire downstream children → output op, and embedding → downstream children.
+                        // The graph should show: embedding → linear/fm/mlp → add(output)
                         if (realSource != null) {
                             for (String sname : allChildNodeNames) {
                                 if (sname == null || sname.equals(realSource)) continue;
+                                // Skip embedding nodes — they feed children, not output
+                                if (embedNodeSet.contains(sname)) continue;
                                 GraphNode sn = graph.adjList().get(sname);
                                 if (sn == null) continue;
 
-                                // child → output
+                                // downstream child → output op
                                 boolean hasOutEdge = false;
                                 for (GraphEdge ge : sn.edges()) {
                                     if (realSource.equals(ge.target())) { hasOutEdge = true; break; }
@@ -1348,8 +1373,8 @@ public final class VistaEngine {
                                     sn.addEdge(new GraphEdge(realSource, "", 0L, false));
                                 }
 
-                                // embedding → child (only for children with no incoming edges)
-                                if (embedSource != null && !sname.equals(embedSource)) {
+                                // embedding → downstream child (only if child has no incoming)
+                                if (embedSource != null) {
                                     boolean hasIncoming = false;
                                     for (GraphNode gn : graph.adjList().values()) {
                                         for (GraphEdge ge : gn.edges()) {
@@ -2139,6 +2164,14 @@ public final class VistaEngine {
         return null;
     }
 
+    /** True if a node name represents an embedding source (EmbeddingImpl or cat(embed)). */
+    private static boolean isEmbeddingSourceName(String name) {
+        if (name == null) return false;
+        String lower = name.toLowerCase();
+        return lower.contains("embeddingimpl") || lower.contains("embedding")
+                || lower.contains("cat(embed)") || lower.startsWith("cat_");
+    }
+
     /** Register a child as a Module node without running forward (structure-only). */
     private void emitStructuralChild(Module child, String attrName, int stackDepth) {
         emitStructuralChildReturning(child, attrName, stackDepth);
@@ -2809,7 +2842,7 @@ public final class VistaEngine {
             if (t != null && !t.isNull()) {
                 long tid = TensorUtils.tensorKey(t);
                 String source = tensorSource.get(tid);
-                if (source != null && !source.contains("EmbeddingImpl")) {
+                if (source != null && !isEmbeddingSourceName(source)) {
                     GraphNode src = graph.adjList().get(source);
                     if (src != null) {
                         String dims = TensorUtils.formatDims(t);
@@ -3952,6 +3985,61 @@ public final class VistaEngine {
             node.edges().removeIf(e -> !adj.containsKey(e.target()));
         }
 
+        // Breakpoint repair: connect orphaned intermediate nodes (breakpoints)
+        // to their correct downstream targets BEFORE filtering embedding edges.
+        // This handles two scenarios:
+        //  (A) embedding wrongly connected to combining op (add/cat) → mlp/linear
+        //      left as breakpoint. Redirect: embedding → breakpoint → combining op.
+        //  (B) mlp/etc. disconnected from output/combining op → wire to nearest
+        //      terminal via BFS.
+        repairBreakpoints(adj);
+
+        // Filter: feature embeddings must NEVER connect directly to output nodes
+        // or combining ops (add/cat) that feed output. They should flow through
+        // downstream modules (linear/mlp/fm/...) first. Only strip the direct
+        // edge when the embedding has other downstream consumers — codebook
+        // embeddings (VQ-VAE) with no other consumers are left intact.
+        Set<String> preOutputOps = new HashSet<>();
+        for (String out : outputNodeSet) {
+            for (Map.Entry<String, GraphNode> e : adj.entrySet()) {
+                for (GraphEdge edge : e.getValue().edges()) {
+                    if (out.equals(edge.target())) {
+                        String name = e.getKey();
+                        String display = graph.graphNodeNameToWithoutSuffix()
+                                .getOrDefault(name, name).toLowerCase();
+                        if (display.contains("add") || display.contains("cat")
+                                || name.startsWith("output_op_") || name.startsWith("cat_")) {
+                            preOutputOps.add(name);
+                        }
+                    }
+                }
+            }
+        }
+        for (Map.Entry<String, GraphNode> e : adj.entrySet()) {
+            String name = e.getKey();
+            String attr = graph.nodeToAttrName().get(name);
+            String attrL = attr == null ? "" : attr.toLowerCase();
+            String display = graph.graphNodeNameToWithoutSuffix()
+                    .getOrDefault(name, name).toLowerCase();
+            boolean isEmbedding = name.toLowerCase().contains("embeddingimpl")
+                    || name.toLowerCase().contains("embedding")
+                    || attrL.contains("embed")
+                    || display.contains("embedding") || display.contains("cat(embed)");
+            if (!isEmbedding) continue;
+            boolean hasOtherDownstream = false;
+            for (GraphEdge edge : e.getValue().edges()) {
+                if (!outputNodeSet.contains(edge.target()) && !preOutputOps.contains(edge.target())) {
+                    hasOtherDownstream = true;
+                    break;
+                }
+            }
+            if (hasOtherDownstream) {
+                final Set<String> block = preOutputOps;
+                e.getValue().edges().removeIf(edge ->
+                        outputNodeSet.contains(edge.target()) || block.contains(edge.target()));
+            }
+        }
+
         // Prune side tables
         pruneMapKeys(graph.moduleInfo(), adj.keySet());
         pruneMapKeys(graph.funcInfo(), adj.keySet());
@@ -3961,6 +4049,195 @@ public final class VistaEngine {
         pruneMapKeys(graph.nodeToAttrName(), adj.keySet());
         pruneMapKeys(graph.nodeToAncestors(), adj.keySet());
         pruneMapKeys(graph.nodeMeta(), adj.keySet());
+    }
+
+    /**
+     * Connect orphaned intermediate nodes (breakpoints) to their correct
+     * downstream targets. Two scenarios:
+     *  (A) embedding wrongly connected to combining op (add/cat) → mlp/linear
+     *      left as breakpoint. Redirect: embedding → breakpoint → combining op.
+     *  (B) mlp/etc. disconnected from output/combining op → wire to nearest
+     *      terminal via BFS.
+     */
+    private void repairBreakpoints(Map<String, GraphNode> adj) {
+        // Collect output nodes and combining ops (add_/cat_/moe_combine_/ait_out_)
+        Set<String> terminalTargets = new HashSet<>(outputNodeSet);
+        Set<String> combiningOps = new HashSet<>();
+        for (String n : adj.keySet()) {
+            String display = graph.graphNodeNameToWithoutSuffix().getOrDefault(n, n).toLowerCase();
+            if (display.startsWith("add") || display.startsWith("cat")
+                    || display.contains("moe_combine") || display.contains("ait_out")
+                    || display.contains("output_op") || n.startsWith("output_op_")) {
+                terminalTargets.add(n);
+                combiningOps.add(n);
+            }
+        }
+
+        // Find breakpoints: intermediate nodes with no real outgoing edge
+        List<String> breakpoints = new ArrayList<>();
+        for (Map.Entry<String, GraphNode> e : adj.entrySet()) {
+            String name = e.getKey();
+            GraphNode node = e.getValue();
+            if (node.nodeType() == NodeType.INPUT
+                    || node.nodeType() == NodeType.OUTPUT
+                    || node.nodeType() == NodeType.CONSTANT
+                    || node.nodeType() == NodeType.PARAMETER) {
+                continue;
+            }
+            // Skip embedding nodes — they are sources, not breakpoints
+            if (isEmbeddingNodeName(name)) continue;
+            boolean hasRealEdge = false;
+            for (GraphEdge edge : node.edges()) {
+                if (adj.containsKey(edge.target())) {
+                    hasRealEdge = true;
+                    break;
+                }
+            }
+            if (!hasRealEdge) {
+                breakpoints.add(name);
+            }
+        }
+
+        if (breakpoints.isEmpty()) return;
+
+        // Build reverse adjacency for BFS (who points to whom)
+        Map<String, List<String>> reverse = new HashMap<>();
+        for (Map.Entry<String, GraphNode> e : adj.entrySet()) {
+            for (GraphEdge edge : e.getValue().edges()) {
+                reverse.computeIfAbsent(edge.target(), k -> new ArrayList<>()).add(e.getKey());
+            }
+        }
+
+        // Scenario A: for each breakpoint, check if an embedding node is
+        // wrongly connected to a combining op. If so, redirect:
+        //   embedding → combining op  becomes  embedding → breakpoint → combining op
+        for (String bp : breakpoints) {
+            for (String embName : new ArrayList<>(adj.keySet())) {
+                if (!isEmbeddingNodeName(embName)) continue;
+                GraphNode embNode = adj.get(embName);
+                if (embNode == null) continue;
+                // Find edges from this embedding to any combining op
+                List<String> embToCombining = new ArrayList<>();
+                for (GraphEdge edge : embNode.edges()) {
+                    if (combiningOps.contains(edge.target()) && adj.containsKey(edge.target())) {
+                        embToCombining.add(edge.target());
+                    }
+                }
+                if (embToCombining.isEmpty()) continue;
+                // Redirect: remove embedding → combining, add embedding → bp, bp → combining
+                for (String combOp : embToCombining) {
+                    embNode.edges().removeIf(edge -> combOp.equals(edge.target()));
+                    embNode.addEdge(new GraphEdge(bp, "", 0L, false));
+                    GraphNode bpNode = adj.get(bp);
+                    if (bpNode != null) {
+                        boolean exists = false;
+                        for (GraphEdge ge : bpNode.edges()) {
+                            if (combOp.equals(ge.target())) { exists = true; break; }
+                        }
+                        if (!exists) {
+                            bpNode.addEdge(new GraphEdge(combOp, "", 0L, false));
+                        }
+                    }
+                }
+            }
+        }
+
+        // Re-collect breakpoints after scenario A repair (some may be fixed)
+        breakpoints.removeIf(bp -> {
+            GraphNode n = adj.get(bp);
+            if (n == null) return true;
+            for (GraphEdge edge : n.edges()) {
+                if (adj.containsKey(edge.target())) return true;
+            }
+            return false;
+        });
+
+        // Scenario B: for remaining breakpoints, BFS to find nearest terminal
+        String primaryOut = outputNodeSet.isEmpty() ? null : outputNodeSet.iterator().next();
+        for (String bp : breakpoints) {
+            String target = findNearestTerminal(adj, bp, terminalTargets, reverse);
+            if (target == null) target = primaryOut;
+            if (target == null || target.equals(bp)) continue;
+            GraphNode bpNode = adj.get(bp);
+            if (bpNode == null) continue;
+            boolean exists = false;
+            for (GraphEdge ge : bpNode.edges()) {
+                if (target.equals(ge.target())) { exists = true; break; }
+            }
+            if (!exists) {
+                bpNode.addEdge(new GraphEdge(target, "", 0L, false));
+            }
+        }
+    }
+
+    /** True if a node name represents an embedding source. */
+    private boolean isEmbeddingNodeName(String name) {
+        if (name == null) return false;
+        String lower = name.toLowerCase();
+        String attr = graph.nodeToAttrName().get(name);
+        String attrL = attr == null ? "" : attr.toLowerCase();
+        String display = graph.graphNodeNameToWithoutSuffix().getOrDefault(name, name).toLowerCase();
+        return lower.contains("embeddingimpl") || lower.contains("embedding")
+                || attrL.contains("embed")
+                || display.contains("embedding") || display.contains("cat(embed)");
+    }
+
+    /**
+     * BFS to find the nearest terminal target reachable from a breakpoint.
+     * Starts from the breakpoint's siblings (other successors of its
+     * predecessors) and walks forward until a terminal is found.
+     */
+    private String findNearestTerminal(Map<String, GraphNode> adj, String start,
+                                       Set<String> terminals,
+                                       Map<String, List<String>> reverse) {
+        // Collect predecessors of the breakpoint
+        Set<String> preds = new HashSet<>();
+        List<String> predList = reverse.get(start);
+        if (predList != null) preds.addAll(predList);
+
+        // BFS forward from predecessors' other successors
+        ArrayDeque<String> queue = new ArrayDeque<>();
+        Set<String> visited = new HashSet<>();
+        // Seed with siblings: other targets of the same predecessors
+        for (String pred : preds) {
+            GraphNode pn = adj.get(pred);
+            if (pn == null) continue;
+            for (GraphEdge edge : pn.edges()) {
+                String tgt = edge.target();
+                if (tgt.equals(start) || visited.contains(tgt)) continue;
+                if (adj.containsKey(tgt)) {
+                    visited.add(tgt);
+                    queue.add(tgt);
+                }
+            }
+        }
+        // Also seed from the breakpoint itself (in case it should connect to
+        // a terminal directly reachable via structural position)
+        int maxHops = 6;
+        while (!queue.isEmpty() && maxHops > 0) {
+            int levelSize = queue.size();
+            for (int i = 0; i < levelSize; i++) {
+                String n = queue.poll();
+                if (n == null) continue;
+                if (terminals.contains(n)) return n;
+                GraphNode node = adj.get(n);
+                if (node == null) continue;
+                for (GraphEdge edge : node.edges()) {
+                    String tgt = edge.target();
+                    if (visited.contains(tgt) || tgt.equals(start)) continue;
+                    if (adj.containsKey(tgt)) {
+                        visited.add(tgt);
+                        queue.add(tgt);
+                    }
+                }
+            }
+            maxHops--;
+        }
+        // Fallback: any terminal in the graph
+        for (String t : terminals) {
+            if (adj.containsKey(t) && !t.equals(start)) return t;
+        }
+        return null;
     }
 
     private static void pruneMapKeys(Map<String, ?> map, Set<String> keep) {
