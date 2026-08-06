@@ -261,7 +261,9 @@ public final class ModuleDiscovery {
         boolean hasSequentialChild = false;
         int namedNonSequential = 0;
         for (ModuleChildren.NamedChild k : kids) {
-            if ("sequential".equals(k.key) && isSequential(k.module)) {
+            if ("sequential".equals(k.key)
+                    && (isSequential(k.module) || isModuleListLike(k.module))) {
+                // Treat a "sequential" ModuleList as the same duplicate wrapper pattern
                 hasSequentialChild = true;
             } else {
                 namedNonSequential++;

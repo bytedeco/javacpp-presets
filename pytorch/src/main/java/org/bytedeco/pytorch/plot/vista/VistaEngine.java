@@ -350,14 +350,14 @@ public final class VistaEngine {
         if (!ModuleDiscovery.isSequential(m)) {
             boolean hasSeq = false;
             for (ModuleChildren.NamedChild k : kids) {
-                if ("sequential".equals(k.key) && ModuleDiscovery.isSequential(k.module)) {
+                if ("sequential".equals(k.key) && (ModuleDiscovery.isSequential(k.module) || ModuleDiscovery.isModuleListLike(k.module))) {
                     hasSeq = true; break;
                 }
             }
             if (hasSeq) {
                 List<ModuleChildren.NamedChild> filtered = new ArrayList<>();
                 for (ModuleChildren.NamedChild k : kids) {
-                    if (!("sequential".equals(k.key) && ModuleDiscovery.isSequential(k.module))) {
+                    if (!("sequential".equals(k.key) && (ModuleDiscovery.isSequential(k.module) || ModuleDiscovery.isModuleListLike(k.module)))) {
                         filtered.add(k);
                     }
                 }

@@ -149,6 +149,18 @@ public static Module recoverTyped(Module module) {
         // asXxx may still crash for exotic types; fall through
     }
 
+    // Slow fallback: walk built-in asXxx() helpers to recover concrete *Impl types
+    try {
+        Object[] result = findUnderlyingType(module);
+        if (result != null) {
+            Module cast = (Module) result[0];
+            remember(cast);
+            return cast;
+        }
+    } catch (Throwable ignored) {
+        // ignore and return original module
+    }
+
     return module;
 }
 
