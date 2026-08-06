@@ -9,10 +9,14 @@ package org.bytedeco.pytorch.recommend.basic.layers;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.pytorch.Device;
-import org.bytedeco.pytorch.LongVector;
-import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.enumtype.FanModeType;
+import org.bytedeco.pytorch.enumtype.Nonlinearity;
+import org.bytedeco.pytorch.enumtype.kFanOut;
+import org.bytedeco.pytorch.enumtype.kLeakyReLU;
+import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.nn.Parameter;
 import org.bytedeco.pytorch.nn.functional.FunctionalDropout;
 import org.bytedeco.pytorch.nn.modules.BatchNorm1dImpl;
 import org.bytedeco.pytorch.nn.modules.DropoutImpl;
@@ -29,6 +33,8 @@ import org.bytedeco.pytorch.nn.modules.TanhImpl;
 import org.bytedeco.pytorch.nn.modules.container.SequentialImpl;
 import org.bytedeco.pytorch.nn.options.BatchNormOptions;
 import org.bytedeco.pytorch.recommend.DeviceSupport;
+
+import static org.bytedeco.pytorch.global.torch.kaiming_uniform_;
 
 /**
  * Multi-Layer Perceptron using SequentialImpl (matching PyTorch's nn.Sequential)
@@ -54,21 +60,25 @@ public class MLP extends Module {
     }
 
     private final SequentialImpl sequential;
-    private final java.util.List<Module> modules = new java.util.ArrayList<>();
+//    private final java.util.List<Module> modules = new java.util.ArrayList<>();
     private int moduleCounter = 0;
+    private float dropout;
+    private boolean useLinearOutFunc = false;
+    private Parameter linearOutWeight;
+//    private Boolean dropTraining = false;
 
     private void addModule(Module m) {
         String name = "layer_" + moduleCounter++;
         sequential.push_back(name, m);
         register_module(name, m);
-        modules.add(m);
+//        modules.add(m);
     }
 
     private void addModule(String name, Module m) {
         // allow explicit names but still register
         sequential.push_back(name, m);
         register_module(name, m);
-        modules.add(m);
+//        modules.add(m);
     }
 
     public MLP(long inputDim, long[] hiddenDims) {
@@ -87,6 +97,7 @@ public class MLP extends Module {
         this.sequential = new SequentialImpl();
         long prevDim = inputDim;
         int dropoutCount = 0;
+//        this.dropTraining = dropTraining;
 
         if (hiddenDims != null) {
             for (long dim : hiddenDims) {
@@ -135,17 +146,33 @@ public class MLP extends Module {
                 }
 
                 if (dropout > 0) {
+                    this.dropout = dropout;
                     // Use functional wrapper to avoid ambiguity between DropoutImpl forward overloads
                     // (e.g., forward(Tensor) vs forward(Tensor, boolean)) which can cause native crashes.
-                addModule(new FunctionalDropout(dropout));
+//                addModule(new FunctionalDropout(dropout));
                 }
 
                 prevDim = dim;
             }
         }
 
-        if (outputLayer) {
+        if (outputLayer && dropout <= 0) {
+            this.useLinearOutFunc = false;
             addModule(new LinearImpl(prevDim, outputDim));
+        }else if(outputLayer && dropout > 0){
+            this.useLinearOutFunc = true;
+            long finalDim = hiddenDims != null && hiddenDims.length > 0
+                    ? hiddenDims[hiddenDims.length - 1]
+                    : outputDim;
+            var weight = torch.empty(new long[]{finalDim, prevDim},new TensorOptions()
+                    .dtype(new ScalarTypeOptional(torch.kFloat()))
+                            .device(new DeviceOptional(new Device(device))),
+//                            .requires_grad(new BoolOptional(true)),
+                    new MemoryFormatOptional());
+            kaiming_uniform_(weight, Math.sqrt(5.0),new FanModeType(new kFanOut()),new Nonlinearity(new kLeakyReLU()));
+            this.linearOutWeight = new Parameter(weight);
+        }else{
+            this.useLinearOutFunc = false;
         }
 
         // Register so parameters() sees Linear weights (Scala omitted this).
@@ -176,12 +203,21 @@ public class MLP extends Module {
             }
             // Execute modules in Java to avoid native SequentialImpl dispatch issues
             Tensor out = x;
-            for (Module m : modules) {
-                out = m.forward(out);
-                if (out == null) {
-                    throw new RuntimeException("Module " + m + " returned null tensor during forward");
-                }
+            out = sequential.forward(out);
+            if (dropout > 0){
+                out = torch.dropout(out, dropout, this.is_training());
             }
+            if(useLinearOutFunc){
+                Tensor castedOut = out.to(torch.kFloat());
+                System.out.println("MLP Layer castedOut final shape: " + java.util.Arrays.toString(castedOut.shape())+" MLP Layer final linearOutWeight shape: " + java.util.Arrays.toString(linearOutWeight.shape()));
+                out = torch.linear(castedOut, linearOutWeight);
+            }
+//            for (Module m : modules) {
+//                out = m.forward(out);
+//                if (out == null) {
+//                    throw new RuntimeException("Module " + m + " returned null tensor during forward");
+//                }
+//            }
             return out;
         } catch (RuntimeException e) {
             System.err.println("[MLP] Forward pass failed: " + e.getMessage());
