@@ -9,27 +9,16 @@ package org.bytedeco.pytorch.recommend.basic.layers;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.Device;
+import org.bytedeco.pytorch.LongVector;
+import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.nn.Parameter;
 import org.bytedeco.pytorch.nn.functional.FunctionalDropout;
-import org.bytedeco.pytorch.nn.modules.BatchNorm1dImpl;
-import org.bytedeco.pytorch.nn.modules.GELUImpl;
-import org.bytedeco.pytorch.nn.modules.IdentityImpl;
-import org.bytedeco.pytorch.nn.modules.LayerNormImpl;
-import org.bytedeco.pytorch.nn.modules.LeakyReLUImpl;
-import org.bytedeco.pytorch.nn.modules.LinearImpl;
-import org.bytedeco.pytorch.nn.modules.PReLUImpl;
-import org.bytedeco.pytorch.nn.modules.ReLUImpl;
-import org.bytedeco.pytorch.nn.modules.SiLUImpl;
-import org.bytedeco.pytorch.nn.modules.SigmoidImpl;
-import org.bytedeco.pytorch.nn.modules.TanhImpl;
+import org.bytedeco.pytorch.nn.modules.*;
 import org.bytedeco.pytorch.nn.modules.container.ModuleListImpl;
-import org.bytedeco.pytorch.nn.modules.container.SequentialImpl;
 import org.bytedeco.pytorch.nn.options.BatchNormOptions;
 import org.bytedeco.pytorch.recommend.DeviceSupport;
-
-import static org.bytedeco.pytorch.global.torch.kaiming_uniform_;
 
 /**
  * Multi-Layer Perceptron using SequentialImpl (matching PyTorch's nn.Sequential)
@@ -48,13 +37,13 @@ import static org.bytedeco.pytorch.global.torch.kaiming_uniform_;
  * </ul>
  */
 @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class MLP extends Module {
+public class MLPBlock extends Module {
 
     static {
         Loader.load(org.bytedeco.pytorch.presets.torch.class);
     }
 
-    private final SequentialImpl sequential;
+    private final ModuleListImpl sequential;
     private int moduleCounter = 0;
     private float dropout;
     private boolean useLinearOutFunc = false;
@@ -62,7 +51,7 @@ public class MLP extends Module {
 
     private void addModule(Module m) {
         String name = "layer_" + moduleCounter++;
-        sequential.push_back(name, m);
+        sequential.push_back(m);
         register_module(name, m);
     }
 
@@ -71,20 +60,20 @@ public class MLP extends Module {
         register_module(name, m);
     }
 
-    public MLP(long inputDim, long[] hiddenDims) {
+    public MLPBlock(long inputDim, long[] hiddenDims) {
         this(inputDim, hiddenDims, 1L, "relu", 0.0f, false, false, true, DeviceSupport.backend());
     }
 
-    public MLP(long inputDim, long[] hiddenDims, long outputDim, String activation,
-               float dropout, boolean useBatchNorm, String device) {
+    public MLPBlock(long inputDim, long[] hiddenDims, long outputDim, String activation,
+                    float dropout, boolean useBatchNorm, String device) {
         this(inputDim, hiddenDims, outputDim, activation, dropout, useBatchNorm, false, true, device);
     }
 
-    public MLP(long inputDim, long[] hiddenDims, long outputDim, String activation,
-               float dropout, boolean useBatchNorm, boolean useLayerNorm,
-               boolean outputLayer, String device) {
+    public MLPBlock(long inputDim, long[] hiddenDims, long outputDim, String activation,
+                    float dropout, boolean useBatchNorm, boolean useLayerNorm,
+                    boolean outputLayer, String device) {
         super("MLP");
-        this.sequential = new SequentialImpl();
+        this.sequential = new ModuleListImpl();
         long prevDim = inputDim;
 
         if (hiddenDims != null) {
@@ -154,9 +143,9 @@ public class MLP extends Module {
     }
 
     /** DNN alias factory (Scala object DNN). */
-    public static MLP dnn(long inputDim, long[] hiddenDims, long outputDim, String activation,
-                          float dropout, boolean useBatchNorm, String device) {
-        return new MLP(inputDim, hiddenDims, outputDim, activation, dropout, useBatchNorm,
+    public static MLPBlock dnn(long inputDim, long[] hiddenDims, long outputDim, String activation,
+                               float dropout, boolean useBatchNorm, String device) {
+        return new MLPBlock(inputDim, hiddenDims, outputDim, activation, dropout, useBatchNorm,
                 false, true, device);
     }
 
