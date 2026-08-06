@@ -249,10 +249,25 @@ public final class ModuleDiscovery {
         if (m == null || m.isNull()) return false;
         if (isSequential(m)) return true;
         java.util.List<ModuleChildren.NamedChild> kids = ModuleChildren.list(m);
-        if (kids.size() != 1) return false;
-        Module only = kids.get(0).module;
-        return isSequential(only)
-                || (ModuleChildren.hasChildren(only) && !isBuiltinLeaf(only));
+        if (kids.size() == 1) {
+            Module only = kids.get(0).module;
+            return isSequential(only)
+                    || (ModuleChildren.hasChildren(only) && !isBuiltinLeaf(only));
+        }
+        // MLP pattern: named children (layer_0, layer_1, …) PLUS a
+        // "sequential" SequentialImpl child containing the same modules.
+        // The named children form the real chain; the sequential container
+        // is a duplicate wrapper that must be skipped during expansion.
+        boolean hasSequentialChild = false;
+        int namedNonSequential = 0;
+        for (ModuleChildren.NamedChild k : kids) {
+            if ("sequential".equals(k.key) && isSequential(k.module)) {
+                hasSequentialChild = true;
+            } else {
+                namedNonSequential++;
+            }
+        }
+        return hasSequentialChild && namedNonSequential > 0;
     }
 
     /**

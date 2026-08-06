@@ -343,6 +343,27 @@ public final class VistaEngine {
     private Tensor expandSequential(Module sequential, Object inputs, int stackDepth) {
         Module m = ModuleDiscovery.concrete(sequential);
         List<ModuleChildren.NamedChild> kids = ModuleChildren.list(m);
+        // MLP pattern: when a custom module has both named children (layer_0,
+        // layer_1, …) AND a "sequential" SequentialImpl child containing the
+        // same modules, skip the sequential container to avoid duplicate
+        // nodes and cyclic edges. Only chain the named children.
+        if (!ModuleDiscovery.isSequential(m)) {
+            boolean hasSeq = false;
+            for (ModuleChildren.NamedChild k : kids) {
+                if ("sequential".equals(k.key) && ModuleDiscovery.isSequential(k.module)) {
+                    hasSeq = true; break;
+                }
+            }
+            if (hasSeq) {
+                List<ModuleChildren.NamedChild> filtered = new ArrayList<>();
+                for (ModuleChildren.NamedChild k : kids) {
+                    if (!("sequential".equals(k.key) && ModuleDiscovery.isSequential(k.module))) {
+                        filtered.add(k);
+                    }
+                }
+                if (!filtered.isEmpty()) kids = filtered;
+            }
+        }
         if (kids.isEmpty()) {
             // Empty sequential — just forward if possible
             try {
@@ -2230,6 +2251,21 @@ public final class VistaEngine {
         src.addEdge(new GraphEdge(to, "", null, true));
     }
 
+    /** Extract the numeric index from a role-tagged attr name (e.g.
+     *  "gate_0.layer_1" with role "gate" → "0"; "tower_1.layer_0" → "1").
+     *  Returns "0" when no index is found (single-instance fallback). */
+    private static String extractRoleIndex(String attrL, String role) {
+        if (attrL == null || attrL.isEmpty()) return "0";
+        int idx = attrL.indexOf(role);
+        if (idx < 0) return "0";
+        int start = idx + role.length();
+        if (start < attrL.length() && attrL.charAt(start) == '_') start++;
+        int end = start;
+        while (end < attrL.length() && Character.isDigit(attrL.charAt(end))) end++;
+        if (end > start) return attrL.substring(start, end);
+        return "0";
+    }
+
     private Tensor traceLeafModule(Module module, Object inputs, int stackDepth) {
         Module m = ModuleDiscovery.concrete(module);
         String typeSimple = ModuleDiscovery.simpleTypeName(m);
@@ -2833,12 +2869,10 @@ public final class VistaEngine {
                     || (attrL.contains("head") && !attrL.contains("gate"))) {
                 predictLayerSinks.add(name);
             }
-            // Exclude intermediate layer types that should never be final
-            // sinks. These are wired as sinks spuriously when the tracing
-            // engine cannot find their real downstream consumer.
-            if (attrL.contains("embedding")) {
-                continue;
-            }
+            // Note: embedding-attr nodes are NOT excluded here. Codebook
+            // embeddings (VectorQuantizer, RQVAE) have no downstream consumer
+            // and ARE the final output. Feature embeddings with downstream
+            // targets are already skipped by the embedDownstream check above.
             sinks.add(name);
         }
 
@@ -2847,69 +2881,114 @@ public final class VistaEngine {
         // outputs. The gate produces per-expert weights, experts produce
         // outputs, and the combine op weights and sums them before feeding
         // the result into tower INPUT nodes (heads), not tower tail nodes.
-        if (!expertSinks.isEmpty() && !towerSinks.isEmpty()) {
-            // Find tower head nodes: tower-attributed nodes that have an
-            // incoming edge from a non-tower node (the tower entry point).
-            Set<String> towerHeads = new LinkedHashSet<>();
-            for (Map.Entry<String, GraphNode> te : graph.adjList().entrySet()) {
-                String tName = te.getKey();
-                String tAttr = graph.nodeToAttrName().get(tName);
-                String tL = tAttr == null ? "" : tAttr.toLowerCase();
-                if (!tL.contains("tower")) continue;
-                for (Map.Entry<String, GraphNode> se : graph.adjList().entrySet()) {
-                    if (se.getKey().equals(tName)) continue;
-                    String sAttr = graph.nodeToAttrName().get(se.getKey());
-                    String sL = sAttr == null ? "" : sAttr.toLowerCase();
-                    if (sL.contains("tower")) continue; // skip tower-internal edges
-                    for (GraphEdge edge : se.getValue().edges()) {
-                        if (tName.equals(edge.target())) {
-                            towerHeads.add(tName);
-                            break;
+
+        // Find tower head nodes: tower-attributed nodes that have an
+        // incoming edge from a non-tower node (the tower entry point).
+        Set<String> towerHeads = new LinkedHashSet<>();
+        for (Map.Entry<String, GraphNode> te : graph.adjList().entrySet()) {
+            String tName = te.getKey();
+            String tAttr = graph.nodeToAttrName().get(tName);
+            String tL = tAttr == null ? "" : tAttr.toLowerCase();
+            if (!tL.contains("tower")) continue;
+            for (Map.Entry<String, GraphNode> se : graph.adjList().entrySet()) {
+                if (se.getKey().equals(tName)) continue;
+                String sAttr = graph.nodeToAttrName().get(se.getKey());
+                String sL = sAttr == null ? "" : sAttr.toLowerCase();
+                if (sL.contains("tower")) continue; // skip tower-internal edges
+                for (GraphEdge edge : se.getValue().edges()) {
+                    if (tName.equals(edge.target())) {
+                        towerHeads.add(tName);
+                        break;
+                    }
+                }
+                if (towerHeads.contains(tName)) break;
+            }
+        }
+
+        if (!expertSinks.isEmpty() && !towerHeads.isEmpty()) {
+            // Group gate sinks by index (gate_0, gate_1, …) for per-gate
+            // combine nodes (MMOE). OMoE has a single gate → one combine.
+            Map<String, String> gateByIndex = new LinkedHashMap<>();
+            for (String gate : gateSinks) {
+                String attr = graph.nodeToAttrName().get(gate);
+                String aL = attr == null ? "" : attr.toLowerCase();
+                String idx = extractRoleIndex(aL, "gate");
+                gateByIndex.put(idx, gate);
+            }
+            // Group tower heads by index (tower_0, tower_1, …)
+            Map<String, String> towerHeadByIndex = new LinkedHashMap<>();
+            for (String head : towerHeads) {
+                String attr = graph.nodeToAttrName().get(head);
+                String aL = attr == null ? "" : attr.toLowerCase();
+                String idx = extractRoleIndex(aL, "tower");
+                towerHeadByIndex.put(idx, head);
+            }
+
+            boolean singleGate = gateByIndex.size() <= 1;
+            if (singleGate) {
+                // OMoE: one combine for all experts + the single gate → all towers
+                globalNodeCounter++;
+                String moeCombineName = "moe_combine_" + globalNodeCounter;
+                graph.graphNodeNameToWithoutSuffix().put(moeCombineName, "moe_combine");
+                graph.graphNodeDisplayNames().put(moeCombineName, "moe_combine");
+                graph.nodeToModulePath().put(moeCombineName, "torch");
+                GraphNode moeCombineNode = GraphNode.of(NodeType.OPERATION);
+                graph.adjList().put(moeCombineName, moeCombineNode);
+                for (String gate : gateSinks) {
+                    GraphNode gn = graph.adjList().get(gate);
+                    if (gn != null) gn.addEdge(new GraphEdge(moeCombineName, "", 0L, true));
+                }
+                for (String expert : expertSinks) {
+                    GraphNode en = graph.adjList().get(expert);
+                    if (en != null) en.addEdge(new GraphEdge(moeCombineName, "", 0L, true));
+                }
+                for (String head : towerHeads) {
+                    final String hd = head;
+                    for (Map.Entry<String, GraphNode> se : graph.adjList().entrySet()) {
+                        if (se.getKey().equals(hd) || se.getKey().equals(moeCombineName)) continue;
+                        String sAttr = graph.nodeToAttrName().get(se.getKey());
+                        String sL = sAttr == null ? "" : sAttr.toLowerCase();
+                        if (sL.contains("tower")) continue;
+                        se.getValue().edges().removeIf(edge -> hd.equals(edge.target()));
+                    }
+                    moeCombineNode.addEdge(new GraphEdge(head, "", 0L, true));
+                }
+            } else {
+                // MMOE: one combine per gate, each feeding the matching tower
+                for (Map.Entry<String, String> ge : gateByIndex.entrySet()) {
+                    String gIdx = ge.getKey();
+                    String gate = ge.getValue();
+                    globalNodeCounter++;
+                    String mcName = "moe_combine_" + globalNodeCounter;
+                    graph.graphNodeNameToWithoutSuffix().put(mcName, "moe_combine");
+                    graph.graphNodeDisplayNames().put(mcName, "moe_combine");
+                    graph.nodeToModulePath().put(mcName, "torch");
+                    GraphNode mcNode = GraphNode.of(NodeType.OPERATION);
+                    graph.adjList().put(mcName, mcNode);
+                    GraphNode gn = graph.adjList().get(gate);
+                    if (gn != null) gn.addEdge(new GraphEdge(mcName, "", 0L, true));
+                    for (String expert : expertSinks) {
+                        GraphNode en = graph.adjList().get(expert);
+                        if (en != null) en.addEdge(new GraphEdge(mcName, "", 0L, true));
+                    }
+                    String head = towerHeadByIndex.get(gIdx);
+                    if (head != null) {
+                        final String hd = head;
+                        for (Map.Entry<String, GraphNode> se : graph.adjList().entrySet()) {
+                            if (se.getKey().equals(hd) || se.getKey().equals(mcName)) continue;
+                            String sAttr = graph.nodeToAttrName().get(se.getKey());
+                            String sL = sAttr == null ? "" : sAttr.toLowerCase();
+                            if (sL.contains("tower")) continue;
+                            se.getValue().edges().removeIf(edge -> hd.equals(edge.target()));
+                        }
+                        mcNode.addEdge(new GraphEdge(head, "", 0L, true));
+                    } else {
+                        // No matching tower — feed all tower heads
+                        for (String h : towerHeads) {
+                            mcNode.addEdge(new GraphEdge(h, "", 0L, true));
                         }
                     }
-                    if (towerHeads.contains(tName)) break;
                 }
-            }
-
-            // Create moe_combine operation node representing the gate-weighted
-            // sum of expert outputs (select → unsqueeze → mul → add loop).
-            globalNodeCounter++;
-            String moeCombineName = "moe_combine_" + globalNodeCounter;
-            graph.graphNodeNameToWithoutSuffix().put(moeCombineName, "moe_combine");
-            graph.graphNodeDisplayNames().put(moeCombineName, "moe_combine");
-            graph.nodeToModulePath().put(moeCombineName, "torch");
-            GraphNode moeCombineNode = GraphNode.of(NodeType.OPERATION);
-            graph.adjList().put(moeCombineName, moeCombineNode);
-
-            // Connect gate → moe_combine (gate output is the weight vector)
-            for (String gate : gateSinks) {
-                GraphNode gn = graph.adjList().get(gate);
-                if (gn != null) {
-                    gn.addEdge(new GraphEdge(moeCombineName, "", 0L, true));
-                }
-            }
-
-            // Connect experts → moe_combine (expert outputs are weighted & summed)
-            for (String expert : expertSinks) {
-                GraphNode en = graph.adjList().get(expert);
-                if (en != null) {
-                    en.addEdge(new GraphEdge(moeCombineName, "", 0L, true));
-                }
-            }
-
-            // Connect moe_combine → tower heads, and remove the spurious edges
-            // from non-tower nodes (e.g. pooled/cat) to tower heads since the
-            // real tower input is the gate-weighted combination, not the raw
-            // pooled embedding.
-            for (String head : towerHeads) {
-                for (Map.Entry<String, GraphNode> se : graph.adjList().entrySet()) {
-                    if (se.getKey().equals(head) || se.getKey().equals(moeCombineName)) continue;
-                    String sAttr = graph.nodeToAttrName().get(se.getKey());
-                    String sL = sAttr == null ? "" : sAttr.toLowerCase();
-                    if (sL.contains("tower")) continue; // keep tower-internal edges
-                    se.getValue().edges().removeIf(edge -> head.equals(edge.target()));
-                }
-                moeCombineNode.addEdge(new GraphEdge(head, "", 0L, true));
             }
 
             // Gate is no longer a sink — it feeds moe_combine
@@ -2925,7 +3004,7 @@ public final class VistaEngine {
                 return false;
             });
         } else if (!expertSinks.isEmpty() && !gateSinks.isEmpty()
-                && towerSinks.isEmpty() && predictLayerSinks.isEmpty()) {
+                && towerHeads.isEmpty() && predictLayerSinks.isEmpty()) {
             // CGC-like: no towers, no predictLayers, experts feed gates, gate
             // outputs are final. Wire experts → gates (all-to-all) and let
             // gates be sinks.
@@ -3124,8 +3203,11 @@ public final class VistaEngine {
             }
             if (allIncoming.size() <= 1) continue;
             // Multiple incoming nodes — filter out intermediate layers that
-            // were spuriously wired to output. Only real sinks participate
-            // in the combining operation.
+            // were spuriously wired to output. A node is "intermediate" only
+            // if it has other downstream edges (to non-output nodes). A node
+            // that connects ONLY to output is a true sink, regardless of its
+            // name (e.g. MetaHeac criticGate produces weights that can't be
+            // traced further, so it IS the final sink for that branch).
             List<String> incoming = new ArrayList<>();
             List<String> toRemove = new ArrayList<>();
             for (String name : allIncoming) {
@@ -3138,15 +3220,7 @@ public final class VistaEngine {
                         break;
                     }
                 }
-                String attrName = graph.nodeToAttrName().get(name);
-                String attrL = attrName == null ? "" : attrName.toLowerCase();
-                boolean isIntermediate = attrL.contains("gate")
-                        || attrL.contains("bottom")
-                        || attrL.contains("infogate")
-                        || attrL.contains("ait")
-                        || attrL.contains("expert")
-                        || attrL.contains("embedding");
-                if (hasOtherEdges || isIntermediate) {
+                if (hasOtherEdges) {
                     toRemove.add(name);
                 } else {
                     incoming.add(name);
