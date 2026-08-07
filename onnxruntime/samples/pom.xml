@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.onnxruntime</groupId>
     <artifactId>cxxapisample</artifactId>
-    <version>1.5.14-SNAPSHOT</version>
+    <version>1.5.14</version>
     <properties>
         <exec.mainClass>CXXApiSample</exec.mainClass>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>onnxruntime-platform</artifactId>
-            <version>1.28.0-1.5.14-SNAPSHOT</version>
+            <version>1.28.0-1.5.14</version>
         </dependency>
     </dependencies>
     <profiles>
@@ -23,14 +23,14 @@
                 <dependency>
                     <groupId>org.bytedeco</groupId>
                     <artifactId>onnxruntime-platform-gpu</artifactId>
-                    <version>1.28.0-1.5.14-SNAPSHOT</version>
+                    <version>1.28.0-1.5.14</version>
                 </dependency>
 
                 <!-- Additional dependencies to use bundled CUDA and cuDNN -->
                 <dependency>
                     <groupId>org.bytedeco</groupId>
                     <artifactId>cuda-platform-redist-cudnn</artifactId>
-                    <version>13.3-9.25-1.5.14-SNAPSHOT</version>
+                    <version>13.3-9.25-1.5.14</version>
                 </dependency>
             </dependencies>
         </profile>

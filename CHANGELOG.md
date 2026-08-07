@@ -1,4 +1,5 @@
 
+### August 10, 2026 version 1.5.14
  * Include missing `refcount.h` header file in presets for CPython ([issue #1798](https://github.com/bytedeco/javacpp-presets/issues/1798))
  * Bundle missing `cudnn_engines_tensor_ir` library for `cuda-redist-cudnn` artifact ([pull #1785](https://github.com/bytedeco/javacpp-presets/pull/1785))
  * Add missing mappings for `c10::ArrayRef<double>` in presets for PyTorch ([issue #1770](https://github.com/bytedeco/javacpp-presets/issues/1770))
