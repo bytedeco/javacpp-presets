@@ -54,6 +54,12 @@ public final class VistaEngine {
     private final Map<Long, String> tensorSource = new HashMap<>();
     private final Map<Long, Boolean> tensorImplied = new HashMap<>();
     private final Set<String> seenEdges = new HashSet<>();
+    /** Module identity → structural cat(embed) node created when runtime
+     *  forward failed (e.g. MPS device). Used by post-processing to wire
+     *  downstream modules to the cat node. */
+    private final Map<Long, String> structuralEmbeddingCatNodes = new HashMap<>();
+    /** Structural cat(embed) node name → inferred output dims string (e.g. "(4,16)"). */
+    private final Map<String, String> structuralCatDims = new HashMap<>();
     private final Set<String> outputNodeSet = new HashSet<>();
     private final List<String> nodesToDelete = new ArrayList<>();
     private final List<String> constantNodeNames = new ArrayList<>();
@@ -868,6 +874,14 @@ public final class VistaEngine {
                             if (srcName != null) { embedNodeNames.add(srcName); allChildNodeNames.add(srcName); }
                             continue;
                         }
+                        // Runtime forward failed but a structural cat(embed)
+                        // node may have been created. Register it so downstream
+                        // modules can be wired to it.
+                        String structCat = structuralEmbeddingCatNodes.get(moduleId(cm));
+                        if (structCat != null) {
+                            embedNodeNames.add(structCat);
+                            allChildNodeNames.add(structCat);
+                        }
                     } catch (Throwable ignored) {}
                 }
                 if (childIn == null) {
@@ -1346,6 +1360,12 @@ public final class VistaEngine {
                         if (embedSource == null && embedOut != null && !embedOut.isNull()) {
                             embedSource = tensorSource.get(TensorUtils.tensorKey(embedOut));
                         }
+                        // Structural fallback: if runtime forward failed but a
+                        // structural cat(embed) node was created, use it as the
+                        // embedding source so downstream modules get wired to it.
+                        if (embedSource == null && !embedNodeNames.isEmpty()) {
+                            embedSource = embedNodeNames.get(embedNodeNames.size() - 1);
+                        }
 
                         // Build a set of embedding source node names so we can
                         // distinguish them from downstream modules (linear/fm/mlp).
@@ -1390,7 +1410,8 @@ public final class VistaEngine {
                                                 if (sname.equals(ge.target())) { hasEmbEdge = true; break; }
                                             }
                                             if (!hasEmbEdge) {
-                                                es.addEdge(new GraphEdge(sname, "", 0L, false));
+                                                String embDims = structuralCatDims.getOrDefault(embedSource, "");
+                                                es.addEdge(new GraphEdge(sname, embDims, 0L, false));
                                             }
                                         }
                                     }
@@ -1497,6 +1518,11 @@ public final class VistaEngine {
             if (bestTarget == null && lastOut != null && !lastOut.isNull()) {
                 bestTarget = tensorSource.get(TensorUtils.tensorKey(lastOut));
             }
+            // Structural fallback: if all runtime forwards failed but a
+            // structural cat(embed) node was created, use it as bestTarget.
+            if (bestTarget == null && !embedNodeNames.isEmpty()) {
+                bestTarget = embedNodeNames.get(embedNodeNames.size() - 1);
+            }
             if (bestTarget != null) {
                 for (String sname : allChildNodeNames) {
                     if (sname == null || sname.equals(bestTarget)) continue;
@@ -1516,6 +1542,42 @@ public final class VistaEngine {
                     }
                     if (hasIncoming) continue;
                     sn.addEdge(new GraphEdge(bestTarget, "", 0L, false));
+                }
+            }
+
+            // Structural cat(embed) fan-out: when runtime forward failed and
+            // a structural cat node was created, wire it to downstream child
+            // nodes (linear/fm/mlp/tower/expert) that have no incoming edges.
+            // This ensures the graph shows: embedding → cat(embed) → downstream.
+            if (!embedNodeNames.isEmpty()) {
+                String catNode = embedNodeNames.get(embedNodeNames.size() - 1);
+                GraphNode catGN = graph.adjList().get(catNode);
+                if (catGN != null) {
+                    String catDims = structuralCatDims.getOrDefault(catNode, "");
+                    for (String sname : allChildNodeNames) {
+                        if (sname == null || sname.equals(catNode)) continue;
+                        // Skip embedding nodes — they feed cat, not vice-versa
+                        if (embedNodeNames.contains(sname)) continue;
+                        GraphNode sn = graph.adjList().get(sname);
+                        if (sn == null) continue;
+                        // Check if sname already has incoming edges
+                        boolean hasIncoming = false;
+                        for (GraphNode gn : graph.adjList().values()) {
+                            for (GraphEdge ge : gn.edges()) {
+                                if (sname.equals(ge.target())) { hasIncoming = true; break; }
+                            }
+                            if (hasIncoming) break;
+                        }
+                        if (hasIncoming) continue;
+                        // Check if cat already has edge to sname
+                        boolean hasEdge = false;
+                        for (GraphEdge ge : catGN.edges()) {
+                            if (sname.equals(ge.target())) { hasEdge = true; break; }
+                        }
+                        if (!hasEdge) {
+                            catGN.addEdge(new GraphEdge(sname, catDims, 0L, false));
+                        }
+                    }
                 }
             }
         } finally {
@@ -1577,7 +1639,11 @@ public final class VistaEngine {
             Tensor real = null;
             try {
                 real = callForward(m, sparseFeats);
-            } catch (Throwable ignored) {}
+            } catch (Throwable ignored) {
+                System.err.println("[DEBUG expandEmbeddingLayer] callForward FAILED: " + ignored);
+            }
+            System.err.println("[DEBUG expandEmbeddingLayer] module=" + ModuleDiscovery.typeName(m)
+                    + " real=" + (real == null ? "null" : (real.isNull() ? "null(isNull)" : "non-null")));
 
             for (ModuleChildren.NamedChild child : ModuleChildren.list(m)) {
                 Module cm = ModuleDiscovery.concrete(child.module);
@@ -1586,6 +1652,8 @@ public final class VistaEngine {
                 // Find matching feature tensor
                 Tensor idx = null;
                 if (sparseFeats != null) {
+                    System.err.println("[DEBUG expandEmbeddingLayer] child key=" + key + " base=" + base
+                            + " sparseFeats keys=" + sparseFeats.keySet());
                     Object v = sparseFeats.get(base);
                     if (v == null) {
                         // try raw key / without prefix
@@ -1603,15 +1671,23 @@ public final class VistaEngine {
                         idx = (Tensor) v;
                     }
                 }
+                System.err.println("[DEBUG expandEmbeddingLayer] child key=" + key
+                        + " idx=" + (idx == null ? "null" : "non-null")
+                        + " cmType=" + ModuleDiscovery.simpleTypeName(cm)
+                        + " isEmbedding=" + ModuleDiscovery.simpleTypeName(cm).toLowerCase().contains("embedding"));
                 if (idx != null && ModuleDiscovery.simpleTypeName(cm).toLowerCase().contains("embedding")) {
                     try {
                         Tensor out = traceLeafModule(cm, idx, stackDepth + 1);
+                        System.err.println("[DEBUG expandEmbeddingLayer] traceLeafModule for " + key
+                                + " out=" + (out == null ? "null" : (out.isNull() ? "null(isNull)" : "non-null")));
                         if (out != null && !out.isNull()) {
                             parts.add(out);
                             String src = tensorSource.get(TensorUtils.tensorKey(out));
                             if (src != null) partNames.add(src);
                         }
                     } catch (Throwable ex) {
+                        System.err.println("[DEBUG expandEmbeddingLayer] traceLeafModule THREW for " + key
+                                + " err=" + ex.getClass().getSimpleName() + ": " + ex.getMessage());
                         // traceLeafModule failed (e.g. MPS placeholder storage issue
                         // after callForward moved tensors to device). Emit a
                         // structural node and record it for later wiring to the
@@ -1635,12 +1711,16 @@ public final class VistaEngine {
                 }
             }
 
+            System.err.println("[DEBUG expandEmbeddingLayer] after loop: parts=" + parts.size()
+                    + " partNames=" + partNames + " structChildNames=" + structChildNames);
+
             if (real != null && !real.isNull()) {
                 // Prefer real forward output for downstream chaining.
                 // Create a proper operation node so downstream modules can
                 // trace edges from it (container frames are not in adjList).
                 long key = TensorUtils.tensorKey(real);
                 String realSource = tensorSource.get(key);
+                System.err.println("[DEBUG expandEmbeddingLayer] real non-null, realSource=" + realSource);
                 if (realSource == null) {
                     int totalCount = partNames.size() + structChildNames.size();
                     if (totalCount <= 1 && !partNames.isEmpty()) {
@@ -1658,6 +1738,8 @@ public final class VistaEngine {
                         graph.nodeToAncestors().put(catName, currentAncestors());
                         tensorSource.put(key, catName);
                         realSource = catName;
+                        System.err.println("[DEBUG expandEmbeddingLayer] CREATED cat node: " + catName
+                                + " totalCount=" + totalCount);
                     }
                 }
                 // Wire edges from each traced EmbeddingImpl part to the real
@@ -1707,10 +1789,84 @@ public final class VistaEngine {
                     return parts.get(parts.size() - 1);
                 }
             }
+            // Structural fallback: real forward failed (e.g. MPS device issue)
+            // and no runtime tensors were captured, but we have multiple
+            // structural embedding children. Create a structural cat(embed)
+            // node so the concatenation appears in the graph and wire the
+            // structural children to it.
+            if (structChildNames.size() >= 2) {
+                // Compute batch size from sparse features
+                long batchSize = -1;
+                if (sparseFeats != null) {
+                    for (Object v : sparseFeats.values()) {
+                        if (v instanceof Tensor) {
+                            Tensor t = (Tensor) v;
+                            if (!t.isNull() && t.dim() > 0) {
+                                batchSize = t.size(0);
+                            }
+                            break;
+                        }
+                    }
+                }
+                // Compute embedding dims from structural children
+                Map<String, Long> childEmbDims = new HashMap<>();
+                long totalEmbDim = 0;
+                for (String sname : structChildNames) {
+                    long embDim = inferEmbeddingDim(sname);
+                    childEmbDims.put(sname, embDim);
+                    if (embDim > 0) totalEmbDim += embDim;
+                }
+                globalNodeCounter++;
+                String catName = "cat_" + globalNodeCounter;
+                graph.graphNodeNameToWithoutSuffix().put(catName, "cat");
+                graph.graphNodeDisplayNames().put(catName, "cat(embed)");
+                graph.nodeToModulePath().put(catName, "torch");
+                GraphNode catNode = GraphNode.of(NodeType.OPERATION);
+                graph.adjList().put(catName, catNode);
+                recordParentBookkeeping(catName);
+                graph.nodeToAncestors().put(catName, currentAncestors());
+                // Wire edges from structural children to cat node with inferred dims
+                for (String sname : structChildNames) {
+                    if (sname == null || sname.equals(catName)) continue;
+                    GraphNode sn = graph.adjList().get(sname);
+                    if (sn == null) continue;
+                    boolean hasEdge = false;
+                    for (GraphEdge ge : sn.edges()) {
+                        if (catName.equals(ge.target())) { hasEdge = true; break; }
+                    }
+                    if (!hasEdge) {
+                        long embDim = childEmbDims.getOrDefault(sname, -1L);
+                        String dims = batchSize > 0 && embDim > 0
+                                ? "(" + batchSize + "," + embDim + ")" : "";
+                        sn.addEdge(new GraphEdge(catName, dims, 0L, false));
+                    }
+                }
+                // Store inferred output dims for downstream wiring
+                String catOutDims = batchSize > 0 && totalEmbDim > 0
+                        ? "(" + batchSize + "," + totalEmbDim + ")" : "";
+                if (!catOutDims.isEmpty()) {
+                    structuralCatDims.put(catName, catOutDims);
+                }
+                // Register the cat node as the implied output source for this
+                // embedding layer so downstream modules can reference it via
+                // the wire-implied post-processing pass.
+                structuralEmbeddingCatNodes.put(moduleId(m), catName);
+            }
             return null;
         } finally {
             endContainerFrame(frame);
         }
+    }
+
+    /** Infer embedding dim from a node's module_info (EmbeddingImpl weight shape[1]). */
+    private long inferEmbeddingDim(String nodeName) {
+        ModuleInfo info = graph.moduleInfo().get(nodeName);
+        if (info == null || info.parameters() == null) return -1;
+        ModuleInfo.ParamInfo weight = info.parameters().get("weight");
+        if (weight == null) return -1;
+        long[] shape = weight.shape();
+        if (shape.length < 2) return -1;
+        return shape[1];
     }
 
     private Tensor catAlongDim1(List<Tensor> parts, List<String> partNames) {
@@ -2899,6 +3055,170 @@ public final class VistaEngine {
             }
         }
 
+        // Infer missing dims on structural edges: when runtime forward
+        // failed (e.g. MPS device), edges created structurally have empty
+        // dims. Try to infer them from module_info (LinearImpl weight
+        // shape[0] = out_features) and the batch size from input edges.
+        {
+            long inferredBatch = -1;
+            for (Map.Entry<String, GraphNode> e : graph.adjList().entrySet()) {
+                if (!e.getKey().startsWith("input_")) continue;
+                for (GraphEdge ge : e.getValue().edges()) {
+                    if (ge.dims() != null && !ge.dims().isEmpty()) {
+                        String d = ge.dims().replaceAll("[()]", "");
+                        String[] parts = d.split(",");
+                        if (parts.length > 0) {
+                            try { inferredBatch = Long.parseLong(parts[0].trim()); } catch (NumberFormatException ex) {}
+                        }
+                    }
+                    if (inferredBatch > 0) break;
+                }
+                if (inferredBatch > 0) break;
+            }
+            // Pass 1: infer from LinearImpl weight shape
+            if (inferredBatch > 0) {
+                for (Map.Entry<String, GraphNode> e : graph.adjList().entrySet()) {
+                    String srcName = e.getKey();
+                    GraphNode srcNode = e.getValue();
+                    List<GraphEdge> edges = srcNode.edges();
+                    for (int i = 0; i < edges.size(); i++) {
+                        GraphEdge ge = edges.get(i);
+                        if (ge.dims() != null && !ge.dims().isEmpty()) continue;
+                        ModuleInfo info = graph.moduleInfo().get(srcName);
+                        if (info == null || info.parameters() == null) continue;
+                        ModuleInfo.ParamInfo weight = info.parameters().get("weight");
+                        if (weight == null) continue;
+                        long[] shape = weight.shape();
+                        if (shape.length < 2) continue;
+                        long outFeatures = shape[0];
+                        String inferred = "(" + inferredBatch + "," + outFeatures + ")";
+                        edges.set(i, new GraphEdge(ge.target(), inferred, ge.edgeDataId(), ge.implied()));
+                    }
+                }
+            }
+            // Pass 2: propagate dims through pass-through ops (ReLU, Dropout, etc.)
+            // Iterate until no changes (handles chains like Linear→ReLU→Dropout→Linear)
+            for (int iter = 0; iter < 10; iter++) {
+                boolean changed = false;
+                // Build incoming dims map
+                Map<String, String> incomingDims = new HashMap<>();
+                for (Map.Entry<String, GraphNode> e : graph.adjList().entrySet()) {
+                    for (GraphEdge ge : e.getValue().edges()) {
+                        if (ge.dims() != null && !ge.dims().isEmpty()) {
+                            incomingDims.putIfAbsent(ge.target(), ge.dims());
+                        }
+                    }
+                }
+                // Propagate to empty edges
+                for (Map.Entry<String, GraphNode> e : graph.adjList().entrySet()) {
+                    String srcName = e.getKey();
+                    GraphNode srcNode = e.getValue();
+                    List<GraphEdge> edges = srcNode.edges();
+                    String srcIncoming = incomingDims.get(srcName);
+                    if (srcIncoming == null) continue;
+                    for (int i = 0; i < edges.size(); i++) {
+                        GraphEdge ge = edges.get(i);
+                        if (ge.dims() != null && !ge.dims().isEmpty()) continue;
+                        edges.set(i, new GraphEdge(ge.target(), srcIncoming, ge.edgeDataId(), ge.implied()));
+                        changed = true;
+                    }
+                }
+                if (!changed) break;
+            }
+        }
+
+        // Structural cat(embed) global fan-out: wire cat(embed) nodes to
+        // downstream modules (linear/fm/mlp/tower/expert) that have no
+        // incoming edges. This handles the case where runtime forward failed
+        // (e.g. MPS device) and the embedding concatenation node was created
+        // structurally but downstream modules inside nested containers (MLP)
+        // were not wired to it.
+        for (Map.Entry<Long, String> entry : structuralEmbeddingCatNodes.entrySet()) {
+            String catName = entry.getValue();
+            GraphNode catGN = graph.adjList().get(catName);
+            if (catGN == null) continue;
+            // Find the parent module of the cat node
+            String catParent = null;
+            for (Map.Entry<String, List<String>> pe : graph.parentModuleToNodes().entrySet()) {
+                if (pe.getValue().contains(catName)) {
+                    catParent = pe.getKey();
+                    break;
+                }
+            }
+            // Find sibling nodes (same parent) with no incoming edges
+            if (catParent != null) {
+                List<String> siblings = graph.parentModuleToNodes().get(catParent);
+                if (siblings != null) {
+                    for (String sib : siblings) {
+                        if (sib == null || sib.equals(catName)) continue;
+                        GraphNode sn = graph.adjList().get(sib);
+                        if (sn == null) continue;
+                        // Skip embedding nodes and cat nodes
+                        String sibDisp = graph.graphNodeDisplayNames().get(sib);
+                        if (sibDisp != null && (sibDisp.contains("cat") || sibDisp.contains("EmbeddingImpl")
+                                || sibDisp.contains("embedding"))) continue;
+                        // Check if sib already has incoming edges
+                        boolean hasIncoming = false;
+                        for (GraphNode gn : graph.adjList().values()) {
+                            for (GraphEdge ge : gn.edges()) {
+                                if (sib.equals(ge.target())) { hasIncoming = true; break; }
+                            }
+                            if (hasIncoming) break;
+                        }
+                        if (hasIncoming) continue;
+                        // Wire cat → sib
+                        boolean hasEdge = false;
+                        for (GraphEdge ge : catGN.edges()) {
+                            if (sib.equals(ge.target())) { hasEdge = true; break; }
+                        }
+                        if (!hasEdge) {
+                            String dims = structuralCatDims.getOrDefault(catName, "");
+                            catGN.addEdge(new GraphEdge(sib, dims, 0L, false));
+                        }
+                    }
+                }
+            }
+        }
+
+        // Also wire cat(embed) to first layers of nested containers (MLP etc.)
+        // that are NOT siblings but descendants of the same model.
+        for (Map.Entry<Long, String> entry : structuralEmbeddingCatNodes.entrySet()) {
+            String catName = entry.getValue();
+            GraphNode catGN = graph.adjList().get(catName);
+            if (catGN == null) continue;
+            String catDims = structuralCatDims.getOrDefault(catName, "");
+            // Find all nodes with no incoming edges that are Linear/FM/MLP-like
+            for (Map.Entry<String, GraphNode> ne : graph.adjList().entrySet()) {
+                String name = ne.getKey();
+                if (name.equals(catName)) continue;
+                GraphNode node = ne.getValue();
+                if (node.nodeType() == NodeType.INPUT || node.nodeType() == NodeType.OUTPUT) continue;
+                String disp = graph.graphNodeDisplayNames().get(name);
+                if (disp == null) continue;
+                // Only wire to first-layer linear/fm/mlp nodes
+                boolean isFirstLayer = disp.contains("layer_0") || disp.equals("linear")
+                        || disp.equals("fm") || disp.contains(".layer_0");
+                if (!isFirstLayer) continue;
+                // Skip if already has incoming edges
+                boolean hasIncoming = false;
+                for (GraphNode gn : graph.adjList().values()) {
+                    for (GraphEdge ge : gn.edges()) {
+                        if (name.equals(ge.target())) { hasIncoming = true; break; }
+                    }
+                    if (hasIncoming) break;
+                }
+                if (hasIncoming) continue;
+                // Wire cat → node
+                boolean hasEdge = false;
+                for (GraphEdge ge : catGN.edges()) {
+                    if (name.equals(ge.target())) { hasEdge = true; break; }
+                }
+                if (!hasEdge) {
+                    catGN.addEdge(new GraphEdge(name, catDims, 0L, false));
+                }
+            }
+        }
+
         // Collect sinks (modules with no outgoing edges to existing nodes)
         // Also classify sinks by their attr-name role for combining-op detection.
         List<String> sinks = new ArrayList<>();
@@ -3790,6 +4110,10 @@ public final class VistaEngine {
             List<Tensor> extracted = TensorUtils.extractTensors(result);
             return extracted.isEmpty() ? null : extracted.get(0);
         } catch (Throwable t) {
+            System.err.println("[DEBUG invokeReflectiveForward] FAILED on " + m.getClass().getName()
+                    + " method=" + (method != null ? method.getName() : "null")
+                    + " params=" + (method != null ? java.util.Arrays.toString(method.getParameterTypes()) : "[]")
+                    + " err=" + t);
             return null;
         }
     }
