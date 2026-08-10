@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tensorrt</groupId>
     <artifactId>sampleonnxmnist</artifactId>
-    <version>1.5.14-SNAPSHOT</version>
+    <version>1.5.14</version>
     <properties>
         <exec.mainClass>SampleOnnxMNIST</exec.mainClass>
     </properties>
@@ -54,19 +54,19 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform</artifactId>
-            <version>11.2-1.5.14-SNAPSHOT</version>
+            <version>11.2-1.5.14</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-cudnn</artifactId>
-            <version>13.3-9.25-1.5.14-SNAPSHOT</version>
+            <version>13.3-9.25-1.5.14</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform-redist</artifactId>
-            <version>11.2-1.5.14-SNAPSHOT</version>
+            <version>11.2-1.5.14</version>
         </dependency>
 
     </dependencies>
