@@ -51,9 +51,9 @@ runs:
           export PREFIX=aarch64-linux-gnu
           export CUDA=cuda-repo-rhel8-13-3-local-13.3.1_610.43.02-1.aarch64.rpm
           export CCCL=13-3-13.3.3.4.1-1.aarch64
-          export CUDNN=cuda-13-9.24.0.43-1.aarch64
+          export CUDNN=cuda-13-9.25.0.15-1.aarch64
           export NCCL=2.30.7-1+cuda13.3.aarch64
-          export NVCOMP=nvcomp-linux-sbsa-5.2.0.10_cuda13-archive
+          export NVCOMP=nvcomp-linux-sbsa-5.3.0.16_cuda13-archive
           export USERLAND_BUILDME="buildme --aarch64"
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
           export ARCH=ppc64el
@@ -74,9 +74,9 @@ runs:
           export PREFIX=x86_64-linux-gnu
           export CUDA=cuda-repo-rhel8-13-3-local-13.3.1_610.43.02-1.x86_64.rpm
           export CCCL=13-3-13.3.3.4.1-1.x86_64
-          export CUDNN=cuda-13-9.24.0.43-1.x86_64
+          export CUDNN=cuda-13-9.25.0.15-1.x86_64
           export NCCL=2.30.7-1+cuda13.3.x86_64
-          export NVCOMP=nvcomp-linux-x86_64-5.2.0.10_cuda13-archive
+          export NVCOMP=nvcomp-linux-x86_64-5.3.0.16_cuda13-archive
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
         echo "PREFIX=$PREFIX" >> $GITHUB_ENV
@@ -90,7 +90,9 @@ runs:
         export CODENAME=$UBUNTU_CODENAME
 
         HOST_ARCH=$(dpkg --print-architecture)   # amd64 or arm64
+        BROKEN_CROSS="freeglut3-dev:$ARCH libva-dev:$ARCH"
         if [[ "$ARCH" != "$HOST_ARCH" ]]; then
+          BROKEN_CROSS=
           # https://github.com/actions/runner-images/issues/675
           $SUDO gem install apt-spy2
           $SUDO apt-spy2 check
@@ -122,7 +124,7 @@ runs:
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
         $SUDO apt-get update
-        $SUDO apt-get -y install python3 python3-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH libpulse-dev:$ARCH libva-dev:$ARCH libdrm-dev:$ARCH libudev-dev:$ARCH
+        $SUDO apt-get -y install python3 python3-minimal rpm $BROKEN_CROSS libasound2-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH libpulse-dev:$ARCH libdrm-dev:$ARCH libudev-dev:$ARCH
         $SUDO apt-get -y install build-essential pkgconf ccache clang $TOOLCHAIN openjdk-8-jdk ant python3-pip swig git file wget zstd unzip tar bzip2 gzip patch autoconf-archive autogen automake cmake make ninja-build libtool bison flex perl nasm ragel curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev libdrm-dev libxcb-glx0-dev libwayland-dev wayland-protocols qtbase5-dev qtwayland5
 
         export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-$HOST_ARCH/
@@ -235,8 +237,8 @@ runs:
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
           # python3 -m gdown 1LZRCv4ZAGiDQAu4pvADJIGntq4cGl5tU
-          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/11.1.0/tars/TensorRT-Enterprise-11.1.0.106-Linux-aarch64-cuda-13.3-Release-external.tar.zst
-          $SUDO tar -hxvf TensorRT-Enterprise-11.1.0.106-Linux-aarch64-cuda-13.3-Release-external.tar.zst -C /usr/local/
+          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/11.2.1/tars/TensorRT-Enterprise-11.2.1.2-Linux-aarch64-cuda-13.3-Release-external.tar.zst
+          $SUDO tar -hxvf TensorRT-Enterprise-11.2.1.2-Linux-aarch64-cuda-13.3-Release-external.tar.zst -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
           $SUDO patchelf --set-rpath '$ORIGIN' /usr/local/tensorrt/lib/libnvinfer.so
           # Remove downloaded archives and unused libraries to avoid running out of disk space
@@ -246,8 +248,8 @@ runs:
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
           # python3 -m gdown 1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
-          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/11.1.0/tars/TensorRT-Enterprise-11.1.0.106-Linux-x86_64-cuda-13.3-Release-external.tar.zst
-          $SUDO tar -hxvf TensorRT-Enterprise-11.1.0.106-Linux-x86_64-cuda-13.3-Release-external.tar.zst -C /usr/local/
+          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/11.2.1/tars/TensorRT-Enterprise-11.2.1.2-Linux-x86_64-cuda-13.3-Release-external.tar.zst
+          $SUDO tar -hxvf TensorRT-Enterprise-11.2.1.2-Linux-x86_64-cuda-13.3-Release-external.tar.zst -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
           $SUDO patchelf --set-rpath '$ORIGIN' /usr/local/tensorrt/lib/libnvinfer.so
           # Remove downloaded archives and unused libraries to avoid running out of disk space
@@ -256,8 +258,8 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "mkl" ]]; then
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/db60f483-f02e-4f7e-9bcd-5e01dba97444/intel-onemkl-2026.0.0.909_offline.sh
-          $SUDO bash intel-onemkl-2026.0.0.909_offline.sh -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/17f37e16-768e-40d2-bcf8-c252dc6c5499/intel-onemkl-2026.1.0.237_offline.sh
+          $SUDO bash intel-onemkl-2026.1.0.237_offline.sh -s -a -s --eula accept
           export MAVEN_OPTIONS="-Djavacpp.platform.compiler=clang++"
         fi
 

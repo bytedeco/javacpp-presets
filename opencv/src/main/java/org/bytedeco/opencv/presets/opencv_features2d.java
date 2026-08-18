@@ -35,9 +35,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = {opencv_highgui.class, opencv_flann.class},
     value = {
-        @Platform(include = "<opencv2/features2d.hpp>", link = "opencv_features2d@.413"),
+        @Platform(include = "<opencv2/features2d.hpp>", link = "opencv_features2d@.414"),
         @Platform(value = "ios", preload = "libopencv_features2d"),
-        @Platform(value = "windows", link = "opencv_features2d4130")},
+        @Platform(value = "windows", link = "opencv_features2d4140")},
     target = "org.bytedeco.opencv.opencv_features2d",
     global = "org.bytedeco.opencv.global.opencv_features2d"
 )

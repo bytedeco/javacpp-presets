@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.14-SNAPSHOT</version>
+    <version>1.5.15-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>cuda-redist-cublas</artifactId>
-  <version>13.3-9.24-${project.parent.version}</version>
+  <version>13.3-9.25-${project.parent.version}</version>
   <name>JavaCPP Presets Redist for CUDA</name>
 
   <properties>

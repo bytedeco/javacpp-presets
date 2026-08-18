@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.14-SNAPSHOT</version>
+    <version>1.5.15-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tesseract</artifactId>
-  <version>5.5.2-${project.parent.version}</version>
+  <version>5.5.3-${project.parent.version}</version>
   <name>JavaCPP Presets for Tesseract</name>
 
   <dependencies>

@@ -189,7 +189,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cblas_cgemm3m", "cblas_zgemm3m", "cblas_bgemm", "cblas_bgemv", "cblas_shgemm",
             "cblas_cgemm_batch_strided", "cblas_dgemm_batch_strided", "cblas_sgemm_batch_strided", "cblas_zgemm_batch_strided", "cblas_sbgemm_batch_strided",
             // broken on Windows
-            "openblas_set_num_threads_local", "openblas_set_threads_callback_function"};
+            "openblas_set_num_threads_local", "openblas_set_threads_callback_function", "openblas_xerbla_handler"};
         for (String f : brokenFunctions) {
             infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(true));
         }

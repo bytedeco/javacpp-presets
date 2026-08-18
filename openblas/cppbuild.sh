@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENBLAS_VERSION=0.3.33
+OPENBLAS_VERSION=0.3.34
 
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS_VERSION.tar.gz OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
@@ -43,8 +43,8 @@ export NO_AFFINITY=1
 export NO_AVX512=1
 case $PLATFORM in
     android-arm)
-        patch -Np1 < ../../../OpenBLAS-android.patch
-        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
+#        patch -Np1 < ../../../OpenBLAS-android.patch
+S        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
         export CC="$ANDROID_CC $ANDROID_FLAGS"
         export FC="$ANDROID_PREFIX-gfortran $ANDROID_FLAGS"
         export CROSS_SUFFIX="$ANDROID_PREFIX-"
@@ -58,8 +58,8 @@ case $PLATFORM in
         sedinplace 's/-march=armv5/-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16/' Makefile.arm ../OpenBLAS-$OPENBLAS_VERSION-nolapack/Makefile.arm
         ;;
     android-arm64)
-        patch -Np1 < ../../../OpenBLAS-android.patch
-        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
+#        patch -Np1 < ../../../OpenBLAS-android.patch
+#        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
         export CC="$ANDROID_CC $ANDROID_FLAGS"
         export FC="$ANDROID_PREFIX-gfortran $ANDROID_FLAGS"
         export CROSS_SUFFIX="$ANDROID_PREFIX-"
@@ -71,8 +71,8 @@ case $PLATFORM in
         export TARGET=ARMV8
         ;;
     android-x86)
-        patch -Np1 < ../../../OpenBLAS-android.patch
-        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
+#        patch -Np1 < ../../../OpenBLAS-android.patch
+#        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
         export CC="$ANDROID_CC $ANDROID_FLAGS"
         export FC="$ANDROID_PREFIX-gfortran $ANDROID_FLAGS"
         export CROSS_SUFFIX="$ANDROID_PREFIX-"
@@ -84,8 +84,8 @@ case $PLATFORM in
         export TARGET=ATOM
         ;;
     android-x86_64)
-        patch -Np1 < ../../../OpenBLAS-android.patch
-        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
+#        patch -Np1 < ../../../OpenBLAS-android.patch
+#        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
         export CC="$ANDROID_CC $ANDROID_FLAGS"
         export FC="$ANDROID_PREFIX-gfortran $ANDROID_FLAGS"
         export CROSS_SUFFIX="$ANDROID_PREFIX-"

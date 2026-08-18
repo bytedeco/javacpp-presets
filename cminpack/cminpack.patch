@@ -1,19 +1,29 @@
-diff -ruN cminpack-1.3.11/cminpack.h cminpack-1.3.11-patch/cminpack.h
---- cminpack-1.3.11/cminpack.h	2024-09-13 18:04:15.000000000 +0900
-+++ cminpack-1.3.11-patch/cminpack.h	2024-10-27 09:09:37.257671690 +0900
-@@ -36,38 +36,7 @@
+diff -ruN cminpack-1.3.14/include/cminpack.h cminpack-1.3.14-patch/include/cminpack.h
+--- cminpack-1.3.14/include/cminpack.h	2026-07-25 20:11:13.000000000 +0900
++++ cminpack-1.3.14-patch/include/cminpack.h	2026-07-31 09:30:46.268451361 +0900
+@@ -36,48 +36,7 @@
  extern "C" {
  #endif /* __cplusplus */
  
--/* Cmake will define cminpack_EXPORTS on Windows when it
--configures to build a shared library. If you are going to use
--another build system on windows or create the visual studio
--projects by hand you need to define cminpack_EXPORTS when
--building a DLL on windows.
+-/* Symbol visibility for Windows DLLs.
+-
+-   When building or using cminpack as a Windows DLL, the API symbols must be
+-   marked with __declspec(dllexport) (when building the DLL) or
+-   __declspec(dllimport) (when using it). This is controlled by two macros:
+-
+-   - define CMINPACK_DLL_EXPORTS when *building* the cminpack DLL;
+-   - define CMINPACK_NO_DLL when building or using cminpack as a *static*
+-     library on Windows (otherwise the header defaults to dllimport, which
+-     makes the linker look for __imp_-prefixed symbols and fails with
+-     "unresolved external symbol __imp_hybrd1" - see issue #18).
+-
+-   The bundled CMake build sets these automatically (CMINPACK_DLL_EXPORTS for
+-   shared builds, CMINPACK_NO_DLL for static builds). If you use another build
+-   system or hand-made Visual Studio projects, define them yourself.
 -*/
 -#if defined (__GNUC__)
--#define CMINPACK_DECLSPEC_EXPORT  __declspec(__dllexport__)
--#define CMINPACK_DECLSPEC_IMPORT  __declspec(__dllimport__)
+-#define CMINPACK_DECLSPEC_EXPORT  __declspec(dllexport)
+-#define CMINPACK_DECLSPEC_IMPORT  __declspec(dllimport)
 -#endif
 -#if defined (_MSC_VER) || defined (__BORLANDC__)
 -#define CMINPACK_DECLSPEC_EXPORT  __declspec(dllexport)
@@ -33,16 +43,36 @@ diff -ruN cminpack-1.3.11/cminpack.h cminpack-1.3.11-patch/cminpack.h
 -    #define  CMINPACK_EXPORT CMINPACK_DECLSPEC_EXPORT
 -  #else
 -    #define  CMINPACK_EXPORT CMINPACK_DECLSPEC_IMPORT
--  #endif /* cminpack_EXPORTS */
+-  #endif /* CMINPACK_DLL_EXPORTS */
 -#else /* defined (_WIN32) */
   #define CMINPACK_EXPORT
 -#endif
  
  #if defined(__CUDA_ARCH__) || defined(__CUDACC__)
  #define __cminpack_attr__ __device__
-diff -ruN cminpack-1.3.11/cminpackP.h cminpack-1.3.11-patch/cminpackP.h
---- cminpack-1.3.11/cminpackP.h	2024-09-13 18:04:15.000000000 +0900
-+++ cminpack-1.3.11-patch/cminpackP.h	2024-10-27 09:10:43.208509151 +0900
+diff -ruN cminpack-1.3.14/Makefile cminpack-1.3.14-patch/Makefile
+--- cminpack-1.3.14/Makefile	2026-07-25 20:11:13.000000000 +0900
++++ cminpack-1.3.14-patch/Makefile	2026-07-31 09:25:45.295444104 +0900
+@@ -16,7 +16,7 @@
+ #LIBSUFFIX=s
+ #CFLAGS="-O3 -g -Wall -Wextra -DUSE_BLAS -DUSE_LAPACK"
+ CFLAGS_L=$(CFLAGS) -DUSE_BLAS -DUSE_LAPACK
+-LDADD_L=-framework Accelerate
++#LDADD_L=-framework Accelerate
+ 
+ ### configuration for the long double version:
+ ## make LIBSUFFIX=s CFLAGS="-O3 -g -Wall -Wextra -D__cminpack_long_double__"
+@@ -96,7 +96,6 @@
+ install: $(LIB)
+ 	cp $(LIB) ${DESTDIR}/lib
+ 	chmod 644 ${DESTDIR}/lib/$(LIB)
+-	$(RANLIB) -t ${DESTDIR}/lib/$(LIB) # might be unnecessary
+ 	cp include/minpack.h ${DESTDIR}/include
+ 	chmod 644 ${DESTDIR}/include/minpack.h
+ 	cp include/cminpack.h ${DESTDIR}/include
+diff -ruN cminpack-1.3.14/src/cminpackP.h cminpack-1.3.14-patch/src/cminpackP.h
+--- cminpack-1.3.14/src/cminpackP.h	2026-07-25 20:11:13.000000000 +0900
++++ cminpack-1.3.14-patch/src/cminpackP.h	2026-07-31 09:24:16.499007603 +0900
 @@ -11,10 +11,10 @@
  #endif
  
@@ -85,24 +115,3 @@ diff -ruN cminpack-1.3.11/cminpackP.h cminpack-1.3.11-patch/cminpackP.h
  #endif
  
  #include "minpackP.h"
-diff -ruN cminpack-1.3.11/Makefile cminpack-1.3.11-patch/Makefile
---- cminpack-1.3.11/Makefile	2024-09-13 18:04:15.000000000 +0900
-+++ cminpack-1.3.11-patch/Makefile	2024-10-27 09:09:37.259671695 +0900
-@@ -11,7 +11,7 @@
- #LIBSUFFIX=s
- #CFLAGS="-O3 -g -Wall -Wextra -DUSE_BLAS -DUSE_LAPACK"
- CFLAGS_L=$(CFLAGS) -DUSE_BLAS -DUSE_LAPACK
--LDADD_L=-framework Accelerate
-+#LDADD_L=-framework Accelerate
- 
- ### configuration for the long double version:
- ## make LIBSUFFIX=s CFLAGS="-O3 -g -Wall -Wextra -D__cminpack_long_double__"
-@@ -91,7 +91,7 @@
- install: $(LIB)
- 	cp $(LIB) ${DESTDIR}/lib
- 	chmod 644 ${DESTDIR}/lib/$(LIB)
--	$(RANLIB) -t ${DESTDIR}/lib/$(LIB) # might be unnecessary
-+#	$(RANLIB) -t ${DESTDIR}/lib/$(LIB) # might be unnecessary
- 	cp minpack.h ${DESTDIR}/include
- 	chmod 644 ${DESTDIR}/include/minpack.h
- 	cp cminpack.h ${DESTDIR}/include

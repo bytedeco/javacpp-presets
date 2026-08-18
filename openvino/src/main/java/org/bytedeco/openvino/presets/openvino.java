@@ -41,25 +41,24 @@ import org.bytedeco.opencl.presets.OpenCL;
             include = {
                 "openvino/c/openvino.h"
             },
-            link = {"openvino_c@.2610", "openvino@.2610"},
-            preloadresource = {
-                "runtime/lib/intel64/",
-                "runtime/3rdparty/tbb/lib/"
-            },
+            link = {"openvino_c@.2621#", "openvino@.2621#"},
+            preloadresource = {"runtime/lib/intel64/"},
             preload = {
-                "openvino_auto_batch_plugin",
-                "openvino_auto_plugin",
-                "openvino_hetero_plugin",
-                "openvino_intel_cpu_plugin",
-                "openvino_intel_gpu_plugin",
-                "openvino_intel_npu_plugin",
-                "openvino_ir_frontend@.2610",
-                "openvino_onnx_frontend@.2610",
-                "openvino_paddle_frontend@.2610",
-                "openvino_pytorch_frontend@.2610",
-                "openvino_tensorflow_frontend@.2610",
-                "openvino_tensorflow_lite_frontend@.2610",
-                "tbb@.12"
+                "tbb:runtime/3rdparty/tbb/lib/libtbb.so.12",
+                "openvino:runtime/lib/intel64/libopenvino.so.2621",
+                "openvino_c:runtime/lib/intel64/libopenvino_c.so.2621",
+                "openvino_auto_batch_plugin:runtime/lib/intel64/libopenvino_auto_batch_plugin.so",
+                "openvino_auto_plugin:runtime/lib/intel64/libopenvino_auto_plugin.so",
+                "openvino_hetero_plugin:runtime/lib/intel64/libopenvino_hetero_plugin.so",
+                "openvino_intel_cpu_plugin:runtime/lib/intel64/libopenvino_intel_cpu_plugin.so",
+                "openvino_intel_gpu_plugin:runtime/lib/intel64/libopenvino_intel_gpu_plugin.so",
+                "openvino_intel_npu_plugin:runtime/lib/intel64/libopenvino_intel_npu_plugin.so",
+                "openvino_ir_frontend:runtime/lib/intel64/libopenvino_ir_frontend.so.2621",
+                "openvino_onnx_frontend:runtime/lib/intel64/libopenvino_onnx_frontend.so.2621",
+                "openvino_paddle_frontend:runtime/lib/intel64/libopenvino_paddle_frontend.so.2621",
+                "openvino_pytorch_frontend:runtime/lib/intel64/libopenvino_pytorch_frontend.so.2621",
+                "openvino_tensorflow_frontend:runtime/lib/intel64/libopenvino_tensorflow_frontend.so.2621",
+                "openvino_tensorflow_lite_frontend:runtime/lib/intel64/libopenvino_tensorflow_lite_frontend.so.2621"
             },
             resource = {"runtime"}
         ),

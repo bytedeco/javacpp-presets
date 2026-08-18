@@ -6,19 +6,19 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.14-SNAPSHOT</version>
+    <version>1.5.15-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tensorrt</artifactId>
-  <version>11.1-${project.parent.version}</version>
+  <version>11.2-${project.parent.version}</version>
   <name>JavaCPP Presets for TensorRT</name>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cuda</artifactId>
-      <version>13.3-9.24-${project.parent.version}</version>
+      <version>13.3-9.25-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -44,7 +44,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>13.3-9.24-${project.parent.version}</version>
+            <version>13.3-9.25-${project.parent.version}</version>
           </dependency>
         </dependencies>
       </plugin>
