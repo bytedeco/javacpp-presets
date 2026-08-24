@@ -892,6 +892,7 @@ public static native void ov_core_versions_free(ov_core_version_list_t versions)
  */
 public static native @Cast("ov_status_e") int ov_core_create_context(@Const ov_core_t core, String device_name, @Cast("const size_t") long context_args_size, @ByPtrPtr ov_remote_context_t context);
 public static native @Cast("ov_status_e") int ov_core_create_context(@Const ov_core_t core, String device_name, @Cast("const size_t") long context_args_size, @ByPtrPtr ov_remote_context_t context, String property_key, Pointer property_value);
+public static native @Cast("ov_status_e") int ov_core_create_context(@Const ov_core_t core, String device_name, @Cast("const size_t") long context_args_size, @ByPtrPtr ov_remote_context_t context, String property_key1, String property_value1, String property_key2, Pointer property_value2, String property_key3, Pointer property_value3);
 
 /**
  * \brief Creates a compiled model from a source model within a specified remote context.
@@ -2621,6 +2622,7 @@ public static native @Cast("const char*") BytePointer ov_property_key_intel_gpu_
  */
 public static native @Cast("ov_status_e") int ov_remote_context_create_tensor(@Const ov_remote_context_t context, @Cast("const ov_element_type_e") int type, @Const @ByVal ov_shape_t shape, @Cast("const size_t") long object_args_size, @ByPtrPtr ov_tensor_t remote_tensor);
 public static native @Cast("ov_status_e") int ov_remote_context_create_tensor(@Const ov_remote_context_t context, @Cast("const ov_element_type_e") int type, @Const @ByVal ov_shape_t shape, @Cast("const size_t") long object_args_size, @ByPtrPtr ov_tensor_t remote_tensor, String property_key, Pointer property_value);
+public static native @Cast("ov_status_e") int ov_remote_context_create_tensor(@Const ov_remote_context_t context, @Cast("const ov_element_type_e") int type, @Const @ByVal ov_shape_t shape, @Cast("const size_t") long object_args_size, @ByPtrPtr ov_tensor_t remote_tensor, String property_key1, String property_value1, String property_key2, Pointer property_value2);
 
 /**
  * \brief Returns name of a device on which underlying object is allocated.

@@ -27,14 +27,12 @@ import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
-import org.bytedeco.opencl.presets.OpenCL;
 
 /**
  *
  * @author Barry Pitman
  */
 @Properties(
-    inherit = OpenCL.class,
     value = {
         @Platform(
             value = {"linux-x86_64"},
@@ -152,6 +150,9 @@ import org.bytedeco.opencl.presets.OpenCL;
                 "runtime/3rdparty/tbb/bin/"
             },
             preload = {
+                "tbb12",
+                "openvino",
+                "openvino_c",
                 "openvino_auto_batch_plugin",
                 "openvino_auto_plugin",
                 "openvino_hetero_plugin",
@@ -163,8 +164,7 @@ import org.bytedeco.opencl.presets.OpenCL;
                 "openvino_paddle_frontend",
                 "openvino_pytorch_frontend",
                 "openvino_tensorflow_frontend",
-                "openvino_tensorflow_lite_frontend",
-                "tbb12"
+                "openvino_tensorflow_lite_frontend"
             },
             resource = {"runtime"}
         ),
@@ -190,13 +190,15 @@ public class openvino implements InfoMapper {
                      + "public static native @Cast(\"ov_status_e\") int ov_core_compile_model(@Const ov_core_t core, @Const ov_model_t model, String device_name, @Cast(\"const size_t\") long property_args_size, @ByPtrPtr ov_compiled_model_t compiled_model, String property_key, String property_value);\n"))
                .put(new org.bytedeco.javacpp.tools.Info("ov_core_create_context").javaText(
                        "public static native @Cast(\"ov_status_e\") int ov_core_create_context(@Const ov_core_t core, String device_name, @Cast(\"const size_t\") long context_args_size, @ByPtrPtr ov_remote_context_t context);\n"
-                     + "public static native @Cast(\"ov_status_e\") int ov_core_create_context(@Const ov_core_t core, String device_name, @Cast(\"const size_t\") long context_args_size, @ByPtrPtr ov_remote_context_t context, String property_key, Pointer property_value);\n"))
+                     + "public static native @Cast(\"ov_status_e\") int ov_core_create_context(@Const ov_core_t core, String device_name, @Cast(\"const size_t\") long context_args_size, @ByPtrPtr ov_remote_context_t context, String property_key, Pointer property_value);\n"
+                     + "public static native @Cast(\"ov_status_e\") int ov_core_create_context(@Const ov_core_t core, String device_name, @Cast(\"const size_t\") long context_args_size, @ByPtrPtr ov_remote_context_t context, String property_key1, String property_value1, String property_key2, Pointer property_value2, String property_key3, Pointer property_value3);\n"))
                .put(new org.bytedeco.javacpp.tools.Info("ov_core_compile_model_with_context").javaText(
                        "public static native @Cast(\"ov_status_e\") int ov_core_compile_model_with_context(@Const ov_core_t core, @Const ov_model_t model, @Const ov_remote_context_t context, @Cast(\"const size_t\") long property_args_size, @ByPtrPtr ov_compiled_model_t compiled_model);\n"
                      + "public static native @Cast(\"ov_status_e\") int ov_core_compile_model_with_context(@Const ov_core_t core, @Const ov_model_t model, @Const ov_remote_context_t context, @Cast(\"const size_t\") long property_args_size, @ByPtrPtr ov_compiled_model_t compiled_model, String property_key, String property_value);\n"))
                .put(new org.bytedeco.javacpp.tools.Info("ov_remote_context_create_tensor").javaText(
                        "public static native @Cast(\"ov_status_e\") int ov_remote_context_create_tensor(@Const ov_remote_context_t context, @Cast(\"const ov_element_type_e\") int type, @Const @ByVal ov_shape_t shape, @Cast(\"const size_t\") long object_args_size, @ByPtrPtr ov_tensor_t remote_tensor);\n"
-                     + "public static native @Cast(\"ov_status_e\") int ov_remote_context_create_tensor(@Const ov_remote_context_t context, @Cast(\"const ov_element_type_e\") int type, @Const @ByVal ov_shape_t shape, @Cast(\"const size_t\") long object_args_size, @ByPtrPtr ov_tensor_t remote_tensor, String property_key, Pointer property_value);\n"))
+                     + "public static native @Cast(\"ov_status_e\") int ov_remote_context_create_tensor(@Const ov_remote_context_t context, @Cast(\"const ov_element_type_e\") int type, @Const @ByVal ov_shape_t shape, @Cast(\"const size_t\") long object_args_size, @ByPtrPtr ov_tensor_t remote_tensor, String property_key, Pointer property_value);\n"
+                     + "public static native @Cast(\"ov_status_e\") int ov_remote_context_create_tensor(@Const ov_remote_context_t context, @Cast(\"const ov_element_type_e\") int type, @Const @ByVal ov_shape_t shape, @Cast(\"const size_t\") long object_args_size, @ByPtrPtr ov_tensor_t remote_tensor, String property_key1, String property_value1, String property_key2, Pointer property_value2);\n"))
                .put(new org.bytedeco.javacpp.tools.Info("OV_BOOLEAN", "BOOLEAN").skip())
                .put(new org.bytedeco.javacpp.tools.Info("ov_dimension_t", "ov_rank_t").skip());
     }
