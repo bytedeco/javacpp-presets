@@ -55,6 +55,7 @@ AOMAV1_VERSION=3.14.1
 SVTAV1_VERSION=4.2.0
 ZIMG_VERSION=3.0.6
 FFMPEG_VERSION=8.1.2
+OPENCL_VERSION=2026.05.29
 
 # Vendored snapshot of https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/20847.patch
 # with the unsupported FFmpeg 8.1 Changelog hunk already removed.
@@ -82,6 +83,12 @@ download https://github.com/webmproject/libwebp/archive/refs/tags/v$WEBP_VERSION
 download https://storage.googleapis.com/aom-releases/libaom-$AOMAV1_VERSION.tar.gz aom-$AOMAV1_VERSION.tar.gz
 download https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v$SVTAV1_VERSION/SVT-AV1-v$SVTAV1_VERSION.tar.gz SVT-AV1-$SVTAV1_VERSION.tar.gz
 download https://github.com/sekrit-twc/zimg/archive/refs/tags/release-$ZIMG_VERSION.tar.gz zimg-release-$ZIMG_VERSION.tar.gz
+case $PLATFORM in
+    linux-arm64 | linux-x86_64 | macosx-arm64 | macosx-x86_64 | windows-x86_64)
+        download https://github.com/KhronosGroup/OpenCL-Headers/archive/v$OPENCL_VERSION.tar.gz OpenCL-Headers-$OPENCL_VERSION.tar.gz
+        download https://github.com/KhronosGroup/OpenCL-ICD-Loader/archive/v$OPENCL_VERSION.tar.gz OpenCL-ICD-Loader-$OPENCL_VERSION.tar.gz
+        ;;
+esac
 download https://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 mkdir -p $PLATFORM$EXTENSION
@@ -89,18 +96,11 @@ cd $PLATFORM$EXTENSION
 INSTALL_PATH=`pwd`
 case $PLATFORM in
     linux-arm64 | linux-x86_64 | macosx-arm64 | macosx-x86_64 | windows-x86_64)
-        OPENCL_PATH="$INSTALL_PATH/../../../opencl/cppbuild/$PLATFORM"
+        OPENCL_PATH="$INSTALL_PATH"
         OPENCL_CONFIG="--enable-opencl"
         OPENCL_CFLAGS="-I$OPENCL_PATH/include"
         OPENCL_LDFLAGS="-L$OPENCL_PATH/lib"
         OPENCL_LIBS="-lOpenCL"
-        if [[ "$PLATFORM" == windows-* ]]; then
-            if [[ ! -f "$OPENCL_PATH/include/CL/cl_d3d11.h" ]]; then
-                echo "Error: OpenCL D3D11 sharing header not found: $OPENCL_PATH/include/CL/cl_d3d11.h"
-                exit 1
-            fi
-            OPENCL_LIBS="-l:OpenCL.lib"
-        fi
         ;;
 esac
 DISABLE="$DISABLE $OPENCL_CONFIG"
@@ -127,6 +127,10 @@ tar --totals -xzf ../libwebp-$WEBP_VERSION.tar.gz
 tar --totals -xzf ../aom-$AOMAV1_VERSION.tar.gz
 tar --totals -xzf ../SVT-AV1-$SVTAV1_VERSION.tar.gz
 tar --totals -xzf ../zimg-release-$ZIMG_VERSION.tar.gz
+if [[ "$OPENCL_CONFIG" == "--enable-opencl" ]]; then
+    tar --totals -xzf ../OpenCL-Headers-$OPENCL_VERSION.tar.gz
+    tar --totals -xzf ../OpenCL-ICD-Loader-$OPENCL_VERSION.tar.gz
+fi
 tar --totals -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
@@ -158,6 +162,49 @@ sedinplace 's/CMAKE_C_COMPILER_ID MATCHES "Clang"/FALSE/g' SVT-AV1-*/CMakeLists.
 # sedinplace 's/defined(__linux__)/defined(__linux__) \&\& !defined(__ANDROID__)/g' SVT-AV1-*/Source/Lib/Common/Codec/EbThreads.h
 sedinplace '/ANativeWindow_release/d' ffmpeg-*/libavutil/hwcontext_mediacodec.c
 sedinplace 's/#define MAX_SLICES 32/#define MAX_SLICES 256/g' ffmpeg-*/libavcodec/h264dec.h
+
+if [[ "$OPENCL_CONFIG" == "--enable-opencl" ]]; then
+    echo ""
+    echo "--------------------"
+    echo "Building OpenCL"
+    echo "--------------------"
+    echo ""
+    cd OpenCL-Headers-$OPENCL_VERSION
+    case $PLATFORM in
+        linux-arm64)
+            CC="aarch64-linux-gnu-gcc" CXX="aarch64-linux-gnu-g++" cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH .
+            make -j $MAKEJ
+            make install/strip
+            cd ../OpenCL-ICD-Loader-$OPENCL_VERSION
+            CC="aarch64-linux-gnu-gcc" CXX="aarch64-linux-gnu-g++" cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DOPENCL_ICD_LOADER_HEADERS_DIR=$INSTALL_PATH/include .
+            make -j $MAKEJ
+            make install/strip
+            ;;
+        windows-x86_64)
+            CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH .
+            make -j $MAKEJ
+            make install
+            cd ../OpenCL-ICD-Loader-$OPENCL_VERSION
+            CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DOPENCL_ICD_LOADER_HEADERS_DIR=$INSTALL_PATH/include .
+            make -j $MAKEJ
+            make install
+            ;;
+        *)
+            cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH .
+            make -j $MAKEJ
+            make install/strip
+            cd ../OpenCL-ICD-Loader-$OPENCL_VERSION
+            cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DOPENCL_ICD_LOADER_HEADERS_DIR=$INSTALL_PATH/include .
+            make -j $MAKEJ
+            make install/strip
+            ;;
+    esac
+    if [[ "$PLATFORM" == windows-* && ! -f "$OPENCL_PATH/include/CL/cl_d3d11.h" ]]; then
+        echo "Error: OpenCL D3D11 sharing header not found: $OPENCL_PATH/include/CL/cl_d3d11.h"
+        exit 1
+    fi
+    cd ..
+fi
 
 case $PLATFORM in
     android-arm)
