@@ -204,6 +204,9 @@ if [[ "$OPENCL_CONFIG" == "--enable-opencl" ]]; then
         exit 1
     fi
     cd ..
+    if [[ "$PLATFORM" == macosx-* ]]; then
+        export DYLD_LIBRARY_PATH="$OPENCL_PATH/lib${DYLD_LIBRARY_PATH:+:$DYLD_LIBRARY_PATH}"
+    fi
 fi
 
 case $PLATFORM in
