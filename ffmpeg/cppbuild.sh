@@ -1564,6 +1564,14 @@ EOF
         make install
         # Link MPP statically so linux-arm64 artifacts do not depend on librockchip_mpp.so at runtime.
         rm -f $INSTALL_PATH/lib/librockchip_mpp.so $INSTALL_PATH/lib/librockchip_mpp.so.*
+        # MPP and libvpx export the same VP9 probability tables. MPP combines all of its objects into
+        # one relocatable object, so keep its private copies local to avoid duplicate definitions.
+        aarch64-linux-gnu-objcopy \
+            --localize-symbol=vp9_default_coef_probs \
+            --localize-symbol=vp9_kf_partition_probs \
+            --localize-symbol=vp9_kf_uv_mode_prob \
+            --localize-symbol=vp9_kf_y_mode_prob \
+            $INSTALL_PATH/lib/librockchip_mpp.a
         cd ../../ffmpeg-$FFMPEG_VERSION
         if [[ ! -d $USERLAND_PATH ]]; then
           USERLAND_PATH="$(which aarch64-linux-gnu-gcc | grep -o '.*/tools/')../userland"
