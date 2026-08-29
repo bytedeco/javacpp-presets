@@ -89,7 +89,10 @@ cd $PLATFORM$EXTENSION
 INSTALL_PATH=`pwd`
 case $PLATFORM in
     linux-arm64 | linux-x86_64 | macosx-arm64 | macosx-x86_64 | windows-x86_64)
-        OPENCL_PATH="$TOP_PATH/opencl/cppbuild/$PLATFORM"
+        OPENCL_PATH="$TOP_PATH/ffmpeg/target/opencl/org/bytedeco/opencl/$PLATFORM"
+        if [[ ! -d "$OPENCL_PATH" ]]; then
+            OPENCL_PATH="$TOP_PATH/opencl/cppbuild/$PLATFORM"
+        fi
         OPENCL_CONFIG="--enable-opencl"
         OPENCL_CFLAGS="-I$OPENCL_PATH/include"
         OPENCL_LDFLAGS="-L$OPENCL_PATH/lib"

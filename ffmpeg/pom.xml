@@ -17,6 +17,11 @@
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
+      <artifactId>opencl</artifactId>
+      <version>3.1-${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
     </dependency>
   </dependencies>
@@ -32,6 +37,40 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>opencl</artifactId>
+            <version>3.1-${project.parent.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>opencl</artifactId>
+            <version>3.1-${project.parent.version}</version>
+            <classifier>${javacpp.platform}</classifier>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <classPaths>
+            <classPath>${project.build.outputDirectory}</classPath>
+          </classPaths>
+          <includePaths>
+            <includePath>${basedir}/src/main/resources/org/bytedeco/ffmpeg/include/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
+            <includePath>${project.build.directory}/opencl/org/bytedeco/opencl/${javacpp.platform}/include/</includePath>
+          </includePaths>
+          <linkPaths>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
+            <linkPath>${project.build.directory}/opencl/org/bytedeco/opencl/${javacpp.platform}/lib/</linkPath>
+          </linkPaths>
+          <preloadPaths>
+            <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/bin/</preloadPath>
+            <preloadPath>${project.build.directory}/opencl/org/bytedeco/opencl/${javacpp.platform}/</preloadPath>
+          </preloadPaths>
+          <resourcePaths>
+            <resourcePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/</resourcePath>
+          </resourcePaths>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
@@ -42,6 +81,27 @@
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack-opencl</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.bytedeco</groupId>
+                  <artifactId>opencl</artifactId>
+                  <version>3.1-${project.parent.version}</version>
+                  <classifier>${javacpp.platform}</classifier>
+                  <type>jar</type>
+                  <outputDirectory>${project.build.directory}/opencl</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-source-plugin</artifactId>
