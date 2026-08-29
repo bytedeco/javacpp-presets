@@ -27,12 +27,14 @@ import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
+import org.bytedeco.opencl.presets.OpenCL;
 
 /**
  *
  * @author Barry Pitman
  */
 @Properties(
+    inherit = OpenCL.class,
     value = {
         @Platform(
             value = {"linux-x86_64"},
