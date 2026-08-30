@@ -19,6 +19,7 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>opencl</artifactId>
       <version>3.1-${project.parent.version}</version>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

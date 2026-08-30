@@ -89,15 +89,19 @@ cd $PLATFORM$EXTENSION
 INSTALL_PATH=`pwd`
 case $PLATFORM in
     linux-arm64 | linux-x86_64 | macosx-arm64 | macosx-x86_64 | windows-x86_64)
-        OPENCL_PATH="$TOP_PATH/ffmpeg/target/opencl/org/bytedeco/opencl/$PLATFORM"
-        if [[ ! -d "$OPENCL_PATH" ]]; then
-            OPENCL_PATH="$TOP_PATH/opencl/cppbuild/$PLATFORM"
-        fi
+        OPENCL_PATH="$TOP_PATH/opencl/cppbuild/$PLATFORM"
         OPENCL_CONFIG="--enable-opencl"
         OPENCL_CFLAGS="-I$OPENCL_PATH/include"
         OPENCL_LDFLAGS="-L$OPENCL_PATH/lib"
         OPENCL_LIBS="-lOpenCL"
-        if [[ "$PLATFORM" == windows-* ]]; then
+        if [[ "$PLATFORM" == linux-* ]]; then
+            # The ICD loader install contains only its soname. FFmpeg's
+            # configure probes add -lOpenCL itself.
+            OPENCL_LINK_PATH="$TOP_PATH/ffmpeg/cppbuild/opencl-$PLATFORM$EXTENSION"
+            mkdir -p "$OPENCL_LINK_PATH"
+            ln -sf "$OPENCL_PATH/lib/libOpenCL.so.1" "$OPENCL_LINK_PATH/libOpenCL.so"
+            OPENCL_LDFLAGS="-L$OPENCL_LINK_PATH $OPENCL_LDFLAGS"
+        elif [[ "$PLATFORM" == windows-* ]]; then
             if [[ ! -f "$OPENCL_PATH/include/CL/cl_d3d11.h" ]]; then
                 echo "Error: OpenCL D3D11 sharing header not found: $OPENCL_PATH/include/CL/cl_d3d11.h"
                 exit 1
