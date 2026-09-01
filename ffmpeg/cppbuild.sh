@@ -68,7 +68,7 @@ download https://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENC
 download https://sourceforge.net/projects/opencore-amr/files/vo-amrwbenc/$VO_AMRWBENC.tar.gz/download $VO_AMRWBENC.tar.gz
 download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
 download https://github.com/cisco/openh264/archive/v$OPENH264_VERSION.tar.gz openh264-$OPENH264_VERSION.tar.gz
-download https://code.videolan.org/videolan/x264/-/archive/stable/$X264.tar.gz $X264.tar.gz
+download https://github.com/mirror/x264/archive/refs/heads/stable.tar.gz $X264.tar.gz
 download https://github.com/videolan/x265/archive/$X265.tar.gz x265-$X265.tar.gz
 download https://github.com/webmproject/libvpx/archive/v$VPX_VERSION.tar.gz libvpx-$VPX_VERSION.tar.gz
 download https://ftp.osuosl.org/pub/blfs/conglomeration/alsa-lib/alsa-lib-$ALSA_VERSION.tar.bz2 alsa-lib-$ALSA_VERSION.tar.bz2
@@ -89,7 +89,7 @@ cd $PLATFORM$EXTENSION
 INSTALL_PATH=`pwd`
 case $PLATFORM in
     linux-arm64 | linux-x86_64 | macosx-arm64 | macosx-x86_64 | windows-x86_64)
-        OPENCL_PATH="$TOP_PATH/opencl/cppbuild/$PLATFORM"
+        OPENCL_PATH="${BUILD_PATH:-$TOP_PATH/opencl/cppbuild/$PLATFORM}"
         OPENCL_CONFIG="--enable-opencl"
         OPENCL_CFLAGS="-I$OPENCL_PATH/include"
         OPENCL_LDFLAGS="-L$OPENCL_PATH/lib"
