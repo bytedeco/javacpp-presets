@@ -60,7 +60,7 @@ FFMPEG_VERSION=8.1.2
 # with the unsupported FFmpeg 8.1 Changelog hunk already removed.
 V4L2_REQUEST_PATCH=ffmpeg-v4l2-request-20847-ffmpeg-8.1.patch
 download https://www.nasm.us/pub/nasm/releasebuilds/$NASM_VERSION/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
-download https://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
+download https://github.com/madler/zlib/releases/download/v${ZLIB#zlib-}/$ZLIB.tar.gz $ZLIB.tar.gz
 download https://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
 download https://ftp.osuosl.org/pub/xiph/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
 download https://archive.mozilla.org/pub/opus/$OPUS.tar.gz $OPUS.tar.gz
