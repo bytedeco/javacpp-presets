@@ -90,6 +90,9 @@ INSTALL_PATH=`pwd`
 case $PLATFORM in
     linux-arm64 | linux-x86_64 | macosx-arm64 | macosx-x86_64 | windows-x86_64)
         OPENCL_PATH="${BUILD_PATH:-$TOP_PATH/opencl/cppbuild/$PLATFORM}"
+        if [[ "$PLATFORM" == windows-* ]]; then
+            OPENCL_PATH="$(cygpath -u "$OPENCL_PATH")"
+        fi
         OPENCL_CONFIG="--enable-opencl"
         OPENCL_CFLAGS="-I$OPENCL_PATH/include"
         OPENCL_LDFLAGS="-L$OPENCL_PATH/lib"
@@ -101,6 +104,8 @@ case $PLATFORM in
             mkdir -p "$OPENCL_LINK_PATH"
             ln -sf "$OPENCL_PATH/lib/libOpenCL.so.1" "$OPENCL_LINK_PATH/libOpenCL.so"
             OPENCL_LDFLAGS="-L$OPENCL_LINK_PATH $OPENCL_LDFLAGS"
+        elif [[ "$PLATFORM" == macosx-* ]]; then
+            OPENCL_LIBS="-framework OpenCL"
         elif [[ "$PLATFORM" == windows-* ]]; then
             if [[ ! -f "$OPENCL_PATH/include/CL/cl_d3d11.h" ]]; then
                 echo "Error: OpenCL D3D11 sharing header not found: $OPENCL_PATH/include/CL/cl_d3d11.h"
