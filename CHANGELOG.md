@@ -1,4 +1,5 @@
 
+ * Map full C API of OpenVINO ([pull #1801](https://github.com/bytedeco/javacpp-presets/pull/1801))
  * Enable OpenCL acceleration for FFmpeg ([issue #1800](https://github.com/bytedeco/javacpp-presets/pull/1800))
 
 ### August 10, 2026 version 1.5.14
