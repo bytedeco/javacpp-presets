@@ -39,7 +39,25 @@ import org.bytedeco.opencl.presets.OpenCL;
         @Platform(
             value = {"linux-x86_64"},
             include = {
-                "openvino/c/openvino.h"
+                "openvino/c/openvino.h",
+                "openvino/c/auto/properties.h",
+                "openvino/c/ov_common.h",
+                "openvino/c/ov_compiled_model.h",
+                "openvino/c/ov_core.h",
+                "openvino/c/ov_dimension.h",
+                "openvino/c/ov_infer_request.h",
+                "openvino/c/ov_layout.h",
+                "openvino/c/ov_model.h",
+                "openvino/c/ov_node.h",
+                "openvino/c/ov_partial_shape.h",
+                "openvino/c/ov_prepostprocess.h",
+                "openvino/c/ov_property.h",
+                "openvino/c/ov_rank.h",
+                "openvino/c/ov_remote_context.h",
+                "openvino/c/ov_shape.h",
+                "openvino/c/ov_tensor.h",
+                "openvino/c/ov_util.h",
+                "openvino/c/gpu/gpu_plugin_properties.h"
             },
             link = {"openvino_c@.2621#", "openvino@.2621#"},
             preloadresource = {"runtime/lib/intel64/"},
@@ -65,7 +83,25 @@ import org.bytedeco.opencl.presets.OpenCL;
         @Platform(
             value = {"macosx-arm64"},
             include = {
-                "openvino/c/openvino.h"
+                "openvino/c/openvino.h",
+                "openvino/c/auto/properties.h",
+                "openvino/c/ov_common.h",
+                "openvino/c/ov_compiled_model.h",
+                "openvino/c/ov_core.h",
+                "openvino/c/ov_dimension.h",
+                "openvino/c/ov_infer_request.h",
+                "openvino/c/ov_layout.h",
+                "openvino/c/ov_model.h",
+                "openvino/c/ov_node.h",
+                "openvino/c/ov_partial_shape.h",
+                "openvino/c/ov_prepostprocess.h",
+                "openvino/c/ov_property.h",
+                "openvino/c/ov_rank.h",
+                "openvino/c/ov_remote_context.h",
+                "openvino/c/ov_shape.h",
+                "openvino/c/ov_tensor.h",
+                "openvino/c/ov_util.h",
+                "openvino/c/gpu/gpu_plugin_properties.h"
             },
             link = {"openvino_c@.2610", "openvino@.2610"},
             preloadresource = {
@@ -90,7 +126,25 @@ import org.bytedeco.opencl.presets.OpenCL;
         @Platform(
             value = {"windows-x86_64"},
             include = {
-                "openvino/c/openvino.h"
+                "openvino/c/openvino.h",
+                "openvino/c/auto/properties.h",
+                "openvino/c/ov_common.h",
+                "openvino/c/ov_compiled_model.h",
+                "openvino/c/ov_core.h",
+                "openvino/c/ov_dimension.h",
+                "openvino/c/ov_infer_request.h",
+                "openvino/c/ov_layout.h",
+                "openvino/c/ov_model.h",
+                "openvino/c/ov_node.h",
+                "openvino/c/ov_partial_shape.h",
+                "openvino/c/ov_prepostprocess.h",
+                "openvino/c/ov_property.h",
+                "openvino/c/ov_rank.h",
+                "openvino/c/ov_remote_context.h",
+                "openvino/c/ov_shape.h",
+                "openvino/c/ov_tensor.h",
+                "openvino/c/ov_util.h",
+                "openvino/c/gpu/gpu_plugin_properties.h"
             },
             link = {"openvino_c", "openvino"},
             preloadresource = {
@@ -98,6 +152,9 @@ import org.bytedeco.opencl.presets.OpenCL;
                 "runtime/3rdparty/tbb/bin/"
             },
             preload = {
+                "tbb12",
+                "openvino",
+                "openvino_c",
                 "openvino_auto_batch_plugin",
                 "openvino_auto_plugin",
                 "openvino_hetero_plugin",
@@ -109,8 +166,7 @@ import org.bytedeco.opencl.presets.OpenCL;
                 "openvino_paddle_frontend",
                 "openvino_pytorch_frontend",
                 "openvino_tensorflow_frontend",
-                "openvino_tensorflow_lite_frontend",
-                "tbb12"
+                "openvino_tensorflow_lite_frontend"
             },
             resource = {"runtime"}
         ),
@@ -123,9 +179,29 @@ public class openvino implements InfoMapper {
 
     @Override public void map(InfoMap infoMap) {
         infoMap.put(new org.bytedeco.javacpp.tools.Info("extern", "__cdecl").cppTypes().annotations())
+               // JavaCPP's lightweight preprocessor does not evaluate OpenVINO's compiler/platform tests.
+               // Expand the public declaration macros directly, while the generated native code retains the
+               // original header definitions (including __cdecl on Windows).
+               .put(new org.bytedeco.javacpp.tools.Info("OPENVINO_C_API").cppText("#define OPENVINO_C_API(...) __VA_ARGS__"))
+               .put(new org.bytedeco.javacpp.tools.Info("OPENVINO_C_VAR").cppText("#define OPENVINO_C_VAR(...) __VA_ARGS__"))
                .put(new org.bytedeco.javacpp.tools.Info("OPENVINO_C_API_EXTERN", "OPENVINO_C_API_CALLBACK").skip())
+               // JavaCPP cannot expand C varargs. These overloads cover the property-pair form used by
+               // OpenVINO's C API while retaining the generated zero-property overloads.
+               .put(new org.bytedeco.javacpp.tools.Info("ov_core_compile_model").javaText(
+                       "public static native @Cast(\"ov_status_e\") int ov_core_compile_model(@Const ov_core_t core, @Const ov_model_t model, String device_name, @Cast(\"const size_t\") long property_args_size, @ByPtrPtr ov_compiled_model_t compiled_model);\n"
+                     + "public static native @Cast(\"ov_status_e\") int ov_core_compile_model(@Const ov_core_t core, @Const ov_model_t model, String device_name, @Cast(\"const size_t\") long property_args_size, @ByPtrPtr ov_compiled_model_t compiled_model, String property_key, String property_value);\n"))
+               .put(new org.bytedeco.javacpp.tools.Info("ov_core_create_context").javaText(
+                       "public static native @Cast(\"ov_status_e\") int ov_core_create_context(@Const ov_core_t core, String device_name, @Cast(\"const size_t\") long context_args_size, @ByPtrPtr ov_remote_context_t context);\n"
+                     + "public static native @Cast(\"ov_status_e\") int ov_core_create_context(@Const ov_core_t core, String device_name, @Cast(\"const size_t\") long context_args_size, @ByPtrPtr ov_remote_context_t context, String property_key, Pointer property_value);\n"
+                     + "public static native @Cast(\"ov_status_e\") int ov_core_create_context(@Const ov_core_t core, String device_name, @Cast(\"const size_t\") long context_args_size, @ByPtrPtr ov_remote_context_t context, String property_key1, String property_value1, String property_key2, Pointer property_value2, String property_key3, Pointer property_value3);\n"))
+               .put(new org.bytedeco.javacpp.tools.Info("ov_core_compile_model_with_context").javaText(
+                       "public static native @Cast(\"ov_status_e\") int ov_core_compile_model_with_context(@Const ov_core_t core, @Const ov_model_t model, @Const ov_remote_context_t context, @Cast(\"const size_t\") long property_args_size, @ByPtrPtr ov_compiled_model_t compiled_model);\n"
+                     + "public static native @Cast(\"ov_status_e\") int ov_core_compile_model_with_context(@Const ov_core_t core, @Const ov_model_t model, @Const ov_remote_context_t context, @Cast(\"const size_t\") long property_args_size, @ByPtrPtr ov_compiled_model_t compiled_model, String property_key, String property_value);\n"))
+               .put(new org.bytedeco.javacpp.tools.Info("ov_remote_context_create_tensor").javaText(
+                       "public static native @Cast(\"ov_status_e\") int ov_remote_context_create_tensor(@Const ov_remote_context_t context, @Cast(\"const ov_element_type_e\") int type, @Const @ByVal ov_shape_t shape, @Cast(\"const size_t\") long object_args_size, @ByPtrPtr ov_tensor_t remote_tensor);\n"
+                     + "public static native @Cast(\"ov_status_e\") int ov_remote_context_create_tensor(@Const ov_remote_context_t context, @Cast(\"const ov_element_type_e\") int type, @Const @ByVal ov_shape_t shape, @Cast(\"const size_t\") long object_args_size, @ByPtrPtr ov_tensor_t remote_tensor, String property_key, Pointer property_value);\n"
+                     + "public static native @Cast(\"ov_status_e\") int ov_remote_context_create_tensor(@Const ov_remote_context_t context, @Cast(\"const ov_element_type_e\") int type, @Const @ByVal ov_shape_t shape, @Cast(\"const size_t\") long object_args_size, @ByPtrPtr ov_tensor_t remote_tensor, String property_key1, String property_value1, String property_key2, Pointer property_value2);\n"))
                .put(new org.bytedeco.javacpp.tools.Info("OV_BOOLEAN", "BOOLEAN").skip())
-               .put(new org.bytedeco.javacpp.tools.Info("ov_rank_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
-               .put(new org.bytedeco.javacpp.tools.Info("ov_dimension_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"));
+               .put(new org.bytedeco.javacpp.tools.Info("ov_dimension_t", "ov_rank_t").skip());
     }
 }
