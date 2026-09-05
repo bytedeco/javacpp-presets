@@ -31,15 +31,11 @@ import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
-import org.bytedeco.dnnl.presets.*;
-import org.bytedeco.openvino.presets.*;
-
 /**
  *
  * @author Samuel Audet
  */
 @Properties(
-    inherit = {dnnl.class, openvino.class},
     value = {
         @Platform(
             value = {"linux", "macosx", "windows"},
@@ -98,11 +94,89 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
         List<String> preloads = properties.get("platform.preload");
         List<String> resources = properties.get("platform.preloadresource");
 
-        // Only apply this at load time since we don't want to copy the CUDA libraries here
-        if (!Loader.isLoadLibraries() || extension == null || !extension.equals("-gpu")) {
+        // Only apply this at load time since we don't want to copy the optional libraries here
+        if (!Loader.isLoadLibraries()) {
             return;
         }
         int i = 0;
+
+        // dnnl
+        String[] dnnlLibs = {"gomp@.1", "iomp5", "omp", "tbb@.2", "dnnl@.3"};
+        for (String lib : dnnlLibs) {
+            if (!preloads.contains(lib)) {
+                preloads.add(i++, lib);
+            }
+        }
+        resources.add("/org/bytedeco/dnnl/");
+
+        // openvino
+        String[] openvinoLibs = {};
+        if (platform.equals("linux-x86_64")) {
+            openvinoLibs = new String[] {
+                "tbb:runtime/3rdparty/tbb/lib/libtbb.so.12",
+                "openvino:runtime/lib/intel64/libopenvino.so.2621",
+                "openvino_c:runtime/lib/intel64/libopenvino_c.so.2621",
+                "openvino_auto_batch_plugin:runtime/lib/intel64/libopenvino_auto_batch_plugin.so",
+                "openvino_auto_plugin:runtime/lib/intel64/libopenvino_auto_plugin.so",
+                "openvino_hetero_plugin:runtime/lib/intel64/libopenvino_hetero_plugin.so",
+                "openvino_intel_cpu_plugin:runtime/lib/intel64/libopenvino_intel_cpu_plugin.so",
+                "openvino_intel_gpu_plugin:runtime/lib/intel64/libopenvino_intel_gpu_plugin.so",
+                "openvino_intel_npu_plugin:runtime/lib/intel64/libopenvino_intel_npu_plugin.so",
+                "openvino_ir_frontend:runtime/lib/intel64/libopenvino_ir_frontend.so.2621",
+                "openvino_onnx_frontend:runtime/lib/intel64/libopenvino_onnx_frontend.so.2621",
+                "openvino_paddle_frontend:runtime/lib/intel64/libopenvino_paddle_frontend.so.2621",
+                "openvino_pytorch_frontend:runtime/lib/intel64/libopenvino_pytorch_frontend.so.2621",
+                "openvino_tensorflow_frontend:runtime/lib/intel64/libopenvino_tensorflow_frontend.so.2621",
+                "openvino_tensorflow_lite_frontend:runtime/lib/intel64/libopenvino_tensorflow_lite_frontend.so.2621"
+            };
+        } else if (platform.equals("macosx-arm64")) {
+            openvinoLibs = new String[] {
+                "tbb:runtime/3rdparty/tbb/lib/libtbb.12.dylib",
+                "openvino:runtime/lib/arm64/Release/libopenvino.2621.dylib",
+                "openvino_c:runtime/lib/arm64/Release/libopenvino_c.2621.dylib",
+                "openvino_auto_batch_plugin:runtime/lib/arm64/Release/libopenvino_auto_batch_plugin.so",
+                "openvino_auto_plugin:runtime/lib/arm64/Release/libopenvino_auto_plugin.so",
+                "openvino_hetero_plugin:runtime/lib/arm64/Release/libopenvino_hetero_plugin.so",
+                "openvino_arm_cpu_plugin:runtime/lib/arm64/Release/libopenvino_arm_cpu_plugin.so",
+                "openvino_ir_frontend:runtime/lib/arm64/Release/libopenvino_ir_frontend.2621.dylib",
+                "openvino_onnx_frontend:runtime/lib/arm64/Release/libopenvino_onnx_frontend.2621.dylib",
+                "openvino_paddle_frontend:runtime/lib/arm64/Release/libopenvino_paddle_frontend.2621.dylib",
+                "openvino_pytorch_frontend:runtime/lib/arm64/Release/libopenvino_pytorch_frontend.2621.dylib",
+                "openvino_tensorflow_frontend:runtime/lib/arm64/Release/libopenvino_tensorflow_frontend.2621.dylib",
+                "openvino_tensorflow_lite_frontend:runtime/lib/arm64/Release/libopenvino_tensorflow_lite_frontend.2621.dylib"
+            };
+        } else if (platform.equals("windows-x86_64")) {
+            openvinoLibs = new String[] {
+                "tbb12:runtime/3rdparty/tbb/bin/tbb12.dll",
+                "openvino:runtime/bin/intel64/Release/openvino.dll",
+                "openvino_c:runtime/bin/intel64/Release/openvino_c.dll",
+                "openvino_auto_batch_plugin:runtime/bin/intel64/Release/openvino_auto_batch_plugin.dll",
+                "openvino_auto_plugin:runtime/bin/intel64/Release/openvino_auto_plugin.dll",
+                "openvino_hetero_plugin:runtime/bin/intel64/Release/openvino_hetero_plugin.dll",
+                "openvino_intel_cpu_plugin:runtime/bin/intel64/Release/openvino_intel_cpu_plugin.dll",
+                "openvino_intel_gpu_plugin:runtime/bin/intel64/Release/openvino_intel_gpu_plugin.dll",
+                "openvino_intel_npu_plugin:runtime/bin/intel64/Release/openvino_intel_npu_plugin.dll",
+                "openvino_ir_frontend:runtime/bin/intel64/Release/openvino_ir_frontend.dll",
+                "openvino_onnx_frontend:runtime/bin/intel64/Release/openvino_onnx_frontend.dll",
+                "openvino_paddle_frontend:runtime/bin/intel64/Release/openvino_paddle_frontend.dll",
+                "openvino_pytorch_frontend:runtime/bin/intel64/Release/openvino_pytorch_frontend.dll",
+                "openvino_tensorflow_frontend:runtime/bin/intel64/Release/openvino_tensorflow_frontend.dll",
+                "openvino_tensorflow_lite_frontend:runtime/bin/intel64/Release/openvino_tensorflow_lite_frontend.dll"
+            };
+        }
+        for (String lib : openvinoLibs) {
+            if (!preloads.contains(lib)) {
+                preloads.add(i++, lib);
+            }
+        }
+        if (openvinoLibs.length > 0) {
+            resources.add("/org/bytedeco/openvino/");
+        }
+
+        // the following only applies when CUDA is enabled
+        if (extension == null || !extension.equals("-gpu")) {
+            return;
+        }
         if (platform.startsWith("windows")) {
             preloads.add(i++, "zlibwapi");
         }
