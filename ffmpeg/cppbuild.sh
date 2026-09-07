@@ -1592,8 +1592,11 @@ EOF
         mkdir -p build_release
         cd build_release
         $CMAKE .. -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DBUILD_TEST=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++
-        make -j $MAKEJ
-        make install
+        $CMAKE --build . --target rockchip_mpp_static --parallel $MAKEJ
+        mkdir -p $INSTALL_PATH/lib/pkgconfig $INSTALL_PATH/include/rockchip
+        cp mpp/librockchip_mpp.a $INSTALL_PATH/lib/
+        cp rockchip_mpp.pc $INSTALL_PATH/lib/pkgconfig/
+        cp ../inc/*.h $INSTALL_PATH/include/rockchip/
         # MPP and libvpx export the same VP9 probability tables. MPP combines all of its objects into
         # one relocatable object, so keep its private copies local to avoid duplicate definitions.
         aarch64-linux-gnu-objcopy \
