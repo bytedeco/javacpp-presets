@@ -13,11 +13,13 @@
 // - and some exceptions commented below
 #include "torch/csrc/utils/python_stub.h"
 
-#include "torch/headeronly/macros/cmake_macros.h"
-#include "torch/headeronly/macros/Export.h"
-#include "torch/headeronly/macros/Macros.h"
+
+#include <torch/headeronly/macros/cmake_macros.h>
+#include <torch/headeronly/macros/Export.h>
+#include <torch/headeronly/macros/Macros.h>
 #include <torch/headeronly/util/HeaderOnlyArrayRef.h>
-#include "torch/headeronly/util/bit_cast.h"
+#include <torch/headeronly/util/bit_cast.h>
+#include <torch/headeronly/util/complex_utils.h>
 #include <torch/headeronly/util/floating_point_utils.h>
 #include <torch/headeronly/util/BFloat16.h>
 #include <torch/headeronly/util/Float4_e2m1fn_x2.h>
@@ -38,7 +40,7 @@
 #include <torch/headeronly/core/Layout.h>
 #include <torch/headeronly/core/MemoryFormat.h>
 #include <torch/headeronly/core/ScalarType.h>
-#include "torch/headeronly/core/enum_tag.h"
+#include <torch/headeronly/core/enum_tag.h>
 
 #include "c10/macros/cmake_macros.h"
 #include "c10/macros/Export.h"
@@ -52,6 +54,7 @@
 // #include "c10/util/string_view.h" // Not mapped. Using custom adapter instead.
 #include "c10/util/StringUtil.h"
 #include "c10/util/Exception.h"
+#include "c10/util/ScopeExit.h"
 #include "c10/core/Device.h"
 #include "c10/core/DeviceCapability.h"
 #include "c10/core/DispatchKey.h"
@@ -81,7 +84,7 @@
 #include "c10/util/Float8_e4m3fnuz-inl.h"
 #include "c10/util/Float8_e4m3fnuz.h"
 #include "c10/util/complex_math.h"
-#include "c10/util/complex_utils.h"
+//#include "c10/util/complex_utils.h"
 #include "c10/util/complex.h"
 #include "c10/util/Half-inl.h"
 #include "c10/util/Half.h"
@@ -402,7 +405,7 @@
 #include "ATen/ops/chain_matmul.h"
 #include "ATen/ops/chalf.h"
 #include "ATen/ops/channel_shuffle.h"
-#include "ATen/ops/cholesky.h"
+// #include "ATen/ops/cholesky.h"
 #include "ATen/ops/cholesky_inverse.h"
 #include "ATen/ops/cholesky_solve.h"
 #include "ATen/ops/choose_qparams_optimized.h"
@@ -917,7 +920,7 @@
 #include "ATen/ops/q_per_channel_zero_points.h"
 #include "ATen/ops/q_scale.h"
 #include "ATen/ops/q_zero_point.h"
-#include "ATen/ops/qr.h"
+// #include "ATen/ops/qr.h"
 #include "ATen/ops/qscheme.h"
 #include "ATen/ops/quantile.h"
 #include "ATen/ops/quantize_per_channel.h"
@@ -1487,6 +1490,8 @@
 #include "torch/csrc/distributed/c10d/Types.hpp"
 #include "torch/csrc/distributed/c10d/Utils.hpp"
 #include "torch/csrc/distributed/c10d/Work.hpp"
+#include "torch/csrc/distributed/c10d/Hooks.hpp"
+#include "torch/csrc/distributed/c10d/Window.hpp"
 #include "torch/csrc/distributed/c10d/debug.h"
 #include "torch/csrc/distributed/c10d/Backend.hpp"
 #include "torch/csrc/distributed/c10d/ProcessGroup.hpp"

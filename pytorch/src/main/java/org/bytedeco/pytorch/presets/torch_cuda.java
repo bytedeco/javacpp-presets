@@ -178,7 +178,7 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info("c10d::Backend::Options").pointerTypes("Backend.Options"))
 
             .put(new Info("c10::DeviceIndex", "at::DeviceIndex").valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
-            .put(new Info("c10::StreamId").valueTypes("long"))
+            .put(new Info("c10::StreamId", "c10::CaptureId_t", "CaptureId_t").cast().valueTypes("long"))
             .put(new Info("c10::cuda::CaptureStatus").valueTypes("int").cast().skip()) // Enum doesn't parse
             .put(new Info("std::pair<std::vector<c10::cuda::DeviceAssertionsData>,std::vector<c10::cuda::CUDAKernelLaunchInfo> >").pointerTypes("DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair").define())
             .put(new Info("c10::impl::GPUTrace::gpuTraceState").skip())

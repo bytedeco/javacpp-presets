@@ -301,7 +301,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                 "__ubsan_ignore_float_divide_by_zero__", "__ubsan_ignore_undefined__", "__ubsan_ignore_signed_int_overflow__", "__ubsan_ignore_function__",
                 "__ubsan_ignore_float_cast_overflow__", "C10_ALWAYS_INLINE_ATTRIBUTE", "C10_TYPENAME_CONSTEXPR",
                 "C10_CLANG_DIAGNOSTIC_IGNORE", "C10_CLANG_DIAGNOSTIC_PUSH", "C10_CLANG_DIAGNOSTIC_POP", "C10_ATTR_VISIBILITY_HIDDEN", "C10_ERASE",
-                "C10_UID", "C10_NODISCARD", "C10_UNUSED", "C10_USED", "C10_RESTRICT", "C10_NOINLINE", "C10_ALWAYS_INLINE", "C10_FALLTHROUGH",
+                "C10_UID", "C10_LIFETIMEBOUND", "C10_NODISCARD", "C10_UNUSED", "C10_USED", "C10_RESTRICT", "C10_NOINLINE", "C10_ALWAYS_INLINE", "C10_FALLTHROUGH",
                 "C10_HOST_DEVICE", "C10_DEVICE", "C10_HOST", "C10_LAUNCH_BOUNDS_0", "C10_HIP_HOST_DEVICE", "C10_WARP_SIZE", "C10_IOS", "C10_MOBILE",
                 "C10_HOST_CONSTEXPR", "CONSTEXPR_EXCEPT_WIN_CUDA", "C10_HOST_CONSTEXPR_EXCEPT_WIN_CUDA", "C10_ALWAYS_INLINE_UNLESS_MOBILE",
                 "alignas", "COMPLEX_INTEGER_OP_TEMPLATE_CONDITION", "C10_DEVICE_HOST_FUNCTION", "FORCE_INLINE_APPLE",
@@ -328,6 +328,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                 "defined(__aarch64__) && !defined(__CUDACC__)",
                 "defined(__aarch64__) && !defined(C10_MOBILE) && !defined(__CUDACC__)",
                 "defined(__HIP_PLATFORM_HCC__)", "defined(__HIPCC__)",
+                "defined(C10_RISCVTSC)",
                 "defined(_MSC_VER)", "_WIN32",
                 "defined(USE_ROCM)", "USE_ROCM", "SYCL_LANGUAGE_VERSION",
                 "defined(CUDA_VERSION) && CUDA_VERSION >= 11000",
@@ -353,7 +354,9 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         sharedMap(infoMap);
 
         infoMap
-            .put(new Info("AutogradState.h").linePatterns(".* bool .*=.*").skip())
+            .put(new Info("AutogradState.h", "TensorImpl.h", "TensorOptions.h").linePatterns(".* uint8_t .* : 2 =", ".*;",
+                                                                                             ".* bool .* : 1 =.*").skip())
+            .put(new Info("TensorBase.h").linePatterns("namespace symint \\{", "\\} // namespace symint").skip())
             .put(new Info("ArrayRef.h").linePatterns("using IntList.*", ".*ArrayRef<int64_t>;").skip())
             .put(new Info("model_container_runner.h").linePatterns("using CreateAOTIModelRunnerFunc.*", "}*;").skip())
             .put(new Info("ordered_dict.h").linePatterns(".*class Item;.*").skip())
@@ -572,6 +575,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         //// std::variant
         infoMap
 //            .put(new Info("std::variant<int,std::vector<int> >").pointerTypes("IntVectorVariant").define())
+            .put(new Info("std::variant<std::unordered_set<std::string>,std::vector<std::string> >").pointerTypes("StringHandles").define())
             .put(new Info("std::variant<torch::enumtype::kLinear,torch::enumtype::kConv1D,torch::enumtype::kConv2D,torch::enumtype::kConv3D,"
                           + "torch::enumtype::kConvTranspose1D,torch::enumtype::kConvTranspose2D,torch::enumtype::kConvTranspose3D,"
                           + "torch::enumtype::kSigmoid,torch::enumtype::kTanh,torch::enumtype::kReLU,torch::enumtype::kLeakyReLU>",
@@ -695,6 +699,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::vector<const char*>").pointerTypes("BytePointerVector").define())
 //            .put(new Info("std::vector<int>").pointerTypes("IntVector").define())
             .put(new Info("std::vector<int64_t>", "std::tuple<std::vector<int64_t>,std::vector<int64_t> >").cast().pointerTypes("LongVector").define())
+            .put(new Info("c10::SmallVector<int64_t,5>").cast().pointerTypes("SmallLongVector").define())
             .put(new Info("std::vector<double>").cast().pointerTypes("DoubleVector").define())
             .put(new Info("std::vector<size_t>").cast().pointerTypes("SizeTVector").define())
             .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
@@ -770,6 +775,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             new ArrayInfo("ArgumentDef").elementTypes("c10::detail::infer_schema::ArgumentDef"),
             new ArrayInfo("BFloat16") /*.itPointerType("ShortPointer") */.elementTypes("c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::BFloat16>",
                                                                                        "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::BFloat16>::t)"),
+            new ArrayInfo("BFloat16Complex") /*.itPointerType("FloatPointer") */.elementTypes("c10::complex<c10::BFloat16>"),
             new ArrayInfo("Block").elementTypes("torch::jit::Block*").itPointerType("PointerPointer<Block>"),
             new ArrayInfo("Bool").itPointerType("BoolPointer").elementTypes("bool", "c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::Bool>",
                                                                                     "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Bool>::t)").elementValueType("boolean"),
@@ -780,6 +786,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             new ArrayInfo("EnumNameValue").elementTypes("c10::EnumNameValue"),
             new ArrayInfo("Float").itPointerType("FloatPointer").elementTypes("float").elementValueType("float"),
             new ArrayInfo("FloatComplex") /*.itPointerType("FloatPointer") */.elementTypes("c10::complex<float>"),
+
             new ArrayInfo("Future").elementTypes("c10::intrusive_ptr<c10::ivalue::Future>"),
             new ArrayInfo("Half") /*.itPointerType("ShortPointer") */.elementTypes("c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::Half>",
                                                                                    "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Half>::t)"),
@@ -1172,6 +1179,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             new PointerInfo("c10d::Store"),
             new PointerInfo("c10d::ProcessGroup::Options").javaBaseName("ProcessGroup.Options"),
             new PointerInfo("c10d::Work"),
+            new PointerInfo("c10d::Window"),
             new PointerInfo("c10d::Backend"),
             new PointerInfo("c10d::Backend::Options").javaBaseName("Backend.Options"),
             new PointerInfo("c10d::_SupplementBase"),
@@ -1266,9 +1274,11 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         infoMap
             .put(new Info("c10::complex<double>").pointerTypes("DoubleComplex"))
             .put(new Info("c10::complex<float>").pointerTypes("FloatComplex"))
+            .put(new Info("c10::complex<c10::BFloat16>").pointerTypes("BFloat16Complex"))
             .put(new Info("c10::complex<c10::Half>").pointerTypes("HalfComplex"))
             .put(new Info("c10::complex<double>::real", "c10::complex<double>::imag",
                 "c10::complex<float>::real", "c10::complex<float>::imag",
+                "c10::complex<c10::BFloat16>::real", "c10::complex<c10::BFloat16>::imag",
                 "c10::complex<c10::Half>::real", "c10::complex<c10::Half>::imag").annotations("@org.bytedeco.javacpp.annotation.Function"))
             .put(new Info( // Not implemented in c10::complex<c10::Half> template specialization:
                 "c10::complex<c10::Half>::operator =(c10::Half)",
@@ -1294,6 +1304,32 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                     "public native @ByRef @Name(\"operator -=\") HalfComplex subtractPut(@Const @ByRef HalfComplex other);\n" +
                     "\n" +
                     "public native @ByRef @Name(\"operator *=\") HalfComplex multiplyPut(@Const @ByRef HalfComplex other);"
+                )
+            )
+            .put(new Info( // Not implemented in c10::complex<c10::BFloat16> template specialization:
+                "c10::complex<c10::BFloat16>::operator =(c10::BFloat16)",
+                "c10::complex<c10::BFloat16>::real(c10::BFloat16)",
+                "c10::complex<c10::BFloat16>::imag(c10::BFloat16)",
+                "c10::complex<c10::BFloat16>::operator const bool()",
+                "c10::complex<c10::BFloat16>::operator +=(c10::BFloat16)",
+                "c10::complex<c10::BFloat16>::operator -=(c10::BFloat16)",
+                "c10::complex<c10::BFloat16>::operator *=(c10::BFloat16)",
+                "c10::complex<c10::BFloat16>::operator /=(c10::BFloat16)"
+            ).skip())
+            .put(new Info("c10::complex<c10::BFloat16>::complex(const c10::BFloat16&, const c10::BFloat16&)").javaText( // Second argument not optional + add specific functions
+                    "public BFloat16Complex(BFloat16 re, BFloat16 im) { super((Pointer)null); allocate(re, im); }\n" +
+                    "private native void allocate(@Const @ByRef BFloat16 re, @Const @ByRef(nullValue = \"c10::BFloat16()\") BFloat16 im);\n" +
+                    "public BFloat16Complex(@Const @ByRef FloatComplex value) { super((Pointer)null); allocate(value); }\n" +
+                    "private native void allocate(@Const @ByRef FloatComplex value);\n" +
+                    "\n" +
+                    "// Conversion operator\n" +
+                    "public native @ByVal @Name(\"operator c10::complex<float>\") FloatComplex asFloatComplex();\n" +
+                    "\n" +
+                    "public native @ByRef @Name(\"operator +=\") BFloat16Complex addPut(@Const @ByRef BFloat16Complex other);\n" +
+                    "\n" +
+                    "public native @ByRef @Name(\"operator -=\") BFloat16Complex subtractPut(@Const @ByRef BFloat16Complex other);\n" +
+                    "\n" +
+                    "public native @ByRef @Name(\"operator *=\") BFloat16Complex multiplyPut(@Const @ByRef BFloat16Complex other);"
                 )
             )
         ;
@@ -2340,8 +2376,9 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             {"at::Half", "Half"},
             {"float", "float"},
             {"double", "double"},
-            {"c10::complex<float>", "ComplexFloat"},
-            {"c10::complex<double>", "ComplexDouble"},
+            {"c10::complex<float>", "FloatComplex"},
+            {"c10::complex<double>", "DoubleComplex"},
+            {"c10::complex<c10::BFloat16>", "BFloat16Complex"},
             {"bool", "boolean"},
             {"at::BFloat16", "BFloat16"},
             {"at::Float8_e4m3fn", "Float8_e4m3fn"},
@@ -2674,10 +2711,13 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             "c10::operator <<(std::ostream&, c10::SourceLocation&)",
             "c10d::checkForNan", // Not exported
             "c10d::Logger::operator <<(std::ostream&, const c10d::Logger&)", // No definition
+            "c10d::ProcessGroup::registerPreHook",
+            "c10d::ProcessGroup::registerPostHook",
             "c10d::ProcessGroupGloo::createProcessGroupGloo", // No definition
             "c10::TensorImpl::set_allow_tensor_metadata_change",
             "caffe2::serialize::detail::getOffset",
             "caffe2::serialize::detail::getPadding",
+            "std::ranges::enable_borrowed_range",
             "torch::autograd::add_node_to_current_graph_task_exec_info",
             "torch::autograd::maybe_override_stale_capture_stream",
             "torch::autograd::set_device(int)",

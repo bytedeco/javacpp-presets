@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>pytorch</artifactId>
-  <version>2.13.0-${project.parent.version}</version>
+  <version>2.14.0-${project.parent.version}</version>
   <name>JavaCPP Presets for PyTorch</name>
 
   <dependencies>
@@ -84,6 +84,12 @@
             <includePath>${basedir}/../numpy/src/main/resources/org/bytedeco/numpy/include/</includePath>
             <includePath>${basedir}/../numpy/target/classes/org/bytedeco/numpy/include/</includePath>
             <includePath>${basedir}/../numpy/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/pytorch/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/pytorch/build/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/pytorch/build/aten/src/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/pytorch/aten/src/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/pytorch/third_party/gloo/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/pytorch/torch/csrc/api/include/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/torch/csrc/api/include/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
             <includePath>${basedir}/target/classes/org/bytedeco/${javacpp.packageName}/include/</includePath>
@@ -92,6 +98,7 @@
             <linkPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../cpython/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../numpy/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/pytorch/build/lib//</linkPath>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
           </linkPaths>
           <preloadPaths>
