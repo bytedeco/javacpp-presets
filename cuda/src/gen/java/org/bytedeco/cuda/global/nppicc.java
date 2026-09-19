@@ -13404,284 +13404,39 @@ public static native @Cast("NppStatus") int nppiUYVP_10u_ToRGB_16f_C3P3R_Ctx(@Ca
 
 /** 4:2:0 conversions */
 
-public static native @Cast("NppStatus") int nppiNV12_8u_ToUYVP_10u_P2C3R_Ctx(@Cast("const Npp8u*const*") PointerPointer pSrc, @Const IntPointer nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*") BytePointer pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiNV12_8u_ToUYVP_10u_P2C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, @Const IntPointer nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*") BytePointer pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiNV12_8u_ToUYVP_10u_P2C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, @Const IntBuffer nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiNV12_8u_ToUYVP_10u_P2C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, @Const int[] nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*") byte[] pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
 
-public static native @Cast("NppStatus") int nppiP010_16u_ToUYVP_10u_P3C3R_Ctx(@Cast("const Npp16u*const*") PointerPointer pSrc, int nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") BytePointer pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiP010_16u_ToUYVP_10u_P3C3R_Ctx(@Cast("const Npp16u*const*") @ByPtrPtr ShortPointer pSrc, int nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") BytePointer pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiP010_16u_ToUYVP_10u_P3C3R_Ctx(@Cast("const Npp16u*const*") @ByPtrPtr ShortBuffer pSrc, int nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiP010_16u_ToUYVP_10u_P3C3R_Ctx(@Cast("const Npp16u*const*") @ByPtrPtr short[] pSrc, int nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") byte[] pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
+
+
 
 /** 4:2:2 conversions */
 
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToP208_8u_C3C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int srcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*") BytePointer pDst, int dstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToP208_8u_C3C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int srcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*") ByteBuffer pDst, int dstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToP208_8u_C3C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int srcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*") byte[] pDst, int dstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
 
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToNV16_8u_C3P2R_Ctx(@Cast("const Npp8u*const") BytePointer pSrc, int nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u**") PointerPointer pDst, @Const IntPointer nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToNV16_8u_C3P2R_Ctx(@Cast("const Npp8u*const") BytePointer pSrc, int nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, @Const IntPointer nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToNV16_8u_C3P2R_Ctx(@Cast("const Npp8u*const") ByteBuffer pSrc, int nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, @Const IntBuffer nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToNV16_8u_C3P2R_Ctx(@Cast("const Npp8u*const") byte[] pSrc, int nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u**") @ByPtrPtr byte[] pDst, @Const int[] nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
 
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToV210_10u_C3C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") BytePointer pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToV210_10u_C3C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToV210_10u_C3C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") byte[] pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
 
-public static native @Cast("NppStatus") int nppiP208_8u_ToUYVP_10u_C3C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*") BytePointer pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiP208_8u_ToUYVP_10u_C3C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiP208_8u_ToUYVP_10u_C3C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*") byte[] pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
 
-public static native @Cast("NppStatus") int nppiNV16_8u_ToUYVP_10u_P2C3R_Ctx(@Cast("const Npp8u*const*") PointerPointer pSrc, @Const IntPointer nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*") BytePointer pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiNV16_8u_ToUYVP_10u_P2C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, @Const IntPointer nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*") BytePointer pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiNV16_8u_ToUYVP_10u_P2C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, @Const IntBuffer nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiNV16_8u_ToUYVP_10u_P2C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, @Const int[] nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*") byte[] pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
 
-public static native @Cast("NppStatus") int nppiV210_10u_ToUYVP_10u_C3C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") BytePointer pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiV210_10u_ToUYVP_10u_C3C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiV210_10u_ToUYVP_10u_C3C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") byte[] pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
 
-public static native @Cast("NppStatus") int nppiP210_16u_ToUYVP_10u_P2C3R_Ctx(@Cast("const Npp16u*const*") PointerPointer pSrc, @Const IntPointer nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") BytePointer pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiP210_16u_ToUYVP_10u_P2C3R_Ctx(@Cast("const Npp16u*const*") @ByPtrPtr ShortPointer pSrc, @Const IntPointer nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") BytePointer pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiP210_16u_ToUYVP_10u_P2C3R_Ctx(@Cast("const Npp16u*const*") @ByPtrPtr ShortBuffer pSrc, @Const IntBuffer nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiP210_16u_ToUYVP_10u_P2C3R_Ctx(@Cast("const Npp16u*const*") @ByPtrPtr short[] pSrc, @Const int[] nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") byte[] pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
+
+
+
+
+
+
+
 
 /** 4:4:4 conversions */
 
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToI444_8u_C3P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*const*") PointerPointer pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToI444_8u_C3P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*const*") @ByPtrPtr BytePointer pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToI444_8u_C3P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*const*") @ByPtrPtr ByteBuffer pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToI444_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*const*") @ByPtrPtr byte[] pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
 
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToYUV444_8u_C3C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                               @ByVal NppiPoint oSrcOffset,
-                                               @Cast("Npp8u*") BytePointer pDst, int nDstStep,
-                                               @ByVal NppiSize oSizeROI,
-                                               @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToYUV444_8u_C3C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                               @ByVal NppiPoint oSrcOffset,
-                                               @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
-                                               @ByVal NppiSize oSizeROI,
-                                               @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToYUV444_8u_C3C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                               @ByVal NppiPoint oSrcOffset,
-                                               @Cast("Npp8u*") byte[] pDst, int nDstStep,
-                                               @ByVal NppiSize oSizeROI,
-                                               @ByVal NppStreamContext nppStreamCtx);
 
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToY410_10u_C3C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") BytePointer pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToY410_10u_C3C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiUYVP_10u_ToY410_10u_C3C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") byte[] pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
 
-public static native @Cast("NppStatus") int nppiI444_8u_ToUYVP_10u_P3C3R_Ctx(@Cast("const Npp8u*const*") PointerPointer pSrc, int nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*") BytePointer pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiI444_8u_ToUYVP_10u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*") BytePointer pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiI444_8u_ToUYVP_10u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiI444_8u_ToUYVP_10u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep,
-                                             @ByVal NppiPoint oSrcOffset,
-                                             @Cast("Npp8u*") byte[] pDst, int nDstStep,
-                                             @ByVal NppiSize oSizeROI,
-                                             @ByVal NppStreamContext nppStreamCtx);
 
-public static native @Cast("NppStatus") int nppiYUV444_8u_ToUYVP_10u_C3C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                               @ByVal NppiPoint oSrcOffset,
-                                               @Cast("Npp8u*") BytePointer pDst, int nDstStep,
-                                               @ByVal NppiSize oSizeROI,
-                                               @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiYUV444_8u_ToUYVP_10u_C3C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                               @ByVal NppiPoint oSrcOffset,
-                                               @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
-                                               @ByVal NppiSize oSizeROI,
-                                               @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiYUV444_8u_ToUYVP_10u_C3C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                               @ByVal NppiPoint oSrcOffset,
-                                               @Cast("Npp8u*") byte[] pDst, int nDstStep,
-                                               @ByVal NppiSize oSizeROI,
-                                               @ByVal NppStreamContext nppStreamCtx);
 
-public static native @Cast("NppStatus") int nppiY410_10u_ToUYVP_10u_C3C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") BytePointer pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiY410_10u_ToUYVP_10u_C3C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiY410_10u_ToUYVP_10u_C3C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                              @ByVal NppiPoint oSrcOffset,
-                                              @Cast("Npp8u*") byte[] pDst, int nDstStep,
-                                              @ByVal NppiSize oSizeROI,
-                                              @ByVal NppStreamContext nppStreamCtx);
+
+
+
+
+
+
 
 /** \} UYVPTranscoding */
 

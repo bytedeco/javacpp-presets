@@ -42,6 +42,9 @@ public class nppicc implements InfoMapper {
     public void map(InfoMap infoMap) {
         nppc.initSkips(infoMap, "nppi_color_conversion.h");
         infoMap.put(new Info("nppiUYVP_10u_ToRGB_16u_C3P3R_Ctx", "nppiUYVP_10u_ToRGB_8u_C3AC4R_Ctx", "nppiRGB_8u_ToUYVP_10u_C3P3R_Ctx", "nppiUYVP_10u_ToRGB_8u_C3P3R_Ctx",
-                             "nppiHLSToBGR_8u_AC4R").skip());
+                             "nppiHLSToBGR_8u_AC4R", "nppiUYVP_10u_ToYUV444_8u_C3C3R_Ctx", "nppiYUV444_8u_ToUYVP_10u_C3C3R_Ctx", "nppiUYVP_10u_ToNV16_8u_C3P2R_Ctx",
+                             "nppiUYVP_10u_ToY410_10u_C3C3R_Ctx", "nppiUYVP_10u_ToV210_10u_C3C3R_Ctx", "nppiUYVP_10u_ToP208_8u_C3C3R_Ctx", "nppiP208_8u_ToUYVP_10u_C3C3R_Ctx",
+                             "nppiNV12_8u_ToUYVP_10u_P2C3R_Ctx", "nppiV210_10u_ToUYVP_10u_C3C3R_Ctx", "nppiP010_16u_ToUYVP_10u_P3C3R_Ctx", "nppiI444_8u_ToUYVP_10u_P3C3R_Ctx",
+                             "nppiNV16_8u_ToUYVP_10u_P2C3R_Ctx", "nppiP210_16u_ToUYVP_10u_P2C3R_Ctx", "nppiY410_10u_ToUYVP_10u_C3C3R_Ctx", "nppiUYVP_10u_ToI444_8u_C3P3R_Ctx").skip());
     }
 }
