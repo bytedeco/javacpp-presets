@@ -13,12 +13,12 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform</artifactId>
-            <version>13.3-9.25-1.5.15-SNAPSHOT</version>
+            <version>13.4-9.26-1.5.15-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform</artifactId>
-            <version>11.2-1.5.15-SNAPSHOT</version>
+            <version>11.3-1.5.15-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
