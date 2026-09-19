@@ -44,7 +44,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class nccl implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("defined(__CUDA_BF16_TYPES_EXIST__)").define(true))
-               .put(new Info("NCCL_COMM_NULL", "NCCL_CONFIG_UNDEF_INT", "NCCL_CONFIG_UNDEF_PTR", "NCCL_CONFIG_INITIALIZER", "NCCL_SIM_INFO_INITIALIZER").annotations().cppTypes())
+               .put(new Info("NCCL_COMM_NULL", "NCCL_CONFIG_INITIALIZER", "NCCL_SIM_INFO_INITIALIZER", "NCCL_CONFIG_INITIALIZER", "NCCL_COLLCONFIG_INITIALIZER").annotations().cppTypes())
+               .put(new Info("NCCL_CONFIG_UNDEF_INT", "NCCL_CONFIG_UNDEF_PTR").translate(false).cppTypes("int"))
+               .put(new Info("ncclConfigExt_t").pointerTypes("ncclConfigExt"))
                .put(new Info("ncclComm_t").valueTypes("ncclComm").pointerTypes("@ByPtrPtr ncclComm", "@Cast(\"ncclComm**\") PointerPointer"))
                .put(new Info("ncclParamHandle_t").valueTypes("ncclParamHandle").pointerTypes("@ByPtrPtr ncclParamHandle", "@Cast(\"ncclParamHandle**\") PointerPointer"))
                .put(new Info("ncclWindow_t").valueTypes("ncclWindow_vidmem").pointerTypes("@ByPtrPtr ncclWindow_vidmem", "@Cast(\"ncclWindow_vidmem**\") PointerPointer"));

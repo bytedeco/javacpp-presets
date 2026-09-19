@@ -25,9 +25,9 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * CUDA 13.3.1  https://developer.nvidia.com/cuda-zone
- * cuDNN 9.25.0.15  https://developer.nvidia.com/cudnn
- * NCCL 2.30.7  https://developer.nvidia.com/nccl
+ * CUDA 13.4.2  https://developer.nvidia.com/cuda-zone
+ * cuDNN 9.26.0.51  https://developer.nvidia.com/cudnn
+ * NCCL 2.31.2  https://developer.nvidia.com/nccl
  * nvCOMP 5.3.0.16  https://developer.nvidia.com/nvcomp
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
@@ -59,7 +59,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.cuda</groupId>
     <artifactId>mnistcudnn</artifactId>
-    <version>1.5.14</version>
+    <version>1.5.15-SNAPSHOT</version>
     <properties>
         <exec.mainClass>MNISTCUDNN</exec.mainClass>
     </properties>
@@ -67,49 +67,49 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform</artifactId>
-            <version>13.3-9.25-1.5.14</version>
+            <version>13.4-9.26-1.5.15-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>13.3-9.25-1.5.14</version>
+            <version>13.4-9.26-1.5.15-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-cublas</artifactId>
-            <version>13.3-9.25-1.5.14</version>
+            <version>13.4-9.26-1.5.15-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-cudnn</artifactId>
-            <version>13.3-9.25-1.5.14</version>
+            <version>13.4-9.26-1.5.15-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-cusolver</artifactId>
-            <version>13.3-9.25-1.5.14</version>
+            <version>13.4-9.26-1.5.15-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-cusparse</artifactId>
-            <version>13.3-9.25-1.5.14</version>
+            <version>13.4-9.26-1.5.15-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-npp</artifactId>
-            <version>13.3-9.25-1.5.14</version>
+            <version>13.4-9.26-1.5.15-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-nccl</artifactId>
-            <version>13.3-9.25-1.5.14</version>
+            <version>13.4-9.26-1.5.15-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-nvcomp</artifactId>
-            <version>13.3-9.25-1.5.14</version>
+            <version>13.4-9.26-1.5.15-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
