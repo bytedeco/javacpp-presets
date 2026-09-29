@@ -15,7 +15,7 @@ import static org.bytedeco.hdf5.global.hdf5.*;
  * \brief Callback function for encoding property values
  *
  * @param value [in] The property value to be encoded
- * @param buf [out]   The encoded property value
+ * @param buf [out]   Pointer to encoding buffer pointer
  * @param size [out]  The size of \p buf
  * @return \herr_t
  *

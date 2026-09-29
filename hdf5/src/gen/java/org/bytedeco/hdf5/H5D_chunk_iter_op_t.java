@@ -18,7 +18,7 @@ import static org.bytedeco.hdf5.global.hdf5.*;
  *
  * @param offset [in]      Logical position of the chunk's first element in units of dataset elements
  * @param filter_mask [in] Bitmask indicating the filters used when the chunk was written
- * @param addr [in]        Chunk address in the file
+ * @param addr [in]        Chunk address in the file, taking the user block (if any) into account
  * @param size [in]        Chunk size in bytes, 0 if the chunk does not exist
  * @param op_data [in,out]     Pointer to any user-defined data associated with
  *                            the operation.
@@ -28,6 +28,11 @@ import static org.bytedeco.hdf5.global.hdf5.*;
  *              immediately return that value, indicating short-circuit success.
  *          \li A negative (#H5_ITER_ERROR) causes the iterator to immediately
  *              return that value, indicating failure.
+ *
+ * \callback_note
+ *
+ * @since 1.14.0
+ *
  */
 @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)
 public class H5D_chunk_iter_op_t extends FunctionPointer {

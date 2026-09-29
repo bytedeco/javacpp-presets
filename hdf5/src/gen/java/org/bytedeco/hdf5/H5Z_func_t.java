@@ -41,6 +41,9 @@ import static org.bytedeco.hdf5.global.hdf5.*;
  *          The return value from the filter is the number of bytes in the
  *          output buffer. If an error occurs then the function should return
  *          zero and leave all pointer arguments unchanged.
+ *
+ * @since 1.0.0
+ *
  */
 /** <!-- [H5Z_func_t_snip] --> */
 @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)

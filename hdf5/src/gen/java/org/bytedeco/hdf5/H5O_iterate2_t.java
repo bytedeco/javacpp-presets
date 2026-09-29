@@ -25,6 +25,8 @@ import static org.bytedeco.hdf5.global.hdf5.*;
  *                        pointer provided with the H5Ovisit3() function call
  * @return \herr_t_iter
  *
+ * @since 1.12.0
+ *
  */
 @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)
 public class H5O_iterate2_t extends FunctionPointer {

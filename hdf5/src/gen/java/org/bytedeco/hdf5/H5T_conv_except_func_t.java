@@ -28,6 +28,7 @@ import static org.bytedeco.hdf5.global.hdf5.*;
  * \details If an exception like overflow happens during conversion, this
  *          function is called if it's registered through H5Pset_type_conv_cb().
  *
+ * @since 1.8.0
  */
 @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)
 public class H5T_conv_except_func_t extends FunctionPointer {

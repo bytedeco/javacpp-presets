@@ -35,7 +35,7 @@ public class H5O_info2_t extends Pointer {
         return new H5O_info2_t((Pointer)this).offsetAddress(i);
     }
 
-    /** File number that object is located in */
+    /** File number that object is located in. Constant across multiple opens of the same file */
     public native @Cast("unsigned long") long fileno(); public native H5O_info2_t fileno(long setter);
     /** Token representing the object        */
     public native @ByRef H5O_token_t token(); public native H5O_info2_t token(H5O_token_t setter);

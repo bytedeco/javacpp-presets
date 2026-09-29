@@ -30,6 +30,11 @@ import static org.bytedeco.hdf5.global.hdf5.*;
  *          \li Negative causes the iterator to immediately return that value,
  *              indicating failure. The iterator can be restarted at the next
  *              attribute.
+ *
+ * \callback_note
+ *
+ * @since 1.8.0
+ *
  */
 @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)
 public class H5A_operator2_t extends FunctionPointer {

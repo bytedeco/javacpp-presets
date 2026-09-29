@@ -22,6 +22,9 @@ import static org.bytedeco.hdf5.global.hdf5.*;
  * @param client_data [in] Pointer to client data in the format expected by the
  *                        user-defined function
  * @return \herr_t
+ *
+ * @since 1.8.0
+ *
  */
 @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)
 public class H5E_walk2_t extends FunctionPointer {

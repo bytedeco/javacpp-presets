@@ -23,6 +23,9 @@ import static org.bytedeco.hdf5.global.hdf5.*;
  *         \c value1 and \c value2 are equal.
  *
  * @see H5Pregister(), H5Pinsert()
+ *
+ * @since 1.8.0
+ *
  */
 @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)
 public class H5P_prp_compare_func_t extends FunctionPointer {

@@ -75,6 +75,9 @@ public class Group extends H5Object {
 
     // Destructor
 
+    // Copy assignment operator.
+    public native @ByRef @Name("operator =") Group put(@Const @ByRef Group original);
+
     // Creates a copy of an existing group using its id.
     public Group(@Cast("const hid_t") long group_id) { super((Pointer)null); allocate(group_id); }
     private native void allocate(@Cast("const hid_t") long group_id);

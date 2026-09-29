@@ -82,4 +82,7 @@ public class Attribute extends AbstractDs {
 
     // Destructor: properly terminates access to this attribute.
 
+    // Copy assignment operator.
+    public native @ByRef @Name("operator =") Attribute put(@Const @ByRef Attribute original);
+
 }

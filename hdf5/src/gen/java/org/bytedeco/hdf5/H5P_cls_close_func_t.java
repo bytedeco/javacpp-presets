@@ -16,7 +16,7 @@ import static org.bytedeco.hdf5.global.hdf5.*;
 /**
  * \brief Callback function for H5Pcreate_class()
  *
- * @param prop_id [in]    The identifier of the property list class being created
+ * @param prop_id [in]    The identifier of the property list class being closed
  * @param close_data [in] User pointer to any close data required
  * @return \herr_t
  *

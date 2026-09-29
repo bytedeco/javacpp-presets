@@ -37,6 +37,8 @@ import static org.bytedeco.hdf5.global.hdf5.*;
  *          been returned. The callback function should return zero (0)
  *          to indicate success, and a negative value to indicate failure.
  *
+ * @since 1.10.2
+ *
  */
 @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)
 public class H5D_scatter_func_t extends FunctionPointer {

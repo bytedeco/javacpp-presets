@@ -26,6 +26,8 @@ import static org.bytedeco.hdf5.global.hdf5.*;
  *                the operation
  * @return \herr_t_iter
  *
+ * @since 1.10.2
+ *
  */
 @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)
 public class H5D_operator_t extends FunctionPointer {

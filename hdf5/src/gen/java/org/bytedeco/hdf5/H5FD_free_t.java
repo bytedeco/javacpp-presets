@@ -11,7 +11,9 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.hdf5.global.hdf5.*;
 
 
-/* A free list is a singly-linked list of address/size pairs. */
+/**
+ * A free list is a singly-linked list of address/size pairs.
+ */
 @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)
 public class H5FD_free_t extends Pointer {
     static { Loader.load(); }

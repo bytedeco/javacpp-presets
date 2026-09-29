@@ -8,11 +8,13 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 ZLIB=zlib-1.3.1
-HDF5_VERSION=1.14.3
+HDF5_VERSION=1.14.6
 AEC_VERSION=1.1.2
 # zlib.net only keeps the latest release at the plain URL; older versions moved to /fossils/.
 download "https://zlib.net/fossils/$ZLIB.tar.gz" $ZLIB.tar.gz
-download "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.14/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.bz2" hdf5-$HDF5_VERSION.tar.bz2
+# support.hdfgroup.org's legacy FTP-style mirror no longer serves releases past 1.14.3;
+# HDF Group now publishes source tarballs as GitHub Release assets instead.
+download "https://github.com/HDFGroup/hdf5/releases/download/hdf5_$HDF5_VERSION/hdf5-$HDF5_VERSION.tar.gz" hdf5-$HDF5_VERSION.tar.gz
 # Use Github mirror repo rather than Gitlab repo for download speed
 #download "https://gitlab.dkrz.de/k202009/libaec/uploads/45b10e42123edd26ab7b3ad92bcf7be2/libaec-$AEC_VERSION.tar.gz" libaec-$AEC_VERSION.tar.gz
 download "https://github.com/MathisRosenhauer/libaec/releases/download/v$AEC_VERSION/libaec-$AEC_VERSION.tar.gz" libaec-$AEC_VERSION.tar.gz
@@ -21,7 +23,7 @@ mkdir -p $PLATFORM
 pushd $PLATFORM
 INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
-tar --totals -xf ../hdf5-$HDF5_VERSION.tar.bz2
+tar --totals -xf ../hdf5-$HDF5_VERSION.tar.gz
 tar --totals -xf ../libaec-$AEC_VERSION.tar.gz
 tar --totals -xf ../$ZLIB.tar.gz
 pushd hdf5-$HDF5_VERSION
@@ -205,7 +207,7 @@ case $PLATFORM in
         mkdir -p build/bin
         cp ../lib/*.lib build/bin
         pushd build
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DZLIB_LIBRARY="$INSTALL_PATH/lib/zlibstatic.lib" -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" -DZLIB_USE_EXTERNAL=OFF -DSZIP_LIBRARY="$INSTALL_PATH/lib/szip-static.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL=OFF -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DUSE_LIBAEC=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DZLIB_LIBRARY="$INSTALL_PATH/lib/zlibstatic.lib" -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" -DZLIB_USE_EXTERNAL=OFF -DSZIP_LIBRARY="$INSTALL_PATH/lib/szip-static.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL=OFF -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DHDF5_USE_LIBAEC_STATIC=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
         ninja -j $MAKEJ
         ninja install
         cp bin/zlib* ../../lib/
@@ -232,7 +234,7 @@ case $PLATFORM in
         mkdir -p build/bin
         cp ../lib/*.lib build/bin
         pushd build
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DZLIB_LIBRARY="$INSTALL_PATH/lib/zlibstatic.lib" -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" -DZLIB_USE_EXTERNAL=OFF -DSZIP_LIBRARY="$INSTALL_PATH/lib/szip-static.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL=OFF -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DUSE_LIBAEC=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DZLIB_LIBRARY="$INSTALL_PATH/lib/zlibstatic.lib" -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" -DZLIB_USE_EXTERNAL=OFF -DSZIP_LIBRARY="$INSTALL_PATH/lib/szip-static.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL=OFF -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DHDF5_USE_LIBAEC_STATIC=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
         ninja -j $MAKEJ
         ninja install
         cp bin/zlib* ../../lib/

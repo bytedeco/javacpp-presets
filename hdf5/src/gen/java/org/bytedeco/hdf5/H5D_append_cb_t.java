@@ -22,6 +22,8 @@ import static org.bytedeco.hdf5.global.hdf5.*;
  *
  * @return \herr_t
  *
+ * @since 1.10.0
+ *
  */
 @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)
 public class H5D_append_cb_t extends FunctionPointer {

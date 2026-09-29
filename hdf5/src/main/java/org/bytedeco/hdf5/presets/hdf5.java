@@ -50,7 +50,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "H5OcreatProp.h", "H5DcreatProp.h", "H5LaccProp.h", "H5DaccProp.h", "H5LcreatProp.h", "H5Location.h", "H5Object.h", "H5CommonFG.h", "H5DataType.h", "H5DxferProp.h",
         "H5FaccProp.h", "H5FcreatProp.h", "H5AtomType.h", "H5PredType.h", "H5EnumType.h", "H5IntType.h", "H5FloatType.h", "H5StrType.h", "H5CompType.h",
         "H5ArrayType.h", "H5VarLenType.h", "H5DataSet.h", "H5Group.h", "H5File.h", "H5Library.h"},
-            link = {"hdf5@.310", "hdf5_cpp@.310", "hdf5_hl@.310", "hdf5_hl_cpp@.310"}, resource = {"include", "lib"}),
+            link = {"hdf5@.315", "hdf5_cpp@.315", "hdf5_hl@.315", "hdf5_hl_cpp@.315"}, resource = {"include", "lib"}),
     @Platform(value = "windows", link = {"shlwapi#", "zlibstatic", "libhdf5", "libhdf5_cpp", "libhdf5_hl", "libhdf5_hl_cpp", "aec-static", "szip-static"}) })
 public class hdf5 implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "hdf5"); }
