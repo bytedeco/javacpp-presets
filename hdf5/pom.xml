@@ -25,6 +25,12 @@
       <version>1.7.36</version>
       <optional>true</optional>
     </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -43,6 +49,17 @@
         <artifactId>javacpp</artifactId>
         <configuration>
           <encoding>ISO-8859-1</encoding>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <!-- javacpp:build (process-classes, before test) stages the platform's compiled
+               native libraries under target/native/, not target/classes/, so Loader's
+               classpath scan needs it added explicitly to find/load them during tests. -->
+          <additionalClasspathElements>
+            <additionalClasspathElement>${project.build.directory}/native</additionalClasspathElement>
+          </additionalClasspathElements>
         </configuration>
       </plugin>
       <plugin>

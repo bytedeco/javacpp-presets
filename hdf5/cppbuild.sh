@@ -10,7 +10,8 @@ fi
 ZLIB=zlib-1.3.1
 HDF5_VERSION=1.14.3
 AEC_VERSION=1.1.2
-download "http://zlib.net/$ZLIB.tar.gz" $ZLIB.tar.gz
+# zlib.net only keeps the latest release at the plain URL; older versions moved to /fossils/.
+download "https://zlib.net/fossils/$ZLIB.tar.gz" $ZLIB.tar.gz
 download "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.14/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.bz2" hdf5-$HDF5_VERSION.tar.bz2
 # Use Github mirror repo rather than Gitlab repo for download speed
 #download "https://gitlab.dkrz.de/k202009/libaec/uploads/45b10e42123edd26ab7b3ad92bcf7be2/libaec-$AEC_VERSION.tar.gz" libaec-$AEC_VERSION.tar.gz
