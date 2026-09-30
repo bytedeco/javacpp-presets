@@ -69,8 +69,13 @@ HDF5_CMAKE_FLAGS=(-DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PA
     -DHDF5_ENABLE_ZLIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DSZIP_USE_EXTERNAL=OFF -DHDF5_USE_LIBAEC_STATIC=ON)
 
 case $PLATFORM in
-# HDF5 does not currently support cross-compiling:
-# https://support.hdfgroup.org/HDF5/faq/compile.html
+# The FAQ note that used to be here ("HDF5 does not currently support
+# cross-compiling") is stale: as of HDF5 2.x's CMake, cross-compiling works fine for
+# a C/C++/Java build (see linux-armhf/linux-ppc64le below and android-arm64/
+# android-x86_64 further down) -- it just needs a plain toolchain file rather than
+# the old autotools --host= invocations below. android-arm/android-x86 (32-bit) are
+# left disabled: low utility today, and no currently-enabled precedent in this repo
+# builds them either (openblas/opencv/ffmpeg keep these commented out too).
 #    android-arm)
 #        # Build libaec for szip first
 #        mkdir -p ../libaec-$AEC_VERSION/build
@@ -99,6 +104,33 @@ case $PLATFORM in
 #        make -j $MAKEJ
 #        make install-strip
 #        ;;
+    android-arm64|android-x86_64)
+        # PLATFORM_ROOT is the Android NDK root, set via the -Djavacpp.platform.root
+        # Maven property that deploy-ubuntu/deploy-centos already export for every
+        # android-* job (see the CI_DEPLOY_PLATFORM == android-* branch in those
+        # actions); opencv's/openblas's own cppbuild.sh rely on the same variable for
+        # their already-working android-arm64/android-x86_64 jobs.
+        case $PLATFORM in
+            android-arm64) ANDROID_ABI=arm64-v8a ;;
+            android-x86_64) ANDROID_ABI=x86_64 ;;
+        esac
+        ANDROID_CMAKE_FLAGS=(-DCMAKE_TOOLCHAIN_FILE="${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake" -DANDROID_ABI="$ANDROID_ABI" -DANDROID_NATIVE_API_LEVEL=24)
+
+        # Build libaec for szip first, with the same NDK toolchain as the main build
+        mkdir -p ../libaec-$AEC_VERSION/build
+        pushd ../libaec-$AEC_VERSION/build
+        "$CMAKE" "${ANDROID_CMAKE_FLAGS[@]}" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
+        make -j $MAKEJ
+        make install
+        popd
+
+        mkdir -p build
+        pushd build
+        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${ANDROID_CMAKE_FLAGS[@]}" "${HDF5_CMAKE_FLAGS[@]}" ..
+        make -j $MAKEJ
+        make install/strip
+        popd
+        ;;
     linux-armhf)
         # HDF5 2.x has no autotools build anymore, and its own CMake already degrades
         # gracefully when cross-compiling (H5ConversionTests falls back to documented
