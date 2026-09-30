@@ -188,8 +188,17 @@ EOF
         # library-path detection only works for a compiler CMake recognizes as a
         # Debian-multiarch gcc; the vendored Bootlin toolchain isn't one, so it finds
         # the (arch-independent) header fine but not the library itself ("Could NOT
-        # find ZLIB (missing: ZLIB_LIBRARY)"). Pin the path explicitly instead, the
-        # same way windows-x86/windows-x86_64 already have to.
+        # find ZLIB (missing: ZLIB_LIBRARY)") at configure time. Pin the path
+        # explicitly, the same way windows-x86/windows-x86_64 already have to.
+        #
+        # That alone gets find_package(ZLIB) to succeed, but the Bootlin toolchain is
+        # fully self-contained with its own internal sysroot and doesn't search the
+        # host's /usr/include by default the way an ordinary system gcc would --
+        # HDF5's own CMakeLists.txt doesn't thread ZLIB_INCLUDE_DIR onto every target
+        # uniformly, so H5Zdeflate.c (the one file that #includes zlib.h directly)
+        # still failed with "zlib.h: No such file or directory" even after configure
+        # found it. Force /usr/include onto every compile unit's flags directly
+        # rather than chasing HDF5's per-target include-dir wiring.
         ZLIB_I386_LIB=/usr/lib/i386-linux-gnu/libz.so
 
         # Build libaec for szip first
@@ -202,7 +211,7 @@ EOF
 
         mkdir -p build
         pushd build
-        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${HDF5_CMAKE_FLAGS[@]}" -DZLIB_LIBRARY="$ZLIB_I386_LIB" -DZLIB_INCLUDE_DIR=/usr/include ..
+        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${HDF5_CMAKE_FLAGS[@]}" -DZLIB_LIBRARY="$ZLIB_I386_LIB" -DZLIB_INCLUDE_DIR=/usr/include -DCMAKE_C_FLAGS="-I/usr/include" -DCMAKE_CXX_FLAGS="-I/usr/include" ..
         make -j $MAKEJ
         make install/strip
         popd
