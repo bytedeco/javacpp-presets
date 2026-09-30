@@ -42,5 +42,5 @@ public class H5G_info_t extends Pointer {
     /** Current max. creation order value for group */
     public native @Cast("int64_t") long max_corder(); public native H5G_info_t max_corder(long setter);
     /** Whether group has a file mounted on it */
-    public native @Cast("hbool_t") boolean mounted(); public native H5G_info_t mounted(boolean setter);
+    public native @Cast("bool") boolean mounted(); public native H5G_info_t mounted(boolean setter);
 }

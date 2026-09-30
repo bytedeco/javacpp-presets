@@ -38,7 +38,7 @@ public class H5T_cdata_t extends Pointer {
     /** is the background buffer needed?	     */
     public native @Cast("H5T_bkg_t") int need_bkg(); public native H5T_cdata_t need_bkg(int setter);
     /** recalculate private data		     */
-    public native @Cast("hbool_t") boolean recalc(); public native H5T_cdata_t recalc(boolean setter);
+    public native @Cast("bool") boolean recalc(); public native H5T_cdata_t recalc(boolean setter);
     /** private data				     */
     public native Pointer priv(); public native H5T_cdata_t priv(Pointer setter);
 }

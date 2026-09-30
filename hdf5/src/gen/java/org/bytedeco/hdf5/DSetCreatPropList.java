@@ -50,9 +50,9 @@ public class DSetCreatPropList extends ObjCreatPropList {
     public native void setChunk(int ndims, @Cast("const hsize_t*") long... dim);
 
     // Returns information about an external file.
-    public native void getExternal(@Cast("unsigned") int idx, @Cast("size_t") long name_size, @Cast("char*") BytePointer name, @Cast("off_t*") @ByRef SizeTPointer offset, @Cast("hsize_t*") @ByRef LongPointer size);
-    public native void getExternal(@Cast("unsigned") int idx, @Cast("size_t") long name_size, @Cast("char*") ByteBuffer name, @Cast("off_t*") @ByRef SizeTPointer offset, @Cast("hsize_t*") @ByRef LongBuffer size);
-    public native void getExternal(@Cast("unsigned") int idx, @Cast("size_t") long name_size, @Cast("char*") byte[] name, @Cast("off_t*") @ByRef SizeTPointer offset, @Cast("hsize_t*") @ByRef long... size);
+    public native void getExternal(@Cast("unsigned") int idx, @Cast("size_t") long name_size, @Cast("char*") BytePointer name, @Cast("HDoff_t*") @ByRef LongPointer offset, @Cast("hsize_t*") @ByRef LongPointer size);
+    public native void getExternal(@Cast("unsigned") int idx, @Cast("size_t") long name_size, @Cast("char*") ByteBuffer name, @Cast("HDoff_t*") @ByRef LongBuffer offset, @Cast("hsize_t*") @ByRef LongBuffer size);
+    public native void getExternal(@Cast("unsigned") int idx, @Cast("size_t") long name_size, @Cast("char*") byte[] name, @Cast("HDoff_t*") @ByRef long[] offset, @Cast("hsize_t*") @ByRef long... size);
 
     // Returns the number of external files for a dataset.
     public native int getExternalCount();
@@ -117,8 +117,8 @@ public class DSetCreatPropList extends ObjCreatPropList {
     public native void setDeflate(int level);
 
     // Adds an external file to the list of external files.
-    public native void setExternal(@Cast("const char*") BytePointer name, @Cast("off_t") long offset, @Cast("hsize_t") long size);
-    public native void setExternal(String name, @Cast("off_t") long offset, @Cast("hsize_t") long size);
+    public native void setExternal(@Cast("const char*") BytePointer name, @Cast("HDoff_t") long offset, @Cast("hsize_t") long size);
+    public native void setExternal(String name, @Cast("HDoff_t") long offset, @Cast("hsize_t") long size);
 
     // Adds a filter to the filter pipeline.
     public native void setFilter(@Cast("H5Z_filter_t") int filter, @Cast("unsigned int") int flags/*=0*/, @Cast("size_t") long cd_nelmts/*=0*/,

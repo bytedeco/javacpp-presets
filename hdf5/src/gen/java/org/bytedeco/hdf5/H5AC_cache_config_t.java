@@ -69,7 +69,7 @@ public class H5AC_cache_config_t extends Pointer {
          * set to disabled (0) on Windows machines.\n
          * The report function is not supported code, and can be expected to change
          * between versions of the library. Use it at your own risk. */
-    public native @Cast("hbool_t") boolean rpt_fcn_enabled(); public native H5AC_cache_config_t rpt_fcn_enabled(boolean setter);
+    public native @Cast("bool") boolean rpt_fcn_enabled(); public native H5AC_cache_config_t rpt_fcn_enabled(boolean setter);
 
     
     /** Boolean field indicating whether the
@@ -91,7 +91,7 @@ public class H5AC_cache_config_t extends Pointer {
          * failures and/or poor performance seen in the field, so as to aid
          * in reproduction in the lab. If you use it absent the direction
          * of The HDF Group, you are on your own. */
-    public native @Cast("hbool_t") boolean open_trace_file(); public native H5AC_cache_config_t open_trace_file(boolean setter);
+    public native @Cast("bool") boolean open_trace_file(); public native H5AC_cache_config_t open_trace_file(boolean setter);
 
     
     /** Boolean field indicating whether the current trace file
@@ -104,7 +104,7 @@ public class H5AC_cache_config_t extends Pointer {
          * of cache activity in cases of occult failures and/or poor performance
          * seen in the field, so as to aid in reproduction in the lab. If you use
          * it absent the direction of The HDF Group, you are on your own. */
-    public native @Cast("hbool_t") boolean close_trace_file(); public native H5AC_cache_config_t close_trace_file(boolean setter);
+    public native @Cast("bool") boolean close_trace_file(); public native H5AC_cache_config_t close_trace_file(boolean setter);
 
     
     /** Full path of the trace file to be opened if the
@@ -142,12 +142,12 @@ public class H5AC_cache_config_t extends Pointer {
          * grow without bound.\n
          * Evictions will be re-enabled when this field is set back to \c 1.
          * This should be done as soon as possible. */
-    public native @Cast("hbool_t") boolean evictions_enabled(); public native H5AC_cache_config_t evictions_enabled(boolean setter);
+    public native @Cast("bool") boolean evictions_enabled(); public native H5AC_cache_config_t evictions_enabled(boolean setter);
 
     
     /** Boolean flag indicating whether the cache should be created
          * with a user specified initial size. */
-    public native @Cast("hbool_t") boolean set_initial_size(); public native H5AC_cache_config_t set_initial_size(boolean setter);
+    public native @Cast("bool") boolean set_initial_size(); public native H5AC_cache_config_t set_initial_size(boolean setter);
 
     
     /** If \ref H5AC_cache_config_t.set_initial_size "set_initial_size"
@@ -162,7 +162,7 @@ public class H5AC_cache_config_t extends Pointer {
          * The value must lie in the interval [0.0, 1.0]. 0.01 is a good place to
          * start in the serial case. In the parallel case, a larger value is needed
          * -- see the overview of the metadata cache in the
-         * “Metadata Caching in HDF5” section of the -- <em>\ref UG</em>
+         * \ref TNMDC section of the -- <em>\ref UG</em>
          * for details. */
     public native double min_clean_fraction(); public native H5AC_cache_config_t min_clean_fraction(double setter);
 
@@ -217,7 +217,7 @@ public class H5AC_cache_config_t extends Pointer {
     
     /** Boolean flag indicating whether an upper limit should be applied to
          * the size of cache size increases. */
-    public native @Cast("hbool_t") boolean apply_max_increment(); public native H5AC_cache_config_t apply_max_increment(boolean setter);
+    public native @Cast("bool") boolean apply_max_increment(); public native H5AC_cache_config_t apply_max_increment(boolean setter);
 
     
     /** Maximum number of bytes by which cache size can be increased in a
@@ -287,7 +287,7 @@ public class H5AC_cache_config_t extends Pointer {
     
     /** Boolean flag indicating ether an upper limit should be applied to
          * the size of cache size decreases. */
-    public native @Cast("hbool_t") boolean apply_max_decrement(); public native H5AC_cache_config_t apply_max_decrement(boolean setter);
+    public native @Cast("bool") boolean apply_max_decrement(); public native H5AC_cache_config_t apply_max_decrement(boolean setter);
 
     
     /** Maximum number of bytes by which the maximum cache size can be
@@ -304,7 +304,7 @@ public class H5AC_cache_config_t extends Pointer {
     
     /** Boolean flag indicating whether the ageout based decrement
          * algorithms will maintain a empty reserve when decreasing cache size. */
-    public native @Cast("hbool_t") boolean apply_empty_reserve(); public native H5AC_cache_config_t apply_empty_reserve(boolean setter);
+    public native @Cast("bool") boolean apply_empty_reserve(); public native H5AC_cache_config_t apply_empty_reserve(boolean setter);
 
     
     /** Empty reserve as a fraction maximum cache size if applicable.\n When

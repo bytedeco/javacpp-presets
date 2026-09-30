@@ -64,15 +64,15 @@ public class FileCreatPropList extends PropList {
 
     // Sets the strategy and the threshold value that the library will
     // will employ in managing file space.
-    public native void setFileSpaceStrategy(@Cast("H5F_fspace_strategy_t") int strategy, @Cast("hbool_t") boolean persist, @Cast("hsize_t") long threshold);
+    public native void setFileSpaceStrategy(@Cast("H5F_fspace_strategy_t") int strategy, @Cast("bool") boolean persist, @Cast("hsize_t") long threshold);
 
     // Returns the strategy that the library uses in managing file space.
-    public native void getFileSpaceStrategy(@Cast("H5F_fspace_strategy_t*") @ByRef IntPointer strategy, @Cast("hbool_t*") @ByRef BoolPointer persist, @Cast("hsize_t*") @ByRef LongPointer threshold);
-    public native void getFileSpaceStrategy(@Cast("H5F_fspace_strategy_t*") @ByRef IntBuffer strategy, @Cast("hbool_t*") @ByRef boolean[] persist, @Cast("hsize_t*") @ByRef LongBuffer threshold);
-    public native void getFileSpaceStrategy(@Cast("H5F_fspace_strategy_t*") @ByRef int[] strategy, @Cast("hbool_t*") @ByRef BoolPointer persist, @Cast("hsize_t*") @ByRef long... threshold);
-    public native void getFileSpaceStrategy(@Cast("H5F_fspace_strategy_t*") @ByRef IntPointer strategy, @Cast("hbool_t*") @ByRef boolean[] persist, @Cast("hsize_t*") @ByRef LongPointer threshold);
-    public native void getFileSpaceStrategy(@Cast("H5F_fspace_strategy_t*") @ByRef IntBuffer strategy, @Cast("hbool_t*") @ByRef BoolPointer persist, @Cast("hsize_t*") @ByRef LongBuffer threshold);
-    public native void getFileSpaceStrategy(@Cast("H5F_fspace_strategy_t*") @ByRef int[] strategy, @Cast("hbool_t*") @ByRef boolean[] persist, @Cast("hsize_t*") @ByRef long... threshold);
+    public native void getFileSpaceStrategy(@Cast("H5F_fspace_strategy_t*") @ByRef IntPointer strategy, @Cast("bool*") @ByRef BoolPointer persist, @Cast("hsize_t*") @ByRef LongPointer threshold);
+    public native void getFileSpaceStrategy(@Cast("H5F_fspace_strategy_t*") @ByRef IntBuffer strategy, @Cast("bool*") @ByRef boolean[] persist, @Cast("hsize_t*") @ByRef LongBuffer threshold);
+    public native void getFileSpaceStrategy(@Cast("H5F_fspace_strategy_t*") @ByRef int[] strategy, @Cast("bool*") @ByRef BoolPointer persist, @Cast("hsize_t*") @ByRef long... threshold);
+    public native void getFileSpaceStrategy(@Cast("H5F_fspace_strategy_t*") @ByRef IntPointer strategy, @Cast("bool*") @ByRef boolean[] persist, @Cast("hsize_t*") @ByRef LongPointer threshold);
+    public native void getFileSpaceStrategy(@Cast("H5F_fspace_strategy_t*") @ByRef IntBuffer strategy, @Cast("bool*") @ByRef BoolPointer persist, @Cast("hsize_t*") @ByRef LongBuffer threshold);
+    public native void getFileSpaceStrategy(@Cast("H5F_fspace_strategy_t*") @ByRef int[] strategy, @Cast("bool*") @ByRef boolean[] persist, @Cast("hsize_t*") @ByRef long... threshold);
 
     // Sets the file space page size for paged aggregation.
     public native void setFileSpacePagesize(@Cast("hsize_t") long fsp_psize);

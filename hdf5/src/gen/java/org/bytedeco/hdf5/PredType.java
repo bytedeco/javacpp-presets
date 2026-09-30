@@ -90,6 +90,14 @@ public class PredType extends AtomType {
     @MemberGetter public static native @Const @ByRef PredType IEEE_F64BE();
     @MemberGetter public static native @Const @ByRef PredType IEEE_F64LE();
 
+    @MemberGetter public static native @Const @ByRef PredType FLOAT_BFLOAT16BE();
+    @MemberGetter public static native @Const @ByRef PredType FLOAT_BFLOAT16LE();
+    @MemberGetter public static native @Const @ByRef PredType FLOAT_F8E4M3();
+    @MemberGetter public static native @Const @ByRef PredType FLOAT_F8E5M2();
+    @MemberGetter public static native @Const @ByRef PredType FLOAT_F6E2M3();
+    @MemberGetter public static native @Const @ByRef PredType FLOAT_F6E3M2();
+    @MemberGetter public static native @Const @ByRef PredType FLOAT_F4E2M1();
+
     @MemberGetter public static native @Const @ByRef PredType UNIX_D32BE();
     @MemberGetter public static native @Const @ByRef PredType UNIX_D32LE();
     @MemberGetter public static native @Const @ByRef PredType UNIX_D64BE();
