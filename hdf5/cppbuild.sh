@@ -293,6 +293,13 @@ EOF
         "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DZLIB_BUILD_TESTING=OFF ..
         ninja -j $MAKEJ
         ninja install
+        # zlib 1.3.2+ exports its own CMake package config (lib/cmake/zlib/*Config.cmake).
+        # HDF5's zlib detection here tries find_package(ZLIB CONFIG) first; that config
+        # only populates modern imported targets, not the legacy ZLIB_LIBRARIES variable
+        # this older HDF5 reads, so it silently ends up linking nothing while still
+        # compiling the deflate filter as if zlib were found. Remove it so HDF5 falls
+        # through to its Module-mode search, which correctly honors -DZLIB_LIBRARY below.
+        rm -rf $INSTALL_PATH/lib/cmake/zlib
         popd
 
         mkdir -p build/bin
@@ -319,6 +326,13 @@ EOF
         "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DZLIB_BUILD_TESTING=OFF ..
         ninja -j $MAKEJ
         ninja install
+        # zlib 1.3.2+ exports its own CMake package config (lib/cmake/zlib/*Config.cmake).
+        # HDF5's zlib detection here tries find_package(ZLIB CONFIG) first; that config
+        # only populates modern imported targets, not the legacy ZLIB_LIBRARIES variable
+        # this older HDF5 reads, so it silently ends up linking nothing while still
+        # compiling the deflate filter as if zlib were found. Remove it so HDF5 falls
+        # through to its Module-mode search, which correctly honors -DZLIB_LIBRARY below.
+        rm -rf $INSTALL_PATH/lib/cmake/zlib
         popd
 
         mkdir -p build/bin
