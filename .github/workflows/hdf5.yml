@@ -19,18 +19,12 @@ env:
 jobs:
   linux-armhf:
     runs-on: ubuntu-22.04
-    container: ubuntu:bionic
     env:
       # Genuinely cross-compiled (no armhf GitHub-hosted runner, no QEMU emulator
       # configured), so the resulting binary can't be executed on this x86_64 host at
       # all; HDF5BindingsTest can only run where the native build matches the JVM.
       CI_DEPLOY_OPTIONS: -DskipTests=true
     steps:
-      # deploy-ubuntu's cross-compiling branch runs `gem install apt-spy2` to fix up
-      # apt mirrors for the foreign architecture, but ubuntu:bionic doesn't ship
-      # Ruby/gem by default (unlike the bare ubuntu-22.04 host runner it usually
-      # runs on) -- install it before the action gets there.
-      - run: apt-get update && apt-get -y install ruby
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   linux-arm64:
     runs-on: ubuntu-22.04-arm
@@ -38,13 +32,10 @@ jobs:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   linux-ppc64le:
     runs-on: ubuntu-22.04
-    container: ubuntu:bionic
     env:
       # Same reasoning as linux-armhf: cross-compiled, can't execute the result here.
       CI_DEPLOY_OPTIONS: -DskipTests=true
     steps:
-      # Same reasoning as linux-armhf above.
-      - run: apt-get update && apt-get -y install ruby
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
 #  linux-x86: (disabled -- needs its own follow-up: container: centos:7 + deploy-centos)
 #    runs-on: ubuntu-22.04
