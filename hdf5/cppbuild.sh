@@ -156,17 +156,48 @@ EOF
         popd
         ;;
     linux-x86)
+        # Native gcc -m32 needs a 32-bit multilib toolchain, which modern Ubuntu no
+        # longer ships by default, and centos:7 (the fallback every other module in
+        # this repo uses for linux-x86) is a dead end too: it went EOL in June 2024
+        # and its mirror network has been shut down entirely, base repo and SCL/
+        # devtoolset alike. Rather than chase CentOS's aging package ecosystem,
+        # vendor a self-contained i686-linux-gnu cross-toolchain instead -- the same
+        # philosophy BinaryBuilder.jl uses (don't trust the host distro's compiler
+        # packages, bring your own). Bootlin's prebuilt, relocatable toolchains are a
+        # public, actively-maintained source for this; the 2022.08 release (GCC
+        # 11.3.0, glibc 2.35) matches the same glibc baseline linux-x86_64 already
+        # requires (Ubuntu 22.04) -- their newest release's "stable" label refers to
+        # buildroot's own release-testing process, not an old/conservative glibc: it
+        # links against glibc 2.44, which would be less portable than what we
+        # already ship, not more.
+        #
+        # 32-bit x86 code runs natively on an x86_64 Linux kernel (no emulator
+        # needed, unlike genuinely different architectures), so HDF5's own CMake
+        # configure checks that need to compile-and-run a test program still work
+        # normally here -- this isn't full cross-compiling the way arm/ppc64le are,
+        # just targeting a different compiler output for the same machine.
+        BOOTLIN_TOOLCHAIN=x86-i686--glibc--stable-2022.08-1
+        download "https://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/$BOOTLIN_TOOLCHAIN.tar.bz2" $BOOTLIN_TOOLCHAIN.tar.bz2
+        tar --totals -xjf $BOOTLIN_TOOLCHAIN.tar.bz2
+        export CC="$(pwd)/$BOOTLIN_TOOLCHAIN/bin/i686-linux-gcc"
+        export CXX="$(pwd)/$BOOTLIN_TOOLCHAIN/bin/i686-linux-g++"
+
+        # zlib1g-dev:i386 is already installed by deploy-ubuntu's own cross-compiling
+        # branch for this exact platform (Ubuntu's i386 multiarch repos are still
+        # live, unlike CentOS 7's), so HDF5_CMAKE_FLAGS' plain find_package(ZLIB)
+        # picks it up the same way linux-x86_64 finds the 64-bit one.
+
         # Build libaec for szip first
         mkdir -p ../libaec-$AEC_VERSION/build
         pushd ../libaec-$AEC_VERSION/build
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_C_FLAGS="-m32" ..
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
         make -j $MAKEJ
         make install
         popd
 
         mkdir -p build
         pushd build
-        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${HDF5_CMAKE_FLAGS[@]}" -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" ..
+        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${HDF5_CMAKE_FLAGS[@]}" ..
         make -j $MAKEJ
         make install/strip
         popd
