@@ -49,6 +49,18 @@ for j in "${JAVA_HOME:-}" "${JAVA_HOME_11_X64:-}" "${JAVA_HOME_11_arm64:-}" "${J
         break
     fi
 done
+if [[ -z "$HDF5_JAVA_HOME" ]]; then
+    # The containers used to cross-compile linux-armhf/linux-ppc64le/linux-x86
+    # (ubuntu:bionic, centos:7) only ship JDK 8 via their own native package manager,
+    # and none of the JAVA_HOME_<version>_<arch> runner variables above are visible
+    # inside them either. HDF5's CMake only needs to run javac/jar on the build host
+    # (not the cross-compile target), so grab a portable x86_64 JDK 11 as a last resort
+    # rather than trying to match the C/C++ cross target's architecture.
+    JDK11=jdk-11.0.2
+    download "https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz" openjdk-11.0.2_linux-x64_bin.tar.gz
+    tar --totals -xzf openjdk-11.0.2_linux-x64_bin.tar.gz
+    HDF5_JAVA_HOME="$(pwd)/$JDK11"
+fi
 echo "Using JDK for HDF5's CMake Java build: ${HDF5_JAVA_HOME:-none found, leaving JAVA_HOME unchanged}"
 HDF5_JAVA_HOME="${HDF5_JAVA_HOME:-${JAVA_HOME:-}}"
 
@@ -88,29 +100,43 @@ case $PLATFORM in
 #        make install-strip
 #        ;;
     linux-armhf)
-        # Build libaec for szip first
+        # HDF5 2.x has no autotools build anymore, and its own CMake already degrades
+        # gracefully when cross-compiling (H5ConversionTests falls back to documented
+        # defaults when CMAKE_CROSSCOMPILING is set and no CMAKE_CROSSCOMPILING_EMULATOR
+        # is given -- see config/ConfigureChecks.cmake), so a plain toolchain file is all
+        # that's needed; no version-specific patch (the old hdf5-linux-armhf.patch was
+        # written against HDF5 1.12.2's build tree, long before CMake supported this).
+        ARMHF_CMAKE_FLAGS=()
+        MACHINE_TYPE=$( uname -m )
+        if [[ ! "$MACHINE_TYPE" =~ arm ]]; then
+          echo "Not native arm so cross-compiling with arm-linux-gnueabihf"
+          cat > arm.cmake <<'EOF'
+set(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_SYSTEM_PROCESSOR arm)
+set(CMAKE_C_COMPILER arm-linux-gnueabihf-gcc)
+set(CMAKE_CXX_COMPILER arm-linux-gnueabihf-g++)
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+EOF
+          ARMHF_CMAKE_FLAGS=(-DCMAKE_TOOLCHAIN_FILE="$(pwd)/arm.cmake")
+        fi
+
+        # Build libaec for szip first, with the same (native or cross) toolchain as HDF5
         mkdir -p ../libaec-$AEC_VERSION/build
         pushd ../libaec-$AEC_VERSION/build
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
+        "$CMAKE" "${ARMHF_CMAKE_FLAGS[@]}" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
         make -j $MAKEJ
         make install
         popd
 
-        MACHINE_TYPE=$( uname -m )
-        if [[ "$MACHINE_TYPE" =~ arm ]]; then
-          ./configure --prefix=$INSTALL_PATH CC="gcc" CXX="g++" --enable-cxx --enable-java
-          make -j $MAKEJ
-          make install-strip
-        else
-          echo "Not native arm so assume cross compiling"
-          patch -Np1 < ../../../hdf5-linux-armhf.patch || true
-          #need this to run twice, first run fails so we fake the exit code too
-          for x in 1 2; do
-              "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=`pwd`/arm.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DCMAKE_CXX_FLAGS="-D_GNU_SOURCE" -DCMAKE_C_FLAGS="-D_GNU_SOURCE" -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON . || true
-          done
-          make -j $MAKEJ
-          make install
-        fi
+        mkdir -p build
+        pushd build
+        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${ARMHF_CMAKE_FLAGS[@]}" "${HDF5_CMAKE_FLAGS[@]}" ..
+        make -j $MAKEJ
+        make install/strip
+        popd
         ;;
     linux-arm64)
         # Build libaec for szip first
@@ -162,29 +188,40 @@ case $PLATFORM in
         popd
         ;;
     linux-ppc64le)
+        # Same rationale as linux-armhf above: no autotools build in HDF5 2.x, and its
+        # CMake already has a graceful cross-compiling fallback, so a plain toolchain
+        # file replaces the old hdf5-linux-ppc64le.patch (written against 1.12.2).
+        PPC64LE_CMAKE_FLAGS=()
         MACHINE_TYPE=$( uname -m )
-        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          # Build libaec for szip first
-          mkdir -p ../libaec-$AEC_VERSION/build
-          pushd ../libaec-$AEC_VERSION/build
-          "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
-          make -j $MAKEJ
-          make install
-          popd
-
-          ./configure --prefix=$INSTALL_PATH CC="gcc -m64" CXX="g++ -m64" --enable-cxx --enable-java --with-szlib
-          make -j $MAKEJ
-          make install-strip
-        else
-          echo "Not native ppc so assume cross compiling"
-          patch -Np1 < ../../../hdf5-linux-ppc64le.patch || true
-          #need this to run twice, first run fails so we fake the exit code too
-          for x in 1 2; do
-              "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=`pwd`/ppc.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DCMAKE_CXX_FLAGS="-D_GNU_SOURCE" -DCMAKE_C_FLAGS="-D_GNU_SOURCE" -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DSZAEC_TGZ_NAME:STRING="libaec-$AEC_VERSION.tar.gz" -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DUSE_LIBAEC=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON . || true
-          done
-          make -j $MAKEJ
-          make install
+        if [[ ! "$MACHINE_TYPE" =~ ppc64 ]]; then
+          echo "Not native ppc so cross-compiling with powerpc64le-linux-gnu"
+          cat > ppc.cmake <<'EOF'
+set(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_SYSTEM_PROCESSOR ppc64le)
+set(CMAKE_C_COMPILER powerpc64le-linux-gnu-gcc)
+set(CMAKE_CXX_COMPILER powerpc64le-linux-gnu-g++)
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+EOF
+          PPC64LE_CMAKE_FLAGS=(-DCMAKE_TOOLCHAIN_FILE="$(pwd)/ppc.cmake")
         fi
+
+        # Build libaec for szip first, with the same (native or cross) toolchain as HDF5
+        mkdir -p ../libaec-$AEC_VERSION/build
+        pushd ../libaec-$AEC_VERSION/build
+        "$CMAKE" "${PPC64LE_CMAKE_FLAGS[@]}" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
+        make -j $MAKEJ
+        make install
+        popd
+
+        mkdir -p build
+        pushd build
+        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${PPC64LE_CMAKE_FLAGS[@]}" "${HDF5_CMAKE_FLAGS[@]}" ..
+        make -j $MAKEJ
+        make install/strip
+        popd
         ;;
     macosx-*)
         # Build libaec for szip first
