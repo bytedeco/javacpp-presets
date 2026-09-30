@@ -114,7 +114,13 @@ case $PLATFORM in
             android-arm64) ANDROID_ABI=arm64-v8a ;;
             android-x86_64) ANDROID_ABI=x86_64 ;;
         esac
-        ANDROID_CMAKE_FLAGS=(-DCMAKE_TOOLCHAIN_FILE="${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake" -DANDROID_ABI="$ANDROID_ABI" -DANDROID_NATIVE_API_LEVEL=24)
+        # The NDK toolchain file defaults CMAKE_FIND_ROOT_PATH_MODE_{LIBRARY,INCLUDE,
+        # PACKAGE} to ONLY, restricting find_library/find_package to the NDK's own
+        # sysroot -- fine for zlib (bundled in the sysroot) but not for libaec, which
+        # we install to $INSTALL_PATH outside it. Override to BOTH so CMake also
+        # searches CMAKE_PREFIX_PATH/normal paths, not just the sysroot.
+        ANDROID_CMAKE_FLAGS=(-DCMAKE_TOOLCHAIN_FILE="${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake" -DANDROID_ABI="$ANDROID_ABI" -DANDROID_NATIVE_API_LEVEL=24
+            -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH)
 
         # Build libaec for szip first, with the same NDK toolchain as the main build
         mkdir -p ../libaec-$AEC_VERSION/build
