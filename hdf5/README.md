@@ -48,7 +48,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>hdf5-platform</artifactId>
-            <version>1.14.6-1.5.11</version>
+            <version>1.14.6-1.5.15-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
