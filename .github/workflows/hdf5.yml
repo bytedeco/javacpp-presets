@@ -45,6 +45,12 @@ jobs:
       # 32-bit native library, so HDF5BindingsTest can't run here either.
       CI_DEPLOY_OPTIONS: -DskipTests=true
     steps:
+      # CentOS 7 went EOL in June 2024 and mirrorlist.centos.org no longer resolves at
+      # all ("Cannot find a valid baseurl for repo: base/7/x86_64"). deploy-centos
+      # already has this same vault.centos.org redirect for CentOS 6 (which went EOL
+      # earlier), but never got the equivalent for 7 -- apply it here before that
+      # action's own `yum -y update` runs.
+      - run: sed -i 's/mirror\.centos\.org/vault.centos.org/g; s/^#\s*baseurl=http/baseurl=http/g; s/^mirrorlist=http/#mirrorlist=http/g' /etc/yum.repos.d/*.repo
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
   linux-x86_64:
     runs-on: ubuntu-22.04
