@@ -184,8 +184,13 @@ EOF
 
         # zlib1g-dev:i386 is already installed by deploy-ubuntu's own cross-compiling
         # branch for this exact platform (Ubuntu's i386 multiarch repos are still
-        # live, unlike CentOS 7's), so HDF5_CMAKE_FLAGS' plain find_package(ZLIB)
-        # picks it up the same way linux-x86_64 finds the 64-bit one.
+        # live, unlike CentOS 7's), but find_package(ZLIB)'s automatic multiarch
+        # library-path detection only works for a compiler CMake recognizes as a
+        # Debian-multiarch gcc; the vendored Bootlin toolchain isn't one, so it finds
+        # the (arch-independent) header fine but not the library itself ("Could NOT
+        # find ZLIB (missing: ZLIB_LIBRARY)"). Pin the path explicitly instead, the
+        # same way windows-x86/windows-x86_64 already have to.
+        ZLIB_I386_LIB=/usr/lib/i386-linux-gnu/libz.so
 
         # Build libaec for szip first
         mkdir -p ../libaec-$AEC_VERSION/build
@@ -197,7 +202,7 @@ EOF
 
         mkdir -p build
         pushd build
-        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${HDF5_CMAKE_FLAGS[@]}" ..
+        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${HDF5_CMAKE_FLAGS[@]}" -DZLIB_LIBRARY="$ZLIB_I386_LIB" -DZLIB_INCLUDE_DIR=/usr/include ..
         make -j $MAKEJ
         make install/strip
         popd
