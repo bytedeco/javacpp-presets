@@ -40,7 +40,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.hdf5</groupId>
     <artifactId>H5tutrCmprss</artifactId>
-    <version>1.5.11</version>
+    <version>1.5.15-SNAPSHOT</version>
     <properties>
         <exec.mainClass>H5tutrCmprss</exec.mainClass>
     </properties>
