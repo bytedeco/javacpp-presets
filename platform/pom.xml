@@ -155,11 +155,11 @@
 <!--      <artifactId>arrow-platform</artifactId>-->
 <!--      <version>6.0.1-${project.version}</version>-->
 <!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>org.bytedeco</groupId>-->
-<!--      <artifactId>hdf5-platform</artifactId>-->
-<!--      <version>1.14.3-${project.version}</version>-->
-<!--    </dependency>-->
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>hdf5-platform</artifactId>
+      <version>1.14.6-${project.version}</version>
+    </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->
 <!--      <artifactId>hyperscan-platform</artifactId>-->
