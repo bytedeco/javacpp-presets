@@ -36,7 +36,7 @@ public class H5L_info2_t extends Pointer {
     /** Type of link                   */
     public native @Cast("H5L_type_t") int type(); public native H5L_info2_t type(int setter);
     /** Indicate if creation order is valid */
-    public native @Cast("hbool_t") boolean corder_valid(); public native H5L_info2_t corder_valid(boolean setter);
+    public native @Cast("bool") boolean corder_valid(); public native H5L_info2_t corder_valid(boolean setter);
     /** Creation order                 */
     public native @Cast("int64_t") long corder(); public native H5L_info2_t corder(long setter);
     /** Character set of link name     */

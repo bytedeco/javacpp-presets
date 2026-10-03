@@ -63,7 +63,7 @@ public class HDF5BindingsTest {
     public void javaCppBindingsAreUsable() throws java.lang.Exception {
         File file = File.createTempFile("hdf5-javacpp-", ".h5");
         assertTrue(file.delete());
-        H5File h5file = new H5File(file.getAbsolutePath(), H5F_ACC_TRUNC());
+        H5File h5file = new H5File(file.getAbsolutePath(), H5F_ACC_TRUNC);
         h5file.close();
         assertTrue("H5File did not produce a file on disk", file.exists());
         file.delete();

@@ -17,7 +17,6 @@ import static org.bytedeco.hdf5.global.hdf5.*;
     It provides a collection of wrappers for the C functions that take a
     location identifier to specify the HDF5 object.  The location identifier
     can be either file, group, dataset, attribute, or named datatype.
-    Wrappers for H5A functions stay in H5Object.
 */
 // Inheritance: IdComponent
 @Namespace("H5") @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)
@@ -94,9 +93,6 @@ public class H5Location extends IdComponent {
     public native void dereference(@Const @ByRef H5Location loc, @Const Pointer ref, @Cast("H5R_type_t") int ref_type/*=H5R_OBJECT*/,
                          @Const @ByRef(nullValue = "H5::PropList::DEFAULT") PropList plist);
     public native void dereference(@Const @ByRef H5Location loc, @Const Pointer ref);
-    // Removed in 1.10.1, because H5Location is baseclass
-    // void dereference(const Attribute& attr, const void* ref, H5R_type_t ref_type = H5R_OBJECT, const
-    // PropList& plist = PropList::DEFAULT);
 
     // Retrieves a dataspace with the region pointed to selected.
     public native @ByVal DataSpace getRegion(Pointer ref, @Cast("H5R_type_t") int ref_type/*=H5R_DATASET_REGION*/);
@@ -131,14 +127,6 @@ public class H5Location extends IdComponent {
                               @Const @ByRef(nullValue = "H5::LinkCreatPropList::DEFAULT") LinkCreatPropList lcpl);
     public native @ByVal DataSet createDataSet(String name, @Const @ByRef DataType data_type, @Const @ByRef DataSpace data_space);
 
-    // Deprecated to add LinkCreatPropList and DSetAccPropList - 1.10.3
-    // DataSet createDataSet(const char* name, const DataType& data_type, const DataSpace& data_space, const
-    // DSetCreatPropList& create_plist = DSetCreatPropList::DEFAULT) const; DataSet createDataSet(const
-    // H5std_string& name, const DataType& data_type, const DataSpace& data_space, const DSetCreatPropList&
-    // create_plist = DSetCreatPropList::DEFAULT) const;
-
-    // Opens an existing dataset at this location.
-    // DSetAccPropList is added - 1.10.3
     public native @ByVal DataSet openDataSet(@Cast("const char*") BytePointer name, @Const @ByRef(nullValue = "H5::DSetAccPropList::DEFAULT") DSetAccPropList dapl);
     public native @ByVal DataSet openDataSet(@Cast("const char*") BytePointer name);
     public native @ByVal DataSet openDataSet(String name, @Const @ByRef(nullValue = "H5::DSetAccPropList::DEFAULT") DSetAccPropList dapl);
@@ -158,7 +146,6 @@ public class H5Location extends IdComponent {
     public native @StdString String getLinkval(String link_name);
 
     // Returns the number of objects in this group.
-    // Deprecated - moved to H5::Group in 1.10.2.
     public native @Cast("hsize_t") long getNumObjs();
 
     // Retrieves the name of an object in this group, given the

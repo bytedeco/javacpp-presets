@@ -49,11 +49,11 @@ public class FileAccPropList extends PropList {
 
     // Modifies this file access property list to use the H5FD_CORE
     // driver.
-    public native void setCore(@Cast("size_t") long increment, @Cast("hbool_t") boolean backing_store);
+    public native void setCore(@Cast("size_t") long increment, @Cast("bool") boolean backing_store);
 
     // Queries H5FD_CORE driver properties.
-    public native void getCore(@Cast("size_t*") @ByRef SizeTPointer increment, @Cast("hbool_t*") @ByRef BoolPointer backing_store);
-    public native void getCore(@Cast("size_t*") @ByRef SizeTPointer increment, @Cast("hbool_t*") @ByRef boolean[] backing_store);
+    public native void getCore(@Cast("size_t*") @ByRef SizeTPointer increment, @Cast("bool*") @ByRef BoolPointer backing_store);
+    public native void getCore(@Cast("size_t*") @ByRef SizeTPointer increment, @Cast("bool*") @ByRef boolean[] backing_store);
 
     // Sets this file access properties list to the family driver.
     public native void setFamily(@Cast("hsize_t") long memb_size, @Const @ByRef FileAccPropList memb_plist);
@@ -140,11 +140,11 @@ public class FileAccPropList extends PropList {
     public native @Cast("unsigned") int getGcReferences();
 
     // Sets file locking parameters.
-    public native void setFileLocking(@Cast("hbool_t") boolean use_file_locking, @Cast("hbool_t") boolean ignore_when_disabled);
+    public native void setFileLocking(@Cast("bool") boolean use_file_locking, @Cast("bool") boolean ignore_when_disabled);
 
     // Gets file locking parameters.
-    public native void getFileLocking(@Cast("hbool_t*") @ByRef BoolPointer use_file_locking, @Cast("hbool_t*") @ByRef BoolPointer ignore_when_disabled);
-    public native void getFileLocking(@Cast("hbool_t*") @ByRef boolean[] use_file_locking, @Cast("hbool_t*") @ByRef boolean[] ignore_when_disabled);
+    public native void getFileLocking(@Cast("bool*") @ByRef BoolPointer use_file_locking, @Cast("bool*") @ByRef BoolPointer ignore_when_disabled);
+    public native void getFileLocking(@Cast("bool*") @ByRef boolean[] use_file_locking, @Cast("bool*") @ByRef boolean[] ignore_when_disabled);
 
     // Sets bounds on versions of library format to be used when creating
     // or writing objects.

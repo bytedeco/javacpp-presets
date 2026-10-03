@@ -47,13 +47,13 @@ public class H5AC_cache_image_config_t extends Pointer {
     /** Boolean flag indicating whether a cache image should be created on file
          *   close.
          */
-    public native @Cast("hbool_t") boolean generate_image(); public native H5AC_cache_image_config_t generate_image(boolean setter);
+    public native @Cast("bool") boolean generate_image(); public native H5AC_cache_image_config_t generate_image(boolean setter);
     
     /** Boolean flag indicating whether the cache image should include the
          *  adaptive cache resize configuration and status.  Note that this field
          *  is ignored at present.
          */
-    public native @Cast("hbool_t") boolean save_resize_status(); public native H5AC_cache_image_config_t save_resize_status(boolean setter);
+    public native @Cast("bool") boolean save_resize_status(); public native H5AC_cache_image_config_t save_resize_status(boolean setter);
     
     /** Integer field indicating the maximum number of times a
          *   prefetched entry can appear in subsequent cache images.  This field

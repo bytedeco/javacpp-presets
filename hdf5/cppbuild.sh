@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 ZLIB=zlib-1.3.2
-HDF5_VERSION=1.14.6
+HDF5_VERSION=2.2.0
 AEC_VERSION=1.1.2
 # zlib.net only serves the current latest release at its plain URL, so pinning a specific
 # version there breaks again the moment a newer one ships (as already happened once for
@@ -16,7 +16,7 @@ AEC_VERSION=1.1.2
 download "https://github.com/madler/zlib/releases/download/v${ZLIB#zlib-}/$ZLIB.tar.gz" $ZLIB.tar.gz
 # support.hdfgroup.org's legacy FTP-style mirror no longer serves releases past 1.14.3;
 # HDF Group now publishes source tarballs as GitHub Release assets instead.
-download "https://github.com/HDFGroup/hdf5/releases/download/hdf5_$HDF5_VERSION/hdf5-$HDF5_VERSION.tar.gz" hdf5-$HDF5_VERSION.tar.gz
+download "https://github.com/HDFGroup/hdf5/releases/download/$HDF5_VERSION/hdf5-$HDF5_VERSION.tar.gz" hdf5-$HDF5_VERSION.tar.gz
 # Use Github mirror repo rather than Gitlab repo for download speed
 #download "https://gitlab.dkrz.de/k202009/libaec/uploads/45b10e42123edd26ab7b3ad92bcf7be2/libaec-$AEC_VERSION.tar.gz" libaec-$AEC_VERSION.tar.gz
 download "https://github.com/MathisRosenhauer/libaec/releases/download/v$AEC_VERSION/libaec-$AEC_VERSION.tar.gz" libaec-$AEC_VERSION.tar.gz
@@ -31,16 +31,33 @@ tar --totals -xf ../$ZLIB.tar.gz
 pushd hdf5-$HDF5_VERSION
 
 #sedinplace '/cmake_minimum_required/d' $(find ./ -iname CMakeLists.txt)
-sedinplace 's/# *cmakedefine/#cmakedefine/g' config/cmake/H5pubconf.h.in
+sedinplace 's/# *cmakedefine/#cmakedefine/g' src/H5pubconf.h.in
 sedinplace 's/COMPATIBILITY SameMinorVersion/COMPATIBILITY AnyNewerVersion/g' CMakeInstallation.cmake
-sedinplace '/C_RUN (/{N;N;d;}' config/cmake/ConfigureChecks.cmake
+sedinplace '/C_RUN (/{N;N;d;}' config/ConfigureChecks.cmake
 
 # As of 1.14.0 the integrated cmake process for building aec/szip is broken
 # Revisit integrated szip build with 1.14.1
 
+# HDF5 2.x's CMake otherwise refuses JDKs older than 11 (java/CMakeLists.txt), but Maven
+# runs on Java 8 here, and the Java sources themselves still compile for Java 8 via the
+# presets' own Maven build. Rather than hunting for or downloading a newer JDK just to
+# satisfy this check, lower the minimum it enforces -- HDF5's JNI build has no actual
+# post-8 language/API dependency, the check is just a defensive gate.
+sedinplace 's/Java_VERSION_STRING VERSION_LESS "11\.0\.0"/Java_VERSION_STRING VERSION_LESS "1.8.0"/' java/CMakeLists.txt
+HDF5_JAVA_HOME="${JAVA_HOME:-}"
+
+HDF5_CMAKE_FLAGS=(-DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_PREFIX_PATH="$INSTALL_PATH"
+    -DBUILD_TESTING=OFF -DHDF5_BUILD_EXAMPLES=OFF -DHDF5_BUILD_TOOLS=OFF -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON
+    -DHDF5_ENABLE_ZLIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DSZIP_USE_EXTERNAL=OFF -DHDF5_USE_LIBAEC_STATIC=ON)
+
 case $PLATFORM in
-# HDF5 does not currently support cross-compiling:
-# https://support.hdfgroup.org/HDF5/faq/compile.html
+# The FAQ note that used to be here ("HDF5 does not currently support
+# cross-compiling") is stale: as of HDF5 2.x's CMake, cross-compiling works fine for
+# a C/C++/Java build (see linux-armhf/linux-ppc64le below and android-arm64/
+# android-x86_64 further down) -- it just needs a plain toolchain file rather than
+# the old autotools --host= invocations below. android-arm/android-x86 (32-bit) are
+# left disabled: low utility today, and no currently-enabled precedent in this repo
+# builds them either (openblas/opencv/ffmpeg keep these commented out too).
 #    android-arm)
 #        # Build libaec for szip first
 #        mkdir -p ../libaec-$AEC_VERSION/build
@@ -69,30 +86,77 @@ case $PLATFORM in
 #        make -j $MAKEJ
 #        make install-strip
 #        ;;
-    linux-armhf)
-        # Build libaec for szip first
+    android-arm64|android-x86_64)
+        # PLATFORM_ROOT is the Android NDK root, set via the -Djavacpp.platform.root
+        # Maven property that deploy-ubuntu/deploy-centos already export for every
+        # android-* job (see the CI_DEPLOY_PLATFORM == android-* branch in those
+        # actions); opencv's/openblas's own cppbuild.sh rely on the same variable for
+        # their already-working android-arm64/android-x86_64 jobs.
+        case $PLATFORM in
+            android-arm64) ANDROID_ABI=arm64-v8a ;;
+            android-x86_64) ANDROID_ABI=x86_64 ;;
+        esac
+        # The NDK toolchain file defaults CMAKE_FIND_ROOT_PATH_MODE_{LIBRARY,INCLUDE,
+        # PACKAGE} to ONLY, restricting find_library/find_package to the NDK's own
+        # sysroot -- fine for zlib (bundled in the sysroot) but not for libaec, which
+        # we install to $INSTALL_PATH outside it. Override to BOTH so CMake also
+        # searches CMAKE_PREFIX_PATH/normal paths, not just the sysroot.
+        ANDROID_CMAKE_FLAGS=(-DCMAKE_TOOLCHAIN_FILE="${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake" -DANDROID_ABI="$ANDROID_ABI" -DANDROID_NATIVE_API_LEVEL=24
+            -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH)
+
+        # Build libaec for szip first, with the same NDK toolchain as the main build
         mkdir -p ../libaec-$AEC_VERSION/build
         pushd ../libaec-$AEC_VERSION/build
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
+        "$CMAKE" "${ANDROID_CMAKE_FLAGS[@]}" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
         make -j $MAKEJ
         make install
         popd
 
+        mkdir -p build
+        pushd build
+        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${ANDROID_CMAKE_FLAGS[@]}" "${HDF5_CMAKE_FLAGS[@]}" ..
+        make -j $MAKEJ
+        make install/strip
+        popd
+        ;;
+    linux-armhf)
+        # HDF5 2.x has no autotools build anymore, and its own CMake already degrades
+        # gracefully when cross-compiling (H5ConversionTests falls back to documented
+        # defaults when CMAKE_CROSSCOMPILING is set and no CMAKE_CROSSCOMPILING_EMULATOR
+        # is given -- see config/ConfigureChecks.cmake), so a plain toolchain file is all
+        # that's needed; no version-specific patch (the old hdf5-linux-armhf.patch was
+        # written against HDF5 1.12.2's build tree, long before CMake supported this).
+        ARMHF_CMAKE_FLAGS=()
         MACHINE_TYPE=$( uname -m )
-        if [[ "$MACHINE_TYPE" =~ arm ]]; then
-          ./configure --prefix=$INSTALL_PATH CC="gcc" CXX="g++" --enable-cxx --enable-java
-          make -j $MAKEJ
-          make install-strip
-        else
-          echo "Not native arm so assume cross compiling"
-          patch -Np1 < ../../../hdf5-linux-armhf.patch || true
-          #need this to run twice, first run fails so we fake the exit code too
-          for x in 1 2; do
-              "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=`pwd`/arm.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DCMAKE_CXX_FLAGS="-D_GNU_SOURCE" -DCMAKE_C_FLAGS="-D_GNU_SOURCE" -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON . || true
-          done
-          make -j $MAKEJ
-          make install
+        if [[ ! "$MACHINE_TYPE" =~ arm ]]; then
+          echo "Not native arm so cross-compiling with arm-linux-gnueabihf"
+          cat > arm.cmake <<'EOF'
+set(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_SYSTEM_PROCESSOR arm)
+set(CMAKE_C_COMPILER arm-linux-gnueabihf-gcc)
+set(CMAKE_CXX_COMPILER arm-linux-gnueabihf-g++)
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+EOF
+          ARMHF_CMAKE_FLAGS=(-DCMAKE_TOOLCHAIN_FILE="$(pwd)/arm.cmake")
         fi
+
+        # Build libaec for szip first, with the same (native or cross) toolchain as HDF5
+        mkdir -p ../libaec-$AEC_VERSION/build
+        pushd ../libaec-$AEC_VERSION/build
+        "$CMAKE" "${ARMHF_CMAKE_FLAGS[@]}" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
+        make -j $MAKEJ
+        make install
+        popd
+
+        mkdir -p build
+        pushd build
+        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${ARMHF_CMAKE_FLAGS[@]}" "${HDF5_CMAKE_FLAGS[@]}" ..
+        make -j $MAKEJ
+        make install/strip
+        popd
         ;;
     linux-arm64)
         # Build libaec for szip first
@@ -103,27 +167,60 @@ case $PLATFORM in
         make install
         popd
 
-        MACHINE_TYPE=$( uname -m )
-        if [[ "$MACHINE_TYPE" =~ arm ]]; then
-          ./configure --prefix=$INSTALL_PATH CC="gcc -m64" CXX="g++ -m64" --enable-cxx --enable-java
-          make -j $MAKEJ
-          make install-strip
-        elif [[ "$MACHINE_TYPE" =~ aarch64 ]]; then
-          ./configure --prefix=$INSTALL_PATH CC="gcc" CXX="g++" --enable-cxx --enable-java
-          make -j $MAKEJ
-          make install-strip
-        else
-          echo "Not native arm so assume cross compiling"
-          patch -Np1 < ../../../hdf5-linux-arm64.patch || true
-          #need this to run twice, first run fails so we fake the exit code too
-          for x in 1 2; do
-              "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=`pwd`/arm64.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DCMAKE_CXX_FLAGS="-D_GNU_SOURCE" -DCMAKE_C_FLAGS="-D_GNU_SOURCE" -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON . || true
-          done
-          make -j $MAKEJ
-          make install
-        fi
+        # Built natively on an arm64 runner; HDF5 2.x has no autotools build anymore
+        mkdir -p build
+        pushd build
+        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${HDF5_CMAKE_FLAGS[@]}" ..
+        make -j $MAKEJ
+        make install/strip
+        popd
         ;;
     linux-x86)
+        # Native gcc -m32 needs a 32-bit multilib toolchain, which modern Ubuntu no
+        # longer ships by default, and centos:7 (the fallback every other module in
+        # this repo uses for linux-x86) is a dead end too: it went EOL in June 2024
+        # and its mirror network has been shut down entirely, base repo and SCL/
+        # devtoolset alike. Rather than chase CentOS's aging package ecosystem,
+        # vendor a self-contained i686-linux-gnu cross-toolchain instead -- the same
+        # philosophy BinaryBuilder.jl uses (don't trust the host distro's compiler
+        # packages, bring your own). Bootlin's prebuilt, relocatable toolchains are a
+        # public, actively-maintained source for this; the 2022.08 release (GCC
+        # 11.3.0, glibc 2.35) matches the same glibc baseline linux-x86_64 already
+        # requires (Ubuntu 22.04) -- their newest release's "stable" label refers to
+        # buildroot's own release-testing process, not an old/conservative glibc: it
+        # links against glibc 2.44, which would be less portable than what we
+        # already ship, not more.
+        #
+        # 32-bit x86 code runs natively on an x86_64 Linux kernel (no emulator
+        # needed, unlike genuinely different architectures), so HDF5's own CMake
+        # configure checks that need to compile-and-run a test program still work
+        # normally here -- this isn't full cross-compiling the way arm/ppc64le are,
+        # just targeting a different compiler output for the same machine.
+        BOOTLIN_TOOLCHAIN=x86-i686--glibc--stable-2022.08-1
+        download "https://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/$BOOTLIN_TOOLCHAIN.tar.bz2" $BOOTLIN_TOOLCHAIN.tar.bz2
+        tar --totals -xjf $BOOTLIN_TOOLCHAIN.tar.bz2
+        export CC="$(pwd)/$BOOTLIN_TOOLCHAIN/bin/i686-linux-gcc"
+        export CXX="$(pwd)/$BOOTLIN_TOOLCHAIN/bin/i686-linux-g++"
+
+        # zlib1g-dev:i386 is already installed by deploy-ubuntu's own cross-compiling
+        # branch for this exact platform (Ubuntu's i386 multiarch repos are still
+        # live, unlike CentOS 7's), but find_package(ZLIB)'s automatic multiarch
+        # library-path detection only works for a compiler CMake recognizes as a
+        # Debian-multiarch gcc; the vendored Bootlin toolchain isn't one, so it finds
+        # the (arch-independent) header fine but not the library itself ("Could NOT
+        # find ZLIB (missing: ZLIB_LIBRARY)") at configure time. Pin the path
+        # explicitly, the same way windows-x86/windows-x86_64 already have to.
+        #
+        # That alone gets find_package(ZLIB) to succeed, but the Bootlin toolchain is
+        # fully self-contained with its own internal sysroot and doesn't search the
+        # host's /usr/include by default the way an ordinary system gcc would --
+        # HDF5's own CMakeLists.txt doesn't thread ZLIB_INCLUDE_DIR onto every target
+        # uniformly, so H5Zdeflate.c (the one file that #includes zlib.h directly)
+        # still failed with "zlib.h: No such file or directory" even after configure
+        # found it. Force /usr/include onto every compile unit's flags directly
+        # rather than chasing HDF5's per-target include-dir wiring.
+        ZLIB_I386_LIB=/usr/lib/i386-linux-gnu/libz.so
+
         # Build libaec for szip first
         mkdir -p ../libaec-$AEC_VERSION/build
         pushd ../libaec-$AEC_VERSION/build
@@ -132,9 +229,12 @@ case $PLATFORM in
         make install
         popd
 
-        ./configure --prefix=$INSTALL_PATH CC="gcc -m32" CXX="g++ -m32" --enable-cxx --enable-java --with-szlib
+        mkdir -p build
+        pushd build
+        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${HDF5_CMAKE_FLAGS[@]}" -DZLIB_LIBRARY="$ZLIB_I386_LIB" -DZLIB_INCLUDE_DIR=/usr/include -DCMAKE_C_FLAGS="-I/usr/include" -DCMAKE_CXX_FLAGS="-I/usr/include" ..
         make -j $MAKEJ
-        make install-strip
+        make install/strip
+        popd
         ;;
     linux-x86_64)
         # Build libaec for szip first
@@ -145,34 +245,48 @@ case $PLATFORM in
         make install
         popd
 
-        ./configure --prefix=$INSTALL_PATH CC="gcc -m64" CXX="g++ -m64" --enable-cxx --enable-java --with-szlib
+        mkdir -p build
+        pushd build
+        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${HDF5_CMAKE_FLAGS[@]}" ..
         make -j $MAKEJ
-        make install-strip
+        make install/strip
+        popd
         ;;
     linux-ppc64le)
+        # Same rationale as linux-armhf above: no autotools build in HDF5 2.x, and its
+        # CMake already has a graceful cross-compiling fallback, so a plain toolchain
+        # file replaces the old hdf5-linux-ppc64le.patch (written against 1.12.2).
+        PPC64LE_CMAKE_FLAGS=()
         MACHINE_TYPE=$( uname -m )
-        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          # Build libaec for szip first
-          mkdir -p ../libaec-$AEC_VERSION/build
-          pushd ../libaec-$AEC_VERSION/build
-          "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
-          make -j $MAKEJ
-          make install
-          popd
-
-          ./configure --prefix=$INSTALL_PATH CC="gcc -m64" CXX="g++ -m64" --enable-cxx --enable-java --with-szlib
-          make -j $MAKEJ
-          make install-strip
-        else
-          echo "Not native ppc so assume cross compiling"
-          patch -Np1 < ../../../hdf5-linux-ppc64le.patch || true
-          #need this to run twice, first run fails so we fake the exit code too
-          for x in 1 2; do
-              "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=`pwd`/ppc.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DCMAKE_CXX_FLAGS="-D_GNU_SOURCE" -DCMAKE_C_FLAGS="-D_GNU_SOURCE" -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DSZAEC_TGZ_NAME:STRING="libaec-$AEC_VERSION.tar.gz" -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DUSE_LIBAEC=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON . || true
-          done
-          make -j $MAKEJ
-          make install
+        if [[ ! "$MACHINE_TYPE" =~ ppc64 ]]; then
+          echo "Not native ppc so cross-compiling with powerpc64le-linux-gnu"
+          cat > ppc.cmake <<'EOF'
+set(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_SYSTEM_PROCESSOR ppc64le)
+set(CMAKE_C_COMPILER powerpc64le-linux-gnu-gcc)
+set(CMAKE_CXX_COMPILER powerpc64le-linux-gnu-g++)
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+EOF
+          PPC64LE_CMAKE_FLAGS=(-DCMAKE_TOOLCHAIN_FILE="$(pwd)/ppc.cmake")
         fi
+
+        # Build libaec for szip first, with the same (native or cross) toolchain as HDF5
+        mkdir -p ../libaec-$AEC_VERSION/build
+        pushd ../libaec-$AEC_VERSION/build
+        "$CMAKE" "${PPC64LE_CMAKE_FLAGS[@]}" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
+        make -j $MAKEJ
+        make install
+        popd
+
+        mkdir -p build
+        pushd build
+        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${PPC64LE_CMAKE_FLAGS[@]}" "${HDF5_CMAKE_FLAGS[@]}" ..
+        make -j $MAKEJ
+        make install/strip
+        popd
         ;;
     macosx-*)
         # Build libaec for szip first
@@ -183,10 +297,12 @@ case $PLATFORM in
         make install
         popd
 
-        patch -Np1 < ../../../hdf5-macosx.patch
-        ./configure --prefix=$INSTALL_PATH --enable-cxx --enable-java --with-szlib
+        mkdir -p build
+        pushd build
+        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${HDF5_CMAKE_FLAGS[@]}" ..
         make -j $MAKEJ
-        make install-strip
+        make install/strip
+        popd
         ;;
     windows-x86)
         export CC="cl.exe"
@@ -209,7 +325,7 @@ case $PLATFORM in
         mkdir -p build/bin
         cp ../lib/*.lib build/bin
         pushd build
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DZLIB_LIBRARY="$INSTALL_PATH/lib/zs.lib" -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" -DZLIB_USE_EXTERNAL=OFF -DSZIP_LIBRARY="$INSTALL_PATH/lib/szip-static.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL=OFF -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DHDF5_USE_LIBAEC_STATIC=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
+        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DZLIB_LIBRARY="$INSTALL_PATH/lib/zs.lib" -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" -DZLIB_USE_EXTERNAL=OFF -DSZIP_LIBRARY="$INSTALL_PATH/lib/szip-static.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL=OFF -DHDF5_ENABLE_ZLIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DHDF5_USE_LIBAEC_STATIC=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
         ninja -j $MAKEJ
         ninja install
         popd
@@ -235,7 +351,7 @@ case $PLATFORM in
         mkdir -p build/bin
         cp ../lib/*.lib build/bin
         pushd build
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DZLIB_LIBRARY="$INSTALL_PATH/lib/zs.lib" -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" -DZLIB_USE_EXTERNAL=OFF -DSZIP_LIBRARY="$INSTALL_PATH/lib/szip-static.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL=OFF -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DHDF5_USE_LIBAEC_STATIC=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
+        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DZLIB_LIBRARY="$INSTALL_PATH/lib/zs.lib" -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" -DZLIB_USE_EXTERNAL=OFF -DSZIP_LIBRARY="$INSTALL_PATH/lib/szip-static.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL=OFF -DHDF5_ENABLE_ZLIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DHDF5_USE_LIBAEC_STATIC=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
         ninja -j $MAKEJ
         ninja install
         popd
@@ -246,7 +362,11 @@ case $PLATFORM in
 esac
 
 [ -d "../java" ] && rm -r ../java
-cp -r java/src ../java
+# HDF5 2.x moved the JNI-based Java API from java/src to java/src-jni (java/hdf is now a
+# separate FFM-based implementation), and generates H5Version.java into the build tree.
+cp -r java/src-jni ../java
+rm -r ../java/test
+cp build/java/src-jni/hdf/hdf5lib/H5Version.java ../java/hdf/hdf5lib/
 
 # Return to cppbuild directory
 popd

@@ -384,7 +384,7 @@ public class H5FD_class_t extends Pointer {
         public    Flush_H5FD_t_long_boolean(Pointer p) { super(p); }
         protected Flush_H5FD_t_long_boolean() { allocate(); }
         private native void allocate();
-        public native @Cast("herr_t") int call(H5FD_t file, @Cast("hid_t") long dxpl_id, @Cast("hbool_t") boolean closing);
+        public native @Cast("herr_t") int call(H5FD_t file, @Cast("hid_t") long dxpl_id, @Cast("bool") boolean closing);
     }
     
     /** Flushes all data to disk */
@@ -396,7 +396,7 @@ public class H5FD_class_t extends Pointer {
         public    Truncate_H5FD_t_long_boolean(Pointer p) { super(p); }
         protected Truncate_H5FD_t_long_boolean() { allocate(); }
         private native void allocate();
-        public native @Cast("herr_t") int call(H5FD_t file, @Cast("hid_t") long dxpl_id, @Cast("hbool_t") boolean closing);
+        public native @Cast("herr_t") int call(H5FD_t file, @Cast("hid_t") long dxpl_id, @Cast("bool") boolean closing);
     }
     
     /** Truncates a file */
@@ -408,7 +408,7 @@ public class H5FD_class_t extends Pointer {
         public    Lock_H5FD_t_boolean(Pointer p) { super(p); }
         protected Lock_H5FD_t_boolean() { allocate(); }
         private native void allocate();
-        public native @Cast("herr_t") int call(H5FD_t file, @Cast("hbool_t") boolean rw);
+        public native @Cast("herr_t") int call(H5FD_t file, @Cast("bool") boolean rw);
     }
     
     /** Places an advisory lock on a file */
