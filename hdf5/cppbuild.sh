@@ -119,45 +119,45 @@ case $PLATFORM in
         make install/strip
         popd
         ;;
-    linux-armhf)
-        # HDF5 2.x has no autotools build anymore, and its own CMake already degrades
-        # gracefully when cross-compiling (H5ConversionTests falls back to documented
-        # defaults when CMAKE_CROSSCOMPILING is set and no CMAKE_CROSSCOMPILING_EMULATOR
-        # is given -- see config/ConfigureChecks.cmake), so a plain toolchain file is all
-        # that's needed; no version-specific patch (the old hdf5-linux-armhf.patch was
-        # written against HDF5 1.12.2's build tree, long before CMake supported this).
-        ARMHF_CMAKE_FLAGS=()
-        MACHINE_TYPE=$( uname -m )
-        if [[ ! "$MACHINE_TYPE" =~ arm ]]; then
-          echo "Not native arm so cross-compiling with arm-linux-gnueabihf"
-          cat > arm.cmake <<'EOF'
-set(CMAKE_SYSTEM_NAME Linux)
-set(CMAKE_SYSTEM_PROCESSOR arm)
-set(CMAKE_C_COMPILER arm-linux-gnueabihf-gcc)
-set(CMAKE_CXX_COMPILER arm-linux-gnueabihf-g++)
-set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
-EOF
-          ARMHF_CMAKE_FLAGS=(-DCMAKE_TOOLCHAIN_FILE="$(pwd)/arm.cmake")
-        fi
-
-        # Build libaec for szip first, with the same (native or cross) toolchain as HDF5
-        mkdir -p ../libaec-$AEC_VERSION/build
-        pushd ../libaec-$AEC_VERSION/build
-        "$CMAKE" "${ARMHF_CMAKE_FLAGS[@]}" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
-        make -j $MAKEJ
-        make install
-        popd
-
-        mkdir -p build
-        pushd build
-        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${ARMHF_CMAKE_FLAGS[@]}" "${HDF5_CMAKE_FLAGS[@]}" ..
-        make -j $MAKEJ
-        make install/strip
-        popd
-        ;;
+#    linux-armhf)
+#        # HDF5 2.x has no autotools build anymore, and its own CMake already degrades
+#        # gracefully when cross-compiling (H5ConversionTests falls back to documented
+#        # defaults when CMAKE_CROSSCOMPILING is set and no CMAKE_CROSSCOMPILING_EMULATOR
+#        # is given -- see config/ConfigureChecks.cmake), so a plain toolchain file is all
+#        # that's needed; no version-specific patch (the old hdf5-linux-armhf.patch was
+#        # written against HDF5 1.12.2's build tree, long before CMake supported this).
+#        ARMHF_CMAKE_FLAGS=()
+#        MACHINE_TYPE=$( uname -m )
+#        if [[ ! "$MACHINE_TYPE" =~ arm ]]; then
+#          echo "Not native arm so cross-compiling with arm-linux-gnueabihf"
+#          cat > arm.cmake <<'EOF'
+#set(CMAKE_SYSTEM_NAME Linux)
+#set(CMAKE_SYSTEM_PROCESSOR arm)
+#set(CMAKE_C_COMPILER arm-linux-gnueabihf-gcc)
+#set(CMAKE_CXX_COMPILER arm-linux-gnueabihf-g++)
+#set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+#set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+#set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+#set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+#EOF
+#          ARMHF_CMAKE_FLAGS=(-DCMAKE_TOOLCHAIN_FILE="$(pwd)/arm.cmake")
+#        fi
+#
+#        # Build libaec for szip first, with the same (native or cross) toolchain as HDF5
+#        mkdir -p ../libaec-$AEC_VERSION/build
+#        pushd ../libaec-$AEC_VERSION/build
+#        "$CMAKE" "${ARMHF_CMAKE_FLAGS[@]}" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
+#        make -j $MAKEJ
+#        make install
+#        popd
+#
+#        mkdir -p build
+#        pushd build
+#        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${ARMHF_CMAKE_FLAGS[@]}" "${HDF5_CMAKE_FLAGS[@]}" ..
+#        make -j $MAKEJ
+#        make install/strip
+#        popd
+#        ;;
     linux-arm64)
         # Build libaec for szip first
         mkdir -p ../libaec-$AEC_VERSION/build
@@ -175,67 +175,67 @@ EOF
         make install/strip
         popd
         ;;
-    linux-x86)
-        # Native gcc -m32 needs a 32-bit multilib toolchain, which modern Ubuntu no
-        # longer ships by default, and centos:7 (the fallback every other module in
-        # this repo uses for linux-x86) is a dead end too: it went EOL in June 2024
-        # and its mirror network has been shut down entirely, base repo and SCL/
-        # devtoolset alike. Rather than chase CentOS's aging package ecosystem,
-        # vendor a self-contained i686-linux-gnu cross-toolchain instead -- the same
-        # philosophy BinaryBuilder.jl uses (don't trust the host distro's compiler
-        # packages, bring your own). Bootlin's prebuilt, relocatable toolchains are a
-        # public, actively-maintained source for this; the 2022.08 release (GCC
-        # 11.3.0, glibc 2.35) matches the same glibc baseline linux-x86_64 already
-        # requires (Ubuntu 22.04) -- their newest release's "stable" label refers to
-        # buildroot's own release-testing process, not an old/conservative glibc: it
-        # links against glibc 2.44, which would be less portable than what we
-        # already ship, not more.
-        #
-        # 32-bit x86 code runs natively on an x86_64 Linux kernel (no emulator
-        # needed, unlike genuinely different architectures), so HDF5's own CMake
-        # configure checks that need to compile-and-run a test program still work
-        # normally here -- this isn't full cross-compiling the way arm/ppc64le are,
-        # just targeting a different compiler output for the same machine.
-        BOOTLIN_TOOLCHAIN=x86-i686--glibc--stable-2022.08-1
-        download "https://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/$BOOTLIN_TOOLCHAIN.tar.bz2" $BOOTLIN_TOOLCHAIN.tar.bz2
-        tar --totals -xjf $BOOTLIN_TOOLCHAIN.tar.bz2
-        export CC="$(pwd)/$BOOTLIN_TOOLCHAIN/bin/i686-linux-gcc"
-        export CXX="$(pwd)/$BOOTLIN_TOOLCHAIN/bin/i686-linux-g++"
-
-        # zlib1g-dev:i386 is already installed by deploy-ubuntu's own cross-compiling
-        # branch for this exact platform (Ubuntu's i386 multiarch repos are still
-        # live, unlike CentOS 7's), but find_package(ZLIB)'s automatic multiarch
-        # library-path detection only works for a compiler CMake recognizes as a
-        # Debian-multiarch gcc; the vendored Bootlin toolchain isn't one, so it finds
-        # the (arch-independent) header fine but not the library itself ("Could NOT
-        # find ZLIB (missing: ZLIB_LIBRARY)") at configure time. Pin the path
-        # explicitly, the same way windows-x86/windows-x86_64 already have to.
-        #
-        # That alone gets find_package(ZLIB) to succeed, but the Bootlin toolchain is
-        # fully self-contained with its own internal sysroot and doesn't search the
-        # host's /usr/include by default the way an ordinary system gcc would --
-        # HDF5's own CMakeLists.txt doesn't thread ZLIB_INCLUDE_DIR onto every target
-        # uniformly, so H5Zdeflate.c (the one file that #includes zlib.h directly)
-        # still failed with "zlib.h: No such file or directory" even after configure
-        # found it. Force /usr/include onto every compile unit's flags directly
-        # rather than chasing HDF5's per-target include-dir wiring.
-        ZLIB_I386_LIB=/usr/lib/i386-linux-gnu/libz.so
-
-        # Build libaec for szip first
-        mkdir -p ../libaec-$AEC_VERSION/build
-        pushd ../libaec-$AEC_VERSION/build
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
-        make -j $MAKEJ
-        make install
-        popd
-
-        mkdir -p build
-        pushd build
-        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${HDF5_CMAKE_FLAGS[@]}" -DZLIB_LIBRARY="$ZLIB_I386_LIB" -DZLIB_INCLUDE_DIR=/usr/include -DCMAKE_C_FLAGS="-I/usr/include" -DCMAKE_CXX_FLAGS="-I/usr/include" ..
-        make -j $MAKEJ
-        make install/strip
-        popd
-        ;;
+#    linux-x86)
+#        # Native gcc -m32 needs a 32-bit multilib toolchain, which modern Ubuntu no
+#        # longer ships by default, and centos:7 (the fallback every other module in
+#        # this repo uses for linux-x86) is a dead end too: it went EOL in June 2024
+#        # and its mirror network has been shut down entirely, base repo and SCL/
+#        # devtoolset alike. Rather than chase CentOS's aging package ecosystem,
+#        # vendor a self-contained i686-linux-gnu cross-toolchain instead -- the same
+#        # philosophy BinaryBuilder.jl uses (don't trust the host distro's compiler
+#        # packages, bring your own). Bootlin's prebuilt, relocatable toolchains are a
+#        # public, actively-maintained source for this; the 2022.08 release (GCC
+#        # 11.3.0, glibc 2.35) matches the same glibc baseline linux-x86_64 already
+#        # requires (Ubuntu 22.04) -- their newest release's "stable" label refers to
+#        # buildroot's own release-testing process, not an old/conservative glibc: it
+#        # links against glibc 2.44, which would be less portable than what we
+#        # already ship, not more.
+#        #
+#        # 32-bit x86 code runs natively on an x86_64 Linux kernel (no emulator
+#        # needed, unlike genuinely different architectures), so HDF5's own CMake
+#        # configure checks that need to compile-and-run a test program still work
+#        # normally here -- this isn't full cross-compiling the way arm/ppc64le are,
+#        # just targeting a different compiler output for the same machine.
+#        BOOTLIN_TOOLCHAIN=x86-i686--glibc--stable-2022.08-1
+#        download "https://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/$BOOTLIN_TOOLCHAIN.tar.bz2" $BOOTLIN_TOOLCHAIN.tar.bz2
+#        tar --totals -xjf $BOOTLIN_TOOLCHAIN.tar.bz2
+#        export CC="$(pwd)/$BOOTLIN_TOOLCHAIN/bin/i686-linux-gcc"
+#        export CXX="$(pwd)/$BOOTLIN_TOOLCHAIN/bin/i686-linux-g++"
+#
+#        # zlib1g-dev:i386 is already installed by deploy-ubuntu's own cross-compiling
+#        # branch for this exact platform (Ubuntu's i386 multiarch repos are still
+#        # live, unlike CentOS 7's), but find_package(ZLIB)'s automatic multiarch
+#        # library-path detection only works for a compiler CMake recognizes as a
+#        # Debian-multiarch gcc; the vendored Bootlin toolchain isn't one, so it finds
+#        # the (arch-independent) header fine but not the library itself ("Could NOT
+#        # find ZLIB (missing: ZLIB_LIBRARY)") at configure time. Pin the path
+#        # explicitly, the same way windows-x86/windows-x86_64 already have to.
+#        #
+#        # That alone gets find_package(ZLIB) to succeed, but the Bootlin toolchain is
+#        # fully self-contained with its own internal sysroot and doesn't search the
+#        # host's /usr/include by default the way an ordinary system gcc would --
+#        # HDF5's own CMakeLists.txt doesn't thread ZLIB_INCLUDE_DIR onto every target
+#        # uniformly, so H5Zdeflate.c (the one file that #includes zlib.h directly)
+#        # still failed with "zlib.h: No such file or directory" even after configure
+#        # found it. Force /usr/include onto every compile unit's flags directly
+#        # rather than chasing HDF5's per-target include-dir wiring.
+#        ZLIB_I386_LIB=/usr/lib/i386-linux-gnu/libz.so
+#
+#        # Build libaec for szip first
+#        mkdir -p ../libaec-$AEC_VERSION/build
+#        pushd ../libaec-$AEC_VERSION/build
+#        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
+#        make -j $MAKEJ
+#        make install
+#        popd
+#
+#        mkdir -p build
+#        pushd build
+#        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" "${HDF5_CMAKE_FLAGS[@]}" -DZLIB_LIBRARY="$ZLIB_I386_LIB" -DZLIB_INCLUDE_DIR=/usr/include -DCMAKE_C_FLAGS="-I/usr/include" -DCMAKE_CXX_FLAGS="-I/usr/include" ..
+#        make -j $MAKEJ
+#        make install/strip
+#        popd
+#        ;;
     linux-x86_64)
         # Build libaec for szip first
         mkdir -p ../libaec-$AEC_VERSION/build
@@ -304,32 +304,32 @@ EOF
         make install/strip
         popd
         ;;
-    windows-x86)
-        export CC="cl.exe"
-        export CXX="cl.exe"
-
-        mkdir -p ../libaec-$AEC_VERSION/build
-        pushd ../libaec-$AEC_VERSION/build
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
-        ninja -j $MAKEJ
-        ninja install
-        popd
-
-        mkdir -p ../$ZLIB/build
-        pushd ../$ZLIB/build
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DZLIB_BUILD_TESTING=OFF ..
-        ninja -j $MAKEJ
-        ninja install
-        popd
-
-        mkdir -p build/bin
-        cp ../lib/*.lib build/bin
-        pushd build
-        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DZLIB_LIBRARY="$INSTALL_PATH/lib/zs.lib" -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" -DZLIB_USE_EXTERNAL=OFF -DSZIP_LIBRARY="$INSTALL_PATH/lib/szip-static.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL=OFF -DHDF5_ENABLE_ZLIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DHDF5_USE_LIBAEC_STATIC=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
-        ninja -j $MAKEJ
-        ninja install
-        popd
-        ;;
+#    windows-x86)
+#        export CC="cl.exe"
+#        export CXX="cl.exe"
+#
+#        mkdir -p ../libaec-$AEC_VERSION/build
+#        pushd ../libaec-$AEC_VERSION/build
+#        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
+#        ninja -j $MAKEJ
+#        ninja install
+#        popd
+#
+#        mkdir -p ../$ZLIB/build
+#        pushd ../$ZLIB/build
+#        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DZLIB_BUILD_TESTING=OFF ..
+#        ninja -j $MAKEJ
+#        ninja install
+#        popd
+#
+#        mkdir -p build/bin
+#        cp ../lib/*.lib build/bin
+#        pushd build
+#        JAVA_HOME="$HDF5_JAVA_HOME" "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DZLIB_LIBRARY="$INSTALL_PATH/lib/zs.lib" -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" -DZLIB_USE_EXTERNAL=OFF -DSZIP_LIBRARY="$INSTALL_PATH/lib/szip-static.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL=OFF -DHDF5_ENABLE_ZLIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DHDF5_USE_LIBAEC_STATIC=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
+#        ninja -j $MAKEJ
+#        ninja install
+#        popd
+#        ;;
     windows-x86_64)
         export CC="cl.exe"
         export CXX="cl.exe"
