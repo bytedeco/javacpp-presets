@@ -1,4 +1,7 @@
 
+ * Fix `hid_t` constants defined as `(H5OPEN X_g)` macros in presets for HDF5 being mapped as truncated `int` ([issue #1812](https://github.com/bytedeco/javacpp-presets/issues/1812))
+ * Link presets for HDF5 on Windows against `hdf5.dll`, the same library as `hdf5_java.dll`, instead of a static copy ([issue #1813](https://github.com/bytedeco/javacpp-presets/issues/1813))
+ * Set `hdf.hdf5lib.H5.hdf5lib` when loading `hdf5_java` so `hdf.hdf5lib.H5` doesn't print an `UnsatisfiedLinkError` searching `java.library.path`
  * Bundle missing `cudnn_ext` and `cudnn_engines_tensor_ir` libraries for `cuda-redist-cudnn` artifact ([issue #1805](https://github.com/bytedeco/javacpp-presets/issues/1805))
  * Enable Rockchip Media Process Platform (RKMPP) support for FFmpeg ([pull #1804](https://github.com/bytedeco/javacpp-presets/pull/1804))
  * Make ONNX Runtime’s DNNL and OpenVINO dependencies optional ([pull #1802](https://github.com/bytedeco/javacpp-presets/pull/1802))
