@@ -34,7 +34,7 @@ public class H5A_info_t extends Pointer {
     }
 
     /** Indicate if creation order is valid */
-    public native @Cast("hbool_t") boolean corder_valid(); public native H5A_info_t corder_valid(boolean setter);
+    public native @Cast("bool") boolean corder_valid(); public native H5A_info_t corder_valid(boolean setter);
     /** Creation order                 */
     public native @Cast("H5O_msg_crt_idx_t") int corder(); public native H5A_info_t corder(int setter);
     /** Character set of attribute name */
