@@ -31,7 +31,11 @@ import org.bytedeco.hdf5.presets.*;
 /**
  * This is only a placeholder to facilitate loading the {@code hdf5_java} module with JavaCPP.
  * <p>
- * Call {@code Loader.load(hdf5_java.class)} before using the API in the {@code hdf.hdf5group} namespace.
+ * Call {@code Loader.load(hdf5_java.class)} before using the API in the {@code hdf.hdf5lib} namespace.
+ * <p>
+ * Loading also sets the {@code hdf.hdf5lib.H5.hdf5lib} system property, unless it is already set,
+ * so that {@code hdf.hdf5lib.H5.loadH5Lib()} uses the library loaded here instead of looking for
+ * it on {@code java.library.path}, where it fails and prints an {@code UnsatisfiedLinkError}.
  *
  * @author Mark Kittisopikul
  */
@@ -44,5 +48,10 @@ import org.bytedeco.hdf5.presets.*;
     }
 )
 public class hdf5_java {
-    static { Loader.load(); }
+    static {
+        String path = Loader.load();
+        if (path != null && System.getProperty("hdf.hdf5lib.H5.hdf5lib") == null) {
+            System.setProperty("hdf.hdf5lib.H5.hdf5lib", path);
+        }
+    }
 }

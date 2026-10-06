@@ -2696,43 +2696,43 @@ public static final int H5T_OPAQUE_TAG_MAX = 256;
  * 16-bit big-endian IEEE floating-point numbers
  * @since 1.14.4
  */
-public static native @MemberGetter int H5T_IEEE_F16BE();
-public static final int H5T_IEEE_F16BE = H5T_IEEE_F16BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_IEEE_F16BE();
+public static final long H5T_IEEE_F16BE = H5T_IEEE_F16BE();
 /**
  * \ingroup PDTIEEE
  * 16-bit little-endian IEEE floating-point numbers
  * @since 1.14.4
  */
-public static native @MemberGetter int H5T_IEEE_F16LE();
-public static final int H5T_IEEE_F16LE = H5T_IEEE_F16LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_IEEE_F16LE();
+public static final long H5T_IEEE_F16LE = H5T_IEEE_F16LE();
 /**
  * \ingroup PDTIEEE
  * 32-bit big-endian IEEE floating-point numbers
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_IEEE_F32BE();
-public static final int H5T_IEEE_F32BE = H5T_IEEE_F32BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_IEEE_F32BE();
+public static final long H5T_IEEE_F32BE = H5T_IEEE_F32BE();
 /**
  * \ingroup PDTIEEE
  * 32-bit little-endian IEEE floating-point numbers
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_IEEE_F32LE();
-public static final int H5T_IEEE_F32LE = H5T_IEEE_F32LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_IEEE_F32LE();
+public static final long H5T_IEEE_F32LE = H5T_IEEE_F32LE();
 /**
  * \ingroup PDTIEEE
  * 64-bit big-endian IEEE floating-point numbers
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_IEEE_F64BE();
-public static final int H5T_IEEE_F64BE = H5T_IEEE_F64BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_IEEE_F64BE();
+public static final long H5T_IEEE_F64BE = H5T_IEEE_F64BE();
 /**
  * \ingroup PDTIEEE
  * 64-bit little-endian IEEE floating-point numbers
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_IEEE_F64LE();
-public static final int H5T_IEEE_F64LE = H5T_IEEE_F64LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_IEEE_F64LE();
+public static final long H5T_IEEE_F64LE = H5T_IEEE_F64LE();
 public static native @Cast("hid_t") long H5T_IEEE_F16BE_g(); public static native void H5T_IEEE_F16BE_g(long setter);
 public static native @Cast("hid_t") long H5T_IEEE_F16LE_g(); public static native void H5T_IEEE_F16LE_g(long setter);
 public static native @Cast("hid_t") long H5T_IEEE_F32BE_g(); public static native void H5T_IEEE_F32BE_g(long setter);
@@ -2747,14 +2747,14 @@ public static native @Cast("hid_t") long H5T_IEEE_F64LE_g(); public static nativ
  * \ingroup PDTALTFLOAT
  * 16-bit big-endian bfloat16 floating-point numbers
  */
-public static native @MemberGetter int H5T_FLOAT_BFLOAT16BE();
-public static final int H5T_FLOAT_BFLOAT16BE = H5T_FLOAT_BFLOAT16BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_FLOAT_BFLOAT16BE();
+public static final long H5T_FLOAT_BFLOAT16BE = H5T_FLOAT_BFLOAT16BE();
 /**
  * \ingroup PDTALTFLOAT
  * 16-bit little-endian bfloat16 floating-point numbers
  */
-public static native @MemberGetter int H5T_FLOAT_BFLOAT16LE();
-public static final int H5T_FLOAT_BFLOAT16LE = H5T_FLOAT_BFLOAT16LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_FLOAT_BFLOAT16LE();
+public static final long H5T_FLOAT_BFLOAT16LE = H5T_FLOAT_BFLOAT16LE();
 /**
  * \ingroup PDTALTFLOAT
  * 8-bit FP8 E4M3 (4 exponent bits, 3 mantissa bits) floating-point numbers
@@ -2770,8 +2770,8 @@ public static final int H5T_FLOAT_BFLOAT16LE = H5T_FLOAT_BFLOAT16LE();
  *            values should be verified to be correct.
  * \endparblock
  */
-public static native @MemberGetter int H5T_FLOAT_F8E4M3();
-public static final int H5T_FLOAT_F8E4M3 = H5T_FLOAT_F8E4M3();
+public static native @MemberGetter @Cast("hid_t") long H5T_FLOAT_F8E4M3();
+public static final long H5T_FLOAT_F8E4M3 = H5T_FLOAT_F8E4M3();
 /**
  * \ingroup PDTALTFLOAT
  * 8-bit FP8 E5M2 (5 exponent bits, 2 mantissa bits) floating-point numbers
@@ -2787,8 +2787,8 @@ public static final int H5T_FLOAT_F8E4M3 = H5T_FLOAT_F8E4M3();
  *            values should be verified to be correct.
  * \endparblock
  */
-public static native @MemberGetter int H5T_FLOAT_F8E5M2();
-public static final int H5T_FLOAT_F8E5M2 = H5T_FLOAT_F8E5M2();
+public static native @MemberGetter @Cast("hid_t") long H5T_FLOAT_F8E5M2();
+public static final long H5T_FLOAT_F8E5M2 = H5T_FLOAT_F8E5M2();
 /**
  * \ingroup PDTALTFLOAT
  * 6-bit FP6 E2M3 (2 exponent bits, 3 mantissa bits) floating-point numbers
@@ -2804,8 +2804,8 @@ public static final int H5T_FLOAT_F8E5M2 = H5T_FLOAT_F8E5M2();
  *            values should be verified to be correct.
  * \endparblock
  */
-public static native @MemberGetter int H5T_FLOAT_F6E2M3();
-public static final int H5T_FLOAT_F6E2M3 = H5T_FLOAT_F6E2M3();
+public static native @MemberGetter @Cast("hid_t") long H5T_FLOAT_F6E2M3();
+public static final long H5T_FLOAT_F6E2M3 = H5T_FLOAT_F6E2M3();
 /**
  * \ingroup PDTALTFLOAT
  * 6-bit FP6 E3M2 (3 exponent bits, 2 mantissa bits) floating-point numbers
@@ -2821,8 +2821,8 @@ public static final int H5T_FLOAT_F6E2M3 = H5T_FLOAT_F6E2M3();
  *            values should be verified to be correct.
  * \endparblock
  */
-public static native @MemberGetter int H5T_FLOAT_F6E3M2();
-public static final int H5T_FLOAT_F6E3M2 = H5T_FLOAT_F6E3M2();
+public static native @MemberGetter @Cast("hid_t") long H5T_FLOAT_F6E3M2();
+public static final long H5T_FLOAT_F6E3M2 = H5T_FLOAT_F6E3M2();
 /**
  * \ingroup PDTALTFLOAT
  * 4-bit FP4 E2M1 (2 exponent bits, 1 mantissa bit) floating-point numbers
@@ -2838,8 +2838,8 @@ public static final int H5T_FLOAT_F6E3M2 = H5T_FLOAT_F6E3M2();
  *            values should be verified to be correct.
  * \endparblock
  */
-public static native @MemberGetter int H5T_FLOAT_F4E2M1();
-public static final int H5T_FLOAT_F4E2M1 = H5T_FLOAT_F4E2M1();
+public static native @MemberGetter @Cast("hid_t") long H5T_FLOAT_F4E2M1();
+public static final long H5T_FLOAT_F4E2M1 = H5T_FLOAT_F4E2M1();
 public static native @Cast("hid_t") long H5T_FLOAT_BFLOAT16BE_g(); public static native void H5T_FLOAT_BFLOAT16BE_g(long setter);
 public static native @Cast("hid_t") long H5T_FLOAT_BFLOAT16LE_g(); public static native void H5T_FLOAT_BFLOAT16LE_g(long setter);
 public static native @Cast("hid_t") long H5T_FLOAT_F8E4M3_g(); public static native void H5T_FLOAT_F8E4M3_g(long setter);
@@ -2856,43 +2856,43 @@ public static native @Cast("hid_t") long H5T_FLOAT_F4E2M1_g(); public static nat
  * Complex number of 2 16-bit big-endian IEEE floating-point numbers
  * @since 2.0.0
  */
-public static native @MemberGetter int H5T_COMPLEX_IEEE_F16BE();
-public static final int H5T_COMPLEX_IEEE_F16BE = H5T_COMPLEX_IEEE_F16BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_COMPLEX_IEEE_F16BE();
+public static final long H5T_COMPLEX_IEEE_F16BE = H5T_COMPLEX_IEEE_F16BE();
 /**
  * \ingroup PDTCOMPLEX
  * Complex number of 2 16-bit little-endian IEEE floating-point numbers
  * @since 2.0.0
  */
-public static native @MemberGetter int H5T_COMPLEX_IEEE_F16LE();
-public static final int H5T_COMPLEX_IEEE_F16LE = H5T_COMPLEX_IEEE_F16LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_COMPLEX_IEEE_F16LE();
+public static final long H5T_COMPLEX_IEEE_F16LE = H5T_COMPLEX_IEEE_F16LE();
 /**
  * \ingroup PDTCOMPLEX
  * Complex number of 2 32-bit big-endian IEEE floating-point numbers
  * @since 2.0.0
  */
-public static native @MemberGetter int H5T_COMPLEX_IEEE_F32BE();
-public static final int H5T_COMPLEX_IEEE_F32BE = H5T_COMPLEX_IEEE_F32BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_COMPLEX_IEEE_F32BE();
+public static final long H5T_COMPLEX_IEEE_F32BE = H5T_COMPLEX_IEEE_F32BE();
 /**
  * \ingroup PDTCOMPLEX
  * Complex number of 2 32-bit little-endian IEEE floating-point numbers
  * @since 2.0.0
  */
-public static native @MemberGetter int H5T_COMPLEX_IEEE_F32LE();
-public static final int H5T_COMPLEX_IEEE_F32LE = H5T_COMPLEX_IEEE_F32LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_COMPLEX_IEEE_F32LE();
+public static final long H5T_COMPLEX_IEEE_F32LE = H5T_COMPLEX_IEEE_F32LE();
 /**
  * \ingroup PDTCOMPLEX
  * Complex number of 2 64-bit big-endian IEEE floating-point numbers
  * @since 2.0.0
  */
-public static native @MemberGetter int H5T_COMPLEX_IEEE_F64BE();
-public static final int H5T_COMPLEX_IEEE_F64BE = H5T_COMPLEX_IEEE_F64BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_COMPLEX_IEEE_F64BE();
+public static final long H5T_COMPLEX_IEEE_F64BE = H5T_COMPLEX_IEEE_F64BE();
 /**
  * \ingroup PDTCOMPLEX
  * Complex number of 2 64-bit little-endian IEEE floating-point numbers
  * @since 2.0.0
  */
-public static native @MemberGetter int H5T_COMPLEX_IEEE_F64LE();
-public static final int H5T_COMPLEX_IEEE_F64LE = H5T_COMPLEX_IEEE_F64LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_COMPLEX_IEEE_F64LE();
+public static final long H5T_COMPLEX_IEEE_F64LE = H5T_COMPLEX_IEEE_F64LE();
 public static native @Cast("hid_t") long H5T_COMPLEX_IEEE_F16BE_g(); public static native void H5T_COMPLEX_IEEE_F16BE_g(long setter);
 public static native @Cast("hid_t") long H5T_COMPLEX_IEEE_F16LE_g(); public static native void H5T_COMPLEX_IEEE_F16LE_g(long setter);
 public static native @Cast("hid_t") long H5T_COMPLEX_IEEE_F32BE_g(); public static native void H5T_COMPLEX_IEEE_F32BE_g(long setter);
@@ -2908,164 +2908,164 @@ public static native @Cast("hid_t") long H5T_COMPLEX_IEEE_F64LE_g(); public stat
  * \ingroup PDTSTD
  * 8-bit big-endian signed integers
  */
-public static native @MemberGetter int H5T_STD_I8BE();
-public static final int H5T_STD_I8BE = H5T_STD_I8BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_I8BE();
+public static final long H5T_STD_I8BE = H5T_STD_I8BE();
 /**
  * \ingroup PDTSTD
  * 8-bit little-endian signed integers
  */
-public static native @MemberGetter int H5T_STD_I8LE();
-public static final int H5T_STD_I8LE = H5T_STD_I8LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_I8LE();
+public static final long H5T_STD_I8LE = H5T_STD_I8LE();
 /**
  * \ingroup PDTSTD
  * 16-bit big-endian signed integers
  */
-public static native @MemberGetter int H5T_STD_I16BE();
-public static final int H5T_STD_I16BE = H5T_STD_I16BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_I16BE();
+public static final long H5T_STD_I16BE = H5T_STD_I16BE();
 /**
  * \ingroup PDTSTD
  * 16-bit little-endian signed integers
  */
-public static native @MemberGetter int H5T_STD_I16LE();
-public static final int H5T_STD_I16LE = H5T_STD_I16LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_I16LE();
+public static final long H5T_STD_I16LE = H5T_STD_I16LE();
 /**
  * \ingroup PDTSTD
  * 32-bit big-endian signed integers
  */
-public static native @MemberGetter int H5T_STD_I32BE();
-public static final int H5T_STD_I32BE = H5T_STD_I32BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_I32BE();
+public static final long H5T_STD_I32BE = H5T_STD_I32BE();
 /**
  * \ingroup PDTSTD
  * 32-bit little-endian signed integers
  */
-public static native @MemberGetter int H5T_STD_I32LE();
-public static final int H5T_STD_I32LE = H5T_STD_I32LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_I32LE();
+public static final long H5T_STD_I32LE = H5T_STD_I32LE();
 /**
  * \ingroup PDTSTD
  * 64-bit big-endian signed integers
  */
-public static native @MemberGetter int H5T_STD_I64BE();
-public static final int H5T_STD_I64BE = H5T_STD_I64BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_I64BE();
+public static final long H5T_STD_I64BE = H5T_STD_I64BE();
 /**
  * \ingroup PDTSTD
  * 64-bit little-endian signed integers
  */
-public static native @MemberGetter int H5T_STD_I64LE();
-public static final int H5T_STD_I64LE = H5T_STD_I64LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_I64LE();
+public static final long H5T_STD_I64LE = H5T_STD_I64LE();
 /**
  * \ingroup PDTSTD
  * 8-bit big-endian unsigned integers
  */
-public static native @MemberGetter int H5T_STD_U8BE();
-public static final int H5T_STD_U8BE = H5T_STD_U8BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_U8BE();
+public static final long H5T_STD_U8BE = H5T_STD_U8BE();
 /**
  * \ingroup PDTSTD
  * 8-bit little-endian unsigned integers
  */
-public static native @MemberGetter int H5T_STD_U8LE();
-public static final int H5T_STD_U8LE = H5T_STD_U8LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_U8LE();
+public static final long H5T_STD_U8LE = H5T_STD_U8LE();
 /**
  * \ingroup PDTSTD
  * 16-bit big-endian unsigned integers
  */
-public static native @MemberGetter int H5T_STD_U16BE();
-public static final int H5T_STD_U16BE = H5T_STD_U16BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_U16BE();
+public static final long H5T_STD_U16BE = H5T_STD_U16BE();
 /**
  * \ingroup PDTSTD
  * 16-bit little-endian unsigned integers
  */
-public static native @MemberGetter int H5T_STD_U16LE();
-public static final int H5T_STD_U16LE = H5T_STD_U16LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_U16LE();
+public static final long H5T_STD_U16LE = H5T_STD_U16LE();
 /**
  * \ingroup PDTSTD
  * 32-bit big-endian unsigned integers
  */
-public static native @MemberGetter int H5T_STD_U32BE();
-public static final int H5T_STD_U32BE = H5T_STD_U32BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_U32BE();
+public static final long H5T_STD_U32BE = H5T_STD_U32BE();
 /**
  * \ingroup PDTSTD
  * 32-bit little-endian unsigned integers
  */
-public static native @MemberGetter int H5T_STD_U32LE();
-public static final int H5T_STD_U32LE = H5T_STD_U32LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_U32LE();
+public static final long H5T_STD_U32LE = H5T_STD_U32LE();
 /**
  * \ingroup PDTSTD
  * 64-bit big-endian unsigned integers
  */
-public static native @MemberGetter int H5T_STD_U64BE();
-public static final int H5T_STD_U64BE = H5T_STD_U64BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_U64BE();
+public static final long H5T_STD_U64BE = H5T_STD_U64BE();
 /**
  * \ingroup PDTSTD
  * 64-bit little-endian unsigned integers
  */
-public static native @MemberGetter int H5T_STD_U64LE();
-public static final int H5T_STD_U64LE = H5T_STD_U64LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_U64LE();
+public static final long H5T_STD_U64LE = H5T_STD_U64LE();
 /**
  * \ingroup PDTSTD
  * 8-bit big-endian bitfield
  */
-public static native @MemberGetter int H5T_STD_B8BE();
-public static final int H5T_STD_B8BE = H5T_STD_B8BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_B8BE();
+public static final long H5T_STD_B8BE = H5T_STD_B8BE();
 /**
  * \ingroup PDTSTD
  * 8-bit little-endian bitfield
  */
-public static native @MemberGetter int H5T_STD_B8LE();
-public static final int H5T_STD_B8LE = H5T_STD_B8LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_B8LE();
+public static final long H5T_STD_B8LE = H5T_STD_B8LE();
 /**
  * \ingroup PDTSTD
  * 16-bit big-endian bitfield
  */
-public static native @MemberGetter int H5T_STD_B16BE();
-public static final int H5T_STD_B16BE = H5T_STD_B16BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_B16BE();
+public static final long H5T_STD_B16BE = H5T_STD_B16BE();
 /**
  * \ingroup PDTSTD
  * 16-bit little-endian bitfield
  */
-public static native @MemberGetter int H5T_STD_B16LE();
-public static final int H5T_STD_B16LE = H5T_STD_B16LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_B16LE();
+public static final long H5T_STD_B16LE = H5T_STD_B16LE();
 /**
  * \ingroup PDTSTD
  * 32-bit big-endian bitfield
  */
-public static native @MemberGetter int H5T_STD_B32BE();
-public static final int H5T_STD_B32BE = H5T_STD_B32BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_B32BE();
+public static final long H5T_STD_B32BE = H5T_STD_B32BE();
 /**
  * \ingroup PDTSTD
  * 32-bit little-endian bitfield
  */
-public static native @MemberGetter int H5T_STD_B32LE();
-public static final int H5T_STD_B32LE = H5T_STD_B32LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_B32LE();
+public static final long H5T_STD_B32LE = H5T_STD_B32LE();
 /**
  * \ingroup PDTSTD
  * 64-bit big-endian bitfield
  */
-public static native @MemberGetter int H5T_STD_B64BE();
-public static final int H5T_STD_B64BE = H5T_STD_B64BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_B64BE();
+public static final long H5T_STD_B64BE = H5T_STD_B64BE();
 /**
  * \ingroup PDTSTD
  * 64-bit little-endian bitfield
  */
-public static native @MemberGetter int H5T_STD_B64LE();
-public static final int H5T_STD_B64LE = H5T_STD_B64LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_B64LE();
+public static final long H5T_STD_B64LE = H5T_STD_B64LE();
 /**
  * \ingroup PDTSTD
  * Object reference
  */
-public static native @MemberGetter int H5T_STD_REF_OBJ();
-public static final int H5T_STD_REF_OBJ = H5T_STD_REF_OBJ();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_REF_OBJ();
+public static final long H5T_STD_REF_OBJ = H5T_STD_REF_OBJ();
 /**
  * \ingroup PDTSTD
  * Dataset region reference
  */
-public static native @MemberGetter int H5T_STD_REF_DSETREG();
-public static final int H5T_STD_REF_DSETREG = H5T_STD_REF_DSETREG();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_REF_DSETREG();
+public static final long H5T_STD_REF_DSETREG = H5T_STD_REF_DSETREG();
 /**
  * \ingroup PDTSTD
  * Generic reference
  */
-public static native @MemberGetter int H5T_STD_REF();
-public static final int H5T_STD_REF = H5T_STD_REF();
+public static native @MemberGetter @Cast("hid_t") long H5T_STD_REF();
+public static final long H5T_STD_REF = H5T_STD_REF();
 public static native @Cast("hid_t") long H5T_STD_I8BE_g(); public static native void H5T_STD_I8BE_g(long setter);
 public static native @Cast("hid_t") long H5T_STD_I8LE_g(); public static native void H5T_STD_I8LE_g(long setter);
 public static native @Cast("hid_t") long H5T_STD_I16BE_g(); public static native void H5T_STD_I16BE_g(long setter);
@@ -3102,29 +3102,29 @@ public static native @Cast("hid_t") long H5T_STD_REF_g(); public static native v
  * Big-endian 32-bit UNIX time_t
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_UNIX_D32BE();
-public static final int H5T_UNIX_D32BE = H5T_UNIX_D32BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_UNIX_D32BE();
+public static final long H5T_UNIX_D32BE = H5T_UNIX_D32BE();
 /**
  * \ingroup PDTUNIX
  * Little-endian 32-bit UNIX time_t
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_UNIX_D32LE();
-public static final int H5T_UNIX_D32LE = H5T_UNIX_D32LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_UNIX_D32LE();
+public static final long H5T_UNIX_D32LE = H5T_UNIX_D32LE();
 /**
  * \ingroup PDTUNIX
  * Big-endian 64-bit UNIX time_t
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_UNIX_D64BE();
-public static final int H5T_UNIX_D64BE = H5T_UNIX_D64BE();
+public static native @MemberGetter @Cast("hid_t") long H5T_UNIX_D64BE();
+public static final long H5T_UNIX_D64BE = H5T_UNIX_D64BE();
 /**
  * \ingroup PDTUNIX
  * Little-endian 64-bit UNIX time_t
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_UNIX_D64LE();
-public static final int H5T_UNIX_D64LE = H5T_UNIX_D64LE();
+public static native @MemberGetter @Cast("hid_t") long H5T_UNIX_D64LE();
+public static final long H5T_UNIX_D64LE = H5T_UNIX_D64LE();
 public static native @Cast("hid_t") long H5T_UNIX_D32BE_g(); public static native void H5T_UNIX_D32BE_g(long setter);
 public static native @Cast("hid_t") long H5T_UNIX_D32LE_g(); public static native void H5T_UNIX_D32LE_g(long setter);
 public static native @Cast("hid_t") long H5T_UNIX_D64BE_g(); public static native void H5T_UNIX_D64BE_g(long setter);
@@ -3139,8 +3139,8 @@ public static native @Cast("hid_t") long H5T_UNIX_D64LE_g(); public static nativ
  * String datatype in C (size defined in bytes rather than in bits)
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_C_S1();
-public static final int H5T_C_S1 = H5T_C_S1();
+public static native @MemberGetter @Cast("hid_t") long H5T_C_S1();
+public static final long H5T_C_S1 = H5T_C_S1();
 public static native @Cast("hid_t") long H5T_C_S1_g(); public static native void H5T_C_S1_g(long setter);
 
 /*
@@ -3151,8 +3151,8 @@ public static native @Cast("hid_t") long H5T_C_S1_g(); public static native void
  * String datatype in Fortran (as defined for the HDF5 C library)
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_FORTRAN_S1();
-public static final int H5T_FORTRAN_S1 = H5T_FORTRAN_S1();
+public static native @MemberGetter @Cast("hid_t") long H5T_FORTRAN_S1();
+public static final long H5T_FORTRAN_S1 = H5T_FORTRAN_S1();
 public static native @Cast("hid_t") long H5T_FORTRAN_S1_g(); public static native void H5T_FORTRAN_S1_g(long setter);
 
 /*
@@ -3164,99 +3164,99 @@ public static native @Cast("hid_t") long H5T_FORTRAN_S1_g(); public static nativ
  * 8-bit little-endian signed (2's complement) integers for Intel CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_INTEL_I8();
-public static final int H5T_INTEL_I8 = H5T_INTEL_I8();
+public static native @MemberGetter @Cast("hid_t") long H5T_INTEL_I8();
+public static final long H5T_INTEL_I8 = H5T_INTEL_I8();
 /**
  * \ingroup PDTX86
  * 16-bit little-endian signed (2's complement) integers for Intel CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_INTEL_I16();
-public static final int H5T_INTEL_I16 = H5T_INTEL_I16();
+public static native @MemberGetter @Cast("hid_t") long H5T_INTEL_I16();
+public static final long H5T_INTEL_I16 = H5T_INTEL_I16();
 /**
  * \ingroup PDTX86
  * 32-bit little-endian signed (2's complement) integers for Intel CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_INTEL_I32();
-public static final int H5T_INTEL_I32 = H5T_INTEL_I32();
+public static native @MemberGetter @Cast("hid_t") long H5T_INTEL_I32();
+public static final long H5T_INTEL_I32 = H5T_INTEL_I32();
 /**
  * \ingroup PDTX86
  * 64-bit little-endian signed (2's complement) integers for Intel CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_INTEL_I64();
-public static final int H5T_INTEL_I64 = H5T_INTEL_I64();
+public static native @MemberGetter @Cast("hid_t") long H5T_INTEL_I64();
+public static final long H5T_INTEL_I64 = H5T_INTEL_I64();
 /**
  * \ingroup PDTX86
  * 8-bit little-endian unsigned integers for Intel CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_INTEL_U8();
-public static final int H5T_INTEL_U8 = H5T_INTEL_U8();
+public static native @MemberGetter @Cast("hid_t") long H5T_INTEL_U8();
+public static final long H5T_INTEL_U8 = H5T_INTEL_U8();
 /**
  * \ingroup PDTX86
  * 16-bit little-endian unsigned integers for Intel CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_INTEL_U16();
-public static final int H5T_INTEL_U16 = H5T_INTEL_U16();
+public static native @MemberGetter @Cast("hid_t") long H5T_INTEL_U16();
+public static final long H5T_INTEL_U16 = H5T_INTEL_U16();
 /**
  * \ingroup PDTX86
  * 32-bit little-endian unsigned integers for Intel CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_INTEL_U32();
-public static final int H5T_INTEL_U32 = H5T_INTEL_U32();
+public static native @MemberGetter @Cast("hid_t") long H5T_INTEL_U32();
+public static final long H5T_INTEL_U32 = H5T_INTEL_U32();
 /**
  * \ingroup PDTX86
  * 64-bit little-endian unsigned integers for Intel CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_INTEL_U64();
-public static final int H5T_INTEL_U64 = H5T_INTEL_U64();
+public static native @MemberGetter @Cast("hid_t") long H5T_INTEL_U64();
+public static final long H5T_INTEL_U64 = H5T_INTEL_U64();
 /**
  * \ingroup PDTX86
  * 8-bit little-endian bitfield for Intel CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_INTEL_B8();
-public static final int H5T_INTEL_B8 = H5T_INTEL_B8();
+public static native @MemberGetter @Cast("hid_t") long H5T_INTEL_B8();
+public static final long H5T_INTEL_B8 = H5T_INTEL_B8();
 /**
  * \ingroup PDTX86
  * 16-bit little-endian bitfield for Intel CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_INTEL_B16();
-public static final int H5T_INTEL_B16 = H5T_INTEL_B16();
+public static native @MemberGetter @Cast("hid_t") long H5T_INTEL_B16();
+public static final long H5T_INTEL_B16 = H5T_INTEL_B16();
 /**
  * \ingroup PDTX86
  * 32-bit little-endian bitfield for Intel CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_INTEL_B32();
-public static final int H5T_INTEL_B32 = H5T_INTEL_B32();
+public static native @MemberGetter @Cast("hid_t") long H5T_INTEL_B32();
+public static final long H5T_INTEL_B32 = H5T_INTEL_B32();
 /**
  * \ingroup PDTX86
  * 64-bit little-endian bitfield for Intel CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_INTEL_B64();
-public static final int H5T_INTEL_B64 = H5T_INTEL_B64();
+public static native @MemberGetter @Cast("hid_t") long H5T_INTEL_B64();
+public static final long H5T_INTEL_B64 = H5T_INTEL_B64();
 /**
  * \ingroup PDTX86
  * 32-bit little-endian IEEE floating-point numbers for Intel CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_INTEL_F32();
-public static final int H5T_INTEL_F32 = H5T_INTEL_F32();
+public static native @MemberGetter @Cast("hid_t") long H5T_INTEL_F32();
+public static final long H5T_INTEL_F32 = H5T_INTEL_F32();
 /**
  * \ingroup PDTX86
  * 64-bit little-endian IEEE floating-point numbers for Intel CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_INTEL_F64();
-public static final int H5T_INTEL_F64 = H5T_INTEL_F64();
+public static native @MemberGetter @Cast("hid_t") long H5T_INTEL_F64();
+public static final long H5T_INTEL_F64 = H5T_INTEL_F64();
 
 /*
  * These types are for DEC Alpha CPU's.  They are little endian with IEEE
@@ -3267,99 +3267,99 @@ public static final int H5T_INTEL_F64 = H5T_INTEL_F64();
  * 8-bit little-endian signed (2's complement) integers for DEC Alpha CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_ALPHA_I8();
-public static final int H5T_ALPHA_I8 = H5T_ALPHA_I8();
+public static native @MemberGetter @Cast("hid_t") long H5T_ALPHA_I8();
+public static final long H5T_ALPHA_I8 = H5T_ALPHA_I8();
 /**
  * \ingroup PDTALPHA
  * 16-bit little-endian signed (2's complement) integers for DEC Alpha CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_ALPHA_I16();
-public static final int H5T_ALPHA_I16 = H5T_ALPHA_I16();
+public static native @MemberGetter @Cast("hid_t") long H5T_ALPHA_I16();
+public static final long H5T_ALPHA_I16 = H5T_ALPHA_I16();
 /**
  * \ingroup PDTALPHA
  * 32-bit little-endian signed (2's complement) integers for DEC Alpha CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_ALPHA_I32();
-public static final int H5T_ALPHA_I32 = H5T_ALPHA_I32();
+public static native @MemberGetter @Cast("hid_t") long H5T_ALPHA_I32();
+public static final long H5T_ALPHA_I32 = H5T_ALPHA_I32();
 /**
  * \ingroup PDTALPHA
  * 64-bit little-endian signed (2's complement) integers for DEC Alpha CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_ALPHA_I64();
-public static final int H5T_ALPHA_I64 = H5T_ALPHA_I64();
+public static native @MemberGetter @Cast("hid_t") long H5T_ALPHA_I64();
+public static final long H5T_ALPHA_I64 = H5T_ALPHA_I64();
 /**
  * \ingroup PDTALPHA
  * 8-bit little-endian unsigned integers for DEC Alpha CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_ALPHA_U8();
-public static final int H5T_ALPHA_U8 = H5T_ALPHA_U8();
+public static native @MemberGetter @Cast("hid_t") long H5T_ALPHA_U8();
+public static final long H5T_ALPHA_U8 = H5T_ALPHA_U8();
 /**
  * \ingroup PDTALPHA
  * 16-bit little-endian unsigned integers for DEC Alpha CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_ALPHA_U16();
-public static final int H5T_ALPHA_U16 = H5T_ALPHA_U16();
+public static native @MemberGetter @Cast("hid_t") long H5T_ALPHA_U16();
+public static final long H5T_ALPHA_U16 = H5T_ALPHA_U16();
 /**
  * \ingroup PDTALPHA
  * 32-bit little-endian unsigned integers for DEC Alpha CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_ALPHA_U32();
-public static final int H5T_ALPHA_U32 = H5T_ALPHA_U32();
+public static native @MemberGetter @Cast("hid_t") long H5T_ALPHA_U32();
+public static final long H5T_ALPHA_U32 = H5T_ALPHA_U32();
 /**
  * \ingroup PDTALPHA
  * 64-bit little-endian unsigned integers for DEC Alpha CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_ALPHA_U64();
-public static final int H5T_ALPHA_U64 = H5T_ALPHA_U64();
+public static native @MemberGetter @Cast("hid_t") long H5T_ALPHA_U64();
+public static final long H5T_ALPHA_U64 = H5T_ALPHA_U64();
 /**
  * \ingroup PDTALPHA
  * 8-bit little-endian bitfield for DEC Alpha CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_ALPHA_B8();
-public static final int H5T_ALPHA_B8 = H5T_ALPHA_B8();
+public static native @MemberGetter @Cast("hid_t") long H5T_ALPHA_B8();
+public static final long H5T_ALPHA_B8 = H5T_ALPHA_B8();
 /**
  * \ingroup PDTALPHA
  * 16-bit little-endian bitfield for DEC Alpha CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_ALPHA_B16();
-public static final int H5T_ALPHA_B16 = H5T_ALPHA_B16();
+public static native @MemberGetter @Cast("hid_t") long H5T_ALPHA_B16();
+public static final long H5T_ALPHA_B16 = H5T_ALPHA_B16();
 /**
  * \ingroup PDTALPHA
  * 32-bit little-endian bitfield for DEC Alpha CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_ALPHA_B32();
-public static final int H5T_ALPHA_B32 = H5T_ALPHA_B32();
+public static native @MemberGetter @Cast("hid_t") long H5T_ALPHA_B32();
+public static final long H5T_ALPHA_B32 = H5T_ALPHA_B32();
 /**
  * \ingroup PDTALPHA
  * 64-bit little-endian bitfield for DEC Alpha CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_ALPHA_B64();
-public static final int H5T_ALPHA_B64 = H5T_ALPHA_B64();
+public static native @MemberGetter @Cast("hid_t") long H5T_ALPHA_B64();
+public static final long H5T_ALPHA_B64 = H5T_ALPHA_B64();
 /**
  * \ingroup PDTALPHA
  * 32-bit little-endian IEEE floating-point numbers for DEC Alpha CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_ALPHA_F32();
-public static final int H5T_ALPHA_F32 = H5T_ALPHA_F32();
+public static native @MemberGetter @Cast("hid_t") long H5T_ALPHA_F32();
+public static final long H5T_ALPHA_F32 = H5T_ALPHA_F32();
 /**
  * \ingroup PDTALPHA
  * 64-bit little-endian IEEE floating-point numbers for DEC Alpha CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_ALPHA_F64();
-public static final int H5T_ALPHA_F64 = H5T_ALPHA_F64();
+public static native @MemberGetter @Cast("hid_t") long H5T_ALPHA_F64();
+public static final long H5T_ALPHA_F64 = H5T_ALPHA_F64();
 
 /*
  * These types are for MIPS cpu's commonly used in SGI systems. They are big
@@ -3370,99 +3370,99 @@ public static final int H5T_ALPHA_F64 = H5T_ALPHA_F64();
  * 8-bit big-endian signed (2's complement) integers for SGI MIPS CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_MIPS_I8();
-public static final int H5T_MIPS_I8 = H5T_MIPS_I8();
+public static native @MemberGetter @Cast("hid_t") long H5T_MIPS_I8();
+public static final long H5T_MIPS_I8 = H5T_MIPS_I8();
 /**
  * \ingroup PDTMIPS
  * 16-bit big-endian signed (2's complement) integers for SGI MIPS CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_MIPS_I16();
-public static final int H5T_MIPS_I16 = H5T_MIPS_I16();
+public static native @MemberGetter @Cast("hid_t") long H5T_MIPS_I16();
+public static final long H5T_MIPS_I16 = H5T_MIPS_I16();
 /**
  * \ingroup PDTMIPS
  * 32-bit big-endian signed (2's complement) integers for SGI MIPS CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_MIPS_I32();
-public static final int H5T_MIPS_I32 = H5T_MIPS_I32();
+public static native @MemberGetter @Cast("hid_t") long H5T_MIPS_I32();
+public static final long H5T_MIPS_I32 = H5T_MIPS_I32();
 /**
  * \ingroup PDTMIPS
  * 64-bit big-endian signed (2's complement) integers for SGI MIPS CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_MIPS_I64();
-public static final int H5T_MIPS_I64 = H5T_MIPS_I64();
+public static native @MemberGetter @Cast("hid_t") long H5T_MIPS_I64();
+public static final long H5T_MIPS_I64 = H5T_MIPS_I64();
 /**
  * \ingroup PDTMIPS
  * 8-bit big-endian unsigned integers for SGI MIPS CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_MIPS_U8();
-public static final int H5T_MIPS_U8 = H5T_MIPS_U8();
+public static native @MemberGetter @Cast("hid_t") long H5T_MIPS_U8();
+public static final long H5T_MIPS_U8 = H5T_MIPS_U8();
 /**
  * \ingroup PDTMIPS
  * 16-bit big-endian unsigned integers for SGI MIPS CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_MIPS_U16();
-public static final int H5T_MIPS_U16 = H5T_MIPS_U16();
+public static native @MemberGetter @Cast("hid_t") long H5T_MIPS_U16();
+public static final long H5T_MIPS_U16 = H5T_MIPS_U16();
 /**
  * \ingroup PDTMIPS
  * 32-bit big-endian unsigned integers for SGI MIPS CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_MIPS_U32();
-public static final int H5T_MIPS_U32 = H5T_MIPS_U32();
+public static native @MemberGetter @Cast("hid_t") long H5T_MIPS_U32();
+public static final long H5T_MIPS_U32 = H5T_MIPS_U32();
 /**
  * \ingroup PDTMIPS
  * 64-bit big-endian unsigned integers for SGI MIPS CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_MIPS_U64();
-public static final int H5T_MIPS_U64 = H5T_MIPS_U64();
+public static native @MemberGetter @Cast("hid_t") long H5T_MIPS_U64();
+public static final long H5T_MIPS_U64 = H5T_MIPS_U64();
 /**
  * \ingroup PDTMIPS
  * 8-bit big-endian bitfield for SGI MIPS CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_MIPS_B8();
-public static final int H5T_MIPS_B8 = H5T_MIPS_B8();
+public static native @MemberGetter @Cast("hid_t") long H5T_MIPS_B8();
+public static final long H5T_MIPS_B8 = H5T_MIPS_B8();
 /**
  * \ingroup PDTMIPS
  * 16-bit big-endian bitfield for SGI MIPS CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_MIPS_B16();
-public static final int H5T_MIPS_B16 = H5T_MIPS_B16();
+public static native @MemberGetter @Cast("hid_t") long H5T_MIPS_B16();
+public static final long H5T_MIPS_B16 = H5T_MIPS_B16();
 /**
  * \ingroup PDTMIPS
  * 32-bit big-endian bitfield for SGI MIPS CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_MIPS_B32();
-public static final int H5T_MIPS_B32 = H5T_MIPS_B32();
+public static native @MemberGetter @Cast("hid_t") long H5T_MIPS_B32();
+public static final long H5T_MIPS_B32 = H5T_MIPS_B32();
 /**
  * \ingroup PDTMIPS
  * 64-bit big-endian bitfield for SGI MIPS CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_MIPS_B64();
-public static final int H5T_MIPS_B64 = H5T_MIPS_B64();
+public static native @MemberGetter @Cast("hid_t") long H5T_MIPS_B64();
+public static final long H5T_MIPS_B64 = H5T_MIPS_B64();
 /**
  * \ingroup PDTMIPS
  * 32-bit big-endian IEEE floating-point numbers for MIPS CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_MIPS_F32();
-public static final int H5T_MIPS_F32 = H5T_MIPS_F32();
+public static native @MemberGetter @Cast("hid_t") long H5T_MIPS_F32();
+public static final long H5T_MIPS_F32 = H5T_MIPS_F32();
 /**
  * \ingroup PDTMIPS
  * 64-bit big-endian IEEE floating-point numbers for MIPS CPUs
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_MIPS_F64();
-public static final int H5T_MIPS_F64 = H5T_MIPS_F64();
+public static native @MemberGetter @Cast("hid_t") long H5T_MIPS_F64();
+public static final long H5T_MIPS_F64 = H5T_MIPS_F64();
 
 /*
  * The VAX floating point types (i.e. in VAX byte order)
@@ -3472,15 +3472,15 @@ public static final int H5T_MIPS_F64 = H5T_MIPS_F64();
  * 32-bit VAX byte order floating-point numbers for OpenVMS on DEC Alpha CPUs
  * @since 1.8.0
  */
-public static native @MemberGetter int H5T_VAX_F32();
-public static final int H5T_VAX_F32 = H5T_VAX_F32();
+public static native @MemberGetter @Cast("hid_t") long H5T_VAX_F32();
+public static final long H5T_VAX_F32 = H5T_VAX_F32();
 /**
  * \ingroup PDTALPHA
  * 64-bit VAX byte order floating-point numbers for OpenVMS on DEC Alpha CPUs
  * @since 1.8.0
  */
-public static native @MemberGetter int H5T_VAX_F64();
-public static final int H5T_VAX_F64 = H5T_VAX_F64();
+public static native @MemberGetter @Cast("hid_t") long H5T_VAX_F64();
+public static final long H5T_VAX_F64 = H5T_VAX_F64();
 public static native @Cast("hid_t") long H5T_VAX_F32_g(); public static native void H5T_VAX_F32_g(long setter);
 public static native @Cast("hid_t") long H5T_VAX_F64_g(); public static native void H5T_VAX_F64_g(long setter);
 
@@ -3497,200 +3497,200 @@ public static native @Cast("hid_t") long H5T_VAX_F64_g(); public static native v
  * C-style \c char
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_CHAR();
-public static final int H5T_NATIVE_CHAR = H5T_NATIVE_CHAR();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_CHAR();
+public static final long H5T_NATIVE_CHAR = H5T_NATIVE_CHAR();
 /**
  * \ingroup PDTNAT
  * C-style \TText{signed char}
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_SCHAR();
-public static final int H5T_NATIVE_SCHAR = H5T_NATIVE_SCHAR();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_SCHAR();
+public static final long H5T_NATIVE_SCHAR = H5T_NATIVE_SCHAR();
 /**
  * \ingroup PDTNAT
  * C-style \TText{unsigned char}
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_UCHAR();
-public static final int H5T_NATIVE_UCHAR = H5T_NATIVE_UCHAR();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_UCHAR();
+public static final long H5T_NATIVE_UCHAR = H5T_NATIVE_UCHAR();
 /**
  * \ingroup PDTNAT
  * C-style \TText{short}
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_SHORT();
-public static final int H5T_NATIVE_SHORT = H5T_NATIVE_SHORT();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_SHORT();
+public static final long H5T_NATIVE_SHORT = H5T_NATIVE_SHORT();
 /**
  * \ingroup PDTNAT
  * C-style \TText{unsigned short}
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_USHORT();
-public static final int H5T_NATIVE_USHORT = H5T_NATIVE_USHORT();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_USHORT();
+public static final long H5T_NATIVE_USHORT = H5T_NATIVE_USHORT();
 /**
  * \ingroup PDTNAT
  * C-style \TText{int}
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_INT();
-public static final int H5T_NATIVE_INT = H5T_NATIVE_INT();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_INT();
+public static final long H5T_NATIVE_INT = H5T_NATIVE_INT();
 /**
  * \ingroup PDTNAT
  * C-style \TText{unsigned int}
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_UINT();
-public static final int H5T_NATIVE_UINT = H5T_NATIVE_UINT();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_UINT();
+public static final long H5T_NATIVE_UINT = H5T_NATIVE_UINT();
 /**
  * \ingroup PDTNAT
  * C-style \TText{long}
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_LONG();
-public static final int H5T_NATIVE_LONG = H5T_NATIVE_LONG();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_LONG();
+public static final long H5T_NATIVE_LONG = H5T_NATIVE_LONG();
 /**
  * \ingroup PDTNAT
  * C-style \TText{unsigned long}
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_ULONG();
-public static final int H5T_NATIVE_ULONG = H5T_NATIVE_ULONG();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_ULONG();
+public static final long H5T_NATIVE_ULONG = H5T_NATIVE_ULONG();
 /**
  * \ingroup PDTNAT
  * C-style \TText{long long}
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_LLONG();
-public static final int H5T_NATIVE_LLONG = H5T_NATIVE_LLONG();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_LLONG();
+public static final long H5T_NATIVE_LLONG = H5T_NATIVE_LLONG();
 /**
  * \ingroup PDTNAT
  * C-style \TText{unsigned long long}
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_ULLONG();
-public static final int H5T_NATIVE_ULLONG = H5T_NATIVE_ULLONG();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_ULLONG();
+public static final long H5T_NATIVE_ULLONG = H5T_NATIVE_ULLONG();
 /**
  * \ingroup PDTNAT
  * C-style \TText{_Float16} (May be \TText{H5I_INVALID_HID} if platform doesn't support \TText{_Float16} type)
  * @since 1.14.4
  */
-public static native @MemberGetter int H5T_NATIVE_FLOAT16();
-public static final int H5T_NATIVE_FLOAT16 = H5T_NATIVE_FLOAT16();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_FLOAT16();
+public static final long H5T_NATIVE_FLOAT16 = H5T_NATIVE_FLOAT16();
 /**
  * \ingroup PDTNAT
  * C-style \TText{float}
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_FLOAT();
-public static final int H5T_NATIVE_FLOAT = H5T_NATIVE_FLOAT();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_FLOAT();
+public static final long H5T_NATIVE_FLOAT = H5T_NATIVE_FLOAT();
 /**
  * \ingroup PDTNAT
  * C-style \TText{double}
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_DOUBLE();
-public static final int H5T_NATIVE_DOUBLE = H5T_NATIVE_DOUBLE();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_DOUBLE();
+public static final long H5T_NATIVE_DOUBLE = H5T_NATIVE_DOUBLE();
 /**
  * \ingroup PDTNAT
  * C-style \TText{long double}
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_LDOUBLE();
-public static final int H5T_NATIVE_LDOUBLE = H5T_NATIVE_LDOUBLE();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_LDOUBLE();
+public static final long H5T_NATIVE_LDOUBLE = H5T_NATIVE_LDOUBLE();
 /**
  * \ingroup PDTNAT
  * C-style \TText{float _Complex} / (MSVC) \TText{_Fcomplex} (May be \TText{H5I_INVALID_HID} if platform
  * doesn't support \TText{float _Complex}/\TText{_Fcomplex} type)
  * @since 2.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_FLOAT_COMPLEX();
-public static final int H5T_NATIVE_FLOAT_COMPLEX = H5T_NATIVE_FLOAT_COMPLEX();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_FLOAT_COMPLEX();
+public static final long H5T_NATIVE_FLOAT_COMPLEX = H5T_NATIVE_FLOAT_COMPLEX();
 /**
  * \ingroup PDTNAT
  * C-style \TText{double _Complex} / (MSVC) \TText{_Dcomplex} (May be \TText{H5I_INVALID_HID} if platform
  * doesn't support \TText{double _Complex}/\TText{_Dcomplex} type)
  * @since 2.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_DOUBLE_COMPLEX();
-public static final int H5T_NATIVE_DOUBLE_COMPLEX = H5T_NATIVE_DOUBLE_COMPLEX();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_DOUBLE_COMPLEX();
+public static final long H5T_NATIVE_DOUBLE_COMPLEX = H5T_NATIVE_DOUBLE_COMPLEX();
 /**
  * \ingroup PDTNAT
  * C-style \TText{long double _Complex} / (MSVC) \TText{_Lcomplex} (May be \TText{H5I_INVALID_HID} if platform
  * doesn't support \TText{long double _Complex}/\TText{_Lcomplex} type)
  * @since 2.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_LDOUBLE_COMPLEX();
-public static final int H5T_NATIVE_LDOUBLE_COMPLEX = H5T_NATIVE_LDOUBLE_COMPLEX();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_LDOUBLE_COMPLEX();
+public static final long H5T_NATIVE_LDOUBLE_COMPLEX = H5T_NATIVE_LDOUBLE_COMPLEX();
 /**
  * \ingroup PDTNAT
  * HDF5 8-bit bitfield based on native types
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_B8();
-public static final int H5T_NATIVE_B8 = H5T_NATIVE_B8();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_B8();
+public static final long H5T_NATIVE_B8 = H5T_NATIVE_B8();
 /**
  * \ingroup PDTNAT
  * HDF5 16-bit bitfield based on native types
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_B16();
-public static final int H5T_NATIVE_B16 = H5T_NATIVE_B16();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_B16();
+public static final long H5T_NATIVE_B16 = H5T_NATIVE_B16();
 /**
  * \ingroup PDTNAT
  * HDF5 32-bit bitfield based on native types
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_B32();
-public static final int H5T_NATIVE_B32 = H5T_NATIVE_B32();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_B32();
+public static final long H5T_NATIVE_B32 = H5T_NATIVE_B32();
 /**
  * \ingroup PDTNAT
  * HDF5 64-bit bitfield based on native types
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_B64();
-public static final int H5T_NATIVE_B64 = H5T_NATIVE_B64();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_B64();
+public static final long H5T_NATIVE_B64 = H5T_NATIVE_B64();
 /**
  * \ingroup PDTNAT
  * HDF5 opaque unit based on native types
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_OPAQUE();
-public static final int H5T_NATIVE_OPAQUE = H5T_NATIVE_OPAQUE();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_OPAQUE();
+public static final long H5T_NATIVE_OPAQUE = H5T_NATIVE_OPAQUE();
 /**
  * \ingroup PDTNAT
  * HDF5 address type based on native types
  * @since 1.4.0
  */
-public static native @MemberGetter int H5T_NATIVE_HADDR();
-public static final int H5T_NATIVE_HADDR = H5T_NATIVE_HADDR();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_HADDR();
+public static final long H5T_NATIVE_HADDR = H5T_NATIVE_HADDR();
 /**
  * \ingroup PDTNAT
  * HDF5 size type based on native types
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_HSIZE();
-public static final int H5T_NATIVE_HSIZE = H5T_NATIVE_HSIZE();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_HSIZE();
+public static final long H5T_NATIVE_HSIZE = H5T_NATIVE_HSIZE();
 /**
  * \ingroup PDTNAT
  * HDF5 signed size type based on native types
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_HSSIZE();
-public static final int H5T_NATIVE_HSSIZE = H5T_NATIVE_HSSIZE();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_HSSIZE();
+public static final long H5T_NATIVE_HSSIZE = H5T_NATIVE_HSSIZE();
 /**
  * \ingroup PDTNAT
  * HDF5 error code type based on native types
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_HERR();
-public static final int H5T_NATIVE_HERR = H5T_NATIVE_HERR();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_HERR();
+public static final long H5T_NATIVE_HERR = H5T_NATIVE_HERR();
 /**
  * \ingroup PDTNAT
  * HDF5 Boolean type based on native types
  * @since 1.0.0
  */
-public static native @MemberGetter int H5T_NATIVE_HBOOL();
-public static final int H5T_NATIVE_HBOOL = H5T_NATIVE_HBOOL();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_HBOOL();
+public static final long H5T_NATIVE_HBOOL = H5T_NATIVE_HBOOL();
 public static native @Cast("hid_t") long H5T_NATIVE_SCHAR_g(); public static native void H5T_NATIVE_SCHAR_g(long setter);
 public static native @Cast("hid_t") long H5T_NATIVE_UCHAR_g(); public static native void H5T_NATIVE_UCHAR_g(long setter);
 public static native @Cast("hid_t") long H5T_NATIVE_SHORT_g(); public static native void H5T_NATIVE_SHORT_g(long setter);
@@ -3724,38 +3724,38 @@ public static native @Cast("hid_t") long H5T_NATIVE_HBOOL_g(); public static nat
  * \ingroup PDTC9x
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_INT8();
-public static final int H5T_NATIVE_INT8 = H5T_NATIVE_INT8();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_INT8();
+public static final long H5T_NATIVE_INT8 = H5T_NATIVE_INT8();
 /**
  * \ingroup PDTC9x
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_UINT8();
-public static final int H5T_NATIVE_UINT8 = H5T_NATIVE_UINT8();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_UINT8();
+public static final long H5T_NATIVE_UINT8 = H5T_NATIVE_UINT8();
 /**
  * \ingroup PDTC9x
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_INT_LEAST8();
-public static final int H5T_NATIVE_INT_LEAST8 = H5T_NATIVE_INT_LEAST8();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_INT_LEAST8();
+public static final long H5T_NATIVE_INT_LEAST8 = H5T_NATIVE_INT_LEAST8();
 /**
  * \ingroup PDTC9x
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_UINT_LEAST8();
-public static final int H5T_NATIVE_UINT_LEAST8 = H5T_NATIVE_UINT_LEAST8();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_UINT_LEAST8();
+public static final long H5T_NATIVE_UINT_LEAST8 = H5T_NATIVE_UINT_LEAST8();
 /**
  * \ingroup PDTC9x
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_INT_FAST8();
-public static final int H5T_NATIVE_INT_FAST8 = H5T_NATIVE_INT_FAST8();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_INT_FAST8();
+public static final long H5T_NATIVE_INT_FAST8 = H5T_NATIVE_INT_FAST8();
 /**
  * \ingroup PDTC9x
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_UINT_FAST8();
-public static final int H5T_NATIVE_UINT_FAST8 = H5T_NATIVE_UINT_FAST8();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_UINT_FAST8();
+public static final long H5T_NATIVE_UINT_FAST8 = H5T_NATIVE_UINT_FAST8();
 public static native @Cast("hid_t") long H5T_NATIVE_INT8_g(); public static native void H5T_NATIVE_INT8_g(long setter);
 public static native @Cast("hid_t") long H5T_NATIVE_UINT8_g(); public static native void H5T_NATIVE_UINT8_g(long setter);
 public static native @Cast("hid_t") long H5T_NATIVE_INT_LEAST8_g(); public static native void H5T_NATIVE_INT_LEAST8_g(long setter);
@@ -3766,33 +3766,33 @@ public static native @Cast("hid_t") long H5T_NATIVE_UINT_FAST8_g(); public stati
 /**
  * \ingroup PDTC9x
  */
-public static native @MemberGetter int H5T_NATIVE_INT16();
-public static final int H5T_NATIVE_INT16 = H5T_NATIVE_INT16();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_INT16();
+public static final long H5T_NATIVE_INT16 = H5T_NATIVE_INT16();
 /**
  * \ingroup PDTC9x
  */
-public static native @MemberGetter int H5T_NATIVE_UINT16();
-public static final int H5T_NATIVE_UINT16 = H5T_NATIVE_UINT16();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_UINT16();
+public static final long H5T_NATIVE_UINT16 = H5T_NATIVE_UINT16();
 /**
  * \ingroup PDTC9x
  */
-public static native @MemberGetter int H5T_NATIVE_INT_LEAST16();
-public static final int H5T_NATIVE_INT_LEAST16 = H5T_NATIVE_INT_LEAST16();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_INT_LEAST16();
+public static final long H5T_NATIVE_INT_LEAST16 = H5T_NATIVE_INT_LEAST16();
 /**
  * \ingroup PDTC9x
  */
-public static native @MemberGetter int H5T_NATIVE_UINT_LEAST16();
-public static final int H5T_NATIVE_UINT_LEAST16 = H5T_NATIVE_UINT_LEAST16();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_UINT_LEAST16();
+public static final long H5T_NATIVE_UINT_LEAST16 = H5T_NATIVE_UINT_LEAST16();
 /**
  * \ingroup PDTC9x
  */
-public static native @MemberGetter int H5T_NATIVE_INT_FAST16();
-public static final int H5T_NATIVE_INT_FAST16 = H5T_NATIVE_INT_FAST16();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_INT_FAST16();
+public static final long H5T_NATIVE_INT_FAST16 = H5T_NATIVE_INT_FAST16();
 /**
  * \ingroup PDTC9x
  */
-public static native @MemberGetter int H5T_NATIVE_UINT_FAST16();
-public static final int H5T_NATIVE_UINT_FAST16 = H5T_NATIVE_UINT_FAST16();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_UINT_FAST16();
+public static final long H5T_NATIVE_UINT_FAST16 = H5T_NATIVE_UINT_FAST16();
 public static native @Cast("hid_t") long H5T_NATIVE_INT16_g(); public static native void H5T_NATIVE_INT16_g(long setter);
 public static native @Cast("hid_t") long H5T_NATIVE_UINT16_g(); public static native void H5T_NATIVE_UINT16_g(long setter);
 public static native @Cast("hid_t") long H5T_NATIVE_INT_LEAST16_g(); public static native void H5T_NATIVE_INT_LEAST16_g(long setter);
@@ -3804,38 +3804,38 @@ public static native @Cast("hid_t") long H5T_NATIVE_UINT_FAST16_g(); public stat
  * \ingroup PDTC9x
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_INT32();
-public static final int H5T_NATIVE_INT32 = H5T_NATIVE_INT32();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_INT32();
+public static final long H5T_NATIVE_INT32 = H5T_NATIVE_INT32();
 /**
  * \ingroup PDTC9x
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_UINT32();
-public static final int H5T_NATIVE_UINT32 = H5T_NATIVE_UINT32();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_UINT32();
+public static final long H5T_NATIVE_UINT32 = H5T_NATIVE_UINT32();
 /**
  * \ingroup PDTC9x
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_INT_LEAST32();
-public static final int H5T_NATIVE_INT_LEAST32 = H5T_NATIVE_INT_LEAST32();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_INT_LEAST32();
+public static final long H5T_NATIVE_INT_LEAST32 = H5T_NATIVE_INT_LEAST32();
 /**
  * \ingroup PDTC9x
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_UINT_LEAST32();
-public static final int H5T_NATIVE_UINT_LEAST32 = H5T_NATIVE_UINT_LEAST32();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_UINT_LEAST32();
+public static final long H5T_NATIVE_UINT_LEAST32 = H5T_NATIVE_UINT_LEAST32();
 /**
  * \ingroup PDTC9x
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_INT_FAST32();
-public static final int H5T_NATIVE_INT_FAST32 = H5T_NATIVE_INT_FAST32();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_INT_FAST32();
+public static final long H5T_NATIVE_INT_FAST32 = H5T_NATIVE_INT_FAST32();
 /**
  * \ingroup PDTC9x
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_UINT_FAST32();
-public static final int H5T_NATIVE_UINT_FAST32 = H5T_NATIVE_UINT_FAST32();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_UINT_FAST32();
+public static final long H5T_NATIVE_UINT_FAST32 = H5T_NATIVE_UINT_FAST32();
 public static native @Cast("hid_t") long H5T_NATIVE_INT32_g(); public static native void H5T_NATIVE_INT32_g(long setter);
 public static native @Cast("hid_t") long H5T_NATIVE_UINT32_g(); public static native void H5T_NATIVE_UINT32_g(long setter);
 public static native @Cast("hid_t") long H5T_NATIVE_INT_LEAST32_g(); public static native void H5T_NATIVE_INT_LEAST32_g(long setter);
@@ -3847,38 +3847,38 @@ public static native @Cast("hid_t") long H5T_NATIVE_UINT_FAST32_g(); public stat
  * \ingroup PDTC9x
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_INT64();
-public static final int H5T_NATIVE_INT64 = H5T_NATIVE_INT64();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_INT64();
+public static final long H5T_NATIVE_INT64 = H5T_NATIVE_INT64();
 /**
  * \ingroup PDTC9x
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_UINT64();
-public static final int H5T_NATIVE_UINT64 = H5T_NATIVE_UINT64();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_UINT64();
+public static final long H5T_NATIVE_UINT64 = H5T_NATIVE_UINT64();
 /**
  * \ingroup PDTC9x
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_INT_LEAST64();
-public static final int H5T_NATIVE_INT_LEAST64 = H5T_NATIVE_INT_LEAST64();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_INT_LEAST64();
+public static final long H5T_NATIVE_INT_LEAST64 = H5T_NATIVE_INT_LEAST64();
 /**
  * \ingroup PDTC9x
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_UINT_LEAST64();
-public static final int H5T_NATIVE_UINT_LEAST64 = H5T_NATIVE_UINT_LEAST64();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_UINT_LEAST64();
+public static final long H5T_NATIVE_UINT_LEAST64 = H5T_NATIVE_UINT_LEAST64();
 /**
  * \ingroup PDTC9x
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_INT_FAST64();
-public static final int H5T_NATIVE_INT_FAST64 = H5T_NATIVE_INT_FAST64();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_INT_FAST64();
+public static final long H5T_NATIVE_INT_FAST64 = H5T_NATIVE_INT_FAST64();
 /**
  * \ingroup PDTC9x
  * @since 1.2.0
  */
-public static native @MemberGetter int H5T_NATIVE_UINT_FAST64();
-public static final int H5T_NATIVE_UINT_FAST64 = H5T_NATIVE_UINT_FAST64();
+public static native @MemberGetter @Cast("hid_t") long H5T_NATIVE_UINT_FAST64();
+public static final long H5T_NATIVE_UINT_FAST64 = H5T_NATIVE_UINT_FAST64();
 public static native @Cast("hid_t") long H5T_NATIVE_INT64_g(); public static native void H5T_NATIVE_INT64_g(long setter);
 public static native @Cast("hid_t") long H5T_NATIVE_UINT64_g(); public static native void H5T_NATIVE_UINT64_g(long setter);
 public static native @Cast("hid_t") long H5T_NATIVE_INT_LEAST64_g(); public static native void H5T_NATIVE_INT_LEAST64_g(long setter);
@@ -16167,113 +16167,113 @@ public static native @Cast("herr_t") int H5Gclose_async(String app_file, String 
 /**
  * Property list class root, is not user-accessible @since 1.8.0
  */
-public static native @MemberGetter int H5P_ROOT();
-public static final int H5P_ROOT = H5P_ROOT();
+public static native @MemberGetter @Cast("hid_t") long H5P_ROOT();
+public static final long H5P_ROOT = H5P_ROOT();
 /**
  * Object creation property list class, is not user-accessible @since 1.8.0
  */
-public static native @MemberGetter int H5P_OBJECT_CREATE();
-public static final int H5P_OBJECT_CREATE = H5P_OBJECT_CREATE();
+public static native @MemberGetter @Cast("hid_t") long H5P_OBJECT_CREATE();
+public static final long H5P_OBJECT_CREATE = H5P_OBJECT_CREATE();
 /**
  * File creation property list class @since 1.0.0
  */
-public static native @MemberGetter int H5P_FILE_CREATE();
-public static final int H5P_FILE_CREATE = H5P_FILE_CREATE();
+public static native @MemberGetter @Cast("hid_t") long H5P_FILE_CREATE();
+public static final long H5P_FILE_CREATE = H5P_FILE_CREATE();
 /**
  * File access property list class @since 1.0.0
  */
-public static native @MemberGetter int H5P_FILE_ACCESS();
-public static final int H5P_FILE_ACCESS = H5P_FILE_ACCESS();
+public static native @MemberGetter @Cast("hid_t") long H5P_FILE_ACCESS();
+public static final long H5P_FILE_ACCESS = H5P_FILE_ACCESS();
 /**
  * Dataset creation property list class @since 1.0.0
  */
-public static native @MemberGetter int H5P_DATASET_CREATE();
-public static final int H5P_DATASET_CREATE = H5P_DATASET_CREATE();
+public static native @MemberGetter @Cast("hid_t") long H5P_DATASET_CREATE();
+public static final long H5P_DATASET_CREATE = H5P_DATASET_CREATE();
 /**
  * Dataset access property list class @since 1.8.0
  */
-public static native @MemberGetter int H5P_DATASET_ACCESS();
-public static final int H5P_DATASET_ACCESS = H5P_DATASET_ACCESS();
+public static native @MemberGetter @Cast("hid_t") long H5P_DATASET_ACCESS();
+public static final long H5P_DATASET_ACCESS = H5P_DATASET_ACCESS();
 /**
  * Dataset transfer property list class @since 1.0.0
  */
-public static native @MemberGetter int H5P_DATASET_XFER();
-public static final int H5P_DATASET_XFER = H5P_DATASET_XFER();
+public static native @MemberGetter @Cast("hid_t") long H5P_DATASET_XFER();
+public static final long H5P_DATASET_XFER = H5P_DATASET_XFER();
 /**
  * File mount property list class
  */
-public static native @MemberGetter int H5P_FILE_MOUNT();
-public static final int H5P_FILE_MOUNT = H5P_FILE_MOUNT();
+public static native @MemberGetter @Cast("hid_t") long H5P_FILE_MOUNT();
+public static final long H5P_FILE_MOUNT = H5P_FILE_MOUNT();
 /**
  * Group creation property list class @since 1.8.0
  */
-public static native @MemberGetter int H5P_GROUP_CREATE();
-public static final int H5P_GROUP_CREATE = H5P_GROUP_CREATE();
+public static native @MemberGetter @Cast("hid_t") long H5P_GROUP_CREATE();
+public static final long H5P_GROUP_CREATE = H5P_GROUP_CREATE();
 /**
  * Group access property list class @since 1.8.0
  */
-public static native @MemberGetter int H5P_GROUP_ACCESS();
-public static final int H5P_GROUP_ACCESS = H5P_GROUP_ACCESS();
+public static native @MemberGetter @Cast("hid_t") long H5P_GROUP_ACCESS();
+public static final long H5P_GROUP_ACCESS = H5P_GROUP_ACCESS();
 /**
  * Datatype creation property list class @since 1.8.0
  */
-public static native @MemberGetter int H5P_DATATYPE_CREATE();
-public static final int H5P_DATATYPE_CREATE = H5P_DATATYPE_CREATE();
+public static native @MemberGetter @Cast("hid_t") long H5P_DATATYPE_CREATE();
+public static final long H5P_DATATYPE_CREATE = H5P_DATATYPE_CREATE();
 /**
  * Datatype access property list class @since 1.8.0
  */
-public static native @MemberGetter int H5P_DATATYPE_ACCESS();
-public static final int H5P_DATATYPE_ACCESS = H5P_DATATYPE_ACCESS();
+public static native @MemberGetter @Cast("hid_t") long H5P_DATATYPE_ACCESS();
+public static final long H5P_DATATYPE_ACCESS = H5P_DATATYPE_ACCESS();
 /**
  * Map creation property list class
  */
-public static native @MemberGetter int H5P_MAP_CREATE();
-public static final int H5P_MAP_CREATE = H5P_MAP_CREATE();
+public static native @MemberGetter @Cast("hid_t") long H5P_MAP_CREATE();
+public static final long H5P_MAP_CREATE = H5P_MAP_CREATE();
 /**
  * Map access property list class
  */
-public static native @MemberGetter int H5P_MAP_ACCESS();
-public static final int H5P_MAP_ACCESS = H5P_MAP_ACCESS();
+public static native @MemberGetter @Cast("hid_t") long H5P_MAP_ACCESS();
+public static final long H5P_MAP_ACCESS = H5P_MAP_ACCESS();
 /**
  * String creation property list class, is not user-accessible
  */
-public static native @MemberGetter int H5P_STRING_CREATE();
-public static final int H5P_STRING_CREATE = H5P_STRING_CREATE();
+public static native @MemberGetter @Cast("hid_t") long H5P_STRING_CREATE();
+public static final long H5P_STRING_CREATE = H5P_STRING_CREATE();
 /**
  * Attribute creation property list class @since 1.8.0
  */
-public static native @MemberGetter int H5P_ATTRIBUTE_CREATE();
-public static final int H5P_ATTRIBUTE_CREATE = H5P_ATTRIBUTE_CREATE();
+public static native @MemberGetter @Cast("hid_t") long H5P_ATTRIBUTE_CREATE();
+public static final long H5P_ATTRIBUTE_CREATE = H5P_ATTRIBUTE_CREATE();
 /**
  * Attribute access property list class
  */
-public static native @MemberGetter int H5P_ATTRIBUTE_ACCESS();
-public static final int H5P_ATTRIBUTE_ACCESS = H5P_ATTRIBUTE_ACCESS();
+public static native @MemberGetter @Cast("hid_t") long H5P_ATTRIBUTE_ACCESS();
+public static final long H5P_ATTRIBUTE_ACCESS = H5P_ATTRIBUTE_ACCESS();
 /**
  * Object copy property list class
  */
-public static native @MemberGetter int H5P_OBJECT_COPY();
-public static final int H5P_OBJECT_COPY = H5P_OBJECT_COPY();
+public static native @MemberGetter @Cast("hid_t") long H5P_OBJECT_COPY();
+public static final long H5P_OBJECT_COPY = H5P_OBJECT_COPY();
 /**
  * Link creation property list class
  */
-public static native @MemberGetter int H5P_LINK_CREATE();
-public static final int H5P_LINK_CREATE = H5P_LINK_CREATE();
+public static native @MemberGetter @Cast("hid_t") long H5P_LINK_CREATE();
+public static final long H5P_LINK_CREATE = H5P_LINK_CREATE();
 /**
  * Link access property list class
  */
-public static native @MemberGetter int H5P_LINK_ACCESS();
-public static final int H5P_LINK_ACCESS = H5P_LINK_ACCESS();
+public static native @MemberGetter @Cast("hid_t") long H5P_LINK_ACCESS();
+public static final long H5P_LINK_ACCESS = H5P_LINK_ACCESS();
 /**
  * VOL initialization property list class
  */
-public static native @MemberGetter int H5P_VOL_INITIALIZE();
-public static final int H5P_VOL_INITIALIZE = H5P_VOL_INITIALIZE();
+public static native @MemberGetter @Cast("hid_t") long H5P_VOL_INITIALIZE();
+public static final long H5P_VOL_INITIALIZE = H5P_VOL_INITIALIZE();
 /**
  * Reference access property list class
  */
-public static native @MemberGetter int H5P_REFERENCE_ACCESS();
-public static final int H5P_REFERENCE_ACCESS = H5P_REFERENCE_ACCESS();
+public static native @MemberGetter @Cast("hid_t") long H5P_REFERENCE_ACCESS();
+public static final long H5P_REFERENCE_ACCESS = H5P_REFERENCE_ACCESS();
 
 /*
  * The library's default property lists
@@ -16281,98 +16281,98 @@ public static final int H5P_REFERENCE_ACCESS = H5P_REFERENCE_ACCESS();
 /**
  * File creation default property list
  */
-public static native @MemberGetter int H5P_FILE_CREATE_DEFAULT();
-public static final int H5P_FILE_CREATE_DEFAULT = H5P_FILE_CREATE_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_FILE_CREATE_DEFAULT();
+public static final long H5P_FILE_CREATE_DEFAULT = H5P_FILE_CREATE_DEFAULT();
 /**
  * File access default property list
  */
-public static native @MemberGetter int H5P_FILE_ACCESS_DEFAULT();
-public static final int H5P_FILE_ACCESS_DEFAULT = H5P_FILE_ACCESS_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_FILE_ACCESS_DEFAULT();
+public static final long H5P_FILE_ACCESS_DEFAULT = H5P_FILE_ACCESS_DEFAULT();
 /**
  * Dataset creation default property list
  */
-public static native @MemberGetter int H5P_DATASET_CREATE_DEFAULT();
-public static final int H5P_DATASET_CREATE_DEFAULT = H5P_DATASET_CREATE_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_DATASET_CREATE_DEFAULT();
+public static final long H5P_DATASET_CREATE_DEFAULT = H5P_DATASET_CREATE_DEFAULT();
 /**
  * Dataset access default property list @since 1.8.0
  */
-public static native @MemberGetter int H5P_DATASET_ACCESS_DEFAULT();
-public static final int H5P_DATASET_ACCESS_DEFAULT = H5P_DATASET_ACCESS_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_DATASET_ACCESS_DEFAULT();
+public static final long H5P_DATASET_ACCESS_DEFAULT = H5P_DATASET_ACCESS_DEFAULT();
 /**
  * Dataset transfer default property list
  */
-public static native @MemberGetter int H5P_DATASET_XFER_DEFAULT();
-public static final int H5P_DATASET_XFER_DEFAULT = H5P_DATASET_XFER_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_DATASET_XFER_DEFAULT();
+public static final long H5P_DATASET_XFER_DEFAULT = H5P_DATASET_XFER_DEFAULT();
 /**
  * File mount default property list
  */
-public static native @MemberGetter int H5P_FILE_MOUNT_DEFAULT();
-public static final int H5P_FILE_MOUNT_DEFAULT = H5P_FILE_MOUNT_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_FILE_MOUNT_DEFAULT();
+public static final long H5P_FILE_MOUNT_DEFAULT = H5P_FILE_MOUNT_DEFAULT();
 /**
  * Group creation default property list @since 1.8.0
  */
-public static native @MemberGetter int H5P_GROUP_CREATE_DEFAULT();
-public static final int H5P_GROUP_CREATE_DEFAULT = H5P_GROUP_CREATE_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_GROUP_CREATE_DEFAULT();
+public static final long H5P_GROUP_CREATE_DEFAULT = H5P_GROUP_CREATE_DEFAULT();
 /**
  * Group access default property list @since 1.8.0
  */
-public static native @MemberGetter int H5P_GROUP_ACCESS_DEFAULT();
-public static final int H5P_GROUP_ACCESS_DEFAULT = H5P_GROUP_ACCESS_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_GROUP_ACCESS_DEFAULT();
+public static final long H5P_GROUP_ACCESS_DEFAULT = H5P_GROUP_ACCESS_DEFAULT();
 /**
  * Datytype creation default property list @since 1.8.0
  */
-public static native @MemberGetter int H5P_DATATYPE_CREATE_DEFAULT();
-public static final int H5P_DATATYPE_CREATE_DEFAULT = H5P_DATATYPE_CREATE_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_DATATYPE_CREATE_DEFAULT();
+public static final long H5P_DATATYPE_CREATE_DEFAULT = H5P_DATATYPE_CREATE_DEFAULT();
 /**
  * Datytype access default property list @since 1.8.0
  */
-public static native @MemberGetter int H5P_DATATYPE_ACCESS_DEFAULT();
-public static final int H5P_DATATYPE_ACCESS_DEFAULT = H5P_DATATYPE_ACCESS_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_DATATYPE_ACCESS_DEFAULT();
+public static final long H5P_DATATYPE_ACCESS_DEFAULT = H5P_DATATYPE_ACCESS_DEFAULT();
 /**
  * Map creation default property list
  */
-public static native @MemberGetter int H5P_MAP_CREATE_DEFAULT();
-public static final int H5P_MAP_CREATE_DEFAULT = H5P_MAP_CREATE_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_MAP_CREATE_DEFAULT();
+public static final long H5P_MAP_CREATE_DEFAULT = H5P_MAP_CREATE_DEFAULT();
 /**
  * Map access default property list
  */
-public static native @MemberGetter int H5P_MAP_ACCESS_DEFAULT();
-public static final int H5P_MAP_ACCESS_DEFAULT = H5P_MAP_ACCESS_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_MAP_ACCESS_DEFAULT();
+public static final long H5P_MAP_ACCESS_DEFAULT = H5P_MAP_ACCESS_DEFAULT();
 /**
  * Attribute creation default property list @since 1.8.0
  */
-public static native @MemberGetter int H5P_ATTRIBUTE_CREATE_DEFAULT();
-public static final int H5P_ATTRIBUTE_CREATE_DEFAULT = H5P_ATTRIBUTE_CREATE_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_ATTRIBUTE_CREATE_DEFAULT();
+public static final long H5P_ATTRIBUTE_CREATE_DEFAULT = H5P_ATTRIBUTE_CREATE_DEFAULT();
 /**
  * Attribute access default property list
  */
-public static native @MemberGetter int H5P_ATTRIBUTE_ACCESS_DEFAULT();
-public static final int H5P_ATTRIBUTE_ACCESS_DEFAULT = H5P_ATTRIBUTE_ACCESS_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_ATTRIBUTE_ACCESS_DEFAULT();
+public static final long H5P_ATTRIBUTE_ACCESS_DEFAULT = H5P_ATTRIBUTE_ACCESS_DEFAULT();
 /**
  * Object copy default property list
  */
-public static native @MemberGetter int H5P_OBJECT_COPY_DEFAULT();
-public static final int H5P_OBJECT_COPY_DEFAULT = H5P_OBJECT_COPY_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_OBJECT_COPY_DEFAULT();
+public static final long H5P_OBJECT_COPY_DEFAULT = H5P_OBJECT_COPY_DEFAULT();
 /**
  * Link creation default property list
  */
-public static native @MemberGetter int H5P_LINK_CREATE_DEFAULT();
-public static final int H5P_LINK_CREATE_DEFAULT = H5P_LINK_CREATE_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_LINK_CREATE_DEFAULT();
+public static final long H5P_LINK_CREATE_DEFAULT = H5P_LINK_CREATE_DEFAULT();
 /**
  * Link access default property list
  */
-public static native @MemberGetter int H5P_LINK_ACCESS_DEFAULT();
-public static final int H5P_LINK_ACCESS_DEFAULT = H5P_LINK_ACCESS_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_LINK_ACCESS_DEFAULT();
+public static final long H5P_LINK_ACCESS_DEFAULT = H5P_LINK_ACCESS_DEFAULT();
 /**
  * VOL initialization default property list
  */
-public static native @MemberGetter int H5P_VOL_INITIALIZE_DEFAULT();
-public static final int H5P_VOL_INITIALIZE_DEFAULT = H5P_VOL_INITIALIZE_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_VOL_INITIALIZE_DEFAULT();
+public static final long H5P_VOL_INITIALIZE_DEFAULT = H5P_VOL_INITIALIZE_DEFAULT();
 /**
  * Reference access default property list
  */
-public static native @MemberGetter int H5P_REFERENCE_ACCESS_DEFAULT();
-public static final int H5P_REFERENCE_ACCESS_DEFAULT = H5P_REFERENCE_ACCESS_DEFAULT();
+public static native @MemberGetter @Cast("hid_t") long H5P_REFERENCE_ACCESS_DEFAULT();
+public static final long H5P_REFERENCE_ACCESS_DEFAULT = H5P_REFERENCE_ACCESS_DEFAULT();
 /**
  * Attribute creation order is tracked but not necessarily indexed
  */
@@ -28568,8 +28568,8 @@ public static native @Cast("herr_t") int H5Sset_extent_simple(@Cast("hid_t") lon
 // #include "H5FDpublic.h" /* File drivers             */
 
 /** ID for the core VFD */
-public static native @MemberGetter int H5FD_CORE();
-public static final int H5FD_CORE = H5FD_CORE();
+public static native @MemberGetter @Cast("hid_t") long H5FD_CORE();
+public static final long H5FD_CORE = H5FD_CORE();
 
 /** Identifier for the core VFD @since 1.14.0 */
 public static final int H5FD_CORE_VALUE = H5_VFD_CORE;
@@ -28728,8 +28728,8 @@ public static final int CBSIZE_DEF = (16 * 1024 * 1024);
 // #include "H5FDpublic.h" /* File drivers             */
 
 /** ID for the family VFD */
-public static native @MemberGetter int H5FD_FAMILY();
-public static final int H5FD_FAMILY = H5FD_FAMILY();
+public static native @MemberGetter @Cast("hid_t") long H5FD_FAMILY();
+public static final long H5FD_FAMILY = H5FD_FAMILY();
 
 /** Identifier for the family VFD @since 1.14.0 */
 public static final int H5FD_FAMILY_VALUE = H5_VFD_FAMILY;
@@ -28847,8 +28847,8 @@ public static native @Cast("herr_t") int H5Pget_fapl_family(@Cast("hid_t") long 
 // #include "H5FDpublic.h" /* File drivers             */
 
 /** ID for the log VFD */
-public static native @MemberGetter int H5FD_LOG();
-public static final int H5FD_LOG = H5FD_LOG();
+public static native @MemberGetter @Cast("hid_t") long H5FD_LOG();
+public static final long H5FD_LOG = H5FD_LOG();
 
 /** Identifier for the log VFD @since 1.14.0 */
 public static final int H5FD_LOG_VALUE = H5_VFD_LOG;
@@ -29416,8 +29416,8 @@ public static final int
 // #include "H5FDpublic.h" /* File drivers             */
 
 /** ID for the multi VFD */
-public static native @MemberGetter int H5FD_MULTI();
-public static final int H5FD_MULTI = H5FD_MULTI();
+public static native @MemberGetter @Cast("hid_t") long H5FD_MULTI();
+public static final long H5FD_MULTI = H5FD_MULTI();
 
 // #ifdef __cplusplus
 // #endif
@@ -29702,8 +29702,8 @@ public static native @Cast("herr_t") int H5Pset_fapl_split(@Cast("hid_t") long f
 // #include "H5FDpublic.h" /* File drivers             */
 
 /** ID for the sec2 VFD */
-public static native @MemberGetter int H5FD_SEC2();
-public static final int H5FD_SEC2 = H5FD_SEC2();
+public static native @MemberGetter @Cast("hid_t") long H5FD_SEC2();
+public static final long H5FD_SEC2 = H5FD_SEC2();
 
 /** Identifier for the sec2 VFD @since 1.14.0 */
 public static final int H5FD_SEC2_VALUE = H5_VFD_SEC2;
@@ -29763,8 +29763,8 @@ public static native @Cast("herr_t") int H5Pset_fapl_sec2(@Cast("hid_t") long fa
 // #include "H5FDpublic.h" /* File drivers             */
 
 /** ID for the stdio VFD */
-public static native @MemberGetter int H5FD_STDIO();
-public static final int H5FD_STDIO = H5FD_STDIO();
+public static native @MemberGetter @Cast("hid_t") long H5FD_STDIO();
+public static final long H5FD_STDIO = H5FD_STDIO();
 
 // #ifdef __cplusplus
 // #endif
