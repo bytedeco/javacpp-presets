@@ -34,13 +34,11 @@ import org.bytedeco.javacpp.Loader;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeTrue;
 
 /**
  * Compares every integer constant in {@link hdf5} with the constant of the same name in the
  * official {@link HDF5Constants}, to catch constants that are mapped with the wrong type or value
- * (see issue #1812). Optional, as it is a broad check rather than a targeted one: run it with
- * {@code -Dhdf5.test.allConstants=true}.
+ * (see issue #1812).
  *
  * @author Mark Kittisopikul
  */
@@ -55,9 +53,6 @@ public class HDF5ConstantsTest {
 
     @Test
     public void allConstantsMatchOfficialBindings() throws java.lang.Exception {
-        assumeTrue("Set -Dhdf5.test.allConstants=true to compare all constants",
-                Boolean.getBoolean("hdf5.test.allConstants"));
-
         long start = System.nanoTime();
         Loader.load(hdf5_java.class);
         long loaded = System.nanoTime();
