@@ -38,7 +38,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = javacpp.class, target = "org.bytedeco.hdf5", global = "org.bytedeco.hdf5.global.hdf5", value = {
     @Platform(value = {"linux", "macosx", "windows"},
             define = {"GENERIC_EXCEPTION_CLASS H5::Exception", "GENERIC_EXCEPTION_TOSTRING getCDetailMsg()",
-                      "H5A_MODULE", "H5D_MODULE", "H5F_MODULE", "H5G_MODULE", "H5L_MODULE",  "H5M_MODULE", "H5O_MODULE", "H5R_MODULE", "H5T_MODULE", "H5VL_MODULE"},
+                      "H5A_MODULE", "H5D_MODULE", "H5F_MODULE", "H5G_MODULE", "H5L_MODULE",  "H5M_MODULE", "H5O_MODULE", "H5R_MODULE", "H5T_MODULE", "H5VL_MODULE",
+                      "H5_BUILT_AS_DYNAMIC_LIB"},
             include = {"H5pubconf.h", /* "H5version.h", */ "H5public.h", "H5Cpublic.h", "H5Ipublic.h",
         "H5Tpublic.h", "H5Lpublic.h", "H5Opublic.h", "H5Zpublic.h",  "H5Apublic.h", "H5ACpublic.h", "H5Dpublic.h", "H5Epublic.h", "H5Fpublic.h",
         "H5FDpublic.h", "H5Gpublic.h", "H5MMpublic.h", "H5Ppublic.h", "H5PLpublic.h", "H5Rpublic.h", "H5Spublic.h", "H5FDcore.h", "H5FDdirect.h",
@@ -51,25 +52,29 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "H5FaccProp.h", "H5FcreatProp.h", "H5AtomType.h", "H5PredType.h", "H5EnumType.h", "H5IntType.h", "H5FloatType.h", "H5StrType.h", "H5CompType.h",
         "H5ArrayType.h", "H5VarLenType.h", "H5DataSet.h", "H5Group.h", "H5File.h", "H5Library.h"},
             link = {"hdf5@.320", "hdf5_cpp@.320", "hdf5_hl@.320", "hdf5_hl_cpp@.320"}, resource = {"include", "lib"}),
-    @Platform(value = "windows", link = {"shlwapi#", "zs", "libhdf5", "libhdf5_cpp", "libhdf5_hl", "libhdf5_hl_cpp", "aec-static", "szip-static"}) })
+    @Platform(value = "windows", link = {"hdf5", "hdf5_cpp", "hdf5_hl", "hdf5_hl_cpp"}) })
 public class hdf5 implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "hdf5"); }
 
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("H5_DLL", "H5_DLLVAR", "H5HL_DLL", "H5HL_DLLVAR", "H5CPP_DLL", "H5CPP_DLLVAR", "H5CPP_HL_DLL", "H5CPP_HL_DLLVAR", "H5CHECK", "H5OPEN", "H5E_ERR_CLS", "H5E_BEGIN_TRY", "H5E_END_TRY",
+        infoMap.put(new Info("H5_DLL", "H5_DLLVAR", "H5HL_DLL", "H5HL_DLLVAR", "H5CPP_DLL", "H5CPP_DLLVAR", "H5CPP_HL_DLL", "H5CPP_HL_DLLVAR", "H5CHECK", "H5E_ERR_CLS", "H5E_BEGIN_TRY", "H5E_END_TRY",
                              "H5G_link_t", "H5std_string", "H5O_TOKEN_UNDEF", "PRIdHID", "PRIxHID", "PRIXHID", "PRIoHID",
                              "PRIdHSIZE", "PRIiHSIZE", "PRIoHSIZE", "PRIuHSIZE", "PRIxHSIZE", "PRIXHSIZE",
                              "PRIdHADDR", "PRIoHADDR", "PRIuHADDR", "PRIxHADDR", "PRIxHADDR", "PRIXHADDR", "H5_PRINTF_HADDR_FMT").cppTypes().annotations())
+               // Every "#define X (H5OPEN X_g)" constant is the hid_t global X_g, but the Parser types such a macro from
+               // the first identifier in it that has cppTypes, so give H5OPEN the type, and skip the H5OPEN macro itself
+               .put(new Info("H5OPEN").cppTypes("hid_t").skip())
                .put(new Info("((__GNUC__ * 100) + __GNUC_MINOR__) >= 406", "H5_HAVE_PARALLEL", "NEW_HYPERSLAB_API", "H5_HAVE_DIRECT",
                              "BOOL_NOTDEFINED", "H5_NO_STD", "H5_HAVE_MAP_API", "H5_DOXYGEN").define(false))
                .put(new Info("H5_NO_DEPRECATED_SYMBOLS", "H5_HAVE_STDBOOL_H", "H5_SIZEOF_UINT32_T>=4", "H5_SIZEOF_INT64_T>=8", "H5_SIZEOF_UINT64_T>=8",
                              "H5A_MODULE", "H5D_MODULE", "H5F_MODULE", "H5G_MODULE", "H5L_MODULE",  "H5M_MODULE", "H5O_MODULE", "H5R_MODULE", "H5T_MODULE", "H5VL_MODULE").define(true))
                .put(new Info("HSIZE_UNDEF", "HADDR_UNDEF", "HADDR_AS_MPI_TYPE", "H5L_MAX_LINK_NAME_LEN", "H5L_SAME_LOC", "H5O_SHMESG_SDSPACE_FLAG",
                              "H5O_SHMESG_DTYPE_FLAG", "H5O_SHMESG_FILL_FLAG", "H5O_SHMESG_PLINE_FLAG", "H5O_SHMESG_ATTR_FLAG", "H5T_VARIABLE",
-                             "H5T_NATIVE_CHAR", "H5D_CHUNK_CACHE_NSLOTS_DEFAULT", "H5D_CHUNK_CACHE_NBYTES_DEFAULT", "H5F_PAGE_BUFFER_SIZE_DEFAULT", "H5E_DEFAULT",
+                             "H5D_CHUNK_CACHE_NSLOTS_DEFAULT", "H5D_CHUNK_CACHE_NBYTES_DEFAULT", "H5F_PAGE_BUFFER_SIZE_DEFAULT", "H5E_DEFAULT",
                              "H5F_ACC_SWMR_WRITE", "H5F_ACC_SWMR_READ", "H5F_FAMILY_DEFAULT", "H5F_UNLIMITED", "H5P_DEFAULT", "H5S_ALL",
                              "H5_VFD_INVALID", "H5_VFD_SEC2", "H5_VFD_CORE", "H5_VFD_LOG", "H5_VFD_FAMILY", "H5_VFD_MULTI", "H5_VFD_STDIO", "H5_VFD_SPLITTER",
                              "H5_VFD_MPIO", "H5_VFD_DIRECT", "H5_VFD_MIRROR", "H5_VFD_HDFS", "H5_VFD_ROS3", "H5_VFD_SUBFILING", "H5_VFD_IOC", "H5_VFD_ONION").translate(false))
+               .put(new Info("H5T_NATIVE_CHAR").cppTypes("hid_t").translate(false))
                .put(new Info("H5_VERS_STR").javaText("public static final String H5_VERS_STR = H5_VERS_MAJOR + \".\" + H5_VERS_MINOR + \".\" + H5_VERS_RELEASE + H5_VERS_SUBRELEASE;"))
                .put(new Info("ssize_t").cast().valueTypes("long").pointerTypes("SizeTPointer"))
                .put(new Info("H5FD_class_value_t", "H5S_seloper_t").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))

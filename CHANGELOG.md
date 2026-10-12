@@ -1,4 +1,5 @@
 
+ * Fix issues with `hid_t` and `hdf5_java` in presets for HDF5 ([pull #1814](https://github.com/bytedeco/javacpp-presets/pull/1814))
  * Bundle missing `cudnn_ext` and `cudnn_engines_tensor_ir` libraries for `cuda-redist-cudnn` artifact ([issue #1805](https://github.com/bytedeco/javacpp-presets/issues/1805))
  * Enable Rockchip Media Process Platform (RKMPP) support for FFmpeg ([pull #1804](https://github.com/bytedeco/javacpp-presets/pull/1804))
  * Make ONNX Runtime’s DNNL and OpenVINO dependencies optional ([pull #1802](https://github.com/bytedeco/javacpp-presets/pull/1802))
