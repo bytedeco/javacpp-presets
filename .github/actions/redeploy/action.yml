@@ -41,6 +41,7 @@ runs:
       env:
         GITHUB_EVENT_HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         FILE: ${{ matrix.file }}
+        GITHUB_TOKEN: ${{ github.token }}
       run: |
         if [[ -z ${CI_DEPLOY_USERNAME:-} ]] || [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
             # We are not deploying
@@ -137,6 +138,11 @@ runs:
                 if [[ -n $FILES ]]; then
                     FILE=$ARTIFACT-$VERSION.jar
                     mv -v $HOME/.m2/repository/${GROUP//.//}/$ARTIFACT/$VERSION/$FILE .
+                    if [[ $VERSION == *-SNAPSHOT ]] && [[ -z ${CI_DEPLOY_SKIP_SNAPSHOT_CHECK:-} ]]; then
+                        # Republish the platform jars this workflow run uploaded, even if maven-metadata.xml lost
+                        # track of some, and refuse to republish any built before this run (issue #1815)
+                        python3 $GITHUB_ACTION_PATH/snapshots.py check --use-uploads . $HOME/.m2/repository/${GROUP//.//}/$ARTIFACT/$VERSION
+                    fi
                     unzip -o $FILE META-INF/maven/$GROUP/$ARTIFACT/pom.xml
                     for i in {1..5}; do
                         STATUS=0
