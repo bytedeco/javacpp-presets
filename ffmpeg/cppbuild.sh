@@ -55,6 +55,9 @@ AOMAV1_VERSION=3.14.1
 SVTAV1_VERSION=4.2.0
 ZIMG_VERSION=3.0.6
 MPP_VERSION=1.1.0
+# same release as the Vulkan SDKs installed by .github/actions/deploy-*; FFmpeg requires >= 1.3.277
+VULKAN_HEADERS_VERSION=1.4.313
+VULKAN_HEADERS_SHA256=f3298b8dc620530493296759858a69b622f98ececa0e8c75488ad2000778148f
 FFMPEG_VERSION=8.1.2
 
 # Vendored snapshot of https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/20847.patch
@@ -84,6 +87,9 @@ download https://storage.googleapis.com/aom-releases/libaom-$AOMAV1_VERSION.tar.
 download https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v$SVTAV1_VERSION/SVT-AV1-v$SVTAV1_VERSION.tar.gz SVT-AV1-$SVTAV1_VERSION.tar.gz
 download https://github.com/sekrit-twc/zimg/archive/refs/tags/release-$ZIMG_VERSION.tar.gz zimg-release-$ZIMG_VERSION.tar.gz
 download https://github.com/rockchip-linux/mpp/archive/refs/tags/$MPP_VERSION.tar.gz mpp-$MPP_VERSION.tar.gz
+download https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/v$VULKAN_HEADERS_VERSION.tar.gz Vulkan-Headers-$VULKAN_HEADERS_VERSION.tar.gz
+SHA256SUM="sha256sum"; command -v sha256sum > /dev/null || SHA256SUM="shasum -a 256"
+echo "$VULKAN_HEADERS_SHA256  Vulkan-Headers-$VULKAN_HEADERS_VERSION.tar.gz" | $SHA256SUM -c -
 download https://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 mkdir -p $PLATFORM$EXTENSION
@@ -142,7 +148,23 @@ tar --totals -xzf ../aom-$AOMAV1_VERSION.tar.gz
 tar --totals -xzf ../SVT-AV1-$SVTAV1_VERSION.tar.gz
 tar --totals -xzf ../zimg-release-$ZIMG_VERSION.tar.gz
 tar --totals -xzf ../mpp-$MPP_VERSION.tar.gz
+tar --totals -xzf ../Vulkan-Headers-$VULKAN_HEADERS_VERSION.tar.gz
 tar --totals -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
+
+case $PLATFORM in
+    android-*)
+        # FFmpeg is configured without --enable-vulkan on Android
+        ;;
+    *)
+        # Give the configure of FFmpeg (--extra-cflags=-I../include/) and the JavaCPP build of jniavutil
+        # (-I$INSTALL_PATH/include/) the same Vulkan headers that hwcontext_vulkan.h includes, instead of
+        # relying on the default include paths of the compiler (/usr/include, /usr/local/include,
+        # /mingw64/include), where they may be missing or of another version, e.g. Homebrew on Apple Silicon
+        mkdir -p $INSTALL_PATH/include/vulkan $INSTALL_PATH/include/vk_video
+        cp Vulkan-Headers-$VULKAN_HEADERS_VERSION/include/vulkan/*.h $INSTALL_PATH/include/vulkan/
+        cp Vulkan-Headers-$VULKAN_HEADERS_VERSION/include/vk_video/*.h $INSTALL_PATH/include/vk_video/
+        ;;
+esac
 
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
     export ACLOCAL_PATH=/mingw64/share/aclocal:/usr/share/aclocal
