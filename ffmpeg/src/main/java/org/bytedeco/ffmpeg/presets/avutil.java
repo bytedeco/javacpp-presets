@@ -50,7 +50,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<libavutil/frame.h>", "<libavutil/samplefmt.h>", "<libavutil/channel_layout.h>", "<libavutil/cpu.h>", "<libavutil/dict.h>",
             "<libavutil/opt.h>", "<libavutil/pixdesc.h>", "<libavutil/imgutils.h>", "<libavutil/downmix_info.h>", "<libavutil/stereo3d.h>",
             "<libavutil/ffversion.h>", "<libavutil/motion_vector.h>", "<libavutil/fifo.h>", "<libavutil/audio_fifo.h>", "<libavutil/hwcontext.h>",
-            /*"<libavutil/hwcontext_cuda.h>", "<libavutil/hwcontext_d3d11va.h>", "<libavutil/hwcontext_dxva2.h>", "<libavutil/hwcontext_drm.h>",
+            "<libavutil/hwcontext_vulkan.h>", /*"<libavutil/hwcontext_cuda.h>", "<libavutil/hwcontext_d3d11va.h>", "<libavutil/hwcontext_dxva2.h>", "<libavutil/hwcontext_drm.h>",
             "<libavutil/hwcontext_mediacodec.h>", "<libavutil/hwcontext_qsv.h>", "<libavutil/hwcontext_vaapi.h>", "<libavutil/hwcontext_vdpau.h>",
             "<libavutil/hwcontext_videotoolbox.h>",*/ "<libavutil/adler32.h>", "<libavutil/aes.h>", "<libavutil/aes_ctr.h>", "<libavutil/base64.h>",
             "<libavutil/blowfish.h>", "<libavutil/cast5.h>", "<libavutil/camellia.h>", "<libavutil/crc.h>", "<libavutil/des.h>", "<libavutil/lfg.h>",
@@ -100,6 +100,22 @@ public class avutil implements InfoMapper {
                              "ID3D11Device", "ID3D11DeviceContext", "ID3D11Texture2D", "ID3D11VideoContext", "ID3D11VideoDevice",
                              "IDirect3DDeviceManager9", "IDirect3DSurface9", "IDirectXVideoDecoder", "mfxFrameSurface1", "mfxSession",
                              "VAConfigID", "VASurfaceID", "VASurfaceAttrib", "VADisplay", "VdpDevice", "VdpGetProcAddress").cast().pointerTypes("Pointer"))
+               .put(new Info("VkInstance", "VkPhysicalDevice", "VkDevice", "VkImage", "VkDeviceMemory", "VkSemaphore",
+                             "PFN_vkGetInstanceProcAddr").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
+               .put(new Info("VkFormat", "VkImageTiling", "VkImageLayout", "VkImageCreateFlags", "VkImageUsageFlagBits",
+                             "VkMemoryPropertyFlagBits", "VkAccessFlagBits", "VkQueueFlagBits", "VkVideoCodecOperationFlagBitsKHR")
+                             .cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
+               .put(new Info("VkAllocationCallbacks", "VkPhysicalDeviceFeatures2", "AVVkFrameInternal").cast().pointerTypes("Pointer"))
+               // "const char * const *" members get no setter by default, but applications supplying their own
+               // VkDevice have to tell FFmpeg which instance and device extensions were enabled on it
+               .put(new Info("AVVulkanDeviceContext::enabled_inst_extensions").javaText(
+                             "@MemberGetter public native @Cast(\"const char*\") BytePointer enabled_inst_extensions(int i);\n"
+                           + "public native @Cast(\"const char*const*\") PointerPointer enabled_inst_extensions(); "
+                           + "public native AVVulkanDeviceContext enabled_inst_extensions(@Cast(\"const char*const*\") PointerPointer setter);"))
+               .put(new Info("AVVulkanDeviceContext::enabled_dev_extensions").javaText(
+                             "@MemberGetter public native @Cast(\"const char*\") BytePointer enabled_dev_extensions(int i);\n"
+                           + "public native @Cast(\"const char*const*\") PointerPointer enabled_dev_extensions(); "
+                           + "public native AVVulkanDeviceContext enabled_dev_extensions(@Cast(\"const char*const*\") PointerPointer setter);"))
                .put(new Info("FF_API_VAAPI").define())
                .put(new Info("AV_PIX_FMT_ABI_GIT_MASTER", "AV_HAVE_INCOMPATIBLE_LIBAV_ABI", "!FF_API_XVMC",
                              "FF_API_GET_BITS_PER_SAMPLE_FMT", "FF_API_FIND_OPT").define(false))
