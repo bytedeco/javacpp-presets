@@ -8,10 +8,10 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
-import static org.bytedeco.ffmpeg.global.avutil_vulkan.*;
+import static org.bytedeco.ffmpeg.global.avutil.*;
 
 
-@Properties(inherit = org.bytedeco.ffmpeg.presets.avutil_vulkan.class)
+@Properties(inherit = org.bytedeco.ffmpeg.presets.avutil.class)
 public class AVVulkanDeviceQueueFamily extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */

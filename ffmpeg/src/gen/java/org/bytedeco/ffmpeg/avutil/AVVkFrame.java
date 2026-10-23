@@ -8,7 +8,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
-import static org.bytedeco.ffmpeg.global.avutil_vulkan.*;
+import static org.bytedeco.ffmpeg.global.avutil.*;
 
 
 /*
@@ -17,7 +17,7 @@ import static org.bytedeco.ffmpeg.global.avutil_vulkan.*;
  * @note the size of this structure is not part of the ABI, to allocate
  * you must use @av_vk_frame_alloc().
  */
-@Properties(inherit = org.bytedeco.ffmpeg.presets.avutil_vulkan.class)
+@Properties(inherit = org.bytedeco.ffmpeg.presets.avutil.class)
 public class AVVkFrame extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */

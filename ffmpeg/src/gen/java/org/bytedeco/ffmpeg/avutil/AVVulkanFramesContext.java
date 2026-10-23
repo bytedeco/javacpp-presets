@@ -8,13 +8,13 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
-import static org.bytedeco.ffmpeg.global.avutil_vulkan.*;
+import static org.bytedeco.ffmpeg.global.avutil.*;
 
 
 /**
  * Allocated as AVHWFramesContext.hwctx, used to set pool-specific options
  */
-@Properties(inherit = org.bytedeco.ffmpeg.presets.avutil_vulkan.class)
+@Properties(inherit = org.bytedeco.ffmpeg.presets.avutil.class)
 public class AVVulkanFramesContext extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */

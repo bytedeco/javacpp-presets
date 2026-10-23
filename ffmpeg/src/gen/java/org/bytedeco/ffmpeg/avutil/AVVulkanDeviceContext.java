@@ -8,7 +8,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
-import static org.bytedeco.ffmpeg.global.avutil_vulkan.*;
+import static org.bytedeco.ffmpeg.global.avutil.*;
 
 
 /**
@@ -23,7 +23,7 @@ import static org.bytedeco.ffmpeg.global.avutil_vulkan.*;
  * Main Vulkan context, allocated as AVHWDeviceContext.hwctx.
  * All of these can be set before init to change what the context uses
  */
-@Properties(inherit = org.bytedeco.ffmpeg.presets.avutil_vulkan.class)
+@Properties(inherit = org.bytedeco.ffmpeg.presets.avutil.class)
 public class AVVulkanDeviceContext extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
