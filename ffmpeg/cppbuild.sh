@@ -55,8 +55,6 @@ AOMAV1_VERSION=3.14.1
 SVTAV1_VERSION=4.2.0
 ZIMG_VERSION=3.0.6
 MPP_VERSION=1.1.0
-# same release as the Vulkan SDKs installed by the deploy actions, only used on Android
-VULKAN_HEADERS_VERSION=1.4.313
 FFMPEG_VERSION=8.1.2
 
 # Vendored snapshot of https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/20847.patch
@@ -86,7 +84,6 @@ download https://storage.googleapis.com/aom-releases/libaom-$AOMAV1_VERSION.tar.
 download https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v$SVTAV1_VERSION/SVT-AV1-v$SVTAV1_VERSION.tar.gz SVT-AV1-$SVTAV1_VERSION.tar.gz
 download https://github.com/sekrit-twc/zimg/archive/refs/tags/release-$ZIMG_VERSION.tar.gz zimg-release-$ZIMG_VERSION.tar.gz
 download https://github.com/rockchip-linux/mpp/archive/refs/tags/$MPP_VERSION.tar.gz mpp-$MPP_VERSION.tar.gz
-download https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/v$VULKAN_HEADERS_VERSION.tar.gz Vulkan-Headers-$VULKAN_HEADERS_VERSION.tar.gz
 download https://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 mkdir -p $PLATFORM$EXTENSION
@@ -145,13 +142,13 @@ tar --totals -xzf ../aom-$AOMAV1_VERSION.tar.gz
 tar --totals -xzf ../SVT-AV1-$SVTAV1_VERSION.tar.gz
 tar --totals -xzf ../zimg-release-$ZIMG_VERSION.tar.gz
 tar --totals -xzf ../mpp-$MPP_VERSION.tar.gz
-tar --totals -xzf ../Vulkan-Headers-$VULKAN_HEADERS_VERSION.tar.gz
 tar --totals -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 if [[ $PLATFORM == android-* ]]; then
-    # the Vulkan headers of the NDK (1.3.275 as of r29) are older than the 1.3.277 that FFmpeg requires
+    # the Vulkan headers of the NDK (1.3.275 as of r29) are older than the 1.3.277 that FFmpeg requires,
+    # so take only those of the Vulkan SDK installed on the host instead of the whole /usr/local/include
     mkdir -p $INSTALL_PATH/include/
-    cp -r Vulkan-Headers-$VULKAN_HEADERS_VERSION/include/vulkan Vulkan-Headers-$VULKAN_HEADERS_VERSION/include/vk_video $INSTALL_PATH/include/
+    cp -a /usr/local/include/vulkan /usr/local/include/vk_video $INSTALL_PATH/include/
 fi
 
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
