@@ -663,7 +663,7 @@ public static final int
  * Libswresample version macros
  */
 
-public static final int LIBSWRESAMPLE_VERSION_MAJOR =   6;
+public static final int LIBSWRESAMPLE_VERSION_MAJOR =   7;
 
 // #endif /* SWRESAMPLE_VERSION_MAJOR_H */
 
@@ -702,7 +702,7 @@ public static final int LIBSWRESAMPLE_VERSION_MAJOR =   6;
 
 // #include "version_major.h"
 
-public static final int LIBSWRESAMPLE_VERSION_MINOR =   3;
+public static final int LIBSWRESAMPLE_VERSION_MINOR =   1;
 public static final int LIBSWRESAMPLE_VERSION_MICRO = 102;
 
 public static native @MemberGetter int LIBSWRESAMPLE_VERSION_INT();

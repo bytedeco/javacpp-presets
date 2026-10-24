@@ -45,8 +45,6 @@ public class avcodec extends org.bytedeco.ffmpeg.presets.avcodec {
 // #include "libavutil/avutil.h"
 // #include "libavutil/samplefmt.h"
 
-// #include "version_major.h"
-
 /**
  * \addtogroup lavc_core
  * \{
@@ -230,134 +228,128 @@ public static final int
     AV_CODEC_ID_BMV_VIDEO = 153,
     AV_CODEC_ID_VBLE = 154,
     AV_CODEC_ID_DXTORY = 155,
-// #if FF_API_V408_CODECID
-    AV_CODEC_ID_V410 = 156,
-// #endif
-    AV_CODEC_ID_XWD = 157,
-    AV_CODEC_ID_CDXL = 158,
-    AV_CODEC_ID_XBM = 159,
-    AV_CODEC_ID_ZEROCODEC = 160,
-    AV_CODEC_ID_MSS1 = 161,
-    AV_CODEC_ID_MSA1 = 162,
-    AV_CODEC_ID_TSCC2 = 163,
-    AV_CODEC_ID_MTS2 = 164,
-    AV_CODEC_ID_CLLC = 165,
-    AV_CODEC_ID_MSS2 = 166,
-    AV_CODEC_ID_VP9 = 167,
-    AV_CODEC_ID_AIC = 168,
-    AV_CODEC_ID_ESCAPE130 = 169,
-    AV_CODEC_ID_G2M = 170,
-    AV_CODEC_ID_WEBP = 171,
-    AV_CODEC_ID_HNM4_VIDEO = 172,
-    AV_CODEC_ID_HEVC = 173;
+    AV_CODEC_ID_XWD = 156,
+    AV_CODEC_ID_CDXL = 157,
+    AV_CODEC_ID_XBM = 158,
+    AV_CODEC_ID_ZEROCODEC = 159,
+    AV_CODEC_ID_MSS1 = 160,
+    AV_CODEC_ID_MSA1 = 161,
+    AV_CODEC_ID_TSCC2 = 162,
+    AV_CODEC_ID_MTS2 = 163,
+    AV_CODEC_ID_CLLC = 164,
+    AV_CODEC_ID_MSS2 = 165,
+    AV_CODEC_ID_VP9 = 166,
+    AV_CODEC_ID_AIC = 167,
+    AV_CODEC_ID_ESCAPE130 = 168,
+    AV_CODEC_ID_G2M = 169,
+    AV_CODEC_ID_WEBP = 170,
+    AV_CODEC_ID_HNM4_VIDEO = 171,
+    AV_CODEC_ID_HEVC = 172;
 public static final int AV_CODEC_ID_H265 = AV_CODEC_ID_HEVC;
 public static final int
-    AV_CODEC_ID_FIC = 174,
-    AV_CODEC_ID_ALIAS_PIX = 175,
-    AV_CODEC_ID_BRENDER_PIX = 176,
-    AV_CODEC_ID_PAF_VIDEO = 177,
-    AV_CODEC_ID_EXR = 178,
-    AV_CODEC_ID_VP7 = 179,
-    AV_CODEC_ID_SANM = 180,
-    AV_CODEC_ID_SGIRLE = 181,
-    AV_CODEC_ID_MVC1 = 182,
-    AV_CODEC_ID_MVC2 = 183,
-    AV_CODEC_ID_HQX = 184,
-    AV_CODEC_ID_TDSC = 185,
-    AV_CODEC_ID_HQ_HQA = 186,
-    AV_CODEC_ID_HAP = 187,
-    AV_CODEC_ID_DDS = 188,
-    AV_CODEC_ID_DXV = 189,
-    AV_CODEC_ID_SCREENPRESSO = 190,
-    AV_CODEC_ID_RSCC = 191,
-    AV_CODEC_ID_AVS2 = 192,
-    AV_CODEC_ID_PGX = 193,
-    AV_CODEC_ID_AVS3 = 194,
-    AV_CODEC_ID_MSP2 = 195,
-    AV_CODEC_ID_VVC = 196;
+    AV_CODEC_ID_FIC = 173,
+    AV_CODEC_ID_ALIAS_PIX = 174,
+    AV_CODEC_ID_BRENDER_PIX = 175,
+    AV_CODEC_ID_PAF_VIDEO = 176,
+    AV_CODEC_ID_EXR = 177,
+    AV_CODEC_ID_VP7 = 178,
+    AV_CODEC_ID_SANM = 179,
+    AV_CODEC_ID_SGIRLE = 180,
+    AV_CODEC_ID_MVC1 = 181,
+    AV_CODEC_ID_MVC2 = 182,
+    AV_CODEC_ID_HQX = 183,
+    AV_CODEC_ID_TDSC = 184,
+    AV_CODEC_ID_HQ_HQA = 185,
+    AV_CODEC_ID_HAP = 186,
+    AV_CODEC_ID_DDS = 187,
+    AV_CODEC_ID_DXV = 188,
+    AV_CODEC_ID_SCREENPRESSO = 189,
+    AV_CODEC_ID_RSCC = 190,
+    AV_CODEC_ID_AVS2 = 191,
+    AV_CODEC_ID_PGX = 192,
+    AV_CODEC_ID_AVS3 = 193,
+    AV_CODEC_ID_MSP2 = 194,
+    AV_CODEC_ID_VVC = 195;
 public static final int AV_CODEC_ID_H266 = AV_CODEC_ID_VVC;
 public static final int
-    AV_CODEC_ID_Y41P = 197,
-    AV_CODEC_ID_AVRP = 198,
-    AV_CODEC_ID_012V = 199,
-    AV_CODEC_ID_AVUI = 200,
-    AV_CODEC_ID_TARGA_Y216 = 201,
-// #if FF_API_V408_CODECID
-    AV_CODEC_ID_V308 = 202,
-    AV_CODEC_ID_V408 = 203,
-// #endif
-    AV_CODEC_ID_YUV4 = 204,
-    AV_CODEC_ID_AVRN = 205,
-    AV_CODEC_ID_CPIA = 206,
-    AV_CODEC_ID_XFACE = 207,
-    AV_CODEC_ID_SNOW = 208,
-    AV_CODEC_ID_SMVJPEG = 209,
-    AV_CODEC_ID_APNG = 210,
-    AV_CODEC_ID_DAALA = 211,
-    AV_CODEC_ID_CFHD = 212,
-    AV_CODEC_ID_TRUEMOTION2RT = 213,
-    AV_CODEC_ID_M101 = 214,
-    AV_CODEC_ID_MAGICYUV = 215,
-    AV_CODEC_ID_SHEERVIDEO = 216,
-    AV_CODEC_ID_YLC = 217,
-    AV_CODEC_ID_PSD = 218,
-    AV_CODEC_ID_PIXLET = 219,
-    AV_CODEC_ID_SPEEDHQ = 220,
-    AV_CODEC_ID_FMVC = 221,
-    AV_CODEC_ID_SCPR = 222,
-    AV_CODEC_ID_CLEARVIDEO = 223,
-    AV_CODEC_ID_XPM = 224,
-    AV_CODEC_ID_AV1 = 225,
-    AV_CODEC_ID_BITPACKED = 226,
-    AV_CODEC_ID_MSCC = 227,
-    AV_CODEC_ID_SRGC = 228,
-    AV_CODEC_ID_SVG = 229,
-    AV_CODEC_ID_GDV = 230,
-    AV_CODEC_ID_FITS = 231,
-    AV_CODEC_ID_IMM4 = 232,
-    AV_CODEC_ID_PROSUMER = 233,
-    AV_CODEC_ID_MWSC = 234,
-    AV_CODEC_ID_WCMV = 235,
-    AV_CODEC_ID_RASC = 236,
-    AV_CODEC_ID_HYMT = 237,
-    AV_CODEC_ID_ARBC = 238,
-    AV_CODEC_ID_AGM = 239,
-    AV_CODEC_ID_LSCR = 240,
-    AV_CODEC_ID_VP4 = 241,
-    AV_CODEC_ID_IMM5 = 242,
-    AV_CODEC_ID_MVDV = 243,
-    AV_CODEC_ID_MVHA = 244,
-    AV_CODEC_ID_CDTOONS = 245,
-    AV_CODEC_ID_MV30 = 246,
-    AV_CODEC_ID_NOTCHLC = 247,
-    AV_CODEC_ID_PFM = 248,
-    AV_CODEC_ID_MOBICLIP = 249,
-    AV_CODEC_ID_PHOTOCD = 250,
-    AV_CODEC_ID_IPU = 251,
-    AV_CODEC_ID_ARGO = 252,
-    AV_CODEC_ID_CRI = 253,
-    AV_CODEC_ID_SIMBIOSIS_IMX = 254,
-    AV_CODEC_ID_SGA_VIDEO = 255,
-    AV_CODEC_ID_GEM = 256,
-    AV_CODEC_ID_VBN = 257,
-    AV_CODEC_ID_JPEGXL = 258,
-    AV_CODEC_ID_QOI = 259,
-    AV_CODEC_ID_PHM = 260,
-    AV_CODEC_ID_RADIANCE_HDR = 261,
-    AV_CODEC_ID_WBMP = 262,
-    AV_CODEC_ID_MEDIA100 = 263,
-    AV_CODEC_ID_VQC = 264,
-    AV_CODEC_ID_PDV = 265,
-    AV_CODEC_ID_EVC = 266,
-    AV_CODEC_ID_RTV1 = 267,
-    AV_CODEC_ID_VMIX = 268,
-    AV_CODEC_ID_LEAD = 269,
-    AV_CODEC_ID_DNXUC = 270,
-    AV_CODEC_ID_RV60 = 271,
-    AV_CODEC_ID_JPEGXL_ANIM = 272,
-    AV_CODEC_ID_APV = 273,
-    AV_CODEC_ID_PRORES_RAW = 274,
-    AV_CODEC_ID_JPEGXS = 275,
+    AV_CODEC_ID_Y41P = 196,
+    AV_CODEC_ID_AVRP = 197,
+    AV_CODEC_ID_012V = 198,
+    AV_CODEC_ID_AVUI = 199,
+    AV_CODEC_ID_TARGA_Y216 = 200,
+    AV_CODEC_ID_YUV4 = 201,
+    AV_CODEC_ID_AVRN = 202,
+    AV_CODEC_ID_CPIA = 203,
+    AV_CODEC_ID_XFACE = 204,
+    AV_CODEC_ID_SNOW = 205,
+    AV_CODEC_ID_SMVJPEG = 206,
+    AV_CODEC_ID_APNG = 207,
+    AV_CODEC_ID_DAALA = 208,
+    AV_CODEC_ID_CFHD = 209,
+    AV_CODEC_ID_TRUEMOTION2RT = 210,
+    AV_CODEC_ID_M101 = 211,
+    AV_CODEC_ID_MAGICYUV = 212,
+    AV_CODEC_ID_SHEERVIDEO = 213,
+    AV_CODEC_ID_YLC = 214,
+    AV_CODEC_ID_PSD = 215,
+    AV_CODEC_ID_PIXLET = 216,
+    AV_CODEC_ID_SPEEDHQ = 217,
+    AV_CODEC_ID_FMVC = 218,
+    AV_CODEC_ID_SCPR = 219,
+    AV_CODEC_ID_CLEARVIDEO = 220,
+    AV_CODEC_ID_XPM = 221,
+    AV_CODEC_ID_AV1 = 222,
+    AV_CODEC_ID_BITPACKED = 223,
+    AV_CODEC_ID_MSCC = 224,
+    AV_CODEC_ID_SRGC = 225,
+    AV_CODEC_ID_SVG = 226,
+    AV_CODEC_ID_GDV = 227,
+    AV_CODEC_ID_FITS = 228,
+    AV_CODEC_ID_IMM4 = 229,
+    AV_CODEC_ID_PROSUMER = 230,
+    AV_CODEC_ID_MWSC = 231,
+    AV_CODEC_ID_WCMV = 232,
+    AV_CODEC_ID_RASC = 233,
+    AV_CODEC_ID_HYMT = 234,
+    AV_CODEC_ID_ARBC = 235,
+    AV_CODEC_ID_AGM = 236,
+    AV_CODEC_ID_LSCR = 237,
+    AV_CODEC_ID_VP4 = 238,
+    AV_CODEC_ID_IMM5 = 239,
+    AV_CODEC_ID_MVDV = 240,
+    AV_CODEC_ID_MVHA = 241,
+    AV_CODEC_ID_CDTOONS = 242,
+    AV_CODEC_ID_MV30 = 243,
+    AV_CODEC_ID_NOTCHLC = 244,
+    AV_CODEC_ID_PFM = 245,
+    AV_CODEC_ID_MOBICLIP = 246,
+    AV_CODEC_ID_PHOTOCD = 247,
+    AV_CODEC_ID_IPU = 248,
+    AV_CODEC_ID_ARGO = 249,
+    AV_CODEC_ID_CRI = 250,
+    AV_CODEC_ID_SIMBIOSIS_IMX = 251,
+    AV_CODEC_ID_SGA_VIDEO = 252,
+    AV_CODEC_ID_GEM = 253,
+    AV_CODEC_ID_VBN = 254,
+    AV_CODEC_ID_JPEGXL = 255,
+    AV_CODEC_ID_QOI = 256,
+    AV_CODEC_ID_PHM = 257,
+    AV_CODEC_ID_RADIANCE_HDR = 258,
+    AV_CODEC_ID_WBMP = 259,
+    AV_CODEC_ID_MEDIA100 = 260,
+    AV_CODEC_ID_VQC = 261,
+    AV_CODEC_ID_PDV = 262,
+    AV_CODEC_ID_EVC = 263,
+    AV_CODEC_ID_RTV1 = 264,
+    AV_CODEC_ID_VMIX = 265,
+    AV_CODEC_ID_LEAD = 266,
+    AV_CODEC_ID_DNXUC = 267,
+    AV_CODEC_ID_RV60 = 268,
+    AV_CODEC_ID_JPEGXL_ANIM = 269,
+    AV_CODEC_ID_APV = 270,
+    AV_CODEC_ID_PRORES_RAW = 271,
+    AV_CODEC_ID_JPEGXS = 272,
+    AV_CODEC_ID_WEBP_ANIM = 273,
 
     /* various PCM "codecs" */
     /** A dummy id pointing at the start of audio codecs */
@@ -595,6 +587,7 @@ public static final int
     AV_CODEC_ID_LC3 = 0x15000 + 106,
     AV_CODEC_ID_G728 = 0x15000 + 107,
     AV_CODEC_ID_AHX = 0x15000 + 108,
+    AV_CODEC_ID_APPLE_APAC = 0x15000 + 109,
 
     /* subtitle codecs */
     /** A dummy ID pointing at the start of subtitle codecs. */
@@ -1189,21 +1182,26 @@ public static final int
 
 
 /**
+ * \relates AVCodecParameters
+ * \{
+ */
+
+/**
  * Allocate a new AVCodecParameters and set its fields to default values
  * (unknown/invalid/0). The returned struct must be freed with
- * avcodec_parameters_free().
+ * ::avcodec_parameters_free().
  */
 @NoException public static native AVCodecParameters avcodec_parameters_alloc();
 
 /**
  * Free an AVCodecParameters instance and everything associated with it and
- * write NULL to the supplied pointer.
+ * write {@code NULL} to the supplied pointer.
  */
 @NoException public static native void avcodec_parameters_free(@Cast("AVCodecParameters**") PointerPointer par);
 @NoException public static native void avcodec_parameters_free(@ByPtrPtr AVCodecParameters par);
 
 /**
- * Copy the contents of src to dst. Any allocated fields in dst are freed and
+ * Copy the contents of \p src to \p dst. Any allocated fields in dst are freed and
  * replaced with newly allocated duplicates of the corresponding fields in src.
  *
  * @return >= 0 on success, a negative AVERROR code on failure.
@@ -1211,10 +1209,12 @@ public static final int
 @NoException public static native int avcodec_parameters_copy(AVCodecParameters dst, @Const AVCodecParameters src);
 
 /**
- * This function is the same as av_get_audio_frame_duration(), except it works
- * with AVCodecParameters instead of an AVCodecContext.
+ * This function is the same as ::av_get_audio_frame_duration(), except it works
+ * with ::AVCodecParameters instead of an ::AVCodecContext.
  */
 @NoException public static native int av_get_audio_frame_duration2(AVCodecParameters par, int frame_bytes);
+
+/** \} */
 
 /**
  * \}
@@ -1597,6 +1597,21 @@ public static final int
      AV_PKT_DATA_EXIF = 40,
 
     /**
+     * HDR dynamic metadata associated with a video frame. The payload is an
+     * AVDynamicHDRSmpte2094App5 type and contains information for color volume
+     * transform as specified in the SMPTE 2094-50 standard.
+     */
+    AV_PKT_DATA_DYNAMIC_HDR_SMPTE_2094_APP5 = 41,
+
+    /**
+     * Dolby Vision enhancement-layer HEVC decoder configuration.
+     * Parsed from the \c hvcE box in ISOM-based containers or the
+     * corresponding BlockAdditionMapping in Matroska. The data is a raw
+     * HEVCDecoderConfigurationRecord as defined in ISO 14496-15.
+     */
+    AV_PKT_DATA_HEVC_CONF = 42,
+
+    /**
      * The number of side data types.
      * This is not part of the public API/ABI in the sense that it may
      * change when new side data types are added.
@@ -1604,7 +1619,7 @@ public static final int
      * If its value becomes huge, some code using it
      * needs to be updated as it assumes it to be smaller than other limits.
      */
-    AV_PKT_DATA_NB = 41;
+    AV_PKT_DATA_NB = 43;
 // Targeting ../avcodec/AVPacketSideData.java
 
 
@@ -1753,10 +1768,6 @@ public static final int
 // Targeting ../avcodec/AVPacket.java
 
 
-// Targeting ../avcodec/AVPacketList.java
-
-
-// #endif
 
 /** The packet contains a keyframe */
 public static final int AV_PKT_FLAG_KEY =     0x0001;
@@ -1943,7 +1954,7 @@ public static final int
  * @param size pointer to store the size of the returned data
  * @return pointer to data if successful, NULL otherwise
  */
-@NoException public static native @Cast("uint8_t*") BytePointer av_packet_pack_dictionary(AVDictionary dict, @Cast("size_t*") SizeTPointer size);
+@NoException public static native @Cast("uint8_t*") BytePointer av_packet_pack_dictionary(@Const AVDictionary dict, @Cast("size_t*") SizeTPointer size);
 /**
  * Unpack a dictionary from side_data.
  *
@@ -2355,11 +2366,8 @@ public static final int
 // #include "libavutil/hwcontext.h"
 // #include "libavutil/log.h"
 // #include "libavutil/pixfmt.h"
-// #include "libavutil/rational.h"
-// #include "libavutil/samplefmt.h"
 
 // #include "libavcodec/codec_id.h"
-// #include "libavcodec/version_major.h"
 
 /**
  * \addtogroup lavc_core
@@ -2831,6 +2839,10 @@ public static final int AV_CODEC_FLAG2_CHUNKS =         (1 << 15);
  * Discard cropping information from SPS.
  */
 public static final int AV_CODEC_FLAG2_IGNORE_CROP =    (1 << 16);
+/**
+ * Force audio encoders to use a fixed frame size.
+ */
+public static final int AV_CODEC_FLAG2_FIXED_FRAME_SIZE = (1 << 17);
 
 /**
  * Show all frames before the first keyframe
@@ -3049,6 +3061,8 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  * of the corresponding fields in codec.
  *
  * @return >= 0 on success, a negative AVERROR code on failure
+ *
+ * \relates AVCodecParameters
  */
 @NoException public static native int avcodec_parameters_from_context(AVCodecParameters par,
                                     @Const AVCodecContext codec);
@@ -3060,6 +3074,8 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  * Fields in codec that do not have a counterpart in par are not touched.
  *
  * @return >= 0 on success, a negative AVERROR code on failure.
+ *
+ * \relates AVCodecParameters
  */
 @NoException public static native int avcodec_parameters_to_context(AVCodecContext codec,
                                   @Const AVCodecParameters par);
@@ -3312,7 +3328,8 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  *                  For audio:
  *                  If AV_CODEC_CAP_VARIABLE_FRAME_SIZE is set, then each frame
  *                  can have any number of samples.
- *                  If it is not set, frame->nb_samples must be equal to
+ *                  If it is not set, or AV_CODEC_FLAG2_FIXED_FRAME_SIZE was
+ *                  requested, then frame->nb_samples must be equal to
  *                  avctx->frame_size for all frames except the last.
  *                  The final frame may be smaller than avctx->frame_size.
  * \retval 0                 success
@@ -3538,10 +3555,7 @@ public static final int
 @NoException public static native @Const AVCodecParser av_parser_iterate(@Cast("void**") PointerPointer opaque);
 @NoException public static native @Const AVCodecParser av_parser_iterate(@Cast("void**") @ByPtrPtr Pointer opaque);
 
-// #if FF_API_PARSER_CODECID
-@NoException public static native AVCodecParserContext av_parser_init(int codec_id);
-// #else
-// #endif
+@NoException public static native AVCodecParserContext av_parser_init(@Cast("AVCodecID") int codec_id);
 
 /**
  * Parse a packet.
@@ -3891,7 +3905,7 @@ public static final int
  * Libavcodec version macros.
  */
 
-public static final int LIBAVCODEC_VERSION_MAJOR =  62;
+public static final int LIBAVCODEC_VERSION_MAJOR =  63;
 
 /**
  * FF_API_* defines may be placed below to indicate public API that will be
@@ -3903,24 +3917,10 @@ public static final int LIBAVCODEC_VERSION_MAJOR =  62;
  * at once through the bump. This improves the git bisect-ability of the change.
  */
 
-public static final boolean FF_API_INIT_PACKET =         (LIBAVCODEC_VERSION_MAJOR < 63);
+public static final boolean FF_API_INIT_PACKET =         (LIBAVCODEC_VERSION_MAJOR < 64);
 
-public static final boolean FF_API_V408_CODECID =        (LIBAVCODEC_VERSION_MAJOR < 63);
-public static final boolean FF_API_CODEC_PROPS =         (LIBAVCODEC_VERSION_MAJOR < 63);
-public static final boolean FF_API_EXR_GAMMA =           (LIBAVCODEC_VERSION_MAJOR < 63);
-public static final boolean FF_API_INTRA_DC_PRECISION =  (LIBAVCODEC_VERSION_MAJOR < 63);
-
-public static final boolean FF_API_NVDEC_OLD_PIX_FMTS =  (LIBAVCODEC_VERSION_MAJOR < 63);
-
-public static final boolean FF_API_PARSER_PRIVATE =      (LIBAVCODEC_VERSION_MAJOR < 63);
-public static final boolean FF_API_PARSER_CODECID =      (LIBAVCODEC_VERSION_MAJOR < 63);
-
-// reminder to remove the OMX encoder on next major bump
-public static final boolean FF_CODEC_OMX =               (LIBAVCODEC_VERSION_MAJOR < 63);
-// reminder to remove Sonic Lossy/Lossless encoders on next major bump
-public static final boolean FF_CODEC_SONIC_ENC =         (LIBAVCODEC_VERSION_MAJOR < 63);
-// reminder to remove Sonic decoder on next-next major bump
-public static final boolean FF_CODEC_SONIC_DEC =         (LIBAVCODEC_VERSION_MAJOR < 63);
+public static final boolean FF_API_INTRA_DC_PRECISION =  (LIBAVCODEC_VERSION_MAJOR < 64);
+public static final boolean FF_API_MJPEG_EXTERN_HUFF =   (LIBAVCODEC_VERSION_MAJOR < 64);
 
 // #endif /* AVCODEC_VERSION_MAJOR_H */
 
@@ -3958,7 +3958,7 @@ public static final boolean FF_CODEC_SONIC_DEC =         (LIBAVCODEC_VERSION_MAJ
 
 // #include "version_major.h"
 
-public static final int LIBAVCODEC_VERSION_MINOR =  28;
+public static final int LIBAVCODEC_VERSION_MINOR =   1;
 public static final int LIBAVCODEC_VERSION_MICRO = 102;
 
 public static native @MemberGetter int LIBAVCODEC_VERSION_INT();

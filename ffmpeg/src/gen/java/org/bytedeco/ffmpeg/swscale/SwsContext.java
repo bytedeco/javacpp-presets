@@ -55,6 +55,7 @@ public class SwsContext extends Pointer {
     /**
      * Extra parameters for fine-tuning certain scalers.
      */
+public static final int SWS_NUM_SCALER_PARAMS = 2;
     public native double scaler_params(int i); public native SwsContext scaler_params(int i, double setter);
     @MemberGetter public native DoublePointer scaler_params();
 
@@ -111,6 +112,32 @@ public class SwsContext extends Pointer {
      * Desired ICC intent for color space conversions.
      */
     public native int intent(); public native SwsContext intent(int setter);
+
+    /**
+     * Scaling filter. If set to something other than SWS_SCALE_AUTO, this will
+     * override the filter implied by {@code SwsContext.flags}.
+     *
+     * Note: Does not affect the legacy (stateful) API.
+     */
+    public native @Cast("SwsScaler") int scaler(); public native SwsContext scaler(int setter);
+
+    /**
+     * Scaler used specifically for up/downsampling subsampled (chroma) planes.
+     * If set to something other than SWS_SCALE_AUTO, this will override the
+     * filter implied by {@code SwsContext.scaler}. Otherwise, the same filter
+     * will be used for both main scaling and chroma subsampling.
+     */
+    public native @Cast("SwsScaler") int scaler_sub(); public native SwsContext scaler_sub(int setter);
+
+    /**
+     * Bitmask of SWS_BACKEND_*. If non-zero, this will restrict the available
+     * backends to the specified set. If left as zero, a default set of
+     * backends will be selected automatically (based on SWS_UNSTABLE).
+     *
+     * Note: This is only relevant for the new API (sws_scale_frame()). The
+     * stateful legacy API always implies SWS_BACKEND_LEGACY.
+     */
+    public native @Cast("SwsBackend") int backends(); public native SwsContext backends(int setter);
 
     /* Remember to add new fields to graph.c:opts_equal() */
 }

@@ -16,16 +16,18 @@ import static org.bytedeco.ffmpeg.global.avcodec.*;
 
 
 /**
- * \addtogroup lavc_core
+ * \defgroup lavc_codec_params Codec parameters
+ * \ingroup lavc_core
  * \{
  */
 
 /**
  * This struct describes the properties of an encoded stream.
  *
- * sizeof(AVCodecParameters) is not a part of the public ABI, this struct must
- * be allocated with avcodec_parameters_alloc() and freed with
- * avcodec_parameters_free().
+ * \note
+ * The {@code sizeof(AVCodecParameters)} is not a part of the public ABI,
+ * therefore this struct must be allocated with ::avcodec_parameters_alloc()
+ * and freed with ::avcodec_parameters_free().
  */
 @Properties(inherit = org.bytedeco.ffmpeg.presets.avcodec.class)
 public class AVCodecParameters extends Pointer {
@@ -61,9 +63,9 @@ public class AVCodecParameters extends Pointer {
     /**
      * Extra binary data needed for initializing the decoder, codec-dependent.
      *
-     * Must be allocated with av_malloc() and will be freed by
-     * avcodec_parameters_free(). The allocated size of extradata must be at
-     * least extradata_size + AV_INPUT_BUFFER_PADDING_SIZE, with the padding
+     * Must be allocated with ::av_malloc() and will be freed by
+     * ::avcodec_parameters_free(). The allocated size of extradata must be at
+     * least #extradata_size + ::AV_INPUT_BUFFER_PADDING_SIZE, with the padding
      * bytes zeroed.
      */
     public native @Cast("uint8_t*") BytePointer extradata(); public native AVCodecParameters extradata(BytePointer setter);
@@ -75,19 +77,19 @@ public class AVCodecParameters extends Pointer {
     /**
      * Additional data associated with the entire stream.
      *
-     * Should be allocated with av_packet_side_data_new() or
-     * av_packet_side_data_add(), and will be freed by avcodec_parameters_free().
+     * Should be allocated with ::av_packet_side_data_new() or
+     * ::av_packet_side_data_add(), and will be freed by ::avcodec_parameters_free().
      */
     public native AVPacketSideData coded_side_data(); public native AVCodecParameters coded_side_data(AVPacketSideData setter);
 
     /**
-     * Amount of entries in \ref coded_side_data.
+     * Amount of entries in #coded_side_data.
      */
     public native int nb_coded_side_data(); public native AVCodecParameters nb_coded_side_data(int setter);
 
     /**
-     * - video: the pixel format, the value corresponds to enum AVPixelFormat.
-     * - audio: the sample format, the value corresponds to enum AVSampleFormat.
+     * - Video: the pixel format, the value corresponds to enum ::AVPixelFormat.
+     * - Audio: the sample format, the value corresponds to enum ::AVSampleFormat.
      */
     public native int format(); public native AVCodecParameters format(int setter);
 
@@ -103,22 +105,27 @@ public class AVCodecParameters extends Pointer {
      * formats to actually decode them. It's the number of bits for one sample in
      * the actual coded bitstream.
      *
-     * This could be for example 4 for ADPCM
-     * For PCM formats this matches bits_per_raw_sample
-     * Can be 0
+     * This could be, for example, 4, for ADPCM.
+     * For PCM formats this matches #bits_per_raw_sample.
+     *
+     * Can be 0.
      */
     public native int bits_per_coded_sample(); public native AVCodecParameters bits_per_coded_sample(int setter);
 
     /**
-     * This is the number of valid bits in each output sample. If the
-     * sample format has more bits, the least significant bits are additional
-     * padding bits, which are always 0. Use right shifts to reduce the sample
-     * to its actual size. For example, audio formats with 24 bit samples will
-     * have bits_per_raw_sample set to 24, and format set to AV_SAMPLE_FMT_S32.
-     * To get the original sample use "(int32_t)sample >> 8"."
+     * The number of valid bits in each output sample.
      *
-     * For ADPCM this might be 12 or 16 or similar
-     * Can be 0
+     * If the sample format has more bits, the least significant bits are additional
+     * padding bits, which are always 0. Use right shifts to reduce the sample
+     * to its actual size.
+     *
+     * For example, audio formats with 24-bit samples will have #bits_per_raw_sample
+     * set to 24, and ::format set to ::AV_SAMPLE_FMT_S32. To get the original sample,
+     * use: {@code (int32_t)sample >> 8}.
+     *
+     * For ADPCM, this might be 12 or 16, or similar.
+     *
+     * Can be 0.
      */
     public native int bits_per_raw_sample(); public native AVCodecParameters bits_per_raw_sample(int setter);
 
@@ -129,39 +136,55 @@ public class AVCodecParameters extends Pointer {
     public native int level(); public native AVCodecParameters level(int setter);
 
     /**
-     * Video only. The dimensions of the video frame in pixels.
+     * The width of the video frame in pixels.
+     *
+     * Video only.
      */
     public native int width(); public native AVCodecParameters width(int setter);
+
+    /**
+     * The height of the video frame in pixels.
+     *
+     * Video only.
+     */
     public native int height(); public native AVCodecParameters height(int setter);
 
     /**
-     * Video only. The aspect ratio (width / height) which a single pixel
+     * The aspect ratio (width/height) which a single pixel
      * should have when displayed.
      *
-     * When the aspect ratio is unknown / undefined, the numerator should be
+     * When the aspect ratio is unknown or undefined, the numerator should be
      * set to 0 (the denominator may have any value).
+     *
+     * Video only.
      */
     public native @ByRef AVRational sample_aspect_ratio(); public native AVCodecParameters sample_aspect_ratio(AVRational setter);
 
     /**
-     * Video only. Number of frames per second, for streams with constant frame
-     * durations. Should be set to { 0, 1 } when some frames have differing
+     * Number of frames per second, for streams with constant frame
+     * durations. Should be set to {@code { 0, 1 }} when some frames have differing
      * durations or if the value is not known.
      *
      * \note This field corresponds to values that are stored in codec-level
      * headers and is typically overridden by container/transport-layer
      * timestamps, when available. It should thus be used only as a last resort,
      * when no higher-level timing information is available.
+     *
+     * Video only.
      */
     public native @ByRef AVRational framerate(); public native AVCodecParameters framerate(AVRational setter);
 
     /**
-     * Video only. The order of the fields in interlaced video.
+     * The order of the fields in interlaced video.
+     *
+     * Video only.
      */
     public native @Cast("AVFieldOrder") int field_order(); public native AVCodecParameters field_order(int setter);
 
     /**
-     * Video only. Additional colorspace characteristics.
+     * Additional colorspace characteristics.
+     *
+     * Video only.
      */
     public native @Cast("AVColorRange") int color_range(); public native AVCodecParameters color_range(int setter);
     public native @Cast("AVColorPrimaries") int color_primaries(); public native AVCodecParameters color_primaries(int setter);
@@ -170,46 +193,65 @@ public class AVCodecParameters extends Pointer {
     public native @Cast("AVChromaLocation") int chroma_location(); public native AVCodecParameters chroma_location(int setter);
 
     /**
-     * Video only. Number of delayed frames.
+     * Number of delayed frames.
+     *
+     * Video only.
      */
     public native int video_delay(); public native AVCodecParameters video_delay(int setter);
 
     /**
-     * Audio only. The channel layout and number of channels.
+     * The channel layout and number of channels.
+     *
+     * Audio only.
      */
     public native @ByRef AVChannelLayout ch_layout(); public native AVCodecParameters ch_layout(AVChannelLayout setter);
     /**
-     * Audio only. The number of audio samples per second.
+     * The number of audio samples per second.
+     *
+     * Audio only.
      */
     public native int sample_rate(); public native AVCodecParameters sample_rate(int setter);
     /**
-     * Audio only. The number of bytes per coded audio frame, required by some
-     * formats.
+     * The number of bytes per coded audio frame, required by some formats.
+     *
+     * Audio only.
      *
      * Corresponds to nBlockAlign in WAVEFORMATEX.
      */
     public native int block_align(); public native AVCodecParameters block_align(int setter);
     /**
-     * Audio only. Audio frame size, if known. Required by some formats to be static.
+     * Audio frame size, if known. Required by some formats to be static.
+     *
+     * Audio only.
      */
     public native int frame_size(); public native AVCodecParameters frame_size(int setter);
 
     /**
-     * Audio only. The amount of padding (in samples) inserted by the encoder at
+     * Number of padding audio samples at the start.
+     *
+     * The amount of padding (in samples) inserted by the encoder at
      * the beginning of the audio. I.e. this number of leading decoded samples
-     * must be discarded by the caller to get the original audio without leading
+     * must be discarded to get the original audio without leading
      * padding.
+     *
+     * Audio only.
      */
     public native int initial_padding(); public native AVCodecParameters initial_padding(int setter);
     /**
-     * Audio only. The amount of padding (in samples) appended by the encoder to
+     * Number of padding audio samples at the end.
+     *
+     * The amount of padding (in samples) appended by the encoder to
      * the end of the audio. I.e. this number of decoded samples must be
-     * discarded by the caller from the end of the stream to get the original
+     * discarded from the end of the stream to get the original
      * audio without any trailing padding.
+     *
+     * Audio only.
      */
     public native int trailing_padding(); public native AVCodecParameters trailing_padding(int setter);
     /**
-     * Audio only. Number of samples to skip after a discontinuity.
+     * Number of audio samples to skip after a discontinuity.
+     *
+     * Audio only.
      */
     public native int seek_preroll(); public native AVCodecParameters seek_preroll(int setter);
 

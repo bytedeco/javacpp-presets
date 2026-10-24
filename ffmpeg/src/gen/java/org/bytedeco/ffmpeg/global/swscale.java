@@ -112,34 +112,60 @@ public static final int
     SWS_ALPHA_BLEND_NB = 3,  /* not part of the ABI */
     SWS_ALPHA_BLEND_MAX_ENUM = 0x7FFFFFFF; /* force size to 32 bits, not a valid blend mode */
 
+/** enum SwsScaler */
+public static final int
+    SWS_SCALE_AUTO = 0,
+    /** bilinear filtering */
+    SWS_SCALE_BILINEAR = 1,
+    /** 2-tap cubic BC-spline */
+    SWS_SCALE_BICUBIC = 2,
+    /** nearest neighbor (point sampling) */
+    SWS_SCALE_POINT = 3,
+    /** area averaging */
+    SWS_SCALE_AREA = 4,
+    /** 2-tap gaussian approximation */
+    SWS_SCALE_GAUSSIAN = 5,
+    /** unwindowed sinc */
+    SWS_SCALE_SINC = 6,
+    /** 3-tap sinc/sinc */
+    SWS_SCALE_LANCZOS = 7,
+    /** unwindowned natural cubic spline */
+    SWS_SCALE_SPLINE = 8,
+    /** not part of the ABI */
+    SWS_SCALE_NB = 9,
+    /** force size to 32 bits, not a valid filter type */
+    SWS_SCALE_MAX_ENUM = 0x7FFFFFFF;
+
+/** enum SwsBackend */
+public static final int
+    /* Stable backends */
+    /** Legacy bespoke format-specific code */
+    SWS_BACKEND_LEGACY      = (1 << 0),
+    SWS_BACKEND_STABLE      = SWS_BACKEND_LEGACY,
+
+    /* Unstable backends (auto-selected only if SWS_UNSTABLE is enabled) */
+    /** Template-based C reference implementation */
+    SWS_BACKEND_C           = (1 << 1),
+    /** Fast path using libc memcpy() / memset() */
+    SWS_BACKEND_MEMCPY      = (1 << 2),
+    /** Chained x86 SIMD kernels */
+    SWS_BACKEND_X86         = (1 << 3),
+    /** Chained AArch64 NEON kernels */
+    SWS_BACKEND_AARCH64     = (1 << 4),
+    /** Vulkan SPIR-V backend */
+    SWS_BACKEND_SPIRV       = (1 << 5),
+    SWS_BACKEND_UNSTABLE    = SWS_BACKEND_C |
+                              SWS_BACKEND_MEMCPY |
+                              SWS_BACKEND_X86 |
+                              SWS_BACKEND_AARCH64 |
+                              SWS_BACKEND_SPIRV,
+
+    SWS_BACKEND_ALL = SWS_BACKEND_STABLE | SWS_BACKEND_UNSTABLE,
+    /** force size to 32 bits, not a valid backend */
+    SWS_BACKEND_MAX_ENUM = 0x7FFFFFFF;
+
 /** enum SwsFlags */
 public static final int
-    /**
-     * Scaler selection options. Only one may be active at a time.
-     */
-    /** fast bilinear filtering */
-    SWS_FAST_BILINEAR = 1 <<  0,
-    /** bilinear filtering */
-    SWS_BILINEAR      = 1 <<  1,
-    /** 2-tap cubic B-spline */
-    SWS_BICUBIC       = 1 <<  2,
-    /** experimental */
-    SWS_X             = 1 <<  3,
-    /** nearest neighbor */
-    SWS_POINT         = 1 <<  4,
-    /** area averaging */
-    SWS_AREA          = 1 <<  5,
-    /** bicubic luma, bilinear chroma */
-    SWS_BICUBLIN      = 1 <<  6,
-    /** gaussian approximation */
-    SWS_GAUSS         = 1 <<  7,
-    /** unwindowed sinc */
-    SWS_SINC          = 1 <<  8,
-    /** 3-tap sinc/sinc */
-    SWS_LANCZOS       = 1 <<  9,
-    /** cubic Keys spline */
-    SWS_SPLINE        = 1 << 10,
-
     /**
      * Return an error on underspecified conversions. Without this flag,
      * unspecified fields are defaulted to sensible values.
@@ -189,9 +215,9 @@ public static final int
     SWS_BITEXACT       = 1 << 19,
 
     /**
-     * Allow using experimental new code paths. This may be faster, slower,
-     * or produce different output, with semantics subject to change at any
-     * point in time. For testing and debugging purposes only.
+     * Allow/prefer using experimental new code paths. This may be faster,
+     * slower, or produce different output, with semantics subject to change
+     * at any point in time. For testing and debugging purposes only.
      */
     SWS_UNSTABLE = 1 << 20,
 
@@ -201,7 +227,34 @@ public static final int
     /** This flag has no effect */
     SWS_DIRECT_BGR      = 1 << 15,
     /** Set {@code SwsContext.dither} instead */
-    SWS_ERROR_DIFFUSION = 1 << 23;
+    SWS_ERROR_DIFFUSION = 1 << 23,
+
+    /**
+     * Scaler selection options. Only one may be active at a time.
+     * Deprecated in favor of {@code SwsContext.scaler}.
+     */
+    /** fast bilinear filtering */
+    SWS_FAST_BILINEAR = 1 <<  0,
+    /** bilinear filtering */
+    SWS_BILINEAR      = 1 <<  1,
+    /** 2-tap cubic B-spline */
+    SWS_BICUBIC       = 1 <<  2,
+    /** experimental */
+    SWS_X             = 1 <<  3,
+    /** nearest neighbor */
+    SWS_POINT         = 1 <<  4,
+    /** area averaging */
+    SWS_AREA          = 1 <<  5,
+    /** bicubic luma, bilinear chroma */
+    SWS_BICUBLIN      = 1 <<  6,
+    /** gaussian approximation */
+    SWS_GAUSS         = 1 <<  7,
+    /** unwindowed sinc */
+    SWS_SINC          = 1 <<  8,
+    /** 3-tap sinc/sinc */
+    SWS_LANCZOS       = 1 <<  9,
+    /** unwindowed natural cubic spline */
+    SWS_SPLINE        = 1 << 10;
 
 /** enum SwsIntent */
 public static final int
@@ -236,7 +289,8 @@ public static final int
  ***************************/
 
 /**
- * Test if a given (software) pixel format is supported.
+ * Test if a given (software) pixel format is supported by any backend,
+ * excluding unstable backends.
  *
  * @param output  If 0, test if compatible with the source/input frame;
  *                otherwise, with the destination/output frame.
@@ -247,7 +301,8 @@ public static final int
 @NoException public static native int sws_test_format(@Cast("AVPixelFormat") int format, int output);
 
 /**
- * Test if a given hardware pixel format is supported.
+ * Test if a given hardware pixel format is supported by any backend,
+ * excluding unstable backends.
  *
  * @param format  The hardware format to check, or AV_PIX_FMT_NONE.
  *
@@ -342,6 +397,14 @@ public static final int
  */
 @NoException public static native int sws_scale_frame(SwsContext c, AVFrame dst, @Const AVFrame src);
 
+/**
+ * Filter kernel cut-off value. Values below this (absolute) magnitude
+ * are cut off from the main filter kernel. Note that the window is
+ * always adjusted to the new filter radius, so there will never be
+ * any spectral leakage (for suitably windowed filters).
+ */
+public static final double SWS_MAX_REDUCE_CUTOFF = 0.002;
+
 /*************************
  * Legacy (stateful) API *
  *************************/
@@ -350,8 +413,6 @@ public static final int SWS_SRC_V_CHR_DROP_MASK =     0x30000;
 public static final int SWS_SRC_V_CHR_DROP_SHIFT =    16;
 
 public static final int SWS_PARAM_DEFAULT =           123456;
-
-public static final double SWS_MAX_REDUCE_CUTOFF = 0.002;
 
 public static final int SWS_CS_ITU709 =         1;
 public static final int SWS_CS_FCC =            4;
@@ -733,7 +794,7 @@ public static final int SWS_CS_BT2020 =         9;
  * swscale version macros
  */
 
-public static final int LIBSWSCALE_VERSION_MAJOR =   9;
+public static final int LIBSWSCALE_VERSION_MAJOR =   10;
 
 /**
  * FF_API_* defines may be placed below to indicate public API that will be
@@ -776,7 +837,7 @@ public static final int LIBSWSCALE_VERSION_MAJOR =   9;
 
 // #include "version_major.h"
 
-public static final int LIBSWSCALE_VERSION_MINOR =   5;
+public static final int LIBSWSCALE_VERSION_MINOR =   1;
 public static final int LIBSWSCALE_VERSION_MICRO = 102;
 
 public static native @MemberGetter int LIBSWSCALE_VERSION_INT();

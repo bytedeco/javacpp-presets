@@ -96,25 +96,8 @@ public class AVFilterContext extends Pointer {
      */
     public native int nb_threads(); public native AVFilterContext nb_threads(int setter);
 
-// #if FF_API_CONTEXT_PUBLIC
-    /**
-     * @deprecated unused
-     */
-    public native @Cast("AVFilterCommand*") @Deprecated Pointer command_queue(); public native AVFilterContext command_queue(Pointer setter);
-// #endif
-
     /** enable expression string */
     public native @Cast("char*") BytePointer enable_str(); public native AVFilterContext enable_str(BytePointer setter);
-// #if FF_API_CONTEXT_PUBLIC
-    /**
-     * @deprecated unused
-     */
-    public native @Deprecated Pointer enable(); public native AVFilterContext enable(Pointer setter);
-    /**
-     * @deprecated unused
-     */
-    public native DoublePointer var_values(); public native AVFilterContext var_values(DoublePointer setter);
-// #endif
     /**
      * MUST NOT be accessed from outside avfilter.
      *
@@ -134,13 +117,6 @@ public class AVFilterContext extends Pointer {
      * avfilter_init_dict().
      */
     public native AVBufferRef hw_device_ctx(); public native AVFilterContext hw_device_ctx(AVBufferRef setter);
-
-// #if FF_API_CONTEXT_PUBLIC
-    /**
-     * @deprecated this field should never have been accessed by callers
-     */
-    public native @Cast("unsigned") @Deprecated int ready(); public native AVFilterContext ready(int setter);
-// #endif
 
     /**
      * Sets the number of extra hardware frames which the filter will
