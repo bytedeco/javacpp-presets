@@ -173,6 +173,10 @@ patch -Np1 -d $LAME < ../../lame.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-vulkan.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../$V4L2_REQUEST_PATCH
+# TODO: remove when the packaged FFmpeg passes tls_verify and ca_file to nested HTTP, HLS and DASH requests
+patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-tls.patch
+# TODO: remove when the packaged FFmpeg loads the Windows ROOT store with OpenSSL when no ca_file is given
+patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-tls-winstore.patch
 # patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
@@ -934,7 +938,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
+        ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib --openssldir=/etc/ssl
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
@@ -1089,7 +1093,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure linux-x86_64 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
+        ./Configure linux-x86_64 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib --openssldir=/etc/ssl
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
@@ -1261,9 +1265,9 @@ EOF
         cd ../$OPENSSL
         if [ $CROSSCOMPILE -eq 1 ]
         then
-          ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib --cross-compile-prefix=arm-linux-gnueabihf-
+          ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib --openssldir=/etc/ssl --cross-compile-prefix=arm-linux-gnueabihf-
         else
-          ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
+          ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib --openssldir=/etc/ssl
         fi
         make -s -j $MAKEJ
         make install_sw
@@ -1494,7 +1498,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure linux-aarch64 -fPIC --prefix=$INSTALL_PATH --libdir=lib --cross-compile-prefix=aarch64-linux-gnu- "$CFLAGS" no-shared
+        ./Configure linux-aarch64 -fPIC --prefix=$INSTALL_PATH --libdir=lib --openssldir=/etc/ssl --cross-compile-prefix=aarch64-linux-gnu- "$CFLAGS" no-shared
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
@@ -1715,9 +1719,9 @@ EOF
         make install
         cd ../$OPENSSL
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          ./Configure linux-ppc64le -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
+          ./Configure linux-ppc64le -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib --openssldir=/etc/ssl
         else
-          ./Configure linux-ppc64le -fPIC no-shared --cross-compile-prefix=powerpc64le-linux-gnu- --prefix=$INSTALL_PATH --libdir=lib
+          ./Configure linux-ppc64le -fPIC no-shared --cross-compile-prefix=powerpc64le-linux-gnu- --prefix=$INSTALL_PATH --libdir=lib --openssldir=/etc/ssl
         fi
         make -s -j $MAKEJ
         make install_sw
@@ -1934,7 +1938,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure darwin64-arm64-cc -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
+        ./Configure darwin64-arm64-cc -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib --openssldir=/etc/ssl
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
@@ -2096,7 +2100,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
+        ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib --openssldir=/etc/ssl
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
