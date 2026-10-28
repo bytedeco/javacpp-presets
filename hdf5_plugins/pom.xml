@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.bytedeco</groupId>
+    <artifactId>javacpp-presets</artifactId>
+    <version>1.5.15-SNAPSHOT</version>
+  </parent>
+
+  <groupId>org.bytedeco</groupId>
+  <artifactId>hdf5_plugins</artifactId>
+  <version>2.2.0-${project.parent.version}</version>
+  <name>JavaCPP Presets for HDF5 Plugins</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>hdf5</artifactId>
+      <version>2.2.0-${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>javacpp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>hdf5</artifactId>
+      <version>2.2.0-${project.parent.version}</version>
+      <classifier>${javacpp.platform}</classifier>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.36</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.bytedeco</groupId>
+        <artifactId>javacpp</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>hdf5</artifactId>
+            <version>2.2.0-${project.parent.version}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <classPaths>
+            <classPath>${basedir}/../hdf5/target/classes/</classPath>
+            <classPath>${project.build.outputDirectory}</classPath>
+          </classPaths>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <!-- javacpp:build stages the platform's resources under target/native/, so Loader's
+               classpath scan needs it added explicitly to find them during tests. -->
+          <additionalClasspathElements>
+            <additionalClasspathElement>${project.build.directory}/native</additionalClasspathElement>
+          </additionalClasspathElements>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <configuration>
+              <includes>
+                <include>org/bytedeco/hdf5_plugins/**</include>
+              </includes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>javacpp-${javacpp.platform}</id>
+            <phase>package</phase>
+            <configuration>
+              <excludes>
+                <exclude>org/bytedeco/hdf5_plugins/${javacpp.platform}/*.exp</exclude>
+                <exclude>org/bytedeco/hdf5_plugins/${javacpp.platform}/*.lib</exclude>
+                <exclude>org/bytedeco/hdf5_plugins/${javacpp.platform}/*.obj</exclude>
+                <exclude>org/bytedeco/hdf5_plugins/${javacpp.platform}/bin/*</exclude>
+                <exclude>org/bytedeco/hdf5_plugins/${javacpp.platform}/lib/*.a</exclude>
+                <exclude>org/bytedeco/hdf5_plugins/${javacpp.platform}/lib/*.la</exclude>
+                <exclude>org/bytedeco/hdf5_plugins/${javacpp.platform}/lib/*.dylib</exclude>
+                <exclude>org/bytedeco/hdf5_plugins/${javacpp.platform}/lib/*.so*</exclude>
+                <exclude>org/bytedeco/hdf5_plugins/${javacpp.platform}/lib/*.jar</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
