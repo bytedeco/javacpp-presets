@@ -62,12 +62,15 @@ public class HDF5Plugins {
      */
     private static File cachePlugin(String name) throws IOException {
         String platform = Loader.getPlatform();
-        boolean windows = platform.startsWith("windows");
-        String[] extensions = windows ? new String[] {".dll"} : platform.startsWith("macosx") ? new String[] {".so", ".dylib"} : new String[] {".so"};
-        for (String extension : extensions) {
-            File f = Loader.cacheResource("/org/bytedeco/hdf5_plugins/" + platform + "/lib/plugin/" + (windows ? "" : "lib") + name + extension);
-            if (f != null) {
-                return f;
+        String[] extensions = platform.startsWith("windows") ? new String[] {".dll"}
+                            : platform.startsWith("macosx") ? new String[] {".so", ".dylib"} : new String[] {".so"};
+        // CMake leaves out the "lib" prefix for some plugins on Windows, like ZFP
+        for (String prefix : new String[] {"lib", ""}) {
+            for (String extension : extensions) {
+                File f = Loader.cacheResource("/org/bytedeco/hdf5_plugins/" + platform + "/lib/plugin/" + prefix + name + extension);
+                if (f != null) {
+                    return f;
+                }
             }
         }
         return null;
