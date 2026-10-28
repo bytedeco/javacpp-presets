@@ -59,7 +59,7 @@ FFMPEG_VERSION=9.0.2
 
 # Vendored snapshot of https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/20847.patch
 # rebased onto FFmpeg 9.0 with the unsupported Changelog hunk removed.
-V4L2_REQUEST_PATCH=ffmpeg-v4l2-request-20847-ffmpeg-9.0.patch
+V4L2_REQUEST_PATCH=ffmpeg-v4l2-request-20847.patch
 download https://www.nasm.us/pub/nasm/releasebuilds/$NASM_VERSION/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download https://github.com/madler/zlib/releases/download/v${ZLIB#zlib-}/$ZLIB.tar.gz $ZLIB.tar.gz
 download https://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz

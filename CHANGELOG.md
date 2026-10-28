@@ -1,5 +1,5 @@
 
- * Trust the system CA certificates and forward `tls_verify` and `ca_file` to nested HTTP, HLS, and DASH requests in presets for FFmpeg
+ * Trust the system CA certificates and forward `tls_verify` and `ca_file` to nested HTTP, HLS, and DASH requests in presets for FFmpeg ([pull #1819](https://github.com/bytedeco/javacpp-presets/pull/1819))
  * Map `AVVulkanDeviceContext`, `AVVulkanFramesContext`, and `AVVkFrame` from `hwcontext_vulkan.h` and enable Vulkan on Android in presets for FFmpeg ([pull #1818](https://github.com/bytedeco/javacpp-presets/pull/1818))
  * Fix issues with `hid_t` and `hdf5_java` in presets for HDF5 ([pull #1814](https://github.com/bytedeco/javacpp-presets/pull/1814))
  * Bundle missing `cudnn_ext` and `cudnn_engines_tensor_ir` libraries for `cuda-redist-cudnn` artifact ([issue #1805](https://github.com/bytedeco/javacpp-presets/issues/1805))
