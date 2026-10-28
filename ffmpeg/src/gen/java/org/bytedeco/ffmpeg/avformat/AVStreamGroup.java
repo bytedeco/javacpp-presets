@@ -69,7 +69,14 @@ public class AVStreamGroup extends Pointer {
         @Name("params.iamf_audio_element") public native AVIAMFAudioElement params_iamf_audio_element(); public native AVStreamGroup params_iamf_audio_element(AVIAMFAudioElement setter);
         @Name("params.iamf_mix_presentation") public native AVIAMFMixPresentation params_iamf_mix_presentation(); public native AVStreamGroup params_iamf_mix_presentation(AVIAMFMixPresentation setter);
         @Name("params.tile_grid") public native AVStreamGroupTileGrid params_tile_grid(); public native AVStreamGroup params_tile_grid(AVStreamGroupTileGrid setter);
-        @Name("params.lcevc") public native AVStreamGroupLCEVC params_lcevc(); public native AVStreamGroup params_lcevc(AVStreamGroupLCEVC setter);
+        @Name("params.layered_video") public native AVStreamGroupLayeredVideo params_layered_video(); public native AVStreamGroup params_layered_video(AVStreamGroupLayeredVideo setter);
+// #if FF_API_LCEVC_STRUCT
+        /**
+         * deprecated, use layered_video.
+         */
+        @Name("params.lcevc") public native @Deprecated AVStreamGroupLayeredVideo params_lcevc(); public native AVStreamGroup params_lcevc(AVStreamGroupLayeredVideo setter);
+// #endif
+        @Name("params.tref") public native AVStreamGroupTREF params_tref(); public native AVStreamGroup params_tref(AVStreamGroupTREF setter);
 
     /**
      * Metadata that applies to the whole group.

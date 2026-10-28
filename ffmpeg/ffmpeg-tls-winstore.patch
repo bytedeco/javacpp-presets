@@ -1,0 +1,17 @@
+diff -ruN ffmpeg-9.0.2/libavformat/tls_openssl.c ffmpeg-9.0.2-patch/libavformat/tls_openssl.c
+--- ffmpeg-9.0.2/libavformat/tls_openssl.c	2026-10-26 03:05:43.514701100 -0600
++++ ffmpeg-9.0.2-patch/libavformat/tls_openssl.c	2026-10-26 03:05:52.259338300 -0600
+@@ -708,6 +708,13 @@
+             av_log(h, AV_LOG_WARNING, "Failure setting default verify locations: %s\n",
+                 openssl_get_error(c));
+         }
++#if defined(_WIN32) && OPENSSL_VERSION_NUMBER >= 0x30200000L
++        // Windows has no default CA directory, so also trust its ROOT system store
++        if (!SSL_CTX_load_verify_store(c->ctx, "org.openssl.winstore://")) {
++            av_log(h, AV_LOG_WARNING, "Failure loading the Windows certificate store: %s\n",
++                openssl_get_error(c));
++        }
++#endif
+     }
+ 
+     if (s->cert_file) {
