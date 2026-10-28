@@ -55,23 +55,38 @@ public class HDF5Plugins {
 
     private static File pluginPath = null;
 
+    /**
+     * Extracts the plugin library with the given name (without prefix and extension) from the JAR files if needed,
+     * and returns it, or null if it is not available on this platform. Most plugins are modules (.so on macOS), but
+     * some, like ZFP, are regular shared libraries (.dylib on macOS).
+     */
+    private static File cachePlugin(String name) throws IOException {
+        String platform = Loader.getPlatform();
+        boolean windows = platform.startsWith("windows");
+        String[] extensions = windows ? new String[] {".dll"} : platform.startsWith("macosx") ? new String[] {".so", ".dylib"} : new String[] {".so"};
+        for (String extension : extensions) {
+            File f = Loader.cacheResource("/org/bytedeco/hdf5_plugins/" + platform + "/lib/plugin/" + (windows ? "" : "lib") + name + extension);
+            if (f != null) {
+                return f;
+            }
+        }
+        return null;
+    }
+
     /** Extracts the plugins from the JAR files if needed and returns the directory containing them. */
     public static synchronized File getPluginPath() throws IOException {
         if (pluginPath == null) {
-            String platform = Loader.getPlatform();
-            boolean windows = platform.startsWith("windows");
             File dir = null;
             for (String name : NAMES) {
                 // Loader cannot extract a whole directory, so go through the individual files,
                 // which all end up side by side in the cache. Some plugins are not built on all platforms.
-                String file = (windows ? "" : "lib") + name + (windows ? ".dll" : ".so");
-                File f = Loader.cacheResource("/org/bytedeco/hdf5_plugins/" + platform + "/lib/plugin/" + file);
+                File f = cachePlugin(name);
                 if (f != null) {
                     dir = f.getParentFile();
                 }
             }
             if (dir == null) {
-                throw new IOException("Could not find the HDF5 plugins for " + platform);
+                throw new IOException("Could not find the HDF5 plugins for " + Loader.getPlatform());
             }
             pluginPath = dir;
         }
@@ -102,10 +117,7 @@ public class HDF5Plugins {
      * as expected by H5Zregister(), or null if the plugin is not available on this platform.
      */
     public static synchronized Pointer getPluginInfo(int filter) throws IOException {
-        String platform = Loader.getPlatform();
-        boolean windows = platform.startsWith("windows");
-        String file = (windows ? "" : "lib") + pluginName(filter) + (windows ? ".dll" : ".so");
-        File f = Loader.cacheResource("/org/bytedeco/hdf5_plugins/" + platform + "/lib/plugin/" + file);
+        File f = cachePlugin(pluginName(filter));
         if (f == null) {
             return null;
         }

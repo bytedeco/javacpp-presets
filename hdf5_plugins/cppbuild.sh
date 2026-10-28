@@ -66,23 +66,11 @@ CMAKE_CONFIG=(-DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$HDF5_PATH" -DHDF5
     -DH5PL_ALLOW_EXTERNAL_SUPPORT=TGZ -DH5PL_BUILD_TESTING=OFF -DH5PL_BUILD_EXAMPLES=OFF -DH5PL_CPACK_ENABLE=OFF -DBUILD_SHARED_LIBS=ON
     -DENABLE_ZSTD=ON -DENABLE_LZ4=ON -DENABLE_JPEG=ON -DENABLE_BZIP2=ON -DENABLE_BSHUF=ON -DENABLE_BLOSC=ON -DENABLE_BLOSC2=ON
     -DENABLE_BITGROOM=ON -DENABLE_GRANULAR_BITROUND=ON -DENABLE_BITROUND=ON -DENABLE_LZF=ON -DENABLE_ZFP=ON)
-ANDROID_CMAKE_FLAGS=(-DCMAKE_TOOLCHAIN_FILE="${PLATFORM_ROOT:-}/build/cmake/android.toolchain.cmake" -DANDROID_NATIVE_API_LEVEL=24
-    -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH)
 
 mkdir -p build
 cd build
 
 case $PLATFORM in
-    android-arm64)
-        "$CMAKE" "${ANDROID_CMAKE_FLAGS[@]}" -DANDROID_ABI=arm64-v8a "${CMAKE_CONFIG[@]}" ..
-        make -j $MAKEJ
-        make install/strip
-        ;;
-    android-x86_64)
-        "$CMAKE" "${ANDROID_CMAKE_FLAGS[@]}" -DANDROID_ABI=x86_64 "${CMAKE_CONFIG[@]}" ..
-        make -j $MAKEJ
-        make install/strip
-        ;;
     linux-arm64)
         export CC="gcc -fPIC"
         "$CMAKE" "${CMAKE_CONFIG[@]}" ..
@@ -117,7 +105,8 @@ case $PLATFORM in
         export CC="cl.exe"
         export CXX="cl.exe"
         # JPEG is disabled by upstream's CMake on Windows
-        "$CMAKE" -G "Ninja" "${CMAKE_CONFIG[@]}" ..
+        # HDF5 is a DLL here, which the plugins' sources need to know to import its global variables
+        "$CMAKE" -G "Ninja" -DCMAKE_C_FLAGS="-DH5_BUILT_AS_DYNAMIC_LIB" "${CMAKE_CONFIG[@]}" ..
         ninja -j $MAKEJ
         ninja install
         # Windows installs modules under bin/, but keep all plugins in the same directory as other platforms

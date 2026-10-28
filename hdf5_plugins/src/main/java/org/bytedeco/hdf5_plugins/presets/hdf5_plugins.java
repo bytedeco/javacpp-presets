@@ -37,8 +37,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = javacpp.class, target = "org.bytedeco.hdf5_plugins", global = "org.bytedeco.hdf5_plugins.global.hdf5_plugins", value = {
-    @Platform(value = {"linux", "macosx", "windows", "android"}, include = "H5PLhelper.h", resource = {"lib/plugin"}),
-    @Platform(value = {"linux", "android"}, link = "dl") })
+    @Platform(value = {"linux", "macosx", "windows"}, include = "H5PLhelper.h", resource = {"lib/plugin"}),
+    @Platform(value = "linux", link = "dl") })
 public class hdf5_plugins implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "hdf5_plugins"); }
 
