@@ -36,6 +36,31 @@ fi
 
 HDF5_PATH="${HDF5_PATH//\\//}"
 
+# The hdf5 artifact only contains the runtime libraries, while its CMake config files also refer to the static
+# libraries and the versioned names of the shared ones, so work on a copy where placeholders stand in for the missing files
+if [[ ! -f "$HDF5_PATH/lib/libhdf5.a" && ! -f "$HDF5_PATH/lib/hdf5.lib" ]] || [[ -n "${BUILD_PATH:-}" ]]; then
+    mkdir -p "$INSTALL_PATH/hdf5"
+    cp -a "$HDF5_PATH/." "$INSTALL_PATH/hdf5/"
+    HDF5_PATH="$INSTALL_PATH/hdf5"
+    for CONFIG in "$HDF5_PATH"/lib/cmake/hdf5/hdf5*-targets-*.cmake; do
+        grep -o '_IMPORT_PREFIX}/[^" );]*' "$CONFIG" | sed 's#_IMPORT_PREFIX}/##' | sort -u | while read F; do
+            if [[ ! -e "$HDF5_PATH/$F" ]]; then
+                mkdir -p "$(dirname "$HDF5_PATH/$F")"
+                # shared libraries are replaced by links to the unversioned or differently versioned ones
+                REAL=$(ls "$HDF5_PATH"/${F##*/} "$HDF5_PATH"/lib/${F##*/} 2>/dev/null | head -1 || true)
+                BASE=${F##*/}
+                BASE=${BASE%%.so*}
+                [[ -z "$REAL" ]] && REAL=$(ls "$HDF5_PATH/$BASE".so* "$HDF5_PATH/lib/$BASE".so* "$HDF5_PATH/$BASE".*dylib "$HDF5_PATH/lib/$BASE".*dylib 2>/dev/null | head -1 || true)
+                if [[ -n "$REAL" ]]; then
+                    ln -sf "$REAL" "$HDF5_PATH/$F"
+                else
+                    : > "$HDF5_PATH/$F"
+                fi
+            fi
+        done
+    done
+fi
+
 # Plugins are modules loaded at runtime by HDF5, so they get their compression libraries linked in statically
 CMAKE_CONFIG=(-DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$HDF5_PATH" -DHDF5_ROOT="$HDF5_PATH" -DUSE_SHARED_LIBS=ON -DHDF5_USE_STATIC_LIBRARIES=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH"
     -DH5PL_ALLOW_EXTERNAL_SUPPORT=TGZ -DH5PL_BUILD_TESTING=OFF -DH5PL_BUILD_EXAMPLES=OFF -DH5PL_CPACK_ENABLE=OFF -DBUILD_SHARED_LIBS=ON

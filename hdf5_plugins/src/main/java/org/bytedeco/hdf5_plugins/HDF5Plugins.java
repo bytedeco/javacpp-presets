@@ -25,7 +25,9 @@ package org.bytedeco.hdf5_plugins;
 import java.io.File;
 import java.io.IOException;
 import org.bytedeco.hdf5.global.hdf5;
+import org.bytedeco.hdf5_plugins.global.hdf5_plugins;
 import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacpp.Pointer;
 
 /**
  * Makes the bundled HDF5 filter plugins available to the HDF5 library.
@@ -74,6 +76,58 @@ public class HDF5Plugins {
             pluginPath = dir;
         }
         return pluginPath;
+    }
+
+    /** Plugin library names (without prefix and extension) by filter ID, for the ones that are built on this platform. */
+    private static String pluginName(int filter) {
+        switch (filter) {
+            case H5Z_FILTER_BZIP2: return "h5bz2";
+            case H5Z_FILTER_LZF: return "h5lzf";
+            case H5Z_FILTER_BLOSC: return "h5blosc";
+            case H5Z_FILTER_LZ4: return "h5lz4";
+            case H5Z_FILTER_BSHUF: return "h5bshuf";
+            case H5Z_FILTER_ZFP: return "h5zzfp";
+            case H5Z_FILTER_ZSTD: return "h5zstd";
+            case H5Z_FILTER_JPEG: return "h5jpeg";
+            case H5Z_FILTER_BITGROOM: return "h5bitgroom";
+            case H5Z_FILTER_GRANULAR_BITROUND: return "h5granular_bitround";
+            case H5Z_FILTER_BLOSC2: return "h5blosc2";
+            case H5Z_FILTER_BITROUND: return "h5bitround";
+            default: throw new IllegalArgumentException("Unknown filter ID " + filter);
+        }
+    }
+
+    /**
+     * Returns the filter class given by H5PLget_plugin_info() of the plugin for the given filter ID,
+     * as expected by H5Zregister(), or null if the plugin is not available on this platform.
+     */
+    public static synchronized Pointer getPluginInfo(int filter) throws IOException {
+        String platform = Loader.getPlatform();
+        boolean windows = platform.startsWith("windows");
+        String file = (windows ? "" : "lib") + pluginName(filter) + (windows ? ".dll" : ".so");
+        File f = Loader.cacheResource("/org/bytedeco/hdf5_plugins/" + platform + "/lib/plugin/" + file);
+        if (f == null) {
+            return null;
+        }
+        Loader.load(hdf5.class); // the plugin may link against the shared HDF5 library
+        return hdf5_plugins.h5pl_get_plugin_info(f.getAbsolutePath());
+    }
+
+    /**
+     * Registers the filter with the given ID directly with HDF5 using H5Zregister(), without going through
+     * the plugin search path, so it also works with {@code H5PLset_loading_state(0)}.
+     *
+     * @return false if the plugin is not available on this platform
+     */
+    public static synchronized boolean register(int filter) throws IOException {
+        Pointer info = getPluginInfo(filter);
+        if (info == null) {
+            return false;
+        }
+        if (hdf5.H5Zregister(info) < 0) {
+            throw new IOException("H5Zregister() failed for filter " + filter);
+        }
+        return true;
     }
 
     /** Appends the directory of the bundled plugins to the HDF5 plugin search path, if not already done. */

@@ -12,6 +12,8 @@ This directory contains the JavaCPP Presets module for:
 
 It bundles the HDF5 filter plugins for Zstandard, LZ4, JPEG, bzip2, Bitshuffle, Blosc, Blosc2, LZF, ZFP, BitGroom, BitRound, and Granular BitRound, with their compression libraries linked in statically. There is no C API to map: HDF5 loads the plugins at runtime. Call `HDF5Plugins.load()` once before using HDF5 to add the bundled plugins to its search path (`H5PLappend()`), then use the filter IDs, for example `HDF5Plugins.H5Z_FILTER_ZSTD`, with `H5Pset_filter()`. Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
+Alternatively, `HDF5Plugins.register(HDF5Plugins.H5Z_FILTER_ZSTD)` registers a single plugin directly with `H5Zregister()`, using the filter class returned by the plugin's exported `H5PLget_plugin_info()`, like the Julia package `H5ZzstdC` does. That does not depend on the plugin search path, so it also works with `H5PLset_loading_state(0)`. `HDF5Plugins.getPluginInfo()` gives access to the filter class itself.
+
 Note that the plugins are built from the sources bundled with the `hdf5_plugins` release, and that JPEG is not available on Windows, as per upstream.
 
 

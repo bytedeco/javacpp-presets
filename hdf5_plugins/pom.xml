@@ -62,12 +62,45 @@
             <artifactId>hdf5</artifactId>
             <version>2.2.0-${project.parent.version}</version>
           </dependency>
+          <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>hdf5</artifactId>
+            <version>2.2.0-${project.parent.version}</version>
+            <classifier>${javacpp.platform}</classifier>
+          </dependency>
         </dependencies>
         <configuration>
           <classPaths>
             <classPath>${basedir}/../hdf5/target/classes/</classPath>
             <classPath>${project.build.outputDirectory}</classPath>
           </classPaths>
+          <includePaths>
+            <includePath>${basedir}/../hdf5/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/target/classes/org/bytedeco/hdf5_plugins/include/</includePath>
+          </includePaths>
+          <linkPaths>
+            <linkPath>${basedir}/../hdf5/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
+          </linkPaths>
+          <preloadPaths>
+            <preloadPath>${basedir}/../hdf5/cppbuild/${javacpp.platform}/bin/</preloadPath>
+            <preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
+          </preloadPaths>
+          <buildResources>
+            <buildResource>/${javacpp.platform.library.path}/</buildResource>
+            <buildResource>/org/bytedeco/hdf5/${javacpp.platform}/</buildResource>
+          </buildResources>
+          <includeResources>
+            <includeResource>/${javacpp.platform.library.path}/include/</includeResource>
+            <includeResource>/org/bytedeco/hdf5/${javacpp.platform}/include/</includeResource>
+          </includeResources>
+          <linkResources>
+            <linkResource>/${javacpp.platform.library.path}/</linkResource>
+            <linkResource>/${javacpp.platform.library.path}/lib/</linkResource>
+            <linkResource>/org/bytedeco/hdf5/${javacpp.platform}/</linkResource>
+            <linkResource>/org/bytedeco/hdf5/${javacpp.platform}/lib/</linkResource>
+          </linkResources>
         </configuration>
       </plugin>
       <plugin>

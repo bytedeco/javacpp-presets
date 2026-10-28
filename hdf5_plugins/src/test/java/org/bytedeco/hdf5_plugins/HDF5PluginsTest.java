@@ -66,6 +66,25 @@ public class HDF5PluginsTest {
         floatRoundTrip(H5Z_FILTER_ZFP, new int[] {5}, 0); // H5Z_ZFP_MODE_REVERSIBLE
     }
 
+    /** Registers a plugin by itself with HDF5 with plugin loading from the search path turned off. */
+    @Test public void testRegister() throws Exception {
+        Loader.load(hdf5.class);
+        assertTrue(H5PLset_loading_state(0) >= 0);
+        // other tests in this JVM may have loaded these through the search path already
+        H5Zunregister(H5Z_FILTER_ZSTD);
+        H5Zunregister(H5Z_FILTER_LZ4);
+        try {
+            assertEquals(0, H5Zfilter_avail(H5Z_FILTER_ZSTD));
+            assertTrue(HDF5Plugins.register(H5Z_FILTER_ZSTD));
+            assertTrue(H5Zfilter_avail(H5Z_FILTER_ZSTD) > 0);
+            assertEquals(0, H5Zfilter_avail(H5Z_FILTER_LZ4)); // others stay unregistered
+            roundTrip(H5Z_FILTER_ZSTD);
+        } finally {
+            H5Zunregister(H5Z_FILTER_ZSTD);
+            H5PLset_loading_state(H5PL_ALL_PLUGIN);
+        }
+    }
+
     @Test public void testLZF() throws Exception {
         HDF5Plugins.load();
         roundTrip(H5Z_FILTER_LZF);
