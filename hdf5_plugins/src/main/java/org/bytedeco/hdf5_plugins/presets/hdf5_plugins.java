@@ -28,7 +28,7 @@ import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.presets.javacpp;
 
 /**
- * Packages the HDF5 filter plugins (zstd, lz4, jpeg, bzip2, bshuf, blosc, blosc2) as
+ * Packages the HDF5 filter plugins (zstd, lz4, jpeg, bzip2, bshuf, blosc, blosc2, lzf, zfp, bitgroom, bitround, granular bitround) as
  * resources. They are loaded at runtime by HDF5 itself, see {@link org.bytedeco.hdf5_plugins.HDF5Plugins}.
  *
  * @author Samuel Audet

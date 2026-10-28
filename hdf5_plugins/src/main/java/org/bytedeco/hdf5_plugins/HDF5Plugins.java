@@ -36,14 +36,20 @@ public class HDF5Plugins {
     /** Registered filter IDs, see https://github.com/HDFGroup/hdf5_plugins/blob/master/docs/RegisteredFilterPlugins.md */
     public static final int
             H5Z_FILTER_BZIP2 = 307,
+            H5Z_FILTER_LZF = 32000,
             H5Z_FILTER_BLOSC = 32001,
             H5Z_FILTER_LZ4 = 32004,
             H5Z_FILTER_BSHUF = 32008,
+            H5Z_FILTER_ZFP = 32013,
             H5Z_FILTER_ZSTD = 32015,
             H5Z_FILTER_JPEG = 32019,
-            H5Z_FILTER_BLOSC2 = 32026;
+            H5Z_FILTER_BITGROOM = 32022,
+            H5Z_FILTER_GRANULAR_BITROUND = 32023,
+            H5Z_FILTER_BLOSC2 = 32026,
+            H5Z_FILTER_BITROUND = 32032;
 
-    private static final String[] NAMES = {"h5bz2", "h5blosc", "h5lz4", "h5bshuf", "h5zstd", "h5jpeg", "h5blosc2"};
+    private static final String[] NAMES = {"h5bz2", "h5blosc", "h5lz4", "h5bshuf", "h5zstd", "h5jpeg", "h5blosc2",
+                                       "h5lzf", "h5zzfp", "h5bitgroom", "h5granular_bitround", "h5bitround"};
 
     private static File pluginPath = null;
 

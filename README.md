@@ -197,7 +197,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * flandmark 1.07  https://github.com/uricamic/flandmark
  * Arrow 6.0.x  https://arrow.apache.org/install/
  * HDF5 2.2.x  https://www.hdfgroup.org/downloads/
- * HDF5 Plugins 2.2.x  https://github.com/HDFGroup/hdf5_plugins  (zstd, lz4, jpeg, bzip2, bshuf, blosc, blosc2)
+ * HDF5 Plugins 2.2.x  https://github.com/HDFGroup/hdf5_plugins  (zstd, lz4, jpeg, bzip2, bshuf, blosc, blosc2, lzf, zfp, bitgroom, bitround, granular bitround)
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
  * LZ4 1.9.x  https://github.com/lz4/lz4
  * MKL 2026.1.x  https://software.intel.com/mkl

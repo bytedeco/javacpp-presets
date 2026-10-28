@@ -57,6 +57,56 @@ public class HDF5PluginsTest {
         }
     }
 
+    /** Quantizing filters keep only a number of significant digits or bits, and ZFP is run in its lossless mode. */
+    @Test public void testFloatPlugins() throws Exception {
+        HDF5Plugins.load();
+        floatRoundTrip(H5Z_FILTER_BITGROOM, new int[] {3}, 1e-2);
+        floatRoundTrip(H5Z_FILTER_GRANULAR_BITROUND, new int[] {3}, 1e-2);
+        floatRoundTrip(H5Z_FILTER_BITROUND, new int[] {10}, 1e-2);
+        floatRoundTrip(H5Z_FILTER_ZFP, new int[] {5}, 0); // H5Z_ZFP_MODE_REVERSIBLE
+    }
+
+    @Test public void testLZF() throws Exception {
+        HDF5Plugins.load();
+        roundTrip(H5Z_FILTER_LZF);
+    }
+
+    static void floatRoundTrip(int filter, int[] cd, double relativeTolerance) throws Exception {
+        File file = File.createTempFile("hdf5_plugins" + filter, ".h5");
+        file.deleteOnExit();
+        float[] values = new float[N];
+        for (int i = 0; i < N; i++) {
+            values[i] = 1 + i * 0.37f;
+        }
+
+        long fid = H5Fcreate(file.getAbsolutePath(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+        long space = H5Screate_simple(1, new long[] {N}, null);
+        long dcpl = H5Pcreate(H5P_DATASET_CREATE());
+        H5Pset_chunk(dcpl, 1, new long[] {N});
+        assertTrue("filter " + filter, H5Pset_filter(dcpl, filter, H5Z_FLAG_MANDATORY, cd.length, cd) >= 0);
+        long dset = H5Dcreate2(fid, "data", H5T_NATIVE_FLOAT(), space, H5P_DEFAULT, dcpl, H5P_DEFAULT);
+        assertTrue("create " + filter, dset >= 0);
+        assertTrue("write " + filter, H5Dwrite(dset, H5T_NATIVE_FLOAT(), H5S_ALL, H5S_ALL, H5P_DEFAULT, new FloatPointer(values)) >= 0);
+        H5Dclose(dset);
+        H5Pclose(dcpl);
+        H5Sclose(space);
+        H5Fclose(fid);
+
+        fid = H5Fopen(file.getAbsolutePath(), H5F_ACC_RDONLY, H5P_DEFAULT);
+        dset = H5Dopen2(fid, "data", H5P_DEFAULT);
+        FloatPointer out = new FloatPointer(N);
+        assertTrue("read " + filter, H5Dread(dset, H5T_NATIVE_FLOAT(), H5S_ALL, H5S_ALL, H5P_DEFAULT, out) >= 0);
+        boolean changed = false;
+        for (int i = 0; i < N; i++) {
+            assertEquals("filter " + filter + " at " + i, values[i], out.get(i), Math.abs(values[i]) * relativeTolerance);
+            changed |= values[i] != out.get(i);
+        }
+        // a lossy filter that was actually applied has to alter some values
+        assertEquals("filter " + filter, relativeTolerance > 0, changed);
+        H5Dclose(dset);
+        H5Fclose(fid);
+    }
+
     static void roundTrip(int filter) throws Exception {
         File file = File.createTempFile("hdf5_plugins" + filter, ".h5");
         file.deleteOnExit();
