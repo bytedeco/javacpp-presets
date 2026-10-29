@@ -1108,6 +1108,7 @@ public static final int AVIO_FLAG_DIRECT = 0x8000;
  creation_time-- date when the file was created, preferably in ISO 8601.
  date         -- date when the work was created, preferably in ISO 8601.
  disc         -- number of a subset, e.g. disc in a multi-disc collection.
+ disc_subtitle-- title of a subset, e.g. disc subtitle in a multi-disc collection.
  encoder      -- name/settings of the software/hardware that produced the file.
  encoded_by   -- person/group who created the file.
  filename     -- original name of the file.
@@ -1228,6 +1229,8 @@ public static final int AVFMT_TS_NONSTRICT = 0x20000;
                                         AVFormatContext.avoid_negative_ts
                                         */
 public static final int AVFMT_TS_NEGATIVE =  0x40000;
+/** Format wants \ref AVCodecParameters.frame_size "fixed size audio frames." */
+public static final int AVFMT_FIXED_FRAMESIZE = 0x80000;
 
 /** Seeking is based on PTS */
 public static final int AVFMT_SEEK_TO_PTS =   0x4000000;
@@ -1393,7 +1396,18 @@ public static final int AV_PTS_WRAP_SUB_OFFSET =  -1;
 // Targeting ../avformat/AVStreamGroupTileGrid.java
 
 
-// Targeting ../avformat/AVStreamGroupLCEVC.java
+// Targeting ../avformat/AVStreamGroupLayeredVideo.java
+
+
+
+// #if FF_API_LCEVC_STRUCT
+/**
+ * Alias kept for backward compatibility.
+ *
+ * AVStreamGroupLCEVC was renamed to \ref AVStreamGroupLayeredVideo.
+ */
+// #define AVStreamGroupLCEVC AVStreamGroupLayeredVideo
+// Targeting ../avformat/AVStreamGroupTREF.java
 
 
 
@@ -1403,7 +1417,9 @@ public static final int
     AV_STREAM_GROUP_PARAMS_IAMF_AUDIO_ELEMENT = 1,
     AV_STREAM_GROUP_PARAMS_IAMF_MIX_PRESENTATION = 2,
     AV_STREAM_GROUP_PARAMS_TILE_GRID = 3,
-    AV_STREAM_GROUP_PARAMS_LCEVC = 4;
+    AV_STREAM_GROUP_PARAMS_LCEVC = 4,
+    AV_STREAM_GROUP_PARAMS_TREF = 5,
+    AV_STREAM_GROUP_PARAMS_DOLBY_VISION = 6;
 // Targeting ../avformat/AVIAMFAudioElement.java
 
 
@@ -1640,6 +1656,40 @@ public static final int
 
 @NoException public static native AVProgram av_new_program(AVFormatContext s, int id);
 
+
+/** match streams using stream id */
+public static final int AVFMT_PROGCOPY_MATCH_BY_ID =          (1 << 0);
+/** match streams using stream index */
+public static final int AVFMT_PROGCOPY_MATCH_BY_INDEX =       (1 << 1);
+/** overwrite pre-existing program having same ID */
+public static final int AVFMT_PROGCOPY_OVERWRITE =            (1 << 8);
+
+/**
+ * Copy an AVProgram from one AVFormatContext to another.
+ *
+ * Streams in the destination context whose designated attribute match the attribute of
+ * the streams in the source AVProgram index are added to the stream index of the copied
+ * AVProgram. The attribute is designated using AVFMT_PROGCOPY_MATCH_ flags.
+ *
+ * If a new program has to be added, the function expects and requires any existing buffer
+ * holding the array of pointers to AVPrograms in the destination context to have its size
+ * be a power-of-two value. This should be the case if all earlier programs were created
+ * using av_new_program or this function.
+ *
+ * @param dst           pointer to the target muxer context
+ * @param src           pointer to the source muxer context
+ * @param progid        ID of the program to be copied
+ * @param flags         combination of flags which determine how streams are matched and
+ *                      whether pre-existing AVProgram in target is overwritten.
+ *                      If no match condition is set, streams will be matched by ids if
+ *                      all source stream ids are non-zero and unique, else by index.
+ *
+ * @return  >= 0 in case of success, Error EEXIST if target already has program with same ID
+ *          and overwrite flag isn't set, else a negative AVERROR code in case of other
+ *          failures.
+ */
+@NoException public static native int av_program_copy(AVFormatContext dst, @Const AVFormatContext src, int progid, int flags);
+
 /**
  * \}
  */
@@ -1830,6 +1880,19 @@ public static final int
 @NoException public static native AVProgram av_find_program_from_stream(AVFormatContext ic, AVProgram last, int s);
 
 @NoException public static native void av_program_add_stream_index(AVFormatContext ac, int progid, @Cast("unsigned int") int idx);
+
+/**
+ * Add the supplied index of a stream to the AVProgram with matching id.
+ *
+ * @param ac      the format context which contains the target AVProgram
+ * @param progid  the ID of the AVProgram whose stream index is to be updated
+ * @param idx     the index of the stream to be added
+ *
+ * @return >=0 upon successful addition or if index was already present,
+ *         AVERROR if no matching program is found or stream index is invalid or
+ *         the stream index array reallocation failed.
+ */
+@NoException public static native int av_program_add_stream_index2(AVFormatContext ac, int progid, @Cast("unsigned int") int idx);
 
 /**
  * Find the "best" stream in the file.
@@ -2749,30 +2812,6 @@ public static final int AV_FRAME_FILENAME_FLAGS_IGNORE_TRUNCATION = 2;
 
 @NoException public static native int avformat_queue_attached_pictures(AVFormatContext s);
 
-// #if FF_API_INTERNAL_TIMING
-/** enum AVTimebaseSource */
-public static final int
-    AVFMT_TBCF_AUTO = -1,
-    AVFMT_TBCF_DECODER = 0,
-    AVFMT_TBCF_DEMUXER = 1,
-// #if FF_API_R_FRAME_RATE
-    AVFMT_TBCF_R_FRAMERATE = 2;
-// #endif
-
-/**
- * @deprecated do not call this function
- */
-@NoException public static native @Deprecated int avformat_transfer_internal_stream_timing_info(@Const AVOutputFormat ofmt,
-                                                  AVStream ost, @Const AVStream ist,
-                                                  @Cast("AVTimebaseSource") int copy_tb);
-
-/**
- * @deprecated do not call this function
- */
-@NoException public static native @Deprecated @ByVal AVRational av_stream_get_codec_timebase(@Const AVStream st);
-// #endif
-
-
 /**
  * \}
  */
@@ -2813,7 +2852,7 @@ public static final int
 
 // Major bumping may affect Ticket5467, 5421, 5451(compatibility with Chromium)
 // Also please add any ticket numbers that you believe might be affected here
-public static final int LIBAVFORMAT_VERSION_MAJOR =  62;
+public static final int LIBAVFORMAT_VERSION_MAJOR =  63;
 
 /**
  * FF_API_* defines may be placed below to indicate public API that will be
@@ -2825,11 +2864,11 @@ public static final int LIBAVFORMAT_VERSION_MAJOR =  62;
  * at once through the bump. This improves the git bisect-ability of the change.
  *
  */
-public static final boolean FF_API_COMPUTE_PKT_FIELDS2 =      (LIBAVFORMAT_VERSION_MAJOR < 63);
+public static final boolean FF_API_COMPUTE_PKT_FIELDS2 =      (LIBAVFORMAT_VERSION_MAJOR < 64);
 
-public static final boolean FF_API_INTERNAL_TIMING =          (LIBAVFORMAT_VERSION_MAJOR < 63);
+public static final boolean FF_API_FDEBUG_TS =                (LIBAVFORMAT_VERSION_MAJOR < 64);
 
-public static final boolean FF_API_NO_DEFAULT_TLS_VERIFY =    (LIBAVFORMAT_VERSION_MAJOR < 63);
+public static final boolean FF_API_LCEVC_STRUCT =             (LIBAVFORMAT_VERSION_MAJOR < 64);
 
 public static final int FF_API_R_FRAME_RATE =            1;
 
@@ -2871,7 +2910,7 @@ public static final int FF_API_R_FRAME_RATE =            1;
 
 // #include "version_major.h"
 
-public static final int LIBAVFORMAT_VERSION_MINOR =  12;
+public static final int LIBAVFORMAT_VERSION_MINOR =   1;
 public static final int LIBAVFORMAT_VERSION_MICRO = 102;
 
 public static native @MemberGetter int LIBAVFORMAT_VERSION_INT();

@@ -341,7 +341,12 @@ public static final int AVFMT_FLAG_AUTO_BSF =   0x200000;
      * Flags to enable debugging.
      */
     public native int debug(); public native AVFormatContext debug(int setter);
-public static final int FF_FDEBUG_TS =        0x0001;
+public static final int AV_FDEBUG_TS =        0x0001;
+public static final int AV_FDEBUG_ID3V2 =     0x0002;
+
+// #if FF_API_FDEBUG_TS
+public static final int FF_FDEBUG_TS = AV_FDEBUG_TS;
+// #endif
 
     /**
      * The maximum number of streams.

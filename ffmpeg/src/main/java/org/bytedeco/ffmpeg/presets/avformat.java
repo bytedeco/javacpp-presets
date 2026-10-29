@@ -37,20 +37,20 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.ffmpeg.avformat",
     global = "org.bytedeco.ffmpeg.global.avformat",
     value = {
-        @Platform(cinclude = {"<libavformat/avio.h>", "<libavformat/avformat.h>", "<libavformat/version_major.h>", "<libavformat/version.h>"}, link = "avformat@.62"),
-        @Platform(value = "windows", preload = "avformat-62")
+        @Platform(cinclude = {"<libavformat/avio.h>", "<libavformat/avformat.h>", "<libavformat/version_major.h>", "<libavformat/version.h>"}, link = "avformat@.63"),
+        @Platform(value = "windows", preload = "avformat-63")
     }
 )
 public class avformat implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("AVDeviceInfoList", "AVDeviceCapabilitiesQuery", "AVBPrint", "URLContext", "FFFrac").cast().pointerTypes("Pointer"))
-               .put(new Info("LIBAVFORMAT_VERSION").cppTypes())
+               .put(new Info("LIBAVFORMAT_VERSION", "AVStreamGroupLCEVC").cppTypes())
                .put(new Info("LIBAVFORMAT_VERSION_INT", "LIBAVFORMAT_IDENT", "AVPROBE_SCORE_RETRY", "AVPROBE_SCORE_STREAM_RETRY").translate(false))
                .put(new Info("FF_API_LAVF_PRIV_OPT", "FF_API_COMPUTE_PKT_FIELDS2", "FF_API_AVIOCONTEXT_WRITTEN",
                              "FF_HLS_TS_OPTIONS", "FF_HTTP_CACHE_REDIRECT_DEFAULT", "FF_API_GET_END_PTS", "FF_API_AVIODIRCONTEXT",
                              "FF_API_AVFORMAT_IO_CLOSE", "FF_API_AVIO_WRITE_NONCONST", "FF_API_LAVF_SHORTEST", "FF_API_ALLOW_FLUSH",
                              "FF_API_AVSTREAM_SIDE_DATA", "FF_API_GET_DUR_ESTIMATE_METHOD", "FF_API_INTERNAL_TIMING",
-                             "FF_API_NO_DEFAULT_TLS_VERIFY").define().translate().cppTypes("bool"))
+                             "FF_API_NO_DEFAULT_TLS_VERIFY", "FF_API_FDEBUG_TS", "FF_API_LCEVC_STRUCT").define().translate().cppTypes("bool"))
                .put(new Info("LIBAVFORMAT_VERSION_MAJOR <= 54", "FF_API_ALLOC_OUTPUT_CONTEXT", "FF_API_FORMAT_PARAMETERS",
                              "FF_API_READ_PACKET", "FF_API_CLOSE_INPUT_FILE", "FF_API_NEW_STREAM", "FF_API_SET_PTS_INFO",
                              "FF_API_AVSTREAM_CLASS").define(false).translate().cppTypes("bool"));

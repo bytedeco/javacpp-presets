@@ -56,9 +56,10 @@ public class AVInputFormat extends Pointer {
     public native @Cast("const char*") BytePointer long_name(); public native AVInputFormat long_name(BytePointer setter);
 
     /**
-     * Can use flags: AVFMT_NOFILE, AVFMT_NEEDNUMBER, AVFMT_SHOW_IDS,
-     * AVFMT_NOTIMESTAMPS, AVFMT_GENERIC_INDEX, AVFMT_TS_DISCONT, AVFMT_NOBINSEARCH,
-     * AVFMT_NOGENSEARCH, AVFMT_NO_BYTE_SEEK, AVFMT_SEEK_TO_PTS.
+     * Can use flags: AVFMT_NOFILE, AVFMT_NEEDNUMBER, AVFMT_EXPERIMENTAL,
+     * AVFMT_SHOW_IDS, AVFMT_NOTIMESTAMPS, AVFMT_GENERIC_INDEX,
+     * AVFMT_TS_DISCONT, AVFMT_NOBINSEARCH, AVFMT_NOGENSEARCH,
+     * AVFMT_NO_BYTE_SEEK, AVFMT_SEEK_TO_PTS.
      */
     public native int flags(); public native AVInputFormat flags(int setter);
 

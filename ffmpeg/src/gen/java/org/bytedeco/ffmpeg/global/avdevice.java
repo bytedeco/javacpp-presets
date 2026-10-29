@@ -494,15 +494,13 @@ public static final int
  * Libavdevice version macros
  */
 
-public static final int LIBAVDEVICE_VERSION_MAJOR =  62;
+public static final int LIBAVDEVICE_VERSION_MAJOR =  63;
 
 /**
  * FF_API_* defines may be placed below to indicate public API that will be
  * dropped at a future version bump. The defines themselves are not part of
  * the public API and may change, break or disappear at any time.
  */
-
-public static final boolean FF_API_ALSA_CHANNELS = (LIBAVDEVICE_VERSION_MAJOR < 63);
 
 // #endif /* AVDEVICE_VERSION_MAJOR_H */
 
@@ -540,7 +538,7 @@ public static final boolean FF_API_ALSA_CHANNELS = (LIBAVDEVICE_VERSION_MAJOR < 
 
 // #include "version_major.h"
 
-public static final int LIBAVDEVICE_VERSION_MINOR =   3;
+public static final int LIBAVDEVICE_VERSION_MINOR =   1;
 public static final int LIBAVDEVICE_VERSION_MICRO = 102;
 
 public static native @MemberGetter int LIBAVDEVICE_VERSION_INT();

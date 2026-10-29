@@ -37,8 +37,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.ffmpeg.swresample",
     global = "org.bytedeco.ffmpeg.global.swresample",
     value = {
-        @Platform(cinclude = {"<libswresample/swresample.h>", "<libswresample/version_major.h>", "<libswresample/version.h>"}, link = "swresample@.6"),
-        @Platform(value = "windows", preload = "swresample-6")
+        @Platform(cinclude = {"<libswresample/swresample.h>", "<libswresample/version_major.h>", "<libswresample/version.h>"}, link = "swresample@.7"),
+        @Platform(value = "windows", preload = "swresample-7")
     }
 )
 public class swresample implements InfoMapper {

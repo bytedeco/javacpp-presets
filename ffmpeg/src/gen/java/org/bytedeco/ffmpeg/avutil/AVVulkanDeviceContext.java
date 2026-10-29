@@ -102,48 +102,6 @@ public class AVVulkanDeviceContext extends Pointer {
     public native @Cast("const char*const*") PointerPointer enabled_dev_extensions(); public native AVVulkanDeviceContext enabled_dev_extensions(@Cast("const char*const*") PointerPointer setter);
     public native int nb_enabled_dev_extensions(); public native AVVulkanDeviceContext nb_enabled_dev_extensions(int setter);
 
-// #if FF_API_VULKAN_FIXED_QUEUES
-    /**
-     * Queue family index for graphics operations, and the number of queues
-     * enabled for it. If unavailable, will be set to -1. Not required.
-     * av_hwdevice_create() will attempt to find a dedicated queue for each
-     * queue family, or pick the one with the least unrelated flags set.
-     * Queue indices here may overlap if a queue has to share capabilities.
-     */
-    public native @Deprecated int queue_family_index(); public native AVVulkanDeviceContext queue_family_index(int setter);
-    public native @Deprecated int nb_graphics_queues(); public native AVVulkanDeviceContext nb_graphics_queues(int setter);
-
-    /**
-     * Queue family index for transfer operations and the number of queues
-     * enabled. Required.
-     */
-    public native @Deprecated int queue_family_tx_index(); public native AVVulkanDeviceContext queue_family_tx_index(int setter);
-    public native @Deprecated int nb_tx_queues(); public native AVVulkanDeviceContext nb_tx_queues(int setter);
-
-    /**
-     * Queue family index for compute operations and the number of queues
-     * enabled. Required.
-     */
-    public native @Deprecated int queue_family_comp_index(); public native AVVulkanDeviceContext queue_family_comp_index(int setter);
-    public native @Deprecated int nb_comp_queues(); public native AVVulkanDeviceContext nb_comp_queues(int setter);
-
-    /**
-     * Queue family index for video encode ops, and the amount of queues enabled.
-     * If the device doesn't support such, queue_family_encode_index will be -1.
-     * Not required.
-     */
-    public native @Deprecated int queue_family_encode_index(); public native AVVulkanDeviceContext queue_family_encode_index(int setter);
-    public native @Deprecated int nb_encode_queues(); public native AVVulkanDeviceContext nb_encode_queues(int setter);
-
-    /**
-     * Queue family index for video decode ops, and the amount of queues enabled.
-     * If the device doesn't support such, queue_family_decode_index will be -1.
-     * Not required.
-     */
-    public native @Deprecated int queue_family_decode_index(); public native AVVulkanDeviceContext queue_family_decode_index(int setter);
-    public native @Deprecated int nb_decode_queues(); public native AVVulkanDeviceContext nb_decode_queues(int setter);
-// #endif
-
 // #if FF_API_VULKAN_SYNC_QUEUES
     /**
      * Locks a queue, preventing other threads from submitting any command
@@ -190,4 +148,7 @@ public class AVVulkanDeviceContext extends Pointer {
     public native @ByRef AVVulkanDeviceQueueFamily qf(int i); public native AVVulkanDeviceContext qf(int i, AVVulkanDeviceQueueFamily setter);
     @MemberGetter public native AVVulkanDeviceQueueFamily qf();
     public native int nb_qf(); public native AVVulkanDeviceContext nb_qf(int setter);
+
+    /* Queue creation flags, for vkGetDeviceQueue2. */
+    public native @Cast("VkDeviceQueueCreateFlags") int queue_flags(); public native AVVulkanDeviceContext queue_flags(int setter);
 }

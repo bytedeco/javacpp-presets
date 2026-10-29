@@ -58,17 +58,17 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<libavutil/sha.h>", "<libavutil/sha512.h>", "<libavutil/xtea.h>", "<libavutil/avstring.h>", "<libavutil/bprint.h>", "<libavutil/common.h>",
             "<libavutil/display.h>", "<libavutil/eval.h>", "<libavutil/encryption_info.h>", "<libavutil/file.h>", "<libavutil/hash.h>",
             "<libavutil/hdr_dynamic_metadata.h>", "<libavutil/intfloat.h>", "<libavutil/intreadwrite.h>", "<libavutil/mastering_display_metadata.h>",
-            "<libavutil/murmur3.h>", "<libavutil/parseutils.h>", "<libavutil/pixelutils.h>", "<libavutil/random_seed.h>", "<libavutil/replaygain.h>",
+            "<libavutil/murmur3.h>", "<libavutil/parseutils.h>", "<libavutil/pixelutils.h>", "<libavutil/random_seed.h>", "<libavutil/raw_color_params.h>", "<libavutil/replaygain.h>",
             "<libavutil/spherical.h>", "<libavutil/threadmessage.h>", "<libavutil/timecode.h>", "<libavutil/timestamp.h>", "<libavutil/tree.h>",
             "<libavutil/container_fifo.h>", "<libavutil/tx.h>", "<libavutil/version.h>", "<libavutil/macros.h>", "log_callback.h"},
             includepath = {"/usr/local/include/ffmpeg/", "/opt/local/include/ffmpeg/", "/usr/include/ffmpeg/"},
-            link = "avutil@.60", compiler = {"default", "nodeprecated"}),
+            link = "avutil@.61", compiler = {"default", "nodeprecated"}),
         @Platform(value = "linux-x86", preload = {"va@.2", "drm@.2", "va-drm@.2"}, preloadpath = {"/usr/lib32/", "/usr/lib/"}),
         @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
         @Platform(value = "macosx", preload = {"atomic@.1"},
                                     preloadpath = {"/usr/local/lib/gcc/13/", "/usr/local/lib/gcc/12/", "/usr/local/lib/gcc/11/", "/usr/local/lib/gcc/10/", "/usr/local/lib/gcc/9/",
                                                    "/usr/local/lib/gcc/8/", "/usr/local/lib/gcc/7/", "/usr/local/lib/gcc/6/", "/usr/local/lib/gcc/5/"}),
-        @Platform(value = "windows", includepath = {"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload = {"libwinpthread-1", "avutil-60"}),
+        @Platform(value = "windows", includepath = {"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload = {"libwinpthread-1", "avutil-61"}),
         @Platform(extension = "-gpl")
     }
 )
@@ -101,9 +101,9 @@ public class avutil implements InfoMapper {
                              "IDirect3DDeviceManager9", "IDirect3DSurface9", "IDirectXVideoDecoder", "mfxFrameSurface1", "mfxSession",
                              "VAConfigID", "VASurfaceID", "VASurfaceAttrib", "VADisplay", "VdpDevice", "VdpGetProcAddress").cast().pointerTypes("Pointer"))
                .put(new Info("VkInstance", "VkPhysicalDevice", "VkDevice", "VkImage", "VkDeviceMemory", "VkSemaphore",
-                             "PFN_vkGetInstanceProcAddr").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
-               .put(new Info("VkFormat", "VkImageTiling", "VkImageLayout", "VkImageCreateFlags", "VkImageUsageFlagBits",
-                             "VkMemoryPropertyFlagBits", "VkAccessFlagBits", "VkQueueFlagBits", "VkVideoCodecOperationFlagBitsKHR")
+                             "VkAccessFlagBits2", "PFN_vkGetInstanceProcAddr").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
+               .put(new Info("VkFormat", "VkImageTiling", "VkImageLayout", "VkImageCreateFlags", "VkImageUsageFlagBits", "VkDeviceQueueCreateFlags",
+                             "VkMemoryPropertyFlagBits", "VkQueueFlagBits", "VkVideoCodecOperationFlagBitsKHR")
                              .cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("VkAllocationCallbacks", "VkPhysicalDeviceFeatures2", "AVVkFrameInternal").cast().pointerTypes("Pointer"))
                // "const char * const *" members get no setter by default, but applications supplying their own

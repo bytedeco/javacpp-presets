@@ -64,7 +64,6 @@ public class avfilter extends org.bytedeco.ffmpeg.presets.avfilter {
 
 // #include <stddef.h>
 
-// #include "libavutil/attributes.h"
 // #include "libavutil/avutil.h"
 // #include "libavutil/buffer.h"
 // #include "libavutil/dict.h"
@@ -1051,19 +1050,19 @@ public static final int
     /**
      * Do not check for format changes.
      */
-    AV_BUFFERSRC_FLAG_NO_CHECK_FORMAT = 1,
+    AV_BUFFERSRC_FLAG_NO_CHECK_FORMAT = 1 << 0,
 
     /**
      * Immediately push the frame to the output.
      */
-    AV_BUFFERSRC_FLAG_PUSH = 4,
+    AV_BUFFERSRC_FLAG_PUSH = 1 << 2,
 
     /**
      * Keep a reference to the frame.
      * If the frame if reference-counted, create a new reference; otherwise
      * copy the frame data.
      */
-    AV_BUFFERSRC_FLAG_KEEP_REF = 8;
+    AV_BUFFERSRC_FLAG_KEEP_REF = 1 << 3;
 
 /**
  * Get the number of failed requests.
@@ -1206,17 +1205,13 @@ public static final int
  * Libavfilter version macros
  */
 
-public static final int LIBAVFILTER_VERSION_MAJOR =  11;
+public static final int LIBAVFILTER_VERSION_MAJOR =  12;
 
 /**
  * FF_API_* defines may be placed below to indicate public API that will be
  * dropped at a future version bump. The defines themselves are not part of
  * the public API and may change, break or disappear at any time.
  */
-
-public static final boolean FF_API_BUFFERSINK_OPTS = (LIBAVFILTER_VERSION_MAJOR < 12);
-public static final boolean FF_API_CONTEXT_PUBLIC =  (LIBAVFILTER_VERSION_MAJOR < 12);
-public static final boolean FF_API_LIBNPP_SUPPORT =  (LIBAVFILTER_VERSION_MAJOR < 12);
 
 // #endif /* AVFILTER_VERSION_MAJOR_H */
 
@@ -1256,7 +1251,7 @@ public static final boolean FF_API_LIBNPP_SUPPORT =  (LIBAVFILTER_VERSION_MAJOR 
 
 // #include "version_major.h"
 
-public static final int LIBAVFILTER_VERSION_MINOR =  14;
+public static final int LIBAVFILTER_VERSION_MINOR =   1;
 public static final int LIBAVFILTER_VERSION_MICRO = 102;
 
 

@@ -1,9 +1,6 @@
-diff --git a/libavutil/vulkan.c b/libavutil/vulkan.c
-index 67b9526255..e3c0c4c24a 100644
---- a/libavutil/vulkan.c
-+++ b/libavutil/vulkan.c
-@@ -605,6 +605,9 @@ int ff_vk_exec_add_dep_frame(FFVulkanContext *s, FFVkExecContext *e, AVFrame *f,
-     VkImageLayout *layout_dst;
+--- ffmpeg-9.0/libavutil/vulkan.c	2026-10-24 16:56:25.192600500 -0600
++++ ffmpeg-9.0-patch/libavutil/vulkan.c	2026-10-24 16:56:25.458921300 -0600
+@@ -809,6 +809,9 @@
      uint32_t *queue_family_dst;
      VkAccessFlagBits *access_dst;
  
@@ -12,3 +9,4 @@ index 67b9526255..e3c0c4c24a 100644
 +
      AVHWFramesContext *hwfc = (AVHWFramesContext *)f->hw_frames_ctx->data;
      AVVulkanFramesContext *vkfc = hwfc->hwctx;
+     AVVkFrame *vkf = (AVVkFrame *)f->data[0];

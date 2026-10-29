@@ -1,5 +1,6 @@
 
  * Add presets for the HDF5 filter plugins (zstd, lz4, jpeg, bzip2, bshuf, blosc, blosc2, lzf, zfp, bitgroom, bitround, granular bitround) from `hdf5_plugins`
+ * Trust the system CA certificates and forward `tls_verify` and `ca_file` to nested HTTP, HLS, and DASH requests in presets for FFmpeg ([pull #1819](https://github.com/bytedeco/javacpp-presets/pull/1819))
  * Map `AVVulkanDeviceContext`, `AVVulkanFramesContext`, and `AVVkFrame` from `hwcontext_vulkan.h` and enable Vulkan on Android in presets for FFmpeg ([pull #1818](https://github.com/bytedeco/javacpp-presets/pull/1818))
  * Fix issues with `hid_t` and `hdf5_java` in presets for HDF5 ([pull #1814](https://github.com/bytedeco/javacpp-presets/pull/1814))
  * Bundle missing `cudnn_ext` and `cudnn_engines_tensor_ir` libraries for `cuda-redist-cudnn` artifact ([issue #1805](https://github.com/bytedeco/javacpp-presets/issues/1805))
@@ -7,7 +8,7 @@
  * Make ONNX Runtime’s DNNL and OpenVINO dependencies optional ([pull #1802](https://github.com/bytedeco/javacpp-presets/pull/1802))
  * Map full C API of OpenVINO ([pull #1801](https://github.com/bytedeco/javacpp-presets/pull/1801))
  * Enable OpenCL acceleration for FFmpeg ([issue #1800](https://github.com/bytedeco/javacpp-presets/pull/1800))
- * Upgrade presets for HDF5 2.2.0, PyTorch 2.14.0, CUDA 13.4.2, cuDNN 9.26.0.51, NCCL 2.31.2, TensorRT 11.3.0.99
+ * Upgrade presets for FFmpeg 9.0.2, HDF5 2.2.0, PyTorch 2.14.0, CUDA 13.4.2, cuDNN 9.26.0.51, NCCL 2.31.2, TensorRT 11.3.0.99
 
 ### August 10, 2026 version 1.5.14
  * Include missing `refcount.h` header file in presets for CPython ([issue #1798](https://github.com/bytedeco/javacpp-presets/issues/1798))
