@@ -340,29 +340,6 @@ public static final int
  */
 @NoException public static native Pointer av_x_if_null(@Const Pointer p, @Const Pointer x);
 
-// #if FF_API_OPT_INT_LIST
-/**
- * Compute the length of an integer list.
- *
- * @param elsize  size in bytes of each list element (only 1, 2, 4 or 8)
- * @param term    list terminator (usually 0 or -1)
- * @param list    pointer to the list
- * @return  length of the list, in elements, not counting the terminator
- */
-@NoException public static native @Cast("unsigned") @Deprecated int av_int_list_length_for_size(@Cast("unsigned") int elsize,
-                                     @Const Pointer list, @Cast("uint64_t") long term);
-
-/**
- * Compute the length of an integer list.
- *
- * @param term  list terminator (usually 0 or -1)
- * @param list  pointer to the list
- * @return  length of the list, in elements, not counting the terminator
- */
-// #define av_int_list_length(list, term)
-//     av_int_list_length_for_size(sizeof(*(list)), list, term)
-// #endif
-
 /**
  * Return the fractional representation of the internal time base.
  */
@@ -3834,10 +3811,49 @@ public static final int
     AV_FRAME_DATA_3D_REFERENCE_DISPLAYS = 30,
 
     /**
-     * Extensible image file format metadata. The payload is a buffer containing
-     * EXIF metadata, starting with either 49 49 2a 00, or 4d 4d 00 2a.
+     * Exchangeable image file format metadata. The payload is a buffer containing
+     * EXIF metadata, starting with either 49 49 2a 00, or 4d 4d 00 2a. These four
+     * bytes signify the endianness, and occur as the first part of the TIFF header.
      */
-     AV_FRAME_DATA_EXIF = 31;
+    AV_FRAME_DATA_EXIF = 31,
+
+    /**
+     * HDR dynamic metadata associated with a video frame. The payload is
+     * an AVDynamicHDRSmpte2094App5 type and contains information for color
+     * volume transform as specified in the SMPTE 2094-50 standard.
+     */
+    AV_FRAME_DATA_DYNAMIC_HDR_SMPTE_2094_APP5 = 32,
+
+    /**
+     * IAMF Mix Gain Parameter Data associated with the audio frame. This metadata
+     * is in the form of the AVIAMFParamDefinition struct and contains information
+     * defined in sections 3.6.1 and 3.8.1 of the Immersive Audio Model and
+     * Formats standard.
+     */
+    AV_FRAME_DATA_IAMF_MIX_GAIN_PARAM = 33,
+
+    /**
+    * IAMF Demixing Info Parameter Data associated with the audio frame. This
+    * metadata is in the form of the AVIAMFParamDefinition struct and contains
+    * information defined in sections 3.6.1 and 3.8.2 of the Immersive Audio Model
+    * and Formats standard.
+    */
+    AV_FRAME_DATA_IAMF_DEMIXING_INFO_PARAM = 34,
+
+    /**
+    * IAMF Recon Gain Info Parameter Data associated with the audio frame. This
+    * metadata is in the form of the AVIAMFParamDefinition struct and contains
+    * information defined in sections 3.6.1 and 3.8.3 of the Immersive Audio Model
+    * and Formats standard.
+    */
+    AV_FRAME_DATA_IAMF_RECON_GAIN_INFO_PARAM = 35,
+
+    /**
+     * Color information from a RAW camera codecs, needed to correctly process
+     * the video data. The payload is an AVRawColorParams struct defined in
+     * libavutil/raw_color_params.h.
+     */
+    AV_FRAME_DATA_RAW_COLOR_PARAMS = 36;
 
 /** enum AVActiveFormatDescription */
 public static final int
@@ -5488,6 +5504,8 @@ public static final int AV_CPU_FLAG_ARM_CRC =      (1 <<13);
 public static final int AV_CPU_FLAG_SME2 =         (1 <<14);
 public static final int AV_CPU_FLAG_SME_I16I64 =   (1 <<15);
 public static final int AV_CPU_FLAG_SETEND =       (1 <<16);
+public static final int AV_CPU_FLAG_PMULL =        (1 <<17);
+public static final int AV_CPU_FLAG_EOR3 =         (1 <<18);
 
 public static final int AV_CPU_FLAG_MMI =          (1 << 0);
 public static final int AV_CPU_FLAG_MSA =          (1 << 1);
@@ -5499,12 +5517,6 @@ public static final int AV_CPU_FLAG_LASX =         (1 << 1);
 // RISC-V extensions
 /** I (full GPR bank) */
 public static final int AV_CPU_FLAG_RVI =          (1 << 0);
-// #if FF_API_RISCV_FD_ZBA
-/** F (single precision FP) */
-public static final int AV_CPU_FLAG_RVF =          (1 << 1);
-/** D (double precision FP) */
-public static final int AV_CPU_FLAG_RVD =          (1 << 2);
-// #endif
 /** Vectors of 8/16/32-bit int's */
 public static final int AV_CPU_FLAG_RVV_I32 =      (1 << 3);
 /** Vectors of float's */
@@ -5515,10 +5527,6 @@ public static final int AV_CPU_FLAG_RVV_I64 =      (1 << 5);
 public static final int AV_CPU_FLAG_RVV_F64 =      (1 << 6);
 /** Basic bit-manipulations */
 public static final int AV_CPU_FLAG_RVB_BASIC =    (1 << 7);
-// #if FF_API_RISCV_FD_ZBA
-/** Address bit-manipulations */
-public static final int AV_CPU_FLAG_RVB_ADDR =     (1 << 8);
-// #endif
 /** Vector basic bit-manipulations */
 public static final int AV_CPU_FLAG_RV_ZVBB =      (1 << 9);
 /** Fast misaligned accesses */
@@ -5882,7 +5890,6 @@ public static final int AV_DICT_DEDUP =         128;
  */
 
 // #include "rational.h"
-// #include "avutil.h"
 // #include "channel_layout.h"
 // #include "dict.h"
 // #include "log.h"
@@ -6663,24 +6670,6 @@ public static final int
 @NoException public static native int av_opt_set_dict_val(Pointer obj, @Cast("const char*") BytePointer name, @Const AVDictionary val, int search_flags);
 @NoException public static native int av_opt_set_dict_val(Pointer obj, String name, @Const AVDictionary val, int search_flags);
 
-// #if FF_API_OPT_INT_LIST
-/**
- * Set a binary option to an integer list.
- *
- * @param obj    AVClass object to set options on
- * @param name   name of the binary option
- * @param val    pointer to an integer list (must have the correct type with
- *               regard to the contents of the list)
- * @param term   list terminator (usually 0 or -1)
- * @param flags  search flags
- */
-// #define av_opt_set_int_list(obj, name, val, term, flags)
-//     (av_int_list_length(val, term) > INT_MAX / sizeof(*(val)) ?
-//      AVERROR(EINVAL) :
-//      av_opt_set_bin(obj, name, (const uint8_t *)(val),
-//                     av_int_list_length(val, term) * sizeof(*(val)), flags))
-// #endif
-
 /**
  * Add, replace, or remove elements for an array option. Which of these
  * operations is performed depends on the values of val and search_flags.
@@ -6930,21 +6919,6 @@ public static final int
 /**
  * \}
  */
-
-// #if FF_API_OPT_PTR
-/**
- * Gets a pointer to the requested field in a struct.
- * This function allows accessing a struct even when its fields are moved or
- * renamed since the application making the access has been compiled,
- *
- * @return a pointer to the field, it can be cast to the correct type and read
- *          or written to.
- *
- * @deprecated direct access to AVOption-exported fields is not supported
- */
-@NoException public static native @Deprecated Pointer av_opt_ptr(@Const AVClass avclass, Pointer obj, @Cast("const char*") BytePointer name);
-@NoException public static native @Deprecated Pointer av_opt_ptr(@Const AVClass avclass, Pointer obj, String name);
-// #endif
 
 /**
  * Check if given option is set to its default value.
@@ -8358,10 +8332,9 @@ public static final int AV_STEREO3D_FLAG_INVERT =     (1 << 0);
 
 // Parsed from <libavutil/ffversion.h>
 
-/* Automatically generated by version.sh, do not manually edit! */
 // #ifndef AVUTIL_FFVERSION_H
 // #define AVUTIL_FFVERSION_H
-public static final String FFMPEG_VERSION = "8.1.2";
+public static final String FFMPEG_VERSION = "9.0.2";
 // #endif /* AVUTIL_FFVERSION_H */
 
 
@@ -11992,13 +11965,6 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
  */
 @NoException public static native @Cast("unsigned") @Const int av_zero_extend_c(@Cast("unsigned") int a, @Cast("unsigned") int p);
 
-// #if FF_API_MOD_UINTP2
-// #ifndef av_mod_uintp2
-// #   define av_mod_uintp2 av_mod_uintp2_c
-// #endif
-@NoException public static native @Cast("unsigned") @Deprecated @Const int av_mod_uintp2_c(@Cast("unsigned") int a, @Cast("unsigned") int p);
-// #endif
-
 /**
  * Add two signed 32-bit values with saturation.
  *
@@ -13046,6 +13012,69 @@ public static final int AV_HDR_PLUS_MAX_PAYLOAD_SIZE = 907;
 @NoException public static native int av_dynamic_hdr_plus_to_t35(@Const AVDynamicHDRPlus s, @Cast("uint8_t**") @ByPtrPtr BytePointer data, @Cast("size_t*") SizeTPointer size);
 @NoException public static native int av_dynamic_hdr_plus_to_t35(@Const AVDynamicHDRPlus s, @Cast("uint8_t**") @ByPtrPtr ByteBuffer data, @Cast("size_t*") SizeTPointer size);
 @NoException public static native int av_dynamic_hdr_plus_to_t35(@Const AVDynamicHDRPlus s, @Cast("uint8_t**") @ByPtrPtr byte[] data, @Cast("size_t*") SizeTPointer size);
+// Targeting ../avutil/AVDynamicHDRSmpte2094App5.java
+
+
+
+/**
+ * Allocate an AVDynamicHDRSmpte2094App5 structure and set its fields to
+ * default values. The resulting struct can be freed using av_freep().
+ *
+ * @return An AVDynamicHDRSmpte2094App5 filled with default values or NULL
+ *         on failure.
+ */
+@NoException public static native AVDynamicHDRSmpte2094App5 av_dynamic_hdr_smpte2094_app5_alloc(@Cast("size_t*") SizeTPointer size);
+
+/**
+ * Allocate a complete AVDynamicHDRSmpte2094App5 and add it to the frame.
+ *
+ * @param frame The frame which side data is added to.
+ *
+ * @return The AVDynamicHDRSmpte2094App5 structure to be filled by caller or
+ *         NULL on failure.
+ */
+@NoException public static native AVDynamicHDRSmpte2094App5 av_dynamic_hdr_smpte2094_app5_create_side_data(AVFrame frame);
+
+/**
+ * Parse the user data formatted as ITU-T T.35 message to AVDynamicHDRSmpte2094App5.
+ *
+ * @param s A pointer containing the decoded AVDynamicHDRSmpte2094App5 structure.
+ * @param data The byte array containing the raw ITU-T T.35 data.
+ * @param size Size of the data array in bytes.
+ *
+ * @return >= 0 on success. Otherwise, returns the appropriate AVERROR.
+ */
+@NoException public static native int av_dynamic_hdr_smpte2094_app5_from_t35(AVDynamicHDRSmpte2094App5 s, @Cast("const uint8_t*") BytePointer data,
+                                           @Cast("size_t") long size);
+@NoException public static native int av_dynamic_hdr_smpte2094_app5_from_t35(AVDynamicHDRSmpte2094App5 s, @Cast("const uint8_t*") ByteBuffer data,
+                                           @Cast("size_t") long size);
+@NoException public static native int av_dynamic_hdr_smpte2094_app5_from_t35(AVDynamicHDRSmpte2094App5 s, @Cast("const uint8_t*") byte[] data,
+                                           @Cast("size_t") long size);
+
+/**
+ * Serialize dynamic SMPTE-2094-50 metadata to a ITU-T T.35 message. Excluding
+ * the country_code, provider_code and provider_oriented_code.
+ *
+ * @param s A pointer containing the AVDynamicHDRSmpte2094App5 data.
+ * @param data [in,out] A pointer to pointer to a byte buffer to be filled with
+ * the serialized metadata. If *data is NULL, a buffer be will be allocated and
+ * a pointer to it stored in its place. The caller assumes ownership of the
+ * buffer. May be NULL, in which case the function will only store the required
+ * buffer size in *size.
+ * @param size [in,out] A pointer to a size to be set to the returned buffer's
+ * size. If *data is not NULL, *size must contain the size of the input buffer.
+ * May be NULL only if *data is NULL.
+ *
+ * @return >= 0 on success. Otherwise, returns the appropriate AVERROR.
+ */
+@NoException public static native int av_dynamic_hdr_smpte2094_app5_to_t35(@Const AVDynamicHDRSmpte2094App5 s, @Cast("uint8_t**") PointerPointer data,
+                                         @Cast("size_t*") SizeTPointer size);
+@NoException public static native int av_dynamic_hdr_smpte2094_app5_to_t35(@Const AVDynamicHDRSmpte2094App5 s, @Cast("uint8_t**") @ByPtrPtr BytePointer data,
+                                         @Cast("size_t*") SizeTPointer size);
+@NoException public static native int av_dynamic_hdr_smpte2094_app5_to_t35(@Const AVDynamicHDRSmpte2094App5 s, @Cast("uint8_t**") @ByPtrPtr ByteBuffer data,
+                                         @Cast("size_t*") SizeTPointer size);
+@NoException public static native int av_dynamic_hdr_smpte2094_app5_to_t35(@Const AVDynamicHDRSmpte2094App5 s, @Cast("uint8_t**") @ByPtrPtr byte[] data,
+                                         @Cast("size_t*") SizeTPointer size);
 
 // #endif /* AVUTIL_HDR_DYNAMIC_METADATA_H */
 
@@ -13301,13 +13330,13 @@ public static final int AV_HDR_PLUS_MAX_PAYLOAD_SIZE = 907;
 // #       define AV_WL64(p, v) AV_WN64(p, v)
 // #   elif !defined(AV_WN64) &&  defined(AV_WL64)
 // #       define AV_WN64(p, v) AV_WL64(p, v)
-// Targeting ../avutil/unaligned_64.java
+// Targeting ../avutil/u005Cunaligned_64.java
 
 
-// Targeting ../avutil/unaligned_32.java
+// Targeting ../avutil/u005Cunaligned_32.java
 
 
-// Targeting ../avutil/unaligned_16.java
+// Targeting ../avutil/u005Cunaligned_16.java
 
 
 
@@ -14322,6 +14351,72 @@ public static final int AV_HDR_PLUS_MAX_PAYLOAD_SIZE = 907;
  */
 
 // #endif /* AVUTIL_RANDOM_SEED_H */
+
+
+// Parsed from <libavutil/raw_color_params.h>
+
+/*
+ * Copyright (c) 2026 Lynne <dev@lynne.ee>
+ *
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+// #ifndef AVUTIL_RAW_COLOR_PARAMS_H
+// #define AVUTIL_RAW_COLOR_PARAMS_H
+
+// #include <stddef.h>
+// #include <stdint.h>
+
+// #include "frame.h"
+// #include "rational.h"
+
+/** enum AVRawColorParamsType */
+public static final int
+    AV_RAW_COLOR_PARAMS_NONE = 0,
+
+    /**
+     * The union is valid when interpreted as AVProResRawColorParams
+     * (codec.prores_raw).
+     */
+    AV_RAW_COLOR_PARAMS_PRORES_RAW = 1;
+// Targeting ../avutil/AVProResRawColorParams.java
+
+
+// Targeting ../avutil/AVRawColorParams.java
+
+
+
+/**
+ * Allocate an AVRawColorParams structure and zero-initialize it.
+ *
+ * @param size if non-NULL, set to sizeof(AVRawColorParams)
+ * @return the newly allocated struct or NULL on failure
+ */
+@NoException public static native AVRawColorParams av_raw_color_params_alloc(@Cast("size_t*") SizeTPointer size);
+
+/**
+ * Allocate and add an AVRawColorParams structure to an existing AVFrame as
+ * AV_FRAME_DATA_RAW_COLOR_PARAMS side data.
+ *
+ * @return the newly allocated struct, or NULL on failure
+ */
+@NoException public static native AVRawColorParams av_raw_color_params_create_side_data(AVFrame frame);
+
+// #endif /* AVUTIL_RAW_COLOR_PARAMS_H */
 
 
 // Parsed from <libavutil/replaygain.h>
@@ -15451,8 +15546,8 @@ public static final long
  * \{
  */
 
-public static final int LIBAVUTIL_VERSION_MAJOR =  60;
-public static final int LIBAVUTIL_VERSION_MINOR =  26;
+public static final int LIBAVUTIL_VERSION_MAJOR =  61;
+public static final int LIBAVUTIL_VERSION_MINOR =   1;
 public static final int LIBAVUTIL_VERSION_MICRO = 102;
 
 public static native @MemberGetter int LIBAVUTIL_VERSION_INT();
@@ -15478,14 +15573,9 @@ public static final String LIBAVUTIL_IDENT = LIBAVUTIL_IDENT();
  * \{
  */
 
-public static final boolean FF_API_MOD_UINTP2 =               (LIBAVUTIL_VERSION_MAJOR < 61);
-public static final boolean FF_API_RISCV_FD_ZBA =             (LIBAVUTIL_VERSION_MAJOR < 61);
-public static final boolean FF_API_VULKAN_FIXED_QUEUES =      (LIBAVUTIL_VERSION_MAJOR < 61);
-public static final boolean FF_API_OPT_INT_LIST =             (LIBAVUTIL_VERSION_MAJOR < 61);
-public static final boolean FF_API_OPT_PTR =                  (LIBAVUTIL_VERSION_MAJOR < 61);
-public static final boolean FF_API_CPU_FLAG_FORCE =           (LIBAVUTIL_VERSION_MAJOR < 61);
-public static final boolean FF_API_DOVI_L11_INVALID_PROPS =   (LIBAVUTIL_VERSION_MAJOR < 61);
-public static final boolean FF_API_ASSERT_FPU =               (LIBAVUTIL_VERSION_MAJOR < 61);
+public static final boolean FF_API_CPU_FLAG_FORCE =           (LIBAVUTIL_VERSION_MAJOR < 62);
+public static final boolean FF_API_DOVI_L11_INVALID_PROPS =   (LIBAVUTIL_VERSION_MAJOR < 62);
+public static final boolean FF_API_ASSERT_FPU =               (LIBAVUTIL_VERSION_MAJOR < 62);
 public static final boolean FF_API_VULKAN_SYNC_QUEUES =       (LIBAVUTIL_VERSION_MAJOR < 62);
 
 /**

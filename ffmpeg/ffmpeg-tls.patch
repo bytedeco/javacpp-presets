@@ -1,0 +1,101 @@
+diff --git a/libavformat/aviobuf.c b/libavformat/aviobuf.c
+index cc71638..9cfae12 100644
+--- a/libavformat/aviobuf.c
++++ b/libavformat/aviobuf.c
+@@ -994,7 +994,8 @@ void ffio_write_lines(AVIOContext *s, const unsigned char *buf, int size,
+ int ffio_copy_url_options(AVIOContext* pb, AVDictionary** avio_opts)
+ {
+     const char *opts[] = {
+-        "headers", "user_agent", "cookies", "http_proxy", "referer", "rw_timeout", "icy", NULL };
++        "headers", "user_agent", "cookies", "http_proxy", "referer", "rw_timeout", "icy",
++        "tls_verify", "ca_file", NULL };
+     const char **opt = opts;
+     uint8_t *buf = NULL;
+     int ret = 0;
+diff --git a/libavformat/dashdec.c b/libavformat/dashdec.c
+index 740ac6b..0683a78 100644
+--- a/libavformat/dashdec.c
++++ b/libavformat/dashdec.c
+@@ -2537,6 +2537,8 @@ static int dash_probe(const AVProbeData *p)
+ #define OFFSET(x) offsetof(DASHContext, x)
+ #define FLAGS AV_OPT_FLAG_DECODING_PARAM
+ static const AVOption dash_options[] = {
++    {"protocol_opts", "Set options for nested protocol requests",
++        OFFSET(avio_opts), AV_OPT_TYPE_DICT, {.str = NULL}, 0, 0, FLAGS},
+     {"allowed_extensions", "List of file extensions that dash is allowed to access",
+         OFFSET(allowed_extensions), AV_OPT_TYPE_STRING,
+         {.str = "aac,m4a,m4s,m4v,mov,mp4,webm,ts"},
+diff --git a/libavformat/hls.c b/libavformat/hls.c
+index 0e1a1ba..999628f 100644
+--- a/libavformat/hls.c
++++ b/libavformat/hls.c
+@@ -3063,6 +3063,8 @@ static const AVOption hls_options[] = {
+         OFFSET(http_seekable), AV_OPT_TYPE_BOOL, { .i64 = -1}, -1, 1, FLAGS},
+     {"seg_format_options", "Set options for segment demuxer",
+         OFFSET(seg_format_opts), AV_OPT_TYPE_DICT, {.str = NULL}, 0, 0, FLAGS},
++    {"protocol_opts", "Set options for nested protocol requests",
++        OFFSET(avio_opts), AV_OPT_TYPE_DICT, {.str = NULL}, 0, 0, FLAGS},
+     {"seg_max_retry", "Maximum number of times to reload a segment on error.",
+      OFFSET(seg_max_retry), AV_OPT_TYPE_INT, {.i64 = 0}, 0, INT_MAX, FLAGS},
+     {NULL}
+diff --git a/libavformat/http.c b/libavformat/http.c
+index 35f886f..777225f 100644
+--- a/libavformat/http.c
++++ b/libavformat/http.c
+@@ -84,6 +84,8 @@ typedef struct HTTPContext {
+     HTTPAuthState auth_state;
+     HTTPAuthState proxy_auth_state;
+     char *http_proxy;
++    char *ca_file;
++    int tls_verify;
+     char *headers;
+     char *mime_type;
+     char *http_version;
+@@ -169,6 +171,10 @@ static const AVOption http_options[] = {
+     { "seekable", "control seekability of connection", OFFSET(seekable), AV_OPT_TYPE_BOOL, { .i64 = -1 }, -1, 1, D },
+     { "chunked_post", "use chunked transfer-encoding for posts", OFFSET(chunked_post), AV_OPT_TYPE_BOOL, { .i64 = 1 }, 0, 1, E },
+     { "http_proxy", "set HTTP proxy to tunnel through", OFFSET(http_proxy), AV_OPT_TYPE_STRING, { .str = NULL }, 0, 0, D | E },
++    { "ca_file", "Certificate Authority database file", OFFSET(ca_file), AV_OPT_TYPE_STRING, { .str = NULL }, 0, 0, D | E },
++    { "cafile", "Certificate Authority database file", OFFSET(ca_file), AV_OPT_TYPE_STRING, { .str = NULL }, 0, 0, D | E },
++    { "tls_verify", "Verify the peer certificate", OFFSET(tls_verify), AV_OPT_TYPE_BOOL, { .i64 = 1 }, 0, 1, D | E },
++    { "verify", "Verify the peer certificate", OFFSET(tls_verify), AV_OPT_TYPE_BOOL, { .i64 = 1 }, 0, 1, D | E },
+     { "headers", "set custom HTTP headers, can override built in default headers", OFFSET(headers), AV_OPT_TYPE_STRING, { .str = NULL }, 0, 0, D | E },
+     { "content_type", "set a specific content type for the POST messages", OFFSET(content_type), AV_OPT_TYPE_STRING, { .str = NULL }, 0, 0, D | E },
+     { "user_agent", "override User-Agent header", OFFSET(user_agent), AV_OPT_TYPE_STRING, { .str = DEFAULT_USER_AGENT }, 0, 0, D },
+@@ -215,6 +221,14 @@ static int http_connect(URLContext *h, const char *path, const char *local_path,
+ static int http_read_header(URLContext *h);
+ static int http_shutdown(URLContext *h, int flags);
+ 
++static int http_tls_options(HTTPContext *s, AVDictionary **options)
++{
++    int ret = av_dict_set_int(options, "tls_verify", s->tls_verify, 0);
++    if (ret < 0)
++        return ret;
++    return av_dict_set(options, "ca_file", s->ca_file, 0);
++}
++
+ void ff_http_init_auth_state(URLContext *dest, const URLContext *src)
+ {
+     memcpy(&((HTTPContext *)dest->priv_data)->auth_state,
+@@ -272,6 +286,8 @@ static int http_open_cnx_internal(URLContext *h, AVDictionary **options)
+         use_proxy   = 0;
+         if (port < 0)
+             port = 443;
++        if ((err = http_tls_options(s, options)) < 0)
++            goto end;
+         /* pass http_proxy to underlying protocol */
+         if (s->http_proxy) {
+             err = av_dict_set(options, "http_proxy", s->http_proxy, 0);
+@@ -745,8 +761,11 @@ static int http_listen(URLContext *h, const char *uri, int flags,
+     int port;
+     av_url_split(proto, sizeof(proto), NULL, 0, hostname, sizeof(hostname), &port,
+                  NULL, 0, uri);
+-    if (!strcmp(proto, "https"))
++    if (!strcmp(proto, "https")) {
+         lower_proto = "tls";
++        if ((ret = http_tls_options(s, options)) < 0)
++            goto fail;
++    }
+     ff_url_join(lower_url, sizeof(lower_url), lower_proto, NULL, hostname, port,
+                 NULL);
+     if ((ret = av_dict_set_int(options, "listen", s->listen, 0)) < 0)

@@ -66,8 +66,8 @@ public class AVVkFrame extends Pointer {
     /**
      * Updated after every barrier. One per VkImage.
      */
-    public native @Cast("VkAccessFlagBits") int access(int i); public native AVVkFrame access(int i, int setter);
-    @MemberGetter public native @Cast("VkAccessFlagBits*") IntPointer access();
+    public native @Cast("VkAccessFlagBits2") long access(int i); public native AVVkFrame access(int i, long setter);
+    @MemberGetter public native @Cast("VkAccessFlagBits2*") LongPointer access();
     public native @Cast("VkImageLayout") int layout(int i); public native AVVkFrame layout(int i, int setter);
     @MemberGetter public native @Cast("VkImageLayout*") IntPointer layout();
 
@@ -90,11 +90,6 @@ public class AVVkFrame extends Pointer {
     @MemberGetter public native @Cast("uint64_t*") LongPointer sem_value();
 
     /**
-     * Internal data.
-     */
-    public native @Cast("AVVkFrameInternal*") Pointer internal(); public native AVVkFrame internal(Pointer setter);
-
-    /**
      * Describes the binding offset of each image to the VkDeviceMemory.
      * One per VkImage.
      */
@@ -108,4 +103,9 @@ public class AVVkFrame extends Pointer {
      */
     public native @Cast("uint32_t") int queue_family(int i); public native AVVkFrame queue_family(int i, int setter);
     @MemberGetter public native @Cast("uint32_t*") IntPointer queue_family();
+
+    /**
+     * Internal data. Not to be accessed by users in any way.
+     */
+    public native @Cast("AVVkFrameInternal*") Pointer internal(); public native AVVkFrame internal(Pointer setter);
 }

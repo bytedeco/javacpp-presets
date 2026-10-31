@@ -684,18 +684,20 @@ public static final int FF_MB_DECISION_RD =     2;
      */
     public native @ByRef AVChannelLayout ch_layout(); public native AVCodecContext ch_layout(AVChannelLayout setter);
 
-    /* The following data should not be initialized. */
     /**
      * Number of samples per channel in an audio frame.
      *
-     * - encoding: set by libavcodec in avcodec_open2(). Each submitted frame
+     * - encoding: may be set by the user before calling avcodec_open2(), and
+     *   libavcodec may then overwrite it if needed. Each submitted frame
      *   except the last must contain exactly frame_size samples per channel.
-     *   May be 0 when the codec has AV_CODEC_CAP_VARIABLE_FRAME_SIZE set, then the
+     *   May be 0 when the codec has AV_CODEC_CAP_VARIABLE_FRAME_SIZE set, except
+     *   when AV_CODEC_FLAG2_FIXED_FRAME_SIZE is requested, then the
      *   frame size is not restricted.
      * - decoding: may be set by some decoders to indicate constant frame size
      */
     public native int frame_size(); public native AVCodecContext frame_size(int setter);
 
+    /* The following data should not be initialized. */
     /**
      * number of bytes per packet if constant and known or 0
      * Used by some WAV based audio codecs.
@@ -1319,18 +1321,6 @@ public static final int FF_THREAD_SLICE =   2;
      * See AV_LEVEL_* in defs.h.
      */
      public native int level(); public native AVCodecContext level(int setter);
-
-// #if FF_API_CODEC_PROPS
-    /**
-     * Properties of the stream that gets decoded
-     * - encoding: unused
-     * - decoding: set by libavcodec
-     */
-    public native @Cast("unsigned") @Deprecated int properties(); public native AVCodecContext properties(int setter);
-public static final int FF_CODEC_PROPERTY_LOSSLESS =        0x00000001;
-public static final int FF_CODEC_PROPERTY_CLOSED_CAPTIONS = 0x00000002;
-public static final int FF_CODEC_PROPERTY_FILM_GRAIN =      0x00000004;
-// #endif
 
     /**
      * Skip loop filtering for selected frames.

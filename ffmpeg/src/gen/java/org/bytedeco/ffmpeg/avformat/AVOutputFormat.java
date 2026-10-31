@@ -57,10 +57,10 @@ public class AVOutputFormat extends Pointer {
     /** default subtitle codec */
     public native @Cast("AVCodecID") int subtitle_codec(); public native AVOutputFormat subtitle_codec(int setter);
     /**
-     * can use flags: AVFMT_NOFILE, AVFMT_NEEDNUMBER,
+     * can use flags: AVFMT_NOFILE, AVFMT_NEEDNUMBER, AVFMT_EXPERIMENTAL,
      * AVFMT_GLOBALHEADER, AVFMT_NOTIMESTAMPS, AVFMT_VARIABLE_FPS,
      * AVFMT_NODIMENSIONS, AVFMT_NOSTREAMS,
-     * AVFMT_TS_NONSTRICT, AVFMT_TS_NEGATIVE
+     * AVFMT_TS_NONSTRICT, AVFMT_TS_NEGATIVE, AVFMT_FIXED_FRAMESIZE
      */
     public native int flags(); public native AVOutputFormat flags(int setter);
 

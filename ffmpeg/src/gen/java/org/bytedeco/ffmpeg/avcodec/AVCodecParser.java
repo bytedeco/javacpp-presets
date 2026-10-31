@@ -33,60 +33,6 @@ public class AVCodecParser extends Pointer {
         return new AVCodecParser((Pointer)this).offsetAddress(i);
     }
 
-// #if FF_API_PARSER_CODECID
-    public native int codec_ids(int i); public native AVCodecParser codec_ids(int i, int setter);
-    @MemberGetter public native IntPointer codec_ids(); /* several codec IDs are permitted */
-// #else
-// #endif
-// #if FF_API_PARSER_PRIVATE
-    /*****************************************************************
-     * All fields below this line are not part of the public API. They
-     * may not be used outside of libavcodec and can be changed and
-     * removed at will.
-     * New public fields should be added right above.
-     *****************************************************************
-     */
-    public native @Deprecated int priv_data_size(); public native AVCodecParser priv_data_size(int setter);
-    public static class Parser_init_AVCodecParserContext extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Parser_init_AVCodecParserContext(Pointer p) { super(p); }
-        protected Parser_init_AVCodecParserContext() { allocate(); }
-        private native void allocate();
-        public native @Deprecated int call(AVCodecParserContext s);
-    }
-    public native Parser_init_AVCodecParserContext parser_init(); public native AVCodecParser parser_init(Parser_init_AVCodecParserContext setter);
-    /* This callback never returns an error, a negative value means that
-     * the frame start was in a previous packet. */
-    public static class Parser_parse_AVCodecParserContext_AVCodecContext_PointerPointer_IntPointer_BytePointer_int extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Parser_parse_AVCodecParserContext_AVCodecContext_PointerPointer_IntPointer_BytePointer_int(Pointer p) { super(p); }
-        protected Parser_parse_AVCodecParserContext_AVCodecContext_PointerPointer_IntPointer_BytePointer_int() { allocate(); }
-        private native void allocate();
-        public native @Deprecated int call(AVCodecParserContext s,
-                            AVCodecContext avctx,
-                            @Cast("const uint8_t**") PointerPointer poutbuf, IntPointer poutbuf_size,
-                            @Cast("const uint8_t*") BytePointer buf, int buf_size);
-    }
-    public native Parser_parse_AVCodecParserContext_AVCodecContext_PointerPointer_IntPointer_BytePointer_int parser_parse(); public native AVCodecParser parser_parse(Parser_parse_AVCodecParserContext_AVCodecContext_PointerPointer_IntPointer_BytePointer_int setter);
-    public static class Parser_close_AVCodecParserContext extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Parser_close_AVCodecParserContext(Pointer p) { super(p); }
-        protected Parser_close_AVCodecParserContext() { allocate(); }
-        private native void allocate();
-        public native @Deprecated void call(AVCodecParserContext s);
-    }
-    public native Parser_close_AVCodecParserContext parser_close(); public native AVCodecParser parser_close(Parser_close_AVCodecParserContext setter);
-    public static class Split_AVCodecContext_BytePointer_int extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Split_AVCodecContext_BytePointer_int(Pointer p) { super(p); }
-        protected Split_AVCodecContext_BytePointer_int() { allocate(); }
-        private native void allocate();
-        public native @Deprecated int call(AVCodecContext avctx, @Cast("const uint8_t*") BytePointer buf, int buf_size);
-    }
-    public native Split_AVCodecContext_BytePointer_int split(); public native AVCodecParser split(Split_AVCodecContext_BytePointer_int setter);
-// #endif
+    public native @Cast("AVCodecID") int codec_ids(int i); public native AVCodecParser codec_ids(int i, int setter);
+    @MemberGetter public native @Cast("AVCodecID*") IntPointer codec_ids(); /* several codec IDs are permitted */
 }
