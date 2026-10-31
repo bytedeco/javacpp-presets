@@ -23,7 +23,7 @@ Java API documentation is available here:
 &lowast; Call `Loader.load(hdf5_java.class)` before using the API in the `hdf.hdf5lib` namespace.
 
 ### Filter plugins
-The artifacts also bundle the [HDF5 filter plugins](https://github.com/HDFGroup/hdf5_plugins) 2.2.0 for Zstandard, LZ4, JPEG, bzip2, Bitshuffle, Blosc, Blosc2, LZF, ZFP, BitGroom, BitRound, and Granular BitRound, with their compression libraries linked in statically. They are not available on Android, and JPEG is not available on Windows, as per upstream.
+The artifacts also bundle the [HDF5 filter plugins](https://github.com/HDFGroup/hdf5_plugins) 2.2.0 for Zstandard, LZ4, JPEG, bzip2, Bitshuffle, Blosc, Blosc2, LZF, ZFP, BitGroom, BitRound, and Granular BitRound, with their compression libraries linked in statically. JPEG is not available on Windows, as per upstream.
 
  * `HDF5Plugins.load()` adds the bundled plugins to the HDF5 plugin search path (`H5PLappend()`), after which the filter IDs, for example `HDF5Plugins.H5Z_FILTER_ZSTD`, work with `H5Pset_filter()`.
  * `HDF5Plugins.register(HDF5Plugins.H5Z_FILTER_ZSTD)` registers a single plugin directly with `H5Zregister()`, using the filter class returned by `H5PLget_plugin_info()` of that plugin, like the Julia package `H5ZzstdC` does. That also works with `H5PLset_loading_state(0)`. `HDF5Plugins.getPluginInfo()` and `getPluginType()` give access to the results of `H5PLget_plugin_info()` and `H5PLget_plugin_type()`, which every plugin exports under the same name, hence the `h5pl_get_plugin_info()` and `h5pl_get_plugin_type()` helpers taking the path of the plugin library.

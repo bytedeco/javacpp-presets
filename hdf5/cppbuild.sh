@@ -368,19 +368,26 @@ esac
 
 # Build the HDF5 filter plugins (zstd, lz4, jpeg, bzip2, bshuf, blosc, blosc2, lzf, zfp, bitgroom, bitround,
 # granular bitround) against the HDF5 that was just installed. HDF5 loads them at runtime from lib/plugin,
-# so they get their compression libraries linked in statically. Not available on Android for now.
-PLUGINS_CMAKE_FLAGS=(-DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_PREFIX_PATH="$INSTALL_PATH" -DHDF5_ROOT="$INSTALL_PATH"
+# so they get their compression libraries linked in statically.
+PLUGINS_CMAKE_FLAGS=(-DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DHDF5_ROOT="$INSTALL_PATH"
     -DUSE_SHARED_LIBS=ON -DHDF5_USE_STATIC_LIBRARIES=OFF -DBUILD_SHARED_LIBS=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
     -DH5PL_ALLOW_EXTERNAL_SUPPORT=TGZ -DH5PL_BUILD_TESTING=OFF -DH5PL_BUILD_EXAMPLES=OFF -DH5PL_CPACK_ENABLE=OFF
     -DENABLE_ZSTD=ON -DENABLE_LZ4=ON -DENABLE_JPEG=ON -DENABLE_BZIP2=ON -DENABLE_BSHUF=ON -DENABLE_BLOSC=ON -DENABLE_BLOSC2=ON
     -DENABLE_BITGROOM=ON -DENABLE_GRANULAR_BITROUND=ON -DENABLE_BITROUND=ON -DENABLE_LZF=ON -DENABLE_ZFP=ON)
 case $PLATFORM in
-    android-*)
+    android-arm64|android-x86_64)
+        # same NDK flags as for HDF5 above
+        mkdir -p ../hdf5_plugins-$HDF5_PLUGINS_VERSION/build
+        pushd ../hdf5_plugins-$HDF5_PLUGINS_VERSION/build
+        "$CMAKE" "${ANDROID_CMAKE_FLAGS[@]}" -DCMAKE_PREFIX_PATH="$INSTALL_PATH" "${PLUGINS_CMAKE_FLAGS[@]}" ..
+        make -j $MAKEJ
+        make install/strip
+        popd
         ;;
     linux-ppc64le)
         mkdir -p ../hdf5_plugins-$HDF5_PLUGINS_VERSION/build
         pushd ../hdf5_plugins-$HDF5_PLUGINS_VERSION/build
-        "$CMAKE" "${PPC64LE_CMAKE_FLAGS[@]}" "${PLUGINS_CMAKE_FLAGS[@]}" ..
+        "$CMAKE" "${PPC64LE_CMAKE_FLAGS[@]}" -DCMAKE_PREFIX_PATH="$INSTALL_PATH" "${PLUGINS_CMAKE_FLAGS[@]}" ..
         make -j $MAKEJ
         make install/strip
         popd
@@ -388,7 +395,7 @@ case $PLATFORM in
     linux-*|macosx-*)
         mkdir -p ../hdf5_plugins-$HDF5_PLUGINS_VERSION/build
         pushd ../hdf5_plugins-$HDF5_PLUGINS_VERSION/build
-        "$CMAKE" "${PLUGINS_CMAKE_FLAGS[@]}" ..
+        "$CMAKE" -DCMAKE_PREFIX_PATH="$INSTALL_PATH" "${PLUGINS_CMAKE_FLAGS[@]}" ..
         make -j $MAKEJ
         make install/strip
         popd
@@ -398,10 +405,16 @@ case $PLATFORM in
         pushd ../hdf5_plugins-$HDF5_PLUGINS_VERSION/build
         # JPEG is disabled by upstream's CMake on Windows
         # HDF5 is a DLL here, which the plugins' sources need to know to import its global variables
+        # No CMAKE_PREFIX_PATH here, as it also contains the zlib DLL installed for HDF5 above, which Blosc and Blosc2 would
+        # then import instead of using their bundled static copy, and fail to load without it. HDF5_ROOT is enough to find HDF5.
         "$CMAKE" -G "Ninja" -DCMAKE_C_FLAGS="-DH5_BUILT_AS_DYNAMIC_LIB" "${PLUGINS_CMAKE_FLAGS[@]}" ..
         ninja -j $MAKEJ
         ninja install
         popd
+        # List the DLLs that each plugin imports, which all have to be loadable next to HDF5 at runtime
+        for DLL in "$INSTALL_PATH"/lib/plugin/*.dll "$INSTALL_PATH"/bin/h5*.dll; do
+            [[ -f "$DLL" ]] && { echo "Dependencies of $DLL"; dumpbin.exe -dependents "$DLL" | grep -i "\.dll" || true; }
+        done
         # Windows installs modules under bin/, but keep all plugins in the same directory as other platforms
         mkdir -p "$INSTALL_PATH/lib/plugin"
         mv "$INSTALL_PATH"/bin/h5*.dll "$INSTALL_PATH/lib/plugin/" || true
