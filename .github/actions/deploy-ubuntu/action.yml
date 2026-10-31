@@ -132,13 +132,11 @@ runs:
         ln -sf $JAVA_HOME /usr/lib/jvm/default-java
         $SUDO ln -sf pkgconf /usr/bin/pkg-config
         find /usr/lib/jvm/default-java/
-        curl -LO https://github.com/Kitware/CMake/releases/download/v3.31.8/cmake-3.31.8-linux-x86_64.tar.gz
-        curl -LO https://repo1.maven.org/maven2/org/apache/maven/apache-maven/3.9.6/apache-maven-3.9.6-bin.tar.gz
-        curl -LO https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.18.3.tar.gz
-        curl -LO https://services.gradle.org/distributions/gradle-7.1.1-bin.zip
+        curl -LO --fail --retry 5 --retry-delay 15 --connect-timeout 30 https://github.com/Kitware/CMake/releases/download/v3.31.8/cmake-3.31.8-linux-x86_64.tar.gz
+        curl -LO --fail --retry 5 --retry-delay 15 --connect-timeout 30 https://repo1.maven.org/maven2/org/apache/maven/apache-maven/3.9.6/apache-maven-3.9.6-bin.tar.gz
+        curl -LO --fail --retry 5 --retry-delay 15 --connect-timeout 30 https://services.gradle.org/distributions/gradle-7.1.1-bin.zip
         $SUDO tar -xzf cmake-3.31.8-linux-x86_64.tar.gz -C /opt/
         $SUDO tar -xzf apache-maven-3.9.6-bin.tar.gz -C /opt/
-        $SUDO tar -xzf git-2.18.3.tar.gz
         $SUDO unzip gradle-7.1.1-bin.zip -d /opt/
         # pushd git-2.18.3; make -j2 prefix=/usr/local/; $SUDO make -j2 prefix=/usr/local/ install; popd
         $SUDO ln -sf /opt/cmake-3.31.8-linux-x86_64/bin/* /usr/bin/

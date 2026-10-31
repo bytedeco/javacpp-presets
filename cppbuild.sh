@@ -126,26 +126,19 @@ function download {
     mkdir -p "$TOP_PATH/downloads"
     if [[ ! -e "$TOP_PATH/downloads/$2" ]]; then
         echo "Downloading $1"
-        curl -L "$1" -o "$TOP_PATH/downloads/$2" --fail
-        DOWNLOADSTATUS=$?
-        if [ "$DOWNLOADSTATUS" -eq 28 ]
-        then
-		echo "Download timed out, waiting 5 minutes then trying again"
-		rm "$TOP_PATH/downloads/$2"
-		sleep 600
-        	curl -L "$1" -o "$TOP_PATH/downloads/$2" --fail
-        	if [ $? -ne 0 ]
-        	then
-			echo "File still could not be downloaded!"
-			rm "$TOP_PATH/downloads/$2"
-			exit 1
-    		fi
-        elif [ "$DOWNLOADSTATUS" -ne 0 ]
-        then
-		echo "File could not be downloaded!"
-		rm "$TOP_PATH/downloads/$2"
-		exit 1
+        # Let curl retry transient failures (timeouts, dropped connections, 5xx) itself, and only move
+        # the file into place once it is complete, so a failed download never leaves a truncated file behind.
+        # --retry-all-errors needs curl 7.71 or newer, and is skipped on older versions.
+        RETRY_ALL=""
+        if curl --help all 2>/dev/null | grep -q -- --retry-all-errors; then
+            RETRY_ALL="--retry-all-errors"
         fi
+        if ! curl -L "$1" -o "$TOP_PATH/downloads/$2.part" --fail --connect-timeout 30 --retry 5 --retry-delay 15 $RETRY_ALL; then
+            echo "File could not be downloaded!"
+            rm -f "$TOP_PATH/downloads/$2.part"
+            exit 1
+        fi
+        mv "$TOP_PATH/downloads/$2.part" "$TOP_PATH/downloads/$2"
     fi
     ln -sf "$TOP_PATH/downloads/$2" "$2"
 }
