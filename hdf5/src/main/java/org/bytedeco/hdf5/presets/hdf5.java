@@ -50,8 +50,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "H5Cpp.h", "H5Include.h", "H5Exception.h", "H5IdComponent.h", "H5DataSpace.h", "H5PropList.h", "H5AbstractDs.h", "H5Attribute.h",
         "H5OcreatProp.h", "H5DcreatProp.h", "H5LaccProp.h", "H5DaccProp.h", "H5LcreatProp.h", "H5Location.h", "H5Object.h", "H5CommonFG.h", "H5DataType.h", "H5DxferProp.h",
         "H5FaccProp.h", "H5FcreatProp.h", "H5AtomType.h", "H5PredType.h", "H5EnumType.h", "H5IntType.h", "H5FloatType.h", "H5StrType.h", "H5CompType.h",
-        "H5ArrayType.h", "H5VarLenType.h", "H5DataSet.h", "H5Group.h", "H5File.h", "H5Library.h"},
+        "H5ArrayType.h", "H5VarLenType.h", "H5DataSet.h", "H5Group.h", "H5File.h", "H5Library.h",
+
+        "H5PLhelper.h"},
             link = {"hdf5@.320", "hdf5_cpp@.320", "hdf5_hl@.320", "hdf5_hl_cpp@.320"}, resource = {"include", "lib"}),
+    @Platform(value = "linux", link = {"hdf5@.320", "hdf5_cpp@.320", "hdf5_hl@.320", "hdf5_hl_cpp@.320", "dl"}),
     @Platform(value = "windows", link = {"hdf5", "hdf5_cpp", "hdf5_hl", "hdf5_hl_cpp"}) })
 public class hdf5 implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "hdf5"); }
@@ -64,6 +67,7 @@ public class hdf5 implements InfoMapper {
                // Every "#define X (H5OPEN X_g)" constant is the hid_t global X_g, but the Parser types such a macro from
                // the first identifier in it that has cppTypes, so give H5OPEN the type, and skip the H5OPEN macro itself
                .put(new Info("H5OPEN").cppTypes("hid_t").skip())
+               .put(new Info("h5pl_get_plugin_info_t", "h5pl_get_plugin_type_t").skip())
                .put(new Info("((__GNUC__ * 100) + __GNUC_MINOR__) >= 406", "H5_HAVE_PARALLEL", "NEW_HYPERSLAB_API", "H5_HAVE_DIRECT",
                              "BOOL_NOTDEFINED", "H5_NO_STD", "H5_HAVE_MAP_API", "H5_DOXYGEN").define(false))
                .put(new Info("H5_NO_DEPRECATED_SYMBOLS", "H5_HAVE_STDBOOL_H", "H5_SIZEOF_UINT32_T>=4", "H5_SIZEOF_INT64_T>=8", "H5_SIZEOF_UINT64_T>=8",
