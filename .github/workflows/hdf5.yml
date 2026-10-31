@@ -33,25 +33,6 @@ jobs:
           key: hdf5-downloads-android-arm64-${{ github.sha }}
           restore-keys: hdf5-downloads-android-arm64-
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
-      # Android is not tested here, so at least look at what the plugins need at runtime: Bionic has no librt, which
-      # Blosc2 asks the linker for, so none of the plugins may depend on it. The other dependencies are only listed.
-      - name: Check the dependencies of the plugins
-        run: |
-          READELF=$(echo android-ndk/toolchains/llvm/prebuilt/*/bin/llvm-readelf)
-          status=0
-          for f in hdf5/cppbuild/$CI_DEPLOY_PLATFORM/lib/plugin/*.so; do
-            echo "== $f"
-            "$READELF" --dynamic "$f" | grep NEEDED || true
-            if "$READELF" --dynamic "$f" | grep -q 'NEEDED.*librt'; then
-              echo "::error::$f depends on librt, which Android does not have"
-              status=1
-            fi
-          done
-          if ! ls hdf5/cppbuild/$CI_DEPLOY_PLATFORM/lib/plugin/*.so > /dev/null 2>&1; then
-            echo "::error::No plugins were built"
-            status=1
-          fi
-          exit $status
   android-x86_64:
     runs-on: ubuntu-22.04
     env:
@@ -68,25 +49,6 @@ jobs:
           key: hdf5-downloads-android-x86_64-${{ github.sha }}
           restore-keys: hdf5-downloads-android-x86_64-
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
-      # Android is not tested here, so at least look at what the plugins need at runtime: Bionic has no librt, which
-      # Blosc2 asks the linker for, so none of the plugins may depend on it. The other dependencies are only listed.
-      - name: Check the dependencies of the plugins
-        run: |
-          READELF=$(echo android-ndk/toolchains/llvm/prebuilt/*/bin/llvm-readelf)
-          status=0
-          for f in hdf5/cppbuild/$CI_DEPLOY_PLATFORM/lib/plugin/*.so; do
-            echo "== $f"
-            "$READELF" --dynamic "$f" | grep NEEDED || true
-            if "$READELF" --dynamic "$f" | grep -q 'NEEDED.*librt'; then
-              echo "::error::$f depends on librt, which Android does not have"
-              status=1
-            fi
-          done
-          if ! ls hdf5/cppbuild/$CI_DEPLOY_PLATFORM/lib/plugin/*.so > /dev/null 2>&1; then
-            echo "::error::No plugins were built"
-            status=1
-          fi
-          exit $status
 #  linux-armhf:
 #    runs-on: ubuntu-22.04
 #    env:

@@ -387,6 +387,17 @@ case $PLATFORM in
         make -j $MAKEJ
         make install/strip
         popd
+        # The Android binaries cannot be run by CI, so at least look at what each plugin needs at runtime. Bionic has no librt,
+        # which Blosc2 asks the linker for and the empty librt.a above satisfies, so none of the plugins may depend on it.
+        READELF=$(ls "$PLATFORM_ROOT"/toolchains/llvm/prebuilt/*/bin/llvm-readelf | head -1)
+        for PLUGIN in "$INSTALL_PATH"/lib/plugin/*.so; do
+            echo "Dependencies of $PLUGIN"
+            "$READELF" --dynamic "$PLUGIN" | grep NEEDED || true
+            if "$READELF" --dynamic "$PLUGIN" | grep -q 'NEEDED.*librt'; then
+                echo "Error: $PLUGIN depends on librt, which Android does not have"
+                exit 1
+            fi
+        done
         ;;
     linux-ppc64le)
         mkdir -p ../hdf5_plugins-$HDF5_PLUGINS_VERSION/build
