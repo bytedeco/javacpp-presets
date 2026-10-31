@@ -379,7 +379,11 @@ case $PLATFORM in
         # same NDK flags as for HDF5 above
         mkdir -p ../hdf5_plugins-$HDF5_PLUGINS_VERSION/build
         pushd ../hdf5_plugins-$HDF5_PLUGINS_VERSION/build
-        "$CMAKE" "${ANDROID_CMAKE_FLAGS[@]}" -DCMAKE_PREFIX_PATH="$INSTALL_PATH" "${PLUGINS_CMAKE_FLAGS[@]}" ..
+        # Blosc2 links librt on every Unix other than macOS, but Bionic has no such library, so give the linker an empty one
+        mkdir -p "$INSTALL_PATH/rt-stub"
+        ar rcs "$INSTALL_PATH/rt-stub/librt.a"
+        "$CMAKE" "${ANDROID_CMAKE_FLAGS[@]}" -DCMAKE_PREFIX_PATH="$INSTALL_PATH" "${PLUGINS_CMAKE_FLAGS[@]}" \
+            -DCMAKE_MODULE_LINKER_FLAGS="-L$INSTALL_PATH/rt-stub" -DCMAKE_SHARED_LINKER_FLAGS="-L$INSTALL_PATH/rt-stub" ..
         make -j $MAKEJ
         make install/strip
         popd
@@ -405,9 +409,10 @@ case $PLATFORM in
         pushd ../hdf5_plugins-$HDF5_PLUGINS_VERSION/build
         # JPEG is disabled by upstream's CMake on Windows
         # HDF5 is a DLL here, which the plugins' sources need to know to import its global variables
-        # No CMAKE_PREFIX_PATH here, as it also contains the zlib DLL installed for HDF5 above, which Blosc and Blosc2 would
-        # then import instead of using their bundled static copy, and fail to load without it. HDF5_ROOT is enough to find HDF5.
-        "$CMAKE" -G "Ninja" -DCMAKE_C_FLAGS="-DH5_BUILT_AS_DYNAMIC_LIB" "${PLUGINS_CMAKE_FLAGS[@]}" ..
+        # The zlib built for HDF5 above installs both z.lib, the import library of z.dll, and the static zs.lib. Blosc and Blosc2
+        # would find z.lib by themselves and import z.dll, which is not loadable next to the plugins, so point them to zs.lib
+        # as for HDF5. HDF5_ROOT is enough to find HDF5, so the install prefix is not added to CMAKE_PREFIX_PATH.
+        "$CMAKE" -G "Ninja" -DCMAKE_C_FLAGS="-DH5_BUILT_AS_DYNAMIC_LIB" -DZLIB_LIBRARY="$INSTALL_PATH/lib/zs.lib" -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" "${PLUGINS_CMAKE_FLAGS[@]}" ..
         ninja -j $MAKEJ
         ninja install
         popd
@@ -421,6 +426,7 @@ case $PLATFORM in
         ;;
 esac
 # ZFP also installs its static library and headers, which are not needed here
+rm -rf "$INSTALL_PATH/rt-stub"
 rm -f "$INSTALL_PATH"/lib/libh5z*.a "$INSTALL_PATH"/lib/h5z*.lib "$INSTALL_PATH"/include/H5Zzfp*.h
 
 [ -d "../java" ] && rm -r ../java
