@@ -20,15 +20,16 @@
  * limitations under the License.
  */
 
-package org.bytedeco.hdf5_plugins;
+package org.bytedeco.hdf5;
 
 import java.io.File;
+import java.lang.Exception; // not org.bytedeco.hdf5.Exception
 import org.bytedeco.javacpp.*;
 import org.bytedeco.hdf5.global.hdf5;
 import org.junit.Test;
 
 import static org.bytedeco.hdf5.global.hdf5.*;
-import static org.bytedeco.hdf5_plugins.HDF5Plugins.*;
+import static org.bytedeco.hdf5.HDF5Plugins.*;
 import static org.junit.Assert.*;
 
 /**
@@ -82,6 +83,69 @@ public class HDF5PluginsTest {
         } finally {
             H5Zunregister(H5Z_FILTER_ZSTD);
             H5PLset_loading_state(H5PL_ALL_PLUGIN);
+        }
+    }
+
+    /** All the bundled plugins are filters. */
+    @Test public void testPluginType() throws Exception {
+        Loader.load(hdf5.class);
+        int[] ids = {H5Z_FILTER_BZIP2, H5Z_FILTER_LZF, H5Z_FILTER_BLOSC, H5Z_FILTER_LZ4, H5Z_FILTER_BSHUF, H5Z_FILTER_ZFP, H5Z_FILTER_ZSTD,
+                     H5Z_FILTER_JPEG, H5Z_FILTER_BITGROOM, H5Z_FILTER_GRANULAR_BITROUND, H5Z_FILTER_BLOSC2, H5Z_FILTER_BITROUND};
+        for (int id : ids) {
+            if (id == H5Z_FILTER_JPEG && Loader.getPlatform().startsWith("windows")) {
+                assertEquals(-1, HDF5Plugins.getPluginType(id));
+            } else {
+                assertEquals("filter " + id, H5PL_TYPE_FILTER, HDF5Plugins.getPluginType(id));
+            }
+        }
+    }
+
+    /** A filter written in Java, which XORs every byte with a constant, registered without any plugin library. */
+    @Test public void testJavaFilter() throws Exception {
+        final int id = 256; // first ID of the range for testing
+        Loader.load(hdf5.class);
+        final byte key = 0x5A;
+        HDF5Plugins.registerJavaFilter(id, "xor", new H5Z_func_t() {
+            @Override public long call(int flags, long cd_nelmts, IntPointer cd_values, long nbytes, SizeTPointer buf_size, PointerPointer buf) {
+                // XOR is its own inverse, so encoding and decoding (H5Z_FLAG_REVERSE) are the same, in place
+                BytePointer data = new BytePointer(buf.get(0)).capacity(nbytes);
+                for (long i = 0; i < nbytes; i++) {
+                    data.put(i, (byte)(data.get(i) ^ key));
+                }
+                return nbytes;
+            }
+        });
+        try {
+            assertTrue(H5Zfilter_avail(id) > 0);
+            File file = File.createTempFile("hdf5_javafilter", ".h5");
+            file.deleteOnExit();
+            int[] ints = new int[N];
+            for (int i = 0; i < N; i++) {
+                ints[i] = i * 31;
+            }
+            long fid = H5Fcreate(file.getAbsolutePath(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+            long space = H5Screate_simple(1, new long[] {N}, null);
+            long dcpl = H5Pcreate(H5P_DATASET_CREATE());
+            H5Pset_chunk(dcpl, 1, new long[] {N});
+            assertTrue(H5Pset_filter(dcpl, id, H5Z_FLAG_MANDATORY, 0, new int[0]) >= 0);
+            long dset = H5Dcreate2(fid, "data", H5T_NATIVE_INT(), space, H5P_DEFAULT, dcpl, H5P_DEFAULT);
+            assertTrue(H5Dwrite(dset, H5T_NATIVE_INT(), H5S_ALL, H5S_ALL, H5P_DEFAULT, new IntPointer(ints)) >= 0);
+            H5Dclose(dset);
+            H5Pclose(dcpl);
+            H5Sclose(space);
+            H5Fclose(fid);
+
+            fid = H5Fopen(file.getAbsolutePath(), H5F_ACC_RDONLY, H5P_DEFAULT);
+            dset = H5Dopen2(fid, "data", H5P_DEFAULT);
+            IntPointer out = new IntPointer(N);
+            assertTrue(H5Dread(dset, H5T_NATIVE_INT(), H5S_ALL, H5S_ALL, H5P_DEFAULT, out) >= 0);
+            for (int i = 0; i < N; i++) {
+                assertEquals(ints[i], out.get(i));
+            }
+            H5Dclose(dset);
+            H5Fclose(fid);
+        } finally {
+            H5Zunregister(id);
         }
     }
 

@@ -1,5 +1,5 @@
 import org.bytedeco.javacpp.*;
-import org.bytedeco.hdf5_plugins.HDF5Plugins;
+import org.bytedeco.hdf5.HDF5Plugins;
 
 import static org.bytedeco.hdf5.global.hdf5.*;
 

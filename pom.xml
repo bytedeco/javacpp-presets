@@ -601,7 +601,6 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
-        <module>hdf5_plugins</module>
         <module>hyperscan</module>
         <module>lz4</module>
         <module>mkl</module>
@@ -1147,7 +1146,6 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
-        <module>hdf5_plugins</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
@@ -1209,7 +1207,6 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
-        <module>hdf5_plugins</module>
         <module>dnnl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
@@ -1277,7 +1274,6 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
-        <module>hdf5_plugins</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
@@ -1340,7 +1336,6 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
-        <module>hdf5_plugins</module>
         <module>lz4</module>
         <module>mkl</module>
         <module>openblas</module>
@@ -1413,7 +1408,6 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
-        <module>hdf5_plugins</module>
         <module>hyperscan</module>
         <module>lz4</module>
         <module>mkl</module>
@@ -1562,7 +1556,6 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
-        <module>hdf5_plugins</module>
         <module>hyperscan</module>
         <module>lz4</module>
         <module>mkl</module>
@@ -1685,7 +1678,6 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
-        <module>hdf5_plugins</module>
         <module>lz4</module>
         <module>mkl</module>
         <module>openblas</module>
@@ -1754,7 +1746,6 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
-        <module>hdf5_plugins</module>
         <module>hyperscan</module>
         <module>lz4</module>
         <module>mkl</module>

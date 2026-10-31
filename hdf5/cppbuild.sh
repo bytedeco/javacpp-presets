@@ -10,6 +10,7 @@ fi
 ZLIB=zlib-1.3.2
 HDF5_VERSION=2.2.0
 AEC_VERSION=1.1.2
+HDF5_PLUGINS_VERSION=2.2.0
 # zlib.net only serves the current latest release at its plain URL, so pinning a specific
 # version there breaks again the moment a newer one ships (as already happened once for
 # 1.3.1). Use zlib's own GitHub Release asset instead, which is stable per-version.
@@ -20,6 +21,9 @@ download "https://github.com/HDFGroup/hdf5/releases/download/$HDF5_VERSION/hdf5-
 # Use Github mirror repo rather than Gitlab repo for download speed
 #download "https://gitlab.dkrz.de/k202009/libaec/uploads/45b10e42123edd26ab7b3ad92bcf7be2/libaec-$AEC_VERSION.tar.gz" libaec-$AEC_VERSION.tar.gz
 download "https://github.com/MathisRosenhauer/libaec/releases/download/v$AEC_VERSION/libaec-$AEC_VERSION.tar.gz" libaec-$AEC_VERSION.tar.gz
+# The HDF5 filter plugins release bundles the sources of zstd, lz4, bzip2, libjpeg, bitshuffle, c-blosc and
+# c-blosc2 under libs/, so no other download is needed for them.
+download "https://github.com/HDFGroup/hdf5_plugins/releases/download/$HDF5_PLUGINS_VERSION/hdf5_plugins-$HDF5_PLUGINS_VERSION.tar.gz" hdf5_plugins-$HDF5_PLUGINS_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 pushd $PLATFORM
@@ -28,6 +32,7 @@ echo "Decompressing archives..."
 tar --totals -xf ../hdf5-$HDF5_VERSION.tar.gz
 tar --totals -xf ../libaec-$AEC_VERSION.tar.gz
 tar --totals -xf ../$ZLIB.tar.gz
+tar --totals -xf ../hdf5_plugins-$HDF5_PLUGINS_VERSION.tar.gz
 pushd hdf5-$HDF5_VERSION
 
 #sedinplace '/cmake_minimum_required/d' $(find ./ -iname CMakeLists.txt)
@@ -360,6 +365,50 @@ EOF
         echo "Error: Platform \"$PLATFORM\" is not supported"
         ;;
 esac
+
+# Build the HDF5 filter plugins (zstd, lz4, jpeg, bzip2, bshuf, blosc, blosc2, lzf, zfp, bitgroom, bitround,
+# granular bitround) against the HDF5 that was just installed. HDF5 loads them at runtime from lib/plugin,
+# so they get their compression libraries linked in statically. Not available on Android for now.
+PLUGINS_CMAKE_FLAGS=(-DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_PREFIX_PATH="$INSTALL_PATH" -DHDF5_ROOT="$INSTALL_PATH"
+    -DUSE_SHARED_LIBS=ON -DHDF5_USE_STATIC_LIBRARIES=OFF -DBUILD_SHARED_LIBS=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    -DH5PL_ALLOW_EXTERNAL_SUPPORT=TGZ -DH5PL_BUILD_TESTING=OFF -DH5PL_BUILD_EXAMPLES=OFF -DH5PL_CPACK_ENABLE=OFF
+    -DENABLE_ZSTD=ON -DENABLE_LZ4=ON -DENABLE_JPEG=ON -DENABLE_BZIP2=ON -DENABLE_BSHUF=ON -DENABLE_BLOSC=ON -DENABLE_BLOSC2=ON
+    -DENABLE_BITGROOM=ON -DENABLE_GRANULAR_BITROUND=ON -DENABLE_BITROUND=ON -DENABLE_LZF=ON -DENABLE_ZFP=ON)
+case $PLATFORM in
+    android-*)
+        ;;
+    linux-ppc64le)
+        mkdir -p ../hdf5_plugins-$HDF5_PLUGINS_VERSION/build
+        pushd ../hdf5_plugins-$HDF5_PLUGINS_VERSION/build
+        "$CMAKE" "${PPC64LE_CMAKE_FLAGS[@]}" "${PLUGINS_CMAKE_FLAGS[@]}" ..
+        make -j $MAKEJ
+        make install/strip
+        popd
+        ;;
+    linux-*|macosx-*)
+        mkdir -p ../hdf5_plugins-$HDF5_PLUGINS_VERSION/build
+        pushd ../hdf5_plugins-$HDF5_PLUGINS_VERSION/build
+        "$CMAKE" "${PLUGINS_CMAKE_FLAGS[@]}" ..
+        make -j $MAKEJ
+        make install/strip
+        popd
+        ;;
+    windows-*)
+        mkdir -p ../hdf5_plugins-$HDF5_PLUGINS_VERSION/build
+        pushd ../hdf5_plugins-$HDF5_PLUGINS_VERSION/build
+        # JPEG is disabled by upstream's CMake on Windows
+        # HDF5 is a DLL here, which the plugins' sources need to know to import its global variables
+        "$CMAKE" -G "Ninja" -DCMAKE_C_FLAGS="-DH5_BUILT_AS_DYNAMIC_LIB" "${PLUGINS_CMAKE_FLAGS[@]}" ..
+        ninja -j $MAKEJ
+        ninja install
+        popd
+        # Windows installs modules under bin/, but keep all plugins in the same directory as other platforms
+        mkdir -p "$INSTALL_PATH/lib/plugin"
+        mv "$INSTALL_PATH"/bin/h5*.dll "$INSTALL_PATH/lib/plugin/" || true
+        ;;
+esac
+# ZFP also installs its static library and headers, which are not needed here
+rm -f "$INSTALL_PATH"/lib/libh5z*.a "$INSTALL_PATH"/lib/h5z*.lib "$INSTALL_PATH"/include/H5Zzfp*.h
 
 [ -d "../java" ] && rm -r ../java
 # HDF5 2.x moved the JNI-based Java API from java/src to java/src-jni (java/hdf is now a

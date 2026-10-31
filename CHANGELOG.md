@@ -1,5 +1,5 @@
 
- * Add presets for the HDF5 filter plugins (zstd, lz4, jpeg, bzip2, bshuf, blosc, blosc2, lzf, zfp, bitgroom, bitround, granular bitround) from `hdf5_plugins`
+ * Bundle the HDF5 filter plugins (zstd, lz4, jpeg, bzip2, bshuf, blosc, blosc2, lzf, zfp, bitgroom, bitround, granular bitround) and add `HDF5Plugins` for loading or registering them, including filters written in Java, in presets for HDF5
  * Trust the system CA certificates and forward `tls_verify` and `ca_file` to nested HTTP, HLS, and DASH requests in presets for FFmpeg ([pull #1819](https://github.com/bytedeco/javacpp-presets/pull/1819))
  * Map `AVVulkanDeviceContext`, `AVVulkanFramesContext`, and `AVVkFrame` from `hwcontext_vulkan.h` and enable Vulkan on Android in presets for FFmpeg ([pull #1818](https://github.com/bytedeco/javacpp-presets/pull/1818))
  * Fix issues with `hid_t` and `hdf5_java` in presets for HDF5 ([pull #1814](https://github.com/bytedeco/javacpp-presets/pull/1814))

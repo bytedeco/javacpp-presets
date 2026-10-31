@@ -20,12 +20,14 @@
  * limitations under the License.
  */
 
-package org.bytedeco.hdf5_plugins;
+package org.bytedeco.hdf5;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.bytedeco.hdf5.global.hdf5;
-import org.bytedeco.hdf5_plugins.global.hdf5_plugins;
+import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 
@@ -67,7 +69,7 @@ public class HDF5Plugins {
         // CMake leaves out the "lib" prefix for some plugins on Windows, like ZFP
         for (String prefix : new String[] {"lib", ""}) {
             for (String extension : extensions) {
-                File f = Loader.cacheResource("/org/bytedeco/hdf5_plugins/" + platform + "/lib/plugin/" + prefix + name + extension);
+                File f = Loader.cacheResource("/org/bytedeco/hdf5/" + platform + "/lib/plugin/" + prefix + name + extension);
                 if (f != null) {
                     return f;
                 }
@@ -125,7 +127,20 @@ public class HDF5Plugins {
             return null;
         }
         Loader.load(hdf5.class); // the plugin may link against the shared HDF5 library
-        return hdf5_plugins.h5pl_get_plugin_info(f.getAbsolutePath());
+        return hdf5.h5pl_get_plugin_info(f.getAbsolutePath());
+    }
+
+    /**
+     * Returns the plugin type given by H5PLget_plugin_type() of the plugin for the given filter ID,
+     * an {@code H5PL_type_t} such as {@code H5PL_TYPE_FILTER}, or -1 if the plugin is not available on this platform.
+     */
+    public static synchronized int getPluginType(int filter) throws IOException {
+        File f = cachePlugin(pluginName(filter));
+        if (f == null) {
+            return -1;
+        }
+        Loader.load(hdf5.class); // the plugin may link against the shared HDF5 library
+        return hdf5.h5pl_get_plugin_type(f.getAbsolutePath());
     }
 
     /**
@@ -153,5 +168,37 @@ public class HDF5Plugins {
         if (hdf5.H5PLappend(path) < 0) {
             throw new IOException("H5PLappend() failed for " + path);
         }
+    }
+
+    private static final List<Object> javaFilters = new ArrayList<Object>(); // keeps them from being deallocated
+
+    /**
+     * Registers a filter implemented in Java with HDF5 using H5Zregister(), without any plugin library. The callback
+     * must follow the contract of {@code H5Z_func_t}: on input {@code buf} holds {@code nbytes} valid bytes of the
+     * {@code *buf_size} allocated ones, and on output it returns the number of valid bytes, or 0 on failure, after
+     * possibly replacing the buffer with one obtained from {@code H5allocate_memory()} or {@code H5resize_memory()},
+     * and releasing the old one with {@code H5free_memory()}. {@code H5Z_FLAG_REVERSE} is set in {@code flags} when
+     * decoding. The filter has to be registered the same way to read back the data it wrote, since it cannot be found
+     * through the plugin search path, and stays registered, along with the callback, until H5Zunregister().
+     *
+     * @param id a filter ID, see https://github.com/HDFGroup/hdf5_plugins/blob/master/docs/RegisteredFilterPlugins.md
+     * @param name a name for the filter
+     * @param filter the callback doing the work, or encoding and decoding
+     */
+    public static synchronized void registerJavaFilter(int id, String name, H5Z_func_t filter) throws IOException {
+        Loader.load(hdf5.class);
+        H5Z_class2_t cls = new H5Z_class2_t();
+        cls.version(hdf5.H5Z_CLASS_T_VERS)
+           .id(id)
+           .encoder_present(1)
+           .decoder_present(1)
+           .name(new BytePointer(name))
+           .filter(filter);
+        if (hdf5.H5Zregister(cls) < 0) {
+            throw new IOException("H5Zregister() failed for filter " + id);
+        }
+        // HDF5 keeps pointing to the struct, the name, and the callback
+        javaFilters.add(cls);
+        javaFilters.add(filter);
     }
 }
