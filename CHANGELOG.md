@@ -1,4 +1,5 @@
 
+ * Build FFmpeg with Kvazaar encoding support ([pull #1820](https://github.com/bytedeco/javacpp-presets/pull/1820))
  * Trust the system CA certificates and forward `tls_verify` and `ca_file` to nested HTTP, HLS, and DASH requests in presets for FFmpeg ([pull #1819](https://github.com/bytedeco/javacpp-presets/pull/1819))
  * Map `AVVulkanDeviceContext`, `AVVulkanFramesContext`, and `AVVkFrame` from `hwcontext_vulkan.h` and enable Vulkan on Android in presets for FFmpeg ([pull #1818](https://github.com/bytedeco/javacpp-presets/pull/1818))
  * Fix issues with `hid_t` and `hdf5_java` in presets for HDF5 ([pull #1814](https://github.com/bytedeco/javacpp-presets/pull/1814))
