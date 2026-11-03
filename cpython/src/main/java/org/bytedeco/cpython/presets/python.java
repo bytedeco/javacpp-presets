@@ -63,8 +63,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "pybuffer.h",
                 "cpython/pymem.h",
                 "pystats.h",
-                "lock.h",
-                "monitoring.h",
+                "cpython/pylock.h",
+                "cpython/monitoring.h",
                 "critical_section.h",
 
                 "object.h",
@@ -72,7 +72,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "refcount.h",
                 "objimpl.h",
                 "cpython/objimpl.h",
-                "typeslots.h",
+                "slots_generated.h",
                 "pyhash.h",
                 "cpython/pydebug.h",
 
@@ -200,7 +200,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "cpython/fileutils.h",
                 "cpython/pyhash.h",
             },
-            link = "python3.14@.1.0!",
+            link = "python3.15@.1.0!",
             preload = {"ffi@.8", "ffi@.7", "ffi@.6", "ffi@.5", "libcrypto-1_1", "libssl-1_1"/*, "sqlite3", "tcl86t", "tk86t"*/},
             resource = {"include", "lib", "libs", "bin", "share"}
         ),
@@ -210,8 +210,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
         @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
         @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-        @Platform(value = "macosx",  link = "python3.14!"),
-        @Platform(value = "windows", link = "python314"),
+        @Platform(value = "macosx",  link = "python3.15!"),
+        @Platform(value = "windows", link = "python315"),
     },
     target = "org.bytedeco.cpython",
     global = "org.bytedeco.cpython.global.python",
@@ -229,7 +229,7 @@ public class python implements InfoMapper {
             return packageFile;
         }
         File pythonFile = Loader.cacheResource("/org/bytedeco/cpython/" + Loader.getPlatform());
-        File configDir = new File(pythonFile, "lib/python3.14/");
+        File configDir = new File(pythonFile, "lib/python3.15/");
         if (configDir.exists()) {
             String pythonPath = pythonFile.getAbsolutePath();
             Pattern pattern = Pattern.compile("'prefix': '(.*)'");
@@ -268,10 +268,10 @@ public class python implements InfoMapper {
         return pythonFile;
     }
 
-    /** Returns {@code {f, new File(f, "site-packages"), new File(f, "python3.14"), new File(f, "python3.14/lib-dynload"), new File(f, "python3.14/site-packages")}} where {@code File f = new File(cachePackage(), "lib")}. */
+    /** Returns {@code {f, new File(f, "site-packages"), new File(f, "python3.15"), new File(f, "python3.15/lib-dynload"), new File(f, "python3.15/site-packages")}} where {@code File f = new File(cachePackage(), "lib")}. */
     public static File[] cachePackages() throws IOException {
         File f = new File(cachePackage(), "lib");
-        return new File[] {f, new File(f, "site-packages"), new File(f, "python3.14"), new File(f, "python3.14/lib-dynload"), new File(f, "python3.14/site-packages")};
+        return new File[] {f, new File(f, "site-packages"), new File(f, "python3.15"), new File(f, "python3.15/lib-dynload"), new File(f, "python3.15/site-packages")};
     }
 
     public void map(InfoMap infoMap) {
@@ -302,8 +302,10 @@ public class python implements InfoMapper {
                              "_PyObject_Vectorcall", "_PyObject_VectorcallMethod", "_PyObject_FastCallDict", "_PyVectorcall_Function",
                              "_PyObject_CallOneArg", "_PyObject_CallMethodNoArgs", "_PyObject_CallMethodOneArg", "_PyObject_LookupSpecial", "_PyTZINFO_HEAD",
                              "_PyDateTime_TIMEHEAD", "_PyDateTime_DATETIMEHEAD", "PyDateTime_IMPORT", "PyDateTime_TimeZone_UTC",
-                             "PyStructSequence_SET_ITEM", "PyStructSequence_GET_ITEM", "Py_PACK_FULL_VERSION", "_Py_FALLTHROUGH",
-                             "_Py_NO_SANITIZE_MEMORY", "_Py_NO_SANITIZE_ADDRESS", "_Py_NO_SANITIZE_THREAD", "_Py_NO_SANITIZE_UNDEFINED").cppTypes().annotations())
+                             "PyStructSequence_SET_ITEM", "PyStructSequence_GET_ITEM", "Py_PACK_FULL_VERSION", "Py_PACK_VERSION", "_Py_FALLTHROUGH",
+                             "_Py_NO_SANITIZE_MEMORY", "_Py_NO_SANITIZE_ADDRESS", "_Py_NO_SANITIZE_THREAD", "_Py_NO_SANITIZE_UNDEFINED",
+                             "_Py_thread_local", "_Py_STDC_VERSION", "_Py_PACK_VERSION", "PyMutex_Lock", "PyMutex_Unlock", "PyMutex_IsLocked",
+                             "_PyObject_Dump", "_PyABIInfo_DEFAULT").cppTypes().annotations())
 
                .put(new Info("PyAPI_DATA").cppText("#define PyAPI_DATA(RTYPE) RTYPE"))
                .put(new Info("PyAPI_FUNC").cppText("#define PyAPI_FUNC(RTYPE) RTYPE").cppTypes())
@@ -338,7 +340,7 @@ public class python implements InfoMapper {
                              "defined(Py_REF_DEBUG) && !defined(Py_LIMITED_API)",
                              "defined(Py_REF_DEBUG) && defined(Py_LIMITED_API) && Py_LIMITED_API+0 >= 0x030A0000",
                              "defined(Py_REF_DEBUG) && !(defined(Py_LIMITED_API) && Py_LIMITED_API+0 >= 0x030A0000)",
-                             "PY_SSIZE_T_CLEAN", "PY_BIG_ENDIAN").cppTypes().define(false))
+                             "PY_SSIZE_T_CLEAN", "PY_BIG_ENDIAN", "_Py_ANONYMOUS").cppTypes().define(false))
 
                .put(new Info("!defined(__INTEL_COMPILER)", "WITH_THREAD", "PY_NO_SHORT_FLOAT_REPR", "SIZEOF_VOID_P > 4",
                             "!defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x030d0000",
@@ -377,7 +379,7 @@ public class python implements InfoMapper {
                .put(new Info("_ts").cast().pointerTypes("PyThreadState"))
 
                .put(new Info("PyThreadFrameGetter", "jmp_buf", "_PyInterpreterFrame", "_stack_chunk", "_PyExecutorObject",
-                             "_PyCoMonitoringData").cast().pointerTypes("Pointer"))
+                             "_PyCoMonitoringData", "_PyExitData").cast().pointerTypes("Pointer"))
 
                .put(new Info("_Py_memory_order", "PyThreadState::_preserve_36_ABI_1", "PyThreadState::_preserve_36_ABI_2",
                              "_PyGC_generation0", "_PyBytes_InsertThousandsGroupingLocale","_PyTrash_begin", "_PyTrash_end",
@@ -427,6 +429,7 @@ public class python implements InfoMapper {
                      + "        @Cast(\"PyObject**\") PointerPointer buf);\n"))
 
                .put(new Info("fileutils.h").linePatterns("#  define _Py_stat_struct stat").skip())
+               .put(new Info("refcount.h").linePatterns("#define Py_DECREF.*").skip())
                .put(new Info("_Py_stat_struct").pointerTypes("@Cast(\"struct _Py_stat_struct*\") Pointer"))
                .put(new Info("stat").pointerTypes("@Cast(\"struct stat*\") Pointer"))
                .put(new Info("_Py_wreadlink", "_Py_wrealpath", "_Py_get_blocking", "_Py_set_blocking").skip())

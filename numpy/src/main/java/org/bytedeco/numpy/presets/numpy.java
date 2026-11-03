@@ -190,6 +190,7 @@ public class numpy implements InfoMapper {
                              "NPY_FLOAT96", "NPY_COMPLEX192", "NPY_FLOAT128", "NPY_COMPLEX256", "NPY_FLOAT16", "NPY_FLOAT256", "NPY_COMPLEX512",
                              "NPY_BYTE_ORDER", "NPY_LITTLE_ENDIAN", "NPY_BIG_ENDIAN").translate(false))
 
+               .put(new Info("_NPY_OPAQUE_FIRST_FIELD").cppText("#define _NPY_OPAQUE_FIRST_FIELD"))
                .put(new Info("NPY_ATTR_DEPRECATE").cppText("#define NPY_ATTR_DEPRECATE()"))
                .put(new Info("NpyAuxData_tag").base("PyObject").pointerTypes("NpyAuxData"))
                .put(new Info("PyArrayObject_fields").base("PyObject").pointerTypes("PyArrayObject"))

@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-SCIPY_VERSION=1.18.0
+SCIPY_VERSION=1.18.1
 download https://github.com/boostorg/math/archive/c114cf4.tar.gz math-c114cf4.tar.gz
 download https://github.com/data-apis/array-api-compat/archive/145bd7d.tar.gz array-api-compat-145bd7d.tar.gz
 download https://github.com/data-apis/array-api-extra/archive/02afc63.tar.gz array-api-extra-02afc63.tar.gz
@@ -89,15 +89,15 @@ echo "libraries = openblas"                       >> site.cfg
 echo "library_dirs = $OPENBLAS_PATH/lib/"         >> site.cfg
 echo "include_dirs = $OPENBLAS_PATH/include/"     >> site.cfg
 
-if [[ -f "$CPYTHON_PATH/include/python3.14/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.15/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/"
-    export PATH="$CPYTHON_PATH/lib/python3.14/bin/:$PATH"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.14"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.14/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.14/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.14/site-packages/"
-    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.14/site-packages/pip/_vendor/certifi/cacert.pem"
+    export PATH="$CPYTHON_PATH/lib/python3.15/bin/:$PATH"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.15"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.15/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.15/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.15/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.15/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -119,28 +119,28 @@ export SCIPY_USE_PYTHRAN=0
 TOOLS="setuptools==67.6.1 cython==3.2.6"
 if ! $PYTHON_BIN_PATH -m pip install --no-deps --target=$PYTHON_LIB_PATH $TOOLS; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
-    chmod +x "$CPYTHON_HOST_PATH/bin/python3.14"
+    chmod +x "$CPYTHON_HOST_PATH/bin/python3.15"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.14" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.14/" crossenv==1.4 numpy==2.5.1 $TOOLS
-    "$CPYTHON_HOST_PATH/bin/python3.14" -m crossenv "$PYTHON_BIN_PATH" crossenv
-    cp -a "$NUMPY_PATH/python/numpy" "$CPYTHON_HOST_PATH/lib/python3.14/"
-#    cp -a "$CPYTHON_HOST_PATH/lib/python3.14/include" "$PYTHON_LIB_PATH"
+    "$CPYTHON_HOST_PATH/bin/python3.15" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.15/" crossenv==1.4 numpy==2.5.4 $TOOLS
+    "$CPYTHON_HOST_PATH/bin/python3.15" -m crossenv "$PYTHON_BIN_PATH" crossenv
+    cp -a "$NUMPY_PATH/python/numpy" "$CPYTHON_HOST_PATH/lib/python3.15/"
+#    cp -a "$CPYTHON_HOST_PATH/lib/python3.15/include" "$PYTHON_LIB_PATH"
     source crossenv/bin/activate
     cross-expose cython numpy pybind11 pythran
-    chmod +x $CPYTHON_HOST_PATH/lib/python3.14/bin/*
-    export PATH="$CPYTHON_HOST_PATH/lib/python3.14/bin/:$PATH"
+    chmod +x $CPYTHON_HOST_PATH/lib/python3.15/bin/*
+    export PATH="$CPYTHON_HOST_PATH/lib/python3.15/bin/:$PATH"
     export PYTHON_BIN_PATH="python"
     export NUMPY_MADVISE_HUGEPAGE=1
 
     # For some reason, setup.py fails on Linux if the Python installation is not at its original prefix
-    PREFIX_HOST_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_HOST_PATH/bin/python3.14-config)
+    PREFIX_HOST_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_HOST_PATH/bin/python3.15-config)
     mkdir -p $PREFIX_HOST_PATH
     cp -a $CPYTHON_HOST_PATH/* $PREFIX_HOST_PATH
 fi
 
 if [[ $PLATFORM == linux* ]]; then
     # For some reason, setup.py fails on Linux if the Python installation is not at its original prefix
-    PREFIX_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_PATH/bin/python3.14-config)
+    PREFIX_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_PATH/bin/python3.15-config)
     mkdir -p $PREFIX_PATH
     cp -a $CPYTHON_PATH/* $PREFIX_PATH
 fi
