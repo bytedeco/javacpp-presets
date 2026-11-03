@@ -37686,4 +37686,37 @@ September 2017:
 // #endif // H5Library_H
 
 
+// Parsed from H5PLhelper.h
+
+/*
+ * Helpers to call H5PLget_plugin_info() and H5PLget_plugin_type() of a given HDF5 plugin library,
+ * for use with H5Zregister(), as the Julia package H5ZzstdC does. All the plugins export the same
+ * symbols, so they have to be looked up in one specific library, given by its path.
+ * The libraries are intentionally never unloaded, since HDF5 keeps pointing into them.
+ */
+// #ifndef H5PLHELPER_H
+// #define H5PLHELPER_H
+
+// #ifdef _WIN32
+// #include <windows.h>
+// #else
+// #include <dlfcn.h>
+// #endif
+
+/* Returns the address of the given symbol in the library at the given path, or NULL on failure */
+public static native Pointer h5pl_lookup(@Cast("const char*") BytePointer path, @Cast("const char*") BytePointer symbol);
+public static native Pointer h5pl_lookup(String path, String symbol);
+
+/* Returns the result of H5PLget_plugin_info() of the plugin at the given path, or NULL on failure */
+public static native @Const Pointer h5pl_get_plugin_info(@Cast("const char*") BytePointer path);
+public static native @Const Pointer h5pl_get_plugin_info(String path);
+
+/* Returns the result of H5PLget_plugin_type() (an H5PL_type_t) of the plugin at the given path, or -1 on failure */
+public static native int h5pl_get_plugin_type(@Cast("const char*") BytePointer path);
+public static native int h5pl_get_plugin_type(String path);
+
+// #endif
+
+
+
 }
