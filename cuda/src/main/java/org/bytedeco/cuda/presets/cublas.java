@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = cudart.class, value = {
     @Platform(define = {"CUBLASAPI", /*"CUBLAS_V2_H_"*/}, include = {"<cublas_api.h>", "<cublas.h>", "<cublasLt.h>", "<cublasXt.h>"},
         link = {"cublasLt@.13", "cublas@.13"}),
-    @Platform(value = "windows-x86_64", preload = {"cublasLt64_13", "cublas64_13"})},
+    @Platform(value = {"windows-x86_64", "windows-arm64"}, preload = {"cublasLt64_13", "cublas64_13"})},
         target = "org.bytedeco.cuda.cublas", global = "org.bytedeco.cuda.global.cublas")
 @NoException
 public class cublas implements InfoMapper {
