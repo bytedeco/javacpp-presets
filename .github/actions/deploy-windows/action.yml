@@ -264,8 +264,21 @@ runs:
       shell: cmd
       run: |
         if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
-          call "%ProgramFiles%\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" arm64
-          call "%ProgramFiles%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" arm64
+          set "VISUAL_STUDIO_INSTALLATION_PATH="
+          for /f "usebackq tokens=*" %%V in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.ARM64 -property installationPath`) do (
+            set "VISUAL_STUDIO_INSTALLATION_PATH=%%V"
+            call "%%V\VC\Auxiliary\Build\vcvarsall.bat" arm64
+            if errorlevel 1 exit /b 1
+          )
+          if not defined VISUAL_STUDIO_INSTALLATION_PATH (
+            echo Visual Studio with ARM64 C++ tools was not found.
+            exit /b 1
+          )
+          where cl > nul 2>&1
+          if errorlevel 1 (
+            echo MSVC compiler was not found after ARM64 environment initialization.
+            exit /b 1
+          )
           set MSYSTEM=CLANGARM64
         )
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" (
