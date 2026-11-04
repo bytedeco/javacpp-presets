@@ -59,6 +59,17 @@ case $PLATFORM in
         export ARCH_FLAGS=
         export COREML_FLAGS="--use_coreml"
         ;;
+    windows-arm64)
+        # native build, so skip the cross-compilation checks that --arm64 triggers
+        sedinplace 's/if args.arm or args.arm64:/if False:/g' tools/ci_build/build.py
+        export DNNL_FLAGS="--disable_dnnl" # no Windows on ARM support in oneDNN
+        # the zlib headers of MSYS2 need unistd.h that only its own toolchain provides
+        ZLIB_SAFE=$INSTALL_PATH/zlib-include-safe
+        rm -Rf $ZLIB_SAFE && mkdir -p $ZLIB_SAFE
+        cp /c/msys64/clangarm64/include/zlib.h /c/msys64/clangarm64/include/zconf.h $ZLIB_SAFE/
+        # recent CMake needs the policy version of the vendored projects declared
+        CMAKE_EXTRA_DEFINES="CMAKE_BUILD_TYPE=Release CMAKE_POLICY_VERSION_MINIMUM=3.5 ZLIB_INCLUDE_DIR=$ZLIB_SAFE ZLIB_LIBRARY_RELEASE=/c/msys64/clangarm64/lib/libz.a ZLIB_LIBRARY_DEBUG=/c/msys64/clangarm64/lib/libz.a onnxruntime_ENABLE_LTO=OFF onnxruntime_BUILD_UNIT_TESTS=OFF"
+        ;;
     windows-*)
         if [[ -n "${CUDA_PATH:-}" ]]; then
             export CUDACXX="$CUDA_PATH/bin/nvcc.exe"
@@ -234,7 +245,7 @@ sedinplace 's/SoftMaxComputeHelper<T, T, true>(ctx->GetComputeStream()/SoftMaxCo
 sedinplace 's/PrepareCompute<TIndex>(context->GetComputeStream()/PrepareCompute<TIndex>(context->GetComputeStream()->GetHandle(), (CUstream_st*)context->GetComputeStream()->GetHandle()/g' orttraining/orttraining/training_ops/cuda/tensor/gather_nd_grad.cc
 
 which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
-"$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --parallel $MAKEJ --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib $ARCH_FLAGS $DNNL_FLAGS $COREML_FLAGS $OPENVINO_FLAGS $OPENMP_FLAGS $TRAINING_FLAGS $GPU_FLAGS
+"$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --parallel $MAKEJ --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib $ARCH_FLAGS $DNNL_FLAGS $COREML_FLAGS $OPENVINO_FLAGS $OPENMP_FLAGS $TRAINING_FLAGS $GPU_FLAGS ${CMAKE_EXTRA_DEFINES:+--cmake_extra_defines $CMAKE_EXTRA_DEFINES}
 
 # install headers and libraries in standard directories
 cp -r include/* ../include

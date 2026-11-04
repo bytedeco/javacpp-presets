@@ -214,11 +214,12 @@ public class IBuilder extends INoCopy {
      *  @param network Network definition.
      *  @param config Builder configuration.
      * 
-     *  @return A pointer to a IHostMemory object that contains a serialized network.
+     *  @return A pointer to a IHostMemory object that contains a serialized engine.
      * 
-     *  \note This function will synchronize the CUDA stream returned by \p config.getProfileStream() before returning.
+     *  \note This function will synchronize the CUDA stream returned by \p config.getProfileStream() and every
+     *        profile-specific stream before returning.
      * 
-     *  @see INetworkDefinition, IBuilderConfig, IHostMemory
+     *  @see INetworkDefinition, IBuilderConfig, IHostMemory, ICudaEngine
      *  */
     
     
@@ -232,10 +233,10 @@ public class IBuilder extends INoCopy {
     public native @NoException(true) IHostMemory buildSerializedNetwork(@ByRef INetworkDefinition network, @ByRef IBuilderConfig config);
 
     /**
-     *  \brief Builds and serializes a network into stream for the given INetworkDefinition and IBuilderConfig.
+     *  \brief Builds \p network using the \p config configuration, and serializes an engine into \p writer.
      * 
-     *  This function allows building and serialization of a network without creating an engine. The engine is
-     *  finally serialized into the writer stream.
+     *  This function allows building and serialization of a network without returning an engine. The engine is
+     *  finally serialized into the \p writer stream.
      * 
      *  @param network Network definition.
      *  @param config Builder configuration.
@@ -243,9 +244,10 @@ public class IBuilder extends INoCopy {
      * 
      *  @return true if build succeed, otherwise false.
      * 
-     *  \note This function will synchronize the CUDA stream returned by \p config.getProfileStream() before returning.
+     *  \note This function will synchronize the CUDA stream returned by \p config.getProfileStream() and every
+     *        profile-specific stream before returning.
      * 
-     *  @see INetworkDefinition, IBuilderConfig, IStreamWriter
+     *  @see INetworkDefinition, IBuilderConfig, IStreamWriter, ICudaEngine
      *  */
     
     
@@ -261,22 +263,23 @@ public class IBuilder extends INoCopy {
             @ByRef INetworkDefinition network, @ByRef IBuilderConfig config, @ByRef IStreamWriter writer);
 
     /**
-     *  \brief Extended form of buildSerializedNetwork that optionally permits getting the kernelText.
+     *  \brief Extended form of buildSerializedNetwork that optionally permits getting the kernel text.
      * 
      *  Similar to two-argument form, except that if an engine with safe capability is successfully built
-     *  and there are kernels, sets kernelText to ..... Otherwise sets kernelText=nullptr.
+     *  and there are kernels, sets \p kernelText to the kernel source code. Otherwise leaves \p kernelText unmodified.
      * 
-     *  This function allows building and serialization of a network without creating an engine.
+     *  This function allows building and serialization of a network without returning an engine.
      * 
      *  @param network Network definition.
      *  @param config Builder configuration.
      *  @param kernelText A reference to a pointer to a IHostMemory object that will be set to the kernel CPP code text
      * 
-     *  @return A pointer to a IHostMemory object that contains a serialized network.
+     *  @return A pointer to a IHostMemory object that contains a serialized engine.
      * 
-     *  \note This function will synchronize the CUDA stream returned by \p config.getProfileStream() before returning.
+     *  \note This function will synchronize the CUDA stream returned by \p config.getProfileStream() and every
+     *        profile-specific stream before returning.
      * 
-     *  @see INetworkDefinition, IBuilderConfig, IHostMemory
+     *  @see INetworkDefinition, IBuilderConfig, IHostMemory, ICudaEngine
      *  */
     
     
@@ -300,7 +303,8 @@ public class IBuilder extends INoCopy {
      * 
      *  @return A pointer to a ICudaEngine object that contains an engine.
      * 
-     *  \note This function will synchronize the CUDA stream returned by \p config.getProfileStream() before returning.
+     *  \note This function will synchronize the CUDA stream returned by \p config.getProfileStream() and every
+     *        profile-specific stream before returning.
      * 
      *  \note This function does not support \p BuilderFlag::kVERSION_COMPATIBLE.
      *  Please use \p buildSerializedNetwork to get a version compatible engine.

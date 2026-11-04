@@ -46,6 +46,42 @@ jobs:
 #        ext: ["", -gpu]
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
+  windows-arm64:
+    runs-on: windows-11-arm
+    strategy:
+      matrix:
+        ext: [""]
+    env:
+        BUILD_DIR: C:\build
+        CI_DEPLOY_OPTIONS: -Djavacpp.parser.skip
+        TEMP: C:\temp
+        TMP: C:\temp
+    steps:
+      - name: Create temporary directory
+        shell: cmd
+        run: if not exist "%TEMP%" mkdir "%TEMP%"
+      - uses: al-cheb/configure-pagefile-action@v1.3
+        with:
+          minimum-size: 32GB
+          maximum-size: 64GB
+          disk-root: "C:"
+      - uses: bytedeco/cache@always
+        with:
+          key: ${{ github.workflow }}-${{ github.job }}${{ matrix.ext }}@${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: ${{ github.workflow }}-${{ github.job }}${{ matrix.ext }}@
+          path: ~/ccache/?
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
+        timeout-minutes: 350
+      - name: Sleep 60 seconds to avoid cache errors
+        continue-on-error: true
+        run: |
+          taskkill /IM python.exe /F /T
+          taskkill /IM cmake.exe /F /T
+          taskkill /IM ninja.exe /F /T
+          taskkill /IM ccache.exe /F /T
+          taskkill /IM cl.exe /F /T
+          sleep 60
+        if: always()
   windows-x86_64:
     runs-on: windows-2022
     strategy:
@@ -83,7 +119,7 @@ jobs:
           sleep 60
         if: always()
   platform:
-    needs: [linux-x86_64, macosx-arm64, macosx-x86_64, windows-x86_64]
+    needs: [linux-x86_64, macosx-arm64, macosx-x86_64, windows-arm64, windows-x86_64]
     runs-on: ubuntu-22.04
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/redeploy@actions

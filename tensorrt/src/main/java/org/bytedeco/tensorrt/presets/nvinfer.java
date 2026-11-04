@@ -45,7 +45,7 @@ import org.bytedeco.cuda.presets.nvrtc;
     inherit = {cublas.class, cudnn.class, nvrtc.class},
     value = {
         @Platform(
-            value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
+            value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-arm64", "windows-x86_64"},
             compiler = "cpp11",
             define = "ENABLE_FEATURE_DISABLE_RUNTIME_ALLOCATION 1",
             include = {"NvInferVersion.h", "NvInferRuntimeBase.h", "NvInferRuntimeCommon.h",
@@ -53,7 +53,7 @@ import org.bytedeco.cuda.presets.nvrtc;
                        "NvInferPluginBase.h", "NvInferRuntimePlugin.h", /*, "NvUtils.h"*/},
             exclude = "NvInferRuntimeBase.h",
             link = "nvinfer@.11",
-            preload = "nvinfer_builder_resource_ptx@.11.3.0"
+            preload = "nvinfer_builder_resource_ptx@.11.4.0"
         ),
         @Platform(
             value = "linux-arm64",
@@ -71,7 +71,7 @@ import org.bytedeco.cuda.presets.nvrtc;
             linkpath = {"/usr/lib/x86_64-linux-gnu/", "/usr/local/tensorrt/lib/"}
         ),
         @Platform(
-            value = "windows-x86_64",
+            value = {"windows-arm64", "windows-x86_64"},
             link = "nvinfer_11",
             preload = "nvinfer_builder_resource_ptx_11",
             includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/include",

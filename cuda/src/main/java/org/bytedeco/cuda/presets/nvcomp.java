@@ -36,6 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                     "<nvcomp/crc32.h>", "<nvcomp/deflate.h>", "<nvcomp/deflate.hpp>", "<nvcomp/gdeflate.h>", "<nvcomp/gdeflate.hpp>",
                     "<nvcomp/gzip.h>", "<nvcomp/lz4.h>", "<nvcomp/lz4.hpp>", "<nvcomp/snappy.h>", "<nvcomp/snappy.hpp>", "<nvcomp/zstd.h>",
                     "<nvcomp/zstd.hpp>"}, link = {"nvcomp@.5", "nvcomp_cpu@.5"}),
+    @Platform(value = "windows-arm64", define = {"JV_OPTIONS {0}", "JV_TYPE_NAMES {}"}, framework = "", preload = "zlibwapi", link = {}),
     @Platform(value = "windows-x86_64", preload = {"nvcomp64_5", "nvcomp_cpu64_5"})},
     target = "org.bytedeco.cuda.nvcomp", global = "org.bytedeco.cuda.global.nvcomp")
 public class nvcomp implements InfoMapper {

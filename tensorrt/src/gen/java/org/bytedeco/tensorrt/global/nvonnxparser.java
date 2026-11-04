@@ -157,10 +157,10 @@ public static final int NV_ONNX_PARSER_VERSION = NV_ONNX_PARSER_VERSION();
 
 /** Specialization. See {@code nvonnxparser::EnumMax()} for details. */
 
-// Targeting ../nvonnxparser/IParserError.java
+// Targeting ..\nvonnxparser\IParserError.java
 
 
-// Targeting ../nvonnxparser/IParser.java
+// Targeting ..\nvonnxparser\IParser.java
 
 
 
@@ -207,13 +207,13 @@ public static final int NV_ONNX_PARSER_VERSION = NV_ONNX_PARSER_VERSION();
 
 /** Specialization. See {@code nvonnxparser::EnumMax()} for details. */
 
-// Targeting ../nvonnxparser/RefitRecord.java
+// Targeting ..\nvonnxparser\RefitRecord.java
 
 
-// Targeting ../nvonnxparser/IRefitterObserver.java
+// Targeting ..\nvonnxparser\IRefitterObserver.java
 
 
-// Targeting ../nvonnxparser/IParserRefitter.java
+// Targeting ..\nvonnxparser\IParserRefitter.java
 
 
 

@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(include = {"<npps.h>", "<npps_support_functions.h>", "<npps_initialization.h>",
             "<npps_conversion_functions.h>", "<npps_arithmetic_and_logical_operations.h>",
             "<npps_statistics_functions.h>", "<npps_filtering_functions.h>"}, link = "npps@.13"),
-    @Platform(value = "windows-x86_64", preload = "npps64_13")},
+    @Platform(value = {"windows-arm64", "windows-x86_64"}, preload = "npps64_13")},
         global = "org.bytedeco.cuda.global.npps")
 @NoException
 public class npps implements InfoMapper {

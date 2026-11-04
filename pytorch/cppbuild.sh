@@ -62,7 +62,8 @@ if [[ $PLATFORM == windows* ]]; then
         cd build
         export CC="cl.exe"
         export CXX="cl.exe"
-        cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../libuv-v1.39.0 -DBUILD_TESTING=OFF
+        # libuv 1.39 needs its policy version declared for recent CMake
+        cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ../libuv-v1.39.0 -DBUILD_TESTING=OFF
         cmake --build . --config Release
         cmake --install . --config Release --prefix ../dist
         cd ../..
@@ -71,7 +72,21 @@ if [[ $PLATFORM == windows* ]]; then
 fi
 
 if [[ ! -d pytorch ]]; then
-    git clone https://github.com/pytorch/pytorch
+    if [[ -f ../pytorch-$PYTORCH_VERSION.tar.gz ]]; then
+        # a pre-seeded tarball avoids cloning the whole repository; make it a git
+        # repository again so the checkout and submodule commands below work
+        echo "Using pre-seeded pytorch-$PYTORCH_VERSION.tar.gz..."
+        tar --totals -xzf ../pytorch-$PYTORCH_VERSION.tar.gz || true
+        mv pytorch-$PYTORCH_VERSION pytorch
+        cd pytorch
+        git init -q .
+        git remote add origin https://github.com/pytorch/pytorch
+        git fetch -q --depth 1 origin tag v$PYTORCH_VERSION
+        git reset -q --hard v$PYTORCH_VERSION
+        cd ..
+    else
+        git clone https://github.com/pytorch/pytorch
+    fi
 fi
 cd pytorch
 git reset --hard
@@ -93,6 +108,10 @@ CPYTHON_HOST_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/host/"
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
 NUMPY_PATH="$INSTALL_PATH/../../../numpy/cppbuild/$PLATFORM/"
+# a native build has no host CPython, so let it be resolved from BUILD_PATH or below
+if [[ "${PLATFORM_HOST:-$PLATFORM}" == "$PLATFORM" ]]; then
+    unset CPYTHON_HOST_PATH
+fi
 
 if [[ -n "${BUILD_PATH:-}" ]]; then
     PREVIFS="$IFS"
@@ -116,10 +135,16 @@ fi
 
 export OpenBLAS_HOME=$OPENBLAS_PATH
 
+CPYTHON_HOST_PATH="${CPYTHON_HOST_PATH:-}"
 CPYTHON_HOST_PATH="${CPYTHON_HOST_PATH//\\//}"
 CPYTHON_PATH="${CPYTHON_PATH//\\//}"
 OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
 NUMPY_PATH="${NUMPY_PATH//\\//}"
+
+# the target CPython plays the host role when no host build was provided
+if [[ -z "${CPYTHON_HOST_PATH:-}" ]]; then
+    CPYTHON_HOST_PATH="$CPYTHON_PATH"
+fi
 
 CPYTHON_PATH="$CPYTHON_HOST_PATH"
 if [[ -f "$CPYTHON_PATH/include/python3.14/Python.h" ]]; then
@@ -175,8 +200,49 @@ case $PLATFORM in
         sedinplace '/CHECK_FUNCTION_EXISTS(posix_fallocate HAVE_POSIX_FALLOCATE)/d' cmake/Dependencies.cmake aten/src/ATen/CMakeLists.txt
         # export PATH=$(brew --prefix llvm@18)/bin:$PATH # Use brew LLVM instead of Xcode LLVM 14
         ;;
-    windows-x86_64)
-        if which ccache.exe; then
+    windows-arm64 | windows-x86_64)
+        # the MSVC and Windows SDK directories go in front of /usr/bin, whose coreutils
+        # link.EXE and a stray ccache.exe CMake otherwise picks over cl.exe and the real
+        # linker, while the rest of PATH stays in the native form that vcvarsall set up
+        CL_DIR=$(dirname "$(which cl.exe)")
+        WIN_KIT=$(find "$(cygpath -u "${WindowsSDKDir:-}/bin")" -maxdepth 1 -name "10.*" -type d 2>/dev/null | sort | tail -1)
+        NEW_PATH=""
+        PREVP="$PATH"
+        PREVA=$IFS
+        IFS=":"
+        for P in $PREVP; do
+            NP=$P
+            case $(basename "$P") in
+                usr\bin|bin|usr/sbin|local\\bin) ;; # keep MSYS/bash dirs in POSIX form
+                *) NP=$(cygpath -u "$P" 2>/dev/null || echo "$P");;
+            esac
+            NEW_PATH="${NEW_PATH:+$NEW_PATH:}$NP"
+        done
+        IFS="$PREVA"
+        # keep only the MSVC directories in native form for CMake's environment detection
+        CL_WIN=$(cygpath -w "$CL_DIR")
+        SDK_WIN=""
+        [[ -n "$WIN_KIT" ]] && SDK_WIN=$(cygpath -w "$WIN_KIT/arm64")
+        export PATH="$CL_WIN${SDK_WIN:+:$SDK_WIN}:$NEW_PATH"
+        # drop any directory that contains only a stray ccache.exe (no cl.exe next to it)
+        CCACHE_PATH=$(command -v ccache.exe 2>/dev/null || true)
+        if [[ -n "$CCACHE_PATH" && ! -f "$(dirname "$CCACHE_PATH")/cl.exe" ]]; then
+            CDIR_WIN=$(cygpath -w "$(dirname "$CCACHE_PATH")")
+            CDIR_MSY=$(cygpath -u "$(dirname "$CCACHE_PATH")")
+            export PATH="${PATH//:$CDIR_WIN:/:}"
+            export PATH="${PATH//:$CDIR_MSY:/:}"
+            case $PATH in "$CDIR_WIN:"*) PATH="${PATH#"$CDIR_WIN:"};; esac
+            case $PATH in *":$CDIR_WIN") PATH="${PATH%":$CDIR_WIN"}";; esac
+            case $PATH in "$CDIR_MSY:"*) PATH="${PATH#"$CDIR_MSY:"};; esac
+            case $PATH in *":$CDIR_MSY") PATH="${PATH%":$CDIR_MSY"}";; esac
+            echo "Stripped stray ccache directory from PATH: $CCACHE_PATH"
+        fi
+        # ccache must sit next to cl.exe to be usable, as with the MSYS2 one
+        CCACHE_OK=0
+        if command -v ccache.exe >/dev/null 2>&1 && [[ "$(dirname "$(command -v ccache.exe)")" == "$(dirname "$(command -v cl.exe)")" ]]; then
+            CCACHE_OK=1
+        fi
+        if [[ $CCACHE_OK == 1 ]]; then
             export CC="ccache.exe cl.exe"
             export CXX="ccache.exe cl.exe"
 #            export CUDAHOSTCC="cl.exe"
@@ -191,6 +257,13 @@ case $PLATFORM in
             export CUDNN_HOME="$CUDA_PATH"
         fi
         export USE_NCCL=0 # Not supported on Windows
+        ;;
+    windows-arm64)
+        export USE_MKLDNN=OFF # no Windows on ARM support in oneDNN
+        export USE_FBGEMM=OFF # no Windows on ARM support in FBGEMM
+        export USE_KINETO=OFF # no Windows on ARM support in Kineto
+        export USE_XNNPACK=OFF # no Windows on ARM support in XNNPACK
+        export USE_NUMPY=1 # numpy headers/libs built above against this CPython
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -264,6 +337,10 @@ sedinplace 's/include(${CMAKE_CURRENT_LIST_DIR}\/Modules\/FindOpenMP.cmake)/find
 
 # delete broken CUDA kernels at least on Windows with CUDA 12.9
 #rm -f aten/src/ATen/native/cuda/SegmentReduce.cu
+
+# clear any stale CMake cache left by a failed configure run: it pins the wrong compiler
+# (e.g. a stray ccache) and CMake keeps reusing it without a fresh configure
+rm -rf build/CMakeCache.txt build/CMakeFiles
 
 #USE_FBGEMM=0 USE_KINETO=0 USE_GLOO=0 USE_MKLDNN=0 \
 BLAS=OpenBLAS "$PYTHON_BIN_PATH" setup.py develop

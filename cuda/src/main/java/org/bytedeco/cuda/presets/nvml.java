@@ -35,7 +35,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = cudart.class, value = {
     @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le", "windows-x86_64"}, define = "NVML_NO_UNVERSIONED_FUNC_DEFS", include = "<nvml.h>", link = "nvidia-ml@.1#"),
-    @Platform(value = "windows-x86_64", link = "nvml", preloadpath = "C:/Program Files/NVIDIA Corporation/NVSMI/")},
+    @Platform(value = "windows-x86_64", link = "nvml", preloadpath = "C:/Program Files/NVIDIA Corporation/NVSMI/"),
+    @Platform(value = "windows-arm64", define = {"JV_OPTIONS {0}", "JV_TYPE_NAMES {}"}, framework = "", link = {})},
         target = "org.bytedeco.cuda.nvml", global = "org.bytedeco.cuda.global.nvml")
 @NoException
 public class nvml implements InfoMapper {

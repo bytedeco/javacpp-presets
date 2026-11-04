@@ -42,7 +42,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                               "<libavcodec/version_major.h>", "<libavcodec/version.h>"},
                   link = "avcodec@.63"),
         @Platform(value = "linux-arm", preload = {"asound@.2", "vchiq_arm", "vcos", "vcsm", "bcm_host", "mmal_core", "mmal_util", "mmal_vc_client"}),
-        @Platform(value = "windows", preload = "avcodec-63")
+        @Platform(value = "windows", preload = "avcodec-63"),
+        @Platform(
+            value = "windows-arm64",
+            linkpath = {},
+            link = {"avcodec.dll.a", "avutil.dll.a", "swresample.dll.a", "psapi.lib"}
+        )
     }
 )
 public class avcodec implements InfoMapper {

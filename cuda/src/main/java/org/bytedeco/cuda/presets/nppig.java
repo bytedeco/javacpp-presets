@@ -35,7 +35,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = nppc.class, value = {
     @Platform(include = "<nppi_geometry_transforms.h>", link = "nppig@.13"),
-    @Platform(value = "windows-x86_64", preload = "nppig64_13")},
+    @Platform(value = {"windows-arm64", "windows-x86_64"}, preload = "nppig64_13")},
         /* target = "org.bytedeco.cuda.nppig", */ global = "org.bytedeco.cuda.global.nppig")
 @NoException
 public class nppig implements InfoMapper {

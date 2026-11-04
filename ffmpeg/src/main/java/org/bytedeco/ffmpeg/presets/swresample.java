@@ -38,7 +38,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     global = "org.bytedeco.ffmpeg.global.swresample",
     value = {
         @Platform(cinclude = {"<libswresample/swresample.h>", "<libswresample/version_major.h>", "<libswresample/version.h>"}, link = "swresample@.7"),
-        @Platform(value = "windows", preload = "swresample-7")
+        @Platform(value = "windows", preload = "swresample-7"),
+        @Platform(
+            value = "windows-arm64",
+            linkpath = {},
+            link = {"swresample.dll.a", "avutil.dll.a", "psapi.lib"}
+        )
     }
 )
 public class swresample implements InfoMapper {

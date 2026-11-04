@@ -102,6 +102,15 @@
         <artifactId>maven-javadoc-plugin</artifactId>
       </plugin>
     </plugins>
+
+    <resources>
+      <resource>
+        <directory>${basedir}/src/main/resources</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
+    </resources>
   </build>
 
   <profiles>
@@ -126,6 +135,32 @@
                 <compilerOption>-lgcc_eh</compilerOption>
                 <compilerOption>-lpthread</compilerOption>
                 <compilerOption>-Wl,-Bdynamic</compilerOption>
+              </compilerOptions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>windows-arm64-mingw</id>
+      <activation>
+        <property>
+          <name>javacpp.platform</name>
+          <value>windows-arm64</value>
+        </property>
+        <os><family>windows</family></os>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacpp</artifactId>
+            <configuration>
+              <properties>windows-arm64-mingw</properties>
+              <compilerOptions>
+                <compilerOption>-static-libgcc</compilerOption>
+                <compilerOption>-static</compilerOption>
               </compilerOptions>
             </configuration>
           </plugin>
