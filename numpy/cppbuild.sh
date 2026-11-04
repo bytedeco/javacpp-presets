@@ -17,13 +17,19 @@ INSTALL_PATH=`pwd`
 CPYTHON_HOST_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/host/"
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
+# native builds have no host tree, and meson on windows-arm64 needs native paths
+if [[ $PLATFORM == windows* && $OPENBLAS_PATH == /* ]]; then
+    CPYTHON_HOST_PATH=$(cygpath -m "$CPYTHON_HOST_PATH")
+    CPYTHON_PATH=$(cygpath -m "$CPYTHON_PATH")
+    OPENBLAS_PATH=$(cygpath -m "$OPENBLAS_PATH")
+fi
 
 if [[ -n "${BUILD_PATH:-}" ]]; then
     PREVIFS="$IFS"
     IFS="$BUILD_PATH_SEPARATOR"
     for P in $BUILD_PATH; do
         if [[ $(find "$P" -name Python.h) ]]; then
-            if [[ "$(basename $P)" == "$PLATFORM_HOST" ]]; then
+            if [[ -z "${PLATFORM_HOST:-}" || "${PLATFORM_HOST:-$PLATFORM}" == "$PLATFORM" || "$(basename $P)" == "$PLATFORM_HOST" ]]; then
                 CPYTHON_HOST_PATH="$P"
             fi
             if [[ "$(basename $P)" == "$PLATFORM" ]]; then
@@ -150,6 +156,24 @@ case $PLATFORM in
     windows-x86_64)
         ATLAS=None "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=build-dir=build
         ;;
+    windows-arm64)
+        # like windows-x86_64, but the MSYS2 coreutils link.EXE must lose to the real
+        # link.exe beside cl.exe, and the MSVC variables need slash-normalised paths
+        MSVC_BIN=$(dirname "$(which cl.exe)")
+        MSVC_LINK=""
+        if [[ -n "${VCToolsInstallDir:-}" ]]; then
+            MSVC_LINK=$(find "$(cygpath -u "${VCToolsInstallDir%/}")/bin/HostARM64" -iname link.exe 2>/dev/null | head -1)
+        fi
+        for v in VCToolsInstallDir VCToolsRedirDir WindowsSDKDir VCINSTALLDIR VSINSTALLDIR; do
+            eval "val=\${$v:-}"
+            if [[ -n "$val" ]]; then
+                eval "export $v=\$(cygpath -m \"\${$v}\")"
+            fi
+        done
+        export PATH="$MSVC_BIN${MSVC_LINK:+:$MSVC_LINK}:/c/msys64/clangarm64/bin"
+        export CC="cl.exe" CXX="cl.exe"
+        ATLAS=None "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=build-dir=build
+        ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
         ;;
@@ -159,6 +183,11 @@ if [[ -d $PYTHON_INSTALL_PATH/numpy ]]; then
     ln -snf $PYTHON_INSTALL_PATH ../python
 else
     ln -snf $PYTHON_INSTALL_PATH/numpy-*/ ../python
+fi
+# MSYS ln -s only creates un-reparsable symlinks without SeCreateSymbolicLinkPrivilege
+if [[ $PLATFORM == windows* && ! -e ../python ]]; then
+    rm -Rf ../python
+    cmd.exe //c "mklink /J $(cygpath -w ../python) $(cygpath -w $PYTHON_INSTALL_PATH)" > /dev/null
 fi
 rm -Rf $(find ../ -iname __pycache__)
 
