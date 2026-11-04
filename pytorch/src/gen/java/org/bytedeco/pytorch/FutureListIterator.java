@@ -33,7 +33,10 @@ public class FutureListIterator extends Pointer {
         return new FutureListIterator((Pointer)this).offsetAddress(i);
     }
 
-   // C++17 friendly std::iterator implementation
+  // C++17 forbids a proxy iterator from being forward or better, so the legacy
+  // tag says input and the real category goes in iterator_concept. Spelled out
+  // explicitly rather than left to iterator_traits synthesis: GCC 11 (an actual
+  // CI toolchain) synthesizes something std::reverse's dispatch can't match.
 
   public FutureListIterator() { super((Pointer)null); allocate(); }
   private native void allocate();
@@ -50,13 +53,14 @@ public class FutureListIterator extends Pointer {
 
   public native @ByVal @Name("operator --") FutureListIterator decrement(int arg0);
 
-  public native @ByRef @Name("operator +=") FutureListIterator addPut(long offset);
+  public native @ByRef @Name("operator +=") FutureListIterator addPut(@Cast("c10::impl::ListIterator<c10::intrusive_ptr<c10::ivalue::Future>,c10::detail::ListImpl::list_type::iterator>::difference_type") long offset);
 
-  public native @ByRef @Name("operator -=") FutureListIterator subtractPut(long offset);
+  public native @ByRef @Name("operator -=") FutureListIterator subtractPut(@Cast("c10::impl::ListIterator<c10::intrusive_ptr<c10::ivalue::Future>,c10::detail::ListImpl::list_type::iterator>::difference_type") long offset);
 
-  public native @ByVal @Name("operator +") FutureListIterator add(long offset);
+  public native @ByVal @Name("operator -") FutureListIterator subtract(@Cast("c10::impl::ListIterator<c10::intrusive_ptr<c10::ivalue::Future>,c10::detail::ListImpl::list_type::iterator>::difference_type") long offset);
 
-  public native @ByVal @Name("operator -") FutureListIterator subtract(long offset);
+  private static native @Namespace @ByVal @Name("operator +") FutureListIterator add(@Cast("c10::impl::ListIterator<c10::intrusive_ptr<c10::ivalue::Future>,c10::detail::ListImpl::list_type::iterator>::difference_type") long offset, @Const @ByRef FutureListIterator rhs);
+  public FutureListIterator add(long offset) { return add(offset, this); }
 
   private static native @Namespace @Cast("c10::impl::ListIterator<c10::intrusive_ptr<c10::ivalue::Future>,c10::detail::ListImpl::list_type::iterator>::difference_type") @Name("operator -") long subtract(@Const @ByRef FutureListIterator lhs, @Const @ByRef FutureListIterator rhs);
   public long subtract(FutureListIterator rhs) { return subtract(this, rhs); }
@@ -65,21 +69,10 @@ public class FutureListIterator extends Pointer {
 
   
 
-  private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef FutureListIterator lhs, @Const @ByRef FutureListIterator rhs);
-  public boolean equals(FutureListIterator rhs) { return equals(this, rhs); }
+  // ranges finds these by ADL; defined in List_inl.h (need a complete IValue).
+  
 
-  private static native @Namespace @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef FutureListIterator lhs, @Const @ByRef FutureListIterator rhs);
-  public boolean notEquals(FutureListIterator rhs) { return notEquals(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef FutureListIterator lhs, @Const @ByRef FutureListIterator rhs);
-  public boolean lessThan(FutureListIterator rhs) { return lessThan(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator <=") boolean lessThanEquals(@Const @ByRef FutureListIterator lhs, @Const @ByRef FutureListIterator rhs);
-  public boolean lessThanEquals(FutureListIterator rhs) { return lessThanEquals(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator >") boolean greaterThan(@Const @ByRef FutureListIterator lhs, @Const @ByRef FutureListIterator rhs);
-  public boolean greaterThan(FutureListIterator rhs) { return greaterThan(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@Const @ByRef FutureListIterator lhs, @Const @ByRef FutureListIterator rhs);
-  public boolean greaterThanEquals(FutureListIterator rhs) { return greaterThanEquals(this, rhs); }
+  
+  private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef FutureListIterator arg0, @Const @ByRef FutureListIterator arg1);
+  public boolean equals(FutureListIterator arg1) { return equals(this, arg1); }
 }

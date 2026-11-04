@@ -39,4 +39,20 @@ public class FakeTensorMode extends Pointer {
   private native void allocate(
         @SharedPtr("c10::SafePyObject") @ByVal SafePyObject shape_env,
         @SharedPtr("c10::SafePyObject") @ByVal SafePyObject converter);
+
+  // record the real constant a fake tensor was created from; the constant is
+  // stored on the fake's ExtraMeta so it dies with the tensor
+  // setting to nullptr to clear it
+  public native void set_constant(
+        TensorImpl fake_impl,
+        @IntrusivePtr("c10::TensorImpl") @Cast({"", "c10::intrusive_ptr<c10::TensorImpl>&"}) TensorImpl constant);
+  public native @NoException(true) void clear_constant(TensorImpl fake_impl);
+
+  // return the real constant a fake tensor was created from, or nullptr
+  public native @IntrusivePtr("c10::TensorImpl") @Cast({"", "c10::intrusive_ptr<c10::TensorImpl>&"}) TensorImpl get_constant(
+        TensorImpl fake_impl);
+  // drop constant tracking for fake tensors aliasing this mutated storage
+  public native void invalidate_constant_aliases(StorageImpl storage_impl);
+  // drop non-CPU constants, keeping cheap CPU ones for constant folding
+  public native void clear_non_cpu_constants();
 }

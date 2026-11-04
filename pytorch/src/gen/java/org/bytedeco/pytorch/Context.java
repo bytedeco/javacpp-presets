@@ -141,6 +141,9 @@ public class Context extends Pointer {
   public native void setSDPUseFA3(@Cast("bool") boolean arg0);
   public native @Cast("bool") boolean userEnabledFA3SDP();
 
+  public native void setSDPUseFA4(@Cast("bool") boolean arg0);
+  public native @Cast("bool") boolean userEnabledFA4SDP();
+
   public native void setSDPUseMemEfficient(@Cast("bool") boolean arg0);
   public native @Cast("bool") boolean userEnabledMemEfficientSDP();
 
@@ -321,6 +324,17 @@ public class Context extends Pointer {
   public native void unsetDefaultMobileCPUAllocator();
   public native @Cast("bool") boolean allowFP16ReductionCPU();
   public native void setAllowFP16ReductionCPU(@Cast("bool") boolean arg0);
+  // Gates the native-AOT DispatchStubs consulted by generated structured
+  // wrappers (see NativeAotStubs.h). Off means stock kernels even with an
+  // AOT kernel library loaded, e.g. for reference computations.
+  public native @Cast("bool") boolean allowNativeAot();
+  public native void setAllowNativeAot(@Cast("bool") boolean arg0);
+  // Ops whose declaration is UNCONDITIONAL read this instead: their AOT
+  // kernels are the implementation, so allowNativeAot must not mask them.
+  // Default false; torch._native._unconditional_masked() is the only caller
+  // that flips it, so a numerics test can obtain stock aten values.
+  public native @Cast("bool") boolean maskUnconditionalNativeAot();
+  public native void setMaskUnconditionalNativeAot(@Cast("bool") boolean arg0);
 
   // Preserved for BC
   public native void lazyInitCUDA();

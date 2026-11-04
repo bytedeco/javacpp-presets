@@ -33,7 +33,10 @@ public class GenericListIterator extends Pointer {
         return new GenericListIterator((Pointer)this).offsetAddress(i);
     }
 
-   // C++17 friendly std::iterator implementation
+  // C++17 forbids a proxy iterator from being forward or better, so the legacy
+  // tag says input and the real category goes in iterator_concept. Spelled out
+  // explicitly rather than left to iterator_traits synthesis: GCC 11 (an actual
+  // CI toolchain) synthesizes something std::reverse's dispatch can't match.
 
   public GenericListIterator() { super((Pointer)null); allocate(); }
   private native void allocate();
@@ -50,13 +53,14 @@ public class GenericListIterator extends Pointer {
 
   public native @ByVal @Name("operator --") GenericListIterator decrement(int arg0);
 
-  public native @ByRef @Name("operator +=") GenericListIterator addPut(long offset);
+  public native @ByRef @Name("operator +=") GenericListIterator addPut(@Cast("c10::impl::ListIterator<c10::IValue,c10::detail::ListImpl::list_type::iterator>::difference_type") long offset);
 
-  public native @ByRef @Name("operator -=") GenericListIterator subtractPut(long offset);
+  public native @ByRef @Name("operator -=") GenericListIterator subtractPut(@Cast("c10::impl::ListIterator<c10::IValue,c10::detail::ListImpl::list_type::iterator>::difference_type") long offset);
 
-  public native @ByVal @Name("operator +") GenericListIterator add(long offset);
+  public native @ByVal @Name("operator -") GenericListIterator subtract(@Cast("c10::impl::ListIterator<c10::IValue,c10::detail::ListImpl::list_type::iterator>::difference_type") long offset);
 
-  public native @ByVal @Name("operator -") GenericListIterator subtract(long offset);
+  private static native @Namespace @ByVal @Name("operator +") GenericListIterator add(@Cast("c10::impl::ListIterator<c10::IValue,c10::detail::ListImpl::list_type::iterator>::difference_type") long offset, @Const @ByRef GenericListIterator rhs);
+  public GenericListIterator add(long offset) { return add(offset, this); }
 
   private static native @Namespace @Cast("c10::impl::ListIterator<c10::IValue,c10::detail::ListImpl::list_type::iterator>::difference_type") @Name("operator -") long subtract(@Const @ByRef GenericListIterator lhs, @Const @ByRef GenericListIterator rhs);
   public long subtract(GenericListIterator rhs) { return subtract(this, rhs); }
@@ -65,21 +69,10 @@ public class GenericListIterator extends Pointer {
 
   
 
-  private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef GenericListIterator lhs, @Const @ByRef GenericListIterator rhs);
-  public boolean equals(GenericListIterator rhs) { return equals(this, rhs); }
+  // ranges finds these by ADL; defined in List_inl.h (need a complete IValue).
+  
 
-  private static native @Namespace @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef GenericListIterator lhs, @Const @ByRef GenericListIterator rhs);
-  public boolean notEquals(GenericListIterator rhs) { return notEquals(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef GenericListIterator lhs, @Const @ByRef GenericListIterator rhs);
-  public boolean lessThan(GenericListIterator rhs) { return lessThan(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator <=") boolean lessThanEquals(@Const @ByRef GenericListIterator lhs, @Const @ByRef GenericListIterator rhs);
-  public boolean lessThanEquals(GenericListIterator rhs) { return lessThanEquals(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator >") boolean greaterThan(@Const @ByRef GenericListIterator lhs, @Const @ByRef GenericListIterator rhs);
-  public boolean greaterThan(GenericListIterator rhs) { return greaterThan(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@Const @ByRef GenericListIterator lhs, @Const @ByRef GenericListIterator rhs);
-  public boolean greaterThanEquals(GenericListIterator rhs) { return greaterThanEquals(this, rhs); }
+  
+  private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef GenericListIterator arg0, @Const @ByRef GenericListIterator arg1);
+  public boolean equals(GenericListIterator arg1) { return equals(this, arg1); }
 }

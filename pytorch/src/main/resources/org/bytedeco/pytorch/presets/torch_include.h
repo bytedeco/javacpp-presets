@@ -1482,6 +1482,7 @@
 // #include "torch/csrc/inductor/aoti_torch/c/shim.h" // model.so API, not part of libtorch API
 // #include "torch/csrc/inductor/aoti_runtime/utils.h" // model.so API, not part of libtorch API
 // #include "torch/csrc/inductor/aoti_runtime/interface.h" // model.so API, not part of libtorch API
+#include "torch/csrc/inductor/aoti_runner/model_container_observer.h"
 #include "torch/csrc/inductor/aoti_runner/model_container_runner.h"
 #include "torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h"
 #include "torch/csrc/inductor/aoti_package/model_package_loader.h"

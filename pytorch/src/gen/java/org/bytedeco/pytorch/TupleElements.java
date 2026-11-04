@@ -67,6 +67,7 @@ public class TupleElements extends Pointer {
   public TupleElements(@Const @ByRef TupleElements rhs) { super((Pointer)null); allocate(rhs); }
   private native void allocate(@Const @ByRef TupleElements rhs);
 
+  // This implementation only provides basic exception safety
   public native @ByRef @Name("operator =") TupleElements put(@Const @ByRef TupleElements rhs);
 
   public native @ByVal IValueArrayRef asArrayRef();

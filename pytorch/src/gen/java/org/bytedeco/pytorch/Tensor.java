@@ -1018,6 +1018,8 @@ public class Tensor extends TensorBase {
   public native @ByRef Tensor _philox_normal_(@Const @ByRef Tensor key);
   public native @ByRef Tensor _philox_uniform_(@Const @ByRef Tensor key, double low/*=0*/, double high/*=1*/);
   public native @ByRef Tensor _philox_uniform_(@Const @ByRef Tensor key);
+  public native @ByRef Tensor _philox_randint_(@Const @ByRef Tensor key, @ByVal(nullValue = "std::optional<int64_t>(::std::nullopt)") LongOptional low, @ByVal(nullValue = "std::optional<int64_t>(::std::nullopt)") LongOptional high);
+  public native @ByRef Tensor _philox_randint_(@Const @ByRef Tensor key);
   public native @ByVal Tensor norm(@Const @ByRef ScalarOptional p, ScalarType dtype);
   public native @ByVal Tensor norm(@Const @ByRef(nullValue = "at::Scalar(2)") Scalar p);
   public native @ByVal Tensor norm();

@@ -469,9 +469,20 @@ public class ProcessGroup extends CustomClassHolder {
   // opaque hook_id so they can be individually unregistered. Registration is
   // expected to happen at setup time, not concurrently with collectives. See
   // Hooks.hpp.
+  public native @Cast("bool") boolean supportsAbortHooks();
+
   public native void registerAbortHook(@Cast("int64_t") long hook_id, @ByVal @Cast("c10d::AbortHook*") Func hook);
 
   public native void unregisterAbortHook(@Cast("int64_t") long hook_id);
+
+  // Completion hooks forward to the default backend for the same reason abort
+  // hooks do: completion is detected inside the backend, not by the dispatcher
+  // kernels that fire the pre/post hooks below.
+  public native @Cast("bool") boolean supportsCompletionHooks();
+
+  public native void registerCompletionHook(@Cast("int64_t") long hook_id, @ByVal CompletionHook hook);
+
+  public native void unregisterCompletionHook(@Cast("int64_t") long hook_id);
 
   
 

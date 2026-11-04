@@ -75,7 +75,7 @@ public class PrefixStore extends Store {
         @Const @ByRef StringVector keys,
         @Cast("std::vector<uint8_t>*") @StdVector ByteVector values);
 
-  // Returns true if this store support append, multiGet and multiSet
+  // Returns true if this store supports append, multiGet and multiSet
   public native @Cast("bool") boolean hasExtendedApi();
 
   public native void queuePush(@StdString BytePointer key, @Cast("const std::vector<uint8_t>*") @ByRef ByteVector value);

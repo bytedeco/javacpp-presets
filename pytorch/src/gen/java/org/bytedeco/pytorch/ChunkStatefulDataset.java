@@ -27,7 +27,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  ended, it should return an empty optional. The dataloader knows to modify
  *  its implementation based on whether the dataset is stateless or stateful.
  * 
- *  Note that when subclassing a from {@code StatefulDataset<Self, T>}, the return
+ *  Note that when subclassing from {@code StatefulDataset<Self, T>}, the return
  *  type of {@code get_batch()}, which the subclass must override, will be
  *  {@code optional<T>} (i.e. the type specified in the {@code StatefulDataset}
  *  specialization is automatically boxed into an {@code optional} for the dataset's

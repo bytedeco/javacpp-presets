@@ -45,7 +45,7 @@ public class XPUHooksInterface extends AcceleratorHooksInterface {
 
   public native @StdString BytePointer showConfig();
 
-  public native int getGlobalIdxFromDevice(@Const @ByRef Device device);
+  public native int getGlobalIdxFromDevice(@Const @ByRef Device arg0);
 
   public native @Const @ByRef Generator getDefaultGenerator(
         @Cast("c10::DeviceIndex") byte device_index/*=-1*/);
@@ -65,9 +65,9 @@ public class XPUHooksInterface extends AcceleratorHooksInterface {
 
   public native Allocator getPinnedMemoryAllocator();
 
-  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer data);
+  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer arg0);
 
-  public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte device_index);
+  public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte arg0);
 
   public native @Const @ByRef LevelZero level_zero();
 }

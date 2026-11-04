@@ -39,7 +39,4 @@ public class TensorTensorDictIterator extends Pointer {
 
   private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef TensorTensorDictIterator lhs, @Const @ByRef TensorTensorDictIterator rhs);
   public boolean equals(TensorTensorDictIterator rhs) { return equals(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef TensorTensorDictIterator lhs, @Const @ByRef TensorTensorDictIterator rhs);
-  public boolean notEquals(TensorTensorDictIterator rhs) { return notEquals(this, rhs); }
 }

@@ -474,6 +474,7 @@ public class IValue extends Pointer {
 
   // ToOptional: convert a IValue to the Optional obj that accepts both T and
   // None
+  
 
   /** \private [doxygen private]
    *  this is a shallow comparison of two IValues to test the object identity */

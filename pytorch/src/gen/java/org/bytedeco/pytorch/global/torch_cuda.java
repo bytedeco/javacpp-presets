@@ -622,15 +622,37 @@ manage their own state. There is only a single CUDA context/state.
 
 /* Handles */
 @Namespace("at::cuda") public static native cusparseContext getCurrentCUDASparseHandle();
+// On CUDA, the public handle uses the BLAS library's default workspace unless
+// ATen workspace caching is explicitly enabled. On ROCm, ATen binds its
+// per-operation workspaces to separate handles, and each stream gets its own
+// public handle, bound at creation to a buffer from a caching-allocator pool
+// reserved for these buffers, at least as large as the arena rocBLAS would have
+// allocated.
 @Namespace("at::cuda") public static native cublasContext getCurrentCUDABlasHandle(@Cast("bool") boolean setup/*=true*/);
 @Namespace("at::cuda") public static native cublasContext getCurrentCUDABlasHandle();
+// Targeting ../cuda/CUDABlasHandleWithWorkspace.java
 
+
+
+@Namespace("at::cuda") public static native @ByVal CUDABlasHandleWithWorkspace getCurrentCUDABlasHandleWithWorkspace();
+
+// #ifdef USE_ROCM
+// #endif
 
 @Namespace("at::cuda") public static native void clearCublasWorkspaces();
 @Namespace("at::cuda") public static native void clearCublasWorkspacesForStream(CUstream_st stream);
 
 @Namespace("at::cuda") public static native @Cast("size_t") long getCUDABlasLtWorkspaceSize();
+@Namespace("at::cuda") public static native @Cast("bool") boolean isCUDABlasWorkspaceCachingEnabled();
+// These return cache-owned allocations even when ATen workspace caching is
+// disabled. Use allocateCUDABlasWorkspace for operation-scoped storage.
+// On ROCm without workspace caching, under stream capture they return a buffer
+// from the capture's memory pool instead, one per (capture, stream), which the
+// graph owns once the capture ends. A pointer fetched before the capture must
+// not be used in it.
 @Namespace("at::cuda") public static native Pointer getCUDABlasLtWorkspace();
+@Namespace("at::cuda") public static native Pointer getCUDABlasLtWorkspace(@Cast("size_t") long workspace_size);
+@Namespace("at::cuda") public static native @StdMove DataPtr allocateCUDABlasWorkspace(@Cast("size_t") long size);
 @Namespace("at::cuda") public static native void setChosenWorkspaceSize(@Cast("size_t") long size);
 @Namespace("at::cuda") public static native void setCUDABlasLtWorkspaceSize(@Cast("size_t") long size);
 @Namespace("at::cuda") public static native void resetChosenWorkspaceSize();
@@ -1288,6 +1310,49 @@ manage their own state. There is only a single CUDA context/state.
 
 @Namespace("c10::cuda::CUDACachingAllocator") public static native void annotateMemory(@Const Pointer ptr, @StdString BytePointer metadata);
 @Namespace("c10::cuda::CUDACachingAllocator") public static native void annotateMemory(@Const Pointer ptr, @StdString String metadata);
+
+// Tag (or, with an empty class, untag) a CUDA stream with an opaque reserve
+// class. Expandable segments created for a tagged stream size their virtual
+// address reservation from the per-class reserve in PYTORCH_CUDA_ALLOC_CONF
+// (see expandable_segments_reserve_by_class / expandable_segments_reserve). The
+// class string is opaque to core: downstream callers own the vocabulary. An
+// untagged stream (or the empty class) uses the full historical reserve.
+//
+// Contract: the tag is keyed by the raw cudaStream_t handle and persists until
+// overwritten or cleared. Streams from getStreamFromPool come from a shared,
+// round-robin pool, so tagging such a stream applies the class to every user of
+// that handle and to the (shared) expandable segments created on it. Tag only
+// streams whose (device, stream) identity you control for the intended
+// lifetime, and clear the tag (empty class) if the handle may later be reused
+// for an unrelated purpose.
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void setExpandableSegmentReserveClassForStream(
+    CUstream_st stream,
+    @StdString BytePointer reserve_class);
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void setExpandableSegmentReserveClassForStream(
+    CUstream_st stream,
+    @StdString String reserve_class);
+@Namespace("c10::cuda::CUDACachingAllocator") public static native @StdString BytePointer getExpandableSegmentReserveClassForStream(
+    CUstream_st stream);
+
+// Registers a code-side default reserve, expressed as a fraction of total
+// device memory, for a reserve class. Lets serving layers opt their stream
+// classes into a downsized reserve by default without depending on
+// CUDAAllocatorConfig. Explicit operator config (via PYTORCH_CUDA_ALLOC_CONF)
+// wins; see the precedence note on
+// CUDAAllocatorConfig::set_default_reserve_for_class.
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void setDefaultExpandableSegmentReserveFractionForClass(
+    @StdString BytePointer reserve_class,
+    double fraction);
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void setDefaultExpandableSegmentReserveFractionForClass(
+    @StdString String reserve_class,
+    double fraction);
+
+// Process-wide expandable-segment virtual-address gauges, for observability
+// (ODS) and out-of-VM diagnostics: total VA bytes reserved by all live
+// ExpandableSegments, and the number of live segments. Cheap relaxed-atomic
+// reads; safe to call at any time.
+@Namespace("c10::cuda::CUDACachingAllocator") public static native @Cast("size_t") long getExpandableSegmentsReservedBytes();
+@Namespace("c10::cuda::CUDACachingAllocator") public static native @Cast("size_t") long getExpandableSegmentsCount();
 
  // namespace c10::cuda::CUDACachingAllocator
 // Keep BC only

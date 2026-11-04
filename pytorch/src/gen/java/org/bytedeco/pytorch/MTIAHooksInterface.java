@@ -121,4 +121,6 @@ public class MTIAHooksInterface extends AcceleratorHooksInterface {
   public native @Const @ByRef Generator getDefaultGenerator(@Cast("c10::DeviceIndex") byte arg0);
 
   public native @ByVal Generator getNewGenerator(@Cast("c10::DeviceIndex") byte arg0);
+
+  public native @Cast("bool") boolean isCurrentStreamCapturing();
 }

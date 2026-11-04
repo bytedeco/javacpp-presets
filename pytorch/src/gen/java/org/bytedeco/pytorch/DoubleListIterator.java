@@ -33,7 +33,10 @@ public class DoubleListIterator extends Pointer {
         return new DoubleListIterator((Pointer)this).offsetAddress(i);
     }
 
-   // C++17 friendly std::iterator implementation
+  // C++17 forbids a proxy iterator from being forward or better, so the legacy
+  // tag says input and the real category goes in iterator_concept. Spelled out
+  // explicitly rather than left to iterator_traits synthesis: GCC 11 (an actual
+  // CI toolchain) synthesizes something std::reverse's dispatch can't match.
 
   public DoubleListIterator() { super((Pointer)null); allocate(); }
   private native void allocate();
@@ -50,13 +53,14 @@ public class DoubleListIterator extends Pointer {
 
   public native @ByVal @Name("operator --") DoubleListIterator decrement(int arg0);
 
-  public native @ByRef @Name("operator +=") DoubleListIterator addPut(long offset);
+  public native @ByRef @Name("operator +=") DoubleListIterator addPut(@Cast("c10::impl::ListIterator<double,c10::detail::ListImpl::list_type::iterator>::difference_type") long offset);
 
-  public native @ByRef @Name("operator -=") DoubleListIterator subtractPut(long offset);
+  public native @ByRef @Name("operator -=") DoubleListIterator subtractPut(@Cast("c10::impl::ListIterator<double,c10::detail::ListImpl::list_type::iterator>::difference_type") long offset);
 
-  public native @ByVal @Name("operator +") DoubleListIterator add(long offset);
+  public native @ByVal @Name("operator -") DoubleListIterator subtract(@Cast("c10::impl::ListIterator<double,c10::detail::ListImpl::list_type::iterator>::difference_type") long offset);
 
-  public native @ByVal @Name("operator -") DoubleListIterator subtract(long offset);
+  private static native @Namespace @ByVal @Name("operator +") DoubleListIterator add(@Cast("c10::impl::ListIterator<double,c10::detail::ListImpl::list_type::iterator>::difference_type") long offset, @Const @ByRef DoubleListIterator rhs);
+  public DoubleListIterator add(long offset) { return add(offset, this); }
 
   private static native @Namespace @Cast("c10::impl::ListIterator<double,c10::detail::ListImpl::list_type::iterator>::difference_type") @Name("operator -") long subtract(@Const @ByRef DoubleListIterator lhs, @Const @ByRef DoubleListIterator rhs);
   public long subtract(DoubleListIterator rhs) { return subtract(this, rhs); }
@@ -65,21 +69,10 @@ public class DoubleListIterator extends Pointer {
 
   
 
-  private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef DoubleListIterator lhs, @Const @ByRef DoubleListIterator rhs);
-  public boolean equals(DoubleListIterator rhs) { return equals(this, rhs); }
+  // ranges finds these by ADL; defined in List_inl.h (need a complete IValue).
+  
 
-  private static native @Namespace @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef DoubleListIterator lhs, @Const @ByRef DoubleListIterator rhs);
-  public boolean notEquals(DoubleListIterator rhs) { return notEquals(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef DoubleListIterator lhs, @Const @ByRef DoubleListIterator rhs);
-  public boolean lessThan(DoubleListIterator rhs) { return lessThan(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator <=") boolean lessThanEquals(@Const @ByRef DoubleListIterator lhs, @Const @ByRef DoubleListIterator rhs);
-  public boolean lessThanEquals(DoubleListIterator rhs) { return lessThanEquals(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator >") boolean greaterThan(@Const @ByRef DoubleListIterator lhs, @Const @ByRef DoubleListIterator rhs);
-  public boolean greaterThan(DoubleListIterator rhs) { return greaterThan(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@Const @ByRef DoubleListIterator lhs, @Const @ByRef DoubleListIterator rhs);
-  public boolean greaterThanEquals(DoubleListIterator rhs) { return greaterThanEquals(this, rhs); }
+  
+  private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef DoubleListIterator arg0, @Const @ByRef DoubleListIterator arg1);
+  public boolean equals(DoubleListIterator arg1) { return equals(this, arg1); }
 }

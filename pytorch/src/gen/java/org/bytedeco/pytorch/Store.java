@@ -103,7 +103,7 @@ public class Store extends CustomClassHolder {
         @Const @ByRef StringVector keys,
         @Cast("std::vector<uint8_t>*") @StdVector ByteVector values);
 
-  // Returns true if this store support append, multiGet and multiSet
+  // Returns true if this store supports append, multiGet and multiSet
   public native @Cast("bool") boolean hasExtendedApi();
 
   public native void queuePush(

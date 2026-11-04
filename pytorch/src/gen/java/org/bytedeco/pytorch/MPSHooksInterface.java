@@ -45,7 +45,9 @@ public class MPSHooksInterface extends AcceleratorHooksInterface {
   // Initialize the MPS library state
   public native void init();
   public native @Cast("bool") boolean hasMPS();
-  public native @Cast("bool") boolean isOnMacOSorNewer(@Cast("unsigned") int major/*=13*/, @Cast("unsigned") int minor/*=0*/);
+  public native @Cast("bool") boolean isOnMacOSorNewer(
+        @Cast("unsigned") int major/*=13*/,
+        @Cast("unsigned") int minor/*=0*/);
   public native @Cast("bool") boolean isOnMacOSorNewer();
   public native @Const @ByRef Generator getDefaultGenerator(
         @Cast("c10::DeviceIndex") byte device_index/*=-1*/);
@@ -63,19 +65,19 @@ public class MPSHooksInterface extends AcceleratorHooksInterface {
   public native @Cast("size_t") long getRecommendedMaxMemory();
   public native @Cast("size_t") long getMaxBufferLength();
   public native void setMemoryFraction(double arg0);
-  public native void profilerStartTrace(@StdString BytePointer mode, @Cast("bool") boolean waitUntilCompleted);
-  public native void profilerStartTrace(@StdString String mode, @Cast("bool") boolean waitUntilCompleted);
+  public native void profilerStartTrace(@StdString BytePointer arg0, @Cast("bool") boolean arg1);
+  public native void profilerStartTrace(@StdString String arg0, @Cast("bool") boolean arg1);
   public native void profilerStopTrace();
-  public native @Cast("uint32_t") int acquireEvent(@Cast("bool") boolean enable_timing);
-  public native @ByVal Device getDeviceFromPtr(Pointer data);
-  public native void releaseEvent(@Cast("uint32_t") int event_id);
-  public native void recordEvent(@Cast("uint32_t") int event_id);
-  public native void waitForEvent(@Cast("uint32_t") int event_id);
-  public native void synchronizeEvent(@Cast("uint32_t") int event_id);
-  public native @Cast("bool") boolean queryEvent(@Cast("uint32_t") int event_id);
-  public native double elapsedTimeOfEvents(@Cast("uint32_t") int start_event_id, @Cast("uint32_t") int end_event_id);
-  public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte device_index);
-  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer data);
+  public native @Cast("uint32_t") int acquireEvent(@Cast("bool") boolean arg0);
+  public native @ByVal Device getDeviceFromPtr(Pointer arg0);
+  public native void releaseEvent(@Cast("uint32_t") int arg0);
+  public native void recordEvent(@Cast("uint32_t") int arg0);
+  public native void waitForEvent(@Cast("uint32_t") int arg0);
+  public native void synchronizeEvent(@Cast("uint32_t") int arg0);
+  public native @Cast("bool") boolean queryEvent(@Cast("uint32_t") int arg0);
+  public native double elapsedTimeOfEvents(@Cast("uint32_t") int arg0, @Cast("uint32_t") int arg1);
+  public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte arg0);
+  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer arg0);
   public native Allocator getPinnedMemoryAllocator();
 //   #undef FAIL_MPSHOOKS_FUNC
 }

@@ -280,6 +280,11 @@ public class ProcessGroupNCCL extends Backend {
     // raise a RuntimeError saying type is incompatible. See also
     // `_process_group_color` in `distributed_c10d.py`.
     public native int split_color(); public native Options split_color(int setter);
+
+    // nccl2 only: create the communicator on the first operation instead of
+    // when the device is bound. Such a group can't be split from until its
+    // first operation.
+    public native @Cast("bool") boolean lazy_init(); public native Options lazy_init(boolean setter);
   }
 
   // Helper class related to TORCH_NCCL_DESYNC_DEBUG
