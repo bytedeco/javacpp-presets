@@ -185,6 +185,22 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         ;;
+    windows-arm64)
+        mkdir -p ../include ../lib ../libs ../bin
+        cd PCbuild
+        unset PLATFORM
+        # unlike the patch above, the SDK pinned to 10.0.19041 is not installed here,
+        # so override it through the environment rather than as an msbuild argument
+        WindowsTargetPlatformVersion=10.0.26100.0 cmd.exe //c 'build.bat -p ARM64 -vv'
+        cp arm64/python*.exe arm64/python*.dll ../../bin/
+        cp arm64/python*.lib ../../libs/
+        cp arm64/*.dll arm64/*.pyd ../../lib/
+        cd ..
+        cp -r Lib/* ../lib/
+        cp -r Include/* PC/pyconfig.h ../include/
+        unzip -o ../lib/ensurepip/_bundled/pip* -d ../lib/
+        # unzip -o ../lib/ensurepip/_bundled/setuptools* -d ../lib/
+        ;;
     windows-x86)
         mkdir -p ../include ../lib ../libs ../bin
         cd PCbuild
@@ -207,22 +223,6 @@ case $PLATFORM in
         cp amd64/python*.exe amd64/python*.dll ../../bin/
         cp amd64/python*.lib ../../libs/
         cp amd64/*.dll amd64/*.pyd ../../lib/
-        cd ..
-        cp -r Lib/* ../lib/
-        cp -r Include/* PC/pyconfig.h ../include/
-        unzip -o ../lib/ensurepip/_bundled/pip* -d ../lib/
-        # unzip -o ../lib/ensurepip/_bundled/setuptools* -d ../lib/
-        ;;
-    windows-arm64)
-        mkdir -p ../include ../lib ../libs ../bin
-        cd PCbuild
-        unset PLATFORM
-        # unlike the patch above, the SDK pinned to 10.0.19041 is not installed here,
-        # so override it through the environment rather than as an msbuild argument
-        WindowsTargetPlatformVersion=10.0.26100.0 cmd.exe //c 'build.bat -p ARM64 -vv'
-        cp arm64/python*.exe arm64/python*.dll ../../bin/
-        cp arm64/python*.lib ../../libs/
-        cp arm64/*.dll arm64/*.pyd ../../lib/
         cd ..
         cp -r Lib/* ../lib/
         cp -r Include/* PC/pyconfig.h ../include/

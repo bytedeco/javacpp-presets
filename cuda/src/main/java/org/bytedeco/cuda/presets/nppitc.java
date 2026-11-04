@@ -35,7 +35,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = nppc.class, value = {
     @Platform(include = "<nppi_threshold_and_compare_operations.h>", link = "nppitc@.13"),
-    @Platform(value = {"windows-x86_64", "windows-arm64"}, preload = "nppitc64_13")},
+    @Platform(value = {"windows-arm64", "windows-x86_64"}, preload = "nppitc64_13")},
         global = "org.bytedeco.cuda.global.nppitc")
 @NoException
 public class nppitc implements InfoMapper {

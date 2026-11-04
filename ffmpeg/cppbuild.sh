@@ -2246,164 +2246,6 @@ EOF
         make install
         ;;
 
-    windows-x86)
-        echo ""
-        echo "--------------------"
-        echo "Building zimg"
-        echo "--------------------"
-        echo ""
-        cd zimg-release-$ZIMG_VERSION
-        autoreconf -iv
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32
-        make -j $MAKEJ V=0
-        make install
-        echo ""
-        echo "--------------------"
-        echo "Building zlib"
-        echo "--------------------"
-        echo ""
-        cd ../$ZLIB
-        make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
-        echo ""
-        echo "--------------------"
-        echo "Building LAME"
-        echo "--------------------"
-        echo ""
-        cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
-        make -j $MAKEJ V=0
-        make install
-        echo ""
-        echo "--------------------"
-        echo "Building XML2"
-        echo "--------------------"
-        echo ""
-        cd ../$XML2
-        ./configure --prefix=$INSTALL_PATH $LIBXML_CONFIG --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
-        make -j $MAKEJ V=0
-        make install
-        echo ""
-        echo "--------------------"
-        echo "Building speex"
-        echo "--------------------"
-        echo ""
-        cd ../$SPEEX
-        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32"
-        make -j $MAKEJ V=0
-        make install
-        cd ../$OPUS
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32"
-        make -j $MAKEJ V=0
-        make install
-        cd ../$OPENCORE_AMR
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32" CXXFLAGS="-m32"
-        make -j $MAKEJ V=0
-        make install
-        cd ../$VO_AMRWBENC
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32" CXXFLAGS="-m32"
-        make -j $MAKEJ V=0
-        make install
-        cd ../$OPENSSL
-        ./Configure mingw -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
-        make -s -j $MAKEJ
-        make install_sw
-        cd ../srt-$LIBSRT_VERSION
-        CC="gcc -m32" CXX="g++ -m32" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $SRT_CONFIG -DENABLE_STDCXX_SYNC=ON .
-        make -j $MAKEJ V=0
-        make install
-        cd ../openh264-$OPENH264_VERSION
-        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86 USE_ASM=No install-static
-        cd ../$X264
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-w64-mingw32
-        make -j $MAKEJ V=0
-        make install
-        cd ../x265-$X265/build/linux
-        # from x265 multilib.sh
-        mkdir -p 8bit 10bit 12bit
-
-        cd 12bit
-        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm.exe
-        make -j $MAKEJ
-
-        cd ../10bit
-        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm.exe
-        make -j $MAKEJ
-
-        cd ../8bit
-        ln -sf ../10bit/libx265.a libx265_main10.a
-        ln -sf ../12bit/libx265.a libx265_main12.a
-        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" ../../../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm.exe -DENABLE_CLI=OFF
-        make -j $MAKEJ
-
-        # rename the 8bit library, then combine all three into libx265.a
-        mv libx265.a libx265_main.a
-ar -M <<EOF
-CREATE libx265.a
-ADDLIB libx265_main.a
-ADDLIB libx265_main10.a
-ADDLIB libx265_main12.a
-SAVE
-END
-EOF
-        make install
-        # ----
-        cd ../../../
-        cd ../libvpx-$VPX_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86-win32-gcc --disable-avx512
-        make -j $MAKEJ
-        make install
-        cd ../libwebp-$WEBP_VERSION
-        CC="gcc -m32" CXX="g++ -m32" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
-        make -j $MAKEJ V=0
-        make install
-        cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=i686-w64-mingw32 CFLAGS="-m32"
-        make -j $MAKEJ
-        make install
-        cd ../mfx_dispatch-$MFX_VERSION
-        sedinplace 's:${SOURCES}:${SOURCES} src/mfx_driver_store_loader.cpp:g' CMakeLists.txt
-        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release .
-        make -j $MAKEJ
-        make install
-        cd ../nv-codec-headers-n$NVCODEC_VERSION
-        make install PREFIX=$INSTALL_PATH
-        cd ../harfbuzz-$HARFBUZZ_VERSION
-        echo "[binaries]" >> windows-native.ini
-        echo "c = 'gcc'" >> windows-native.ini
-        echo "cpp = 'g++'" >> windows-native.ini
-        echo "ar = 'ar'" >> windows-native.ini
-        echo "windres = 'windres'" >> windows-native.ini
-        echo "strip = 'strip'" >> windows-native.ini
-        meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG --native-file windows-native.ini -Dcpp_args="-m32" -Dc_args="-m32"
-        cd build
-        meson compile
-        meson install
-        cd ..
-        cd ../libaom-$AOMAV1_VERSION
-        mkdir -p build_release
-        cd build_release
-        CC="gcc -m32" CXX="g++ -m32" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBAOM_CONFIG ..
-        make -j $MAKEJ
-        make install
-        cd ..
-        cd ../SVT-AV1-v$SVTAV1_VERSION
-        mkdir -p build_release
-        cd build_release
-        CC="gcc -m32" CXX="g++ -m32" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG ..
-        make -j $MAKEJ
-        make install
-        cd ..
-        cd ../kvazaar-$KVAZAAR_VERSION
-        ./autogen.sh
-        CC="gcc -m32" CFLAGS="-m32 -DKVZ_STATIC_LIB" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --host=i686-w64-mingw32
-        make -j $MAKEJ V=0
-        make install
-        cd ../ffmpeg-$FFMPEG_VERSION
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $EXTRA_CONFIG $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --cxx="g++ -m32" --extra-cflags="-DLIBXML_STATIC -DKVZ_STATIC_LIB -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic -lole32 -luuid" || cat ffbuild/config.log
-        make -j $MAKEJ
-        make install
-        ;;
-
     windows-arm64)
         echo ""
         echo "--------------------"
@@ -2619,6 +2461,164 @@ EOF
         make install
         fi
         ;;
+    windows-x86)
+        echo ""
+        echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMG_VERSION
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
+        echo "Building zlib"
+        echo "--------------------"
+        echo ""
+        cd ../$ZLIB
+        make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
+        cd ../$LAME
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
+        echo "Building XML2"
+        echo "--------------------"
+        echo ""
+        cd ../$XML2
+        ./configure --prefix=$INSTALL_PATH $LIBXML_CONFIG --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
+        cd ../$SPEEX
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32"
+        make -j $MAKEJ V=0
+        make install
+        cd ../$OPUS
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32"
+        make -j $MAKEJ V=0
+        make install
+        cd ../$OPENCORE_AMR
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32" CXXFLAGS="-m32"
+        make -j $MAKEJ V=0
+        make install
+        cd ../$VO_AMRWBENC
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32" CXXFLAGS="-m32"
+        make -j $MAKEJ V=0
+        make install
+        cd ../$OPENSSL
+        ./Configure mingw -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
+        make -s -j $MAKEJ
+        make install_sw
+        cd ../srt-$LIBSRT_VERSION
+        CC="gcc -m32" CXX="g++ -m32" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $SRT_CONFIG -DENABLE_STDCXX_SYNC=ON .
+        make -j $MAKEJ V=0
+        make install
+        cd ../openh264-$OPENH264_VERSION
+        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86 USE_ASM=No install-static
+        cd ../$X264
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
+        cd ../x265-$X265/build/linux
+        # from x265 multilib.sh
+        mkdir -p 8bit 10bit 12bit
+
+        cd 12bit
+        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm.exe
+        make -j $MAKEJ
+
+        cd ../10bit
+        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm.exe
+        make -j $MAKEJ
+
+        cd ../8bit
+        ln -sf ../10bit/libx265.a libx265_main10.a
+        ln -sf ../12bit/libx265.a libx265_main12.a
+        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" ../../../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm.exe -DENABLE_CLI=OFF
+        make -j $MAKEJ
+
+        # rename the 8bit library, then combine all three into libx265.a
+        mv libx265.a libx265_main.a
+ar -M <<EOF
+CREATE libx265.a
+ADDLIB libx265_main.a
+ADDLIB libx265_main10.a
+ADDLIB libx265_main12.a
+SAVE
+END
+EOF
+        make install
+        # ----
+        cd ../../../
+        cd ../libvpx-$VPX_VERSION
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86-win32-gcc --disable-avx512
+        make -j $MAKEJ
+        make install
+        cd ../libwebp-$WEBP_VERSION
+        CC="gcc -m32" CXX="g++ -m32" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
+        make -j $MAKEJ V=0
+        make install
+        cd ../freetype-$FREETYPE_VERSION
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=i686-w64-mingw32 CFLAGS="-m32"
+        make -j $MAKEJ
+        make install
+        cd ../mfx_dispatch-$MFX_VERSION
+        sedinplace 's:${SOURCES}:${SOURCES} src/mfx_driver_store_loader.cpp:g' CMakeLists.txt
+        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release .
+        make -j $MAKEJ
+        make install
+        cd ../nv-codec-headers-n$NVCODEC_VERSION
+        make install PREFIX=$INSTALL_PATH
+        cd ../harfbuzz-$HARFBUZZ_VERSION
+        echo "[binaries]" >> windows-native.ini
+        echo "c = 'gcc'" >> windows-native.ini
+        echo "cpp = 'g++'" >> windows-native.ini
+        echo "ar = 'ar'" >> windows-native.ini
+        echo "windres = 'windres'" >> windows-native.ini
+        echo "strip = 'strip'" >> windows-native.ini
+        meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG --native-file windows-native.ini -Dcpp_args="-m32" -Dc_args="-m32"
+        cd build
+        meson compile
+        meson install
+        cd ..
+        cd ../libaom-$AOMAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        CC="gcc -m32" CXX="g++ -m32" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBAOM_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
+        cd ../SVT-AV1-v$SVTAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        CC="gcc -m32" CXX="g++ -m32" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
+        CC="gcc -m32" CFLAGS="-m32 -DKVZ_STATIC_LIB" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --host=i686-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
+        cd ../ffmpeg-$FFMPEG_VERSION
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $EXTRA_CONFIG $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --cxx="g++ -m32" --extra-cflags="-DLIBXML_STATIC -DKVZ_STATIC_LIB -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic -lole32 -luuid" || cat ffbuild/config.log
+        make -j $MAKEJ
+        make install
+        ;;
+
 
     windows-x86_64)
         echo ""

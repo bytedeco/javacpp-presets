@@ -148,17 +148,7 @@ case $PLATFORM in
         # need to add RPATH so it can find MKL in cache
         for f in $(find ../ -iname *.so); do install_name_tool -add_rpath @loader_path/../../../ $f || true; done
         ;;
-    windows-x86)
-        # sedinplace '/ccompiler._default_compilers = /,+2d' numpy/distutils/ccompiler.py # don't try to use GCC
-        # sedinplace 's/ltype = long_double_representation(pyod("_configtest"))/ltype = "IEEE_DOUBLE_LE"/g' numpy/core/setup_common.py
-        ATLAS=None "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=build-dir=build
-        ;;
-    windows-x86_64)
-        ATLAS=None "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=build-dir=build
-        ;;
     windows-arm64)
-        # like windows-x86_64, but the MSYS2 coreutils link.EXE must lose to the real
-        # link.exe beside cl.exe, and the MSVC variables need slash-normalised paths
         MSVC_BIN=$(dirname "$(which cl.exe)")
         MSVC_LINK=""
         if [[ -n "${VCToolsInstallDir:-}" ]]; then
@@ -172,6 +162,14 @@ case $PLATFORM in
         done
         export PATH="$MSVC_BIN${MSVC_LINK:+:$MSVC_LINK}:/c/msys64/clangarm64/bin"
         export CC="cl.exe" CXX="cl.exe"
+        ATLAS=None "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=build-dir=build
+        ;;
+    windows-x86)
+        # sedinplace '/ccompiler._default_compilers = /,+2d' numpy/distutils/ccompiler.py # don't try to use GCC
+        # sedinplace 's/ltype = long_double_representation(pyod("_configtest"))/ltype = "IEEE_DOUBLE_LE"/g' numpy/core/setup_common.py
+        ATLAS=None "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=build-dir=build
+        ;;
+    windows-x86_64)
         ATLAS=None "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=build-dir=build
         ;;
     *)

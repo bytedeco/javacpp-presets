@@ -200,7 +200,7 @@ case $PLATFORM in
         sedinplace '/CHECK_FUNCTION_EXISTS(posix_fallocate HAVE_POSIX_FALLOCATE)/d' cmake/Dependencies.cmake aten/src/ATen/CMakeLists.txt
         # export PATH=$(brew --prefix llvm@18)/bin:$PATH # Use brew LLVM instead of Xcode LLVM 14
         ;;
-    windows-x86_64 | windows-arm64)
+    windows-arm64 | windows-x86_64)
         # the MSVC and Windows SDK directories go in front of /usr/bin, whose coreutils
         # link.EXE and a stray ccache.exe CMake otherwise picks over cl.exe and the real
         # linker, while the rest of PATH stays in the native form that vcvarsall set up

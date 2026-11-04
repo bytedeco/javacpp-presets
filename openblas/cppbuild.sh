@@ -215,6 +215,16 @@ S        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBL
         export NO_AVX512=1
         export TARGET=NEHALEM
         ;;
+    windows-arm64)
+        export CC="gcc"
+        export FC=
+        export LDFLAGS="-Wl,--allow-multiple-definition"
+        export BINARY=64
+        export NOFORTRAN=1
+        export TARGET=ARMV8
+        export NO_SVE=1
+        export NO_SME=1
+        ;;
     windows-x86)
         export CC="gcc -m32"
         export FC="gfortran -m32"
@@ -233,16 +243,6 @@ S        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBL
         export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lquadmath -lgcc -lgcc_eh -lpthread"
         export NO_AVX512=1
         export TARGET=NEHALEM
-        ;;
-    windows-arm64)
-        export CC="gcc"
-        export FC=
-        export LDFLAGS="-Wl,--allow-multiple-definition"
-        export BINARY=64
-        export NOFORTRAN=1
-        export TARGET=ARMV8
-        export NO_SVE=1
-        export NO_SME=1
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

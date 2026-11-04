@@ -42,7 +42,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = cudart.class, value = {
     @Platform(include = {"<npp.h>", /*"<nppversion.h>",*/ "<nppdefs.h>", "<nppcore.h>"}, link = "nppc@.13"),
-    @Platform(value = {"windows-x86_64", "windows-arm64"}, preload = "nppc64_13")},
+    @Platform(value = {"windows-arm64", "windows-x86_64"}, preload = "nppc64_13")},
         target = "org.bytedeco.cuda.nppc", global = "org.bytedeco.cuda.global.nppc")
 @NoException
 public class nppc implements InfoMapper, LoadEnabled {
