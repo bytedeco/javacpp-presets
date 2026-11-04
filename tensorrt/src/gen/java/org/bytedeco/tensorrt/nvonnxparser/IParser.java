@@ -420,5 +420,36 @@ public class IParser extends Pointer {
      * 
      *  @return true if the IBuilderConfig was set successfully, false otherwise.
      *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
     public native @Cast("bool") @NoException(true) boolean setBuilderConfig(@Const IBuilderConfig builderConfig);
+
+    /**
+     *  \brief Set or clear an optional observer notified once per refittable weight during parsing.
+     * 
+     *  When attached, the parser emits one RefitRecord per network weight it names via
+     *  INetworkDefinition::setWeightsName, at the moment the weight is created during
+     *  parse/parseModelProto. This is the same record schema emitted by
+     *  IParserRefitter::setRefitObserver during refit, produced without building or
+     *  deserializing an engine. Because the network has not been built yet, the records are a
+     *  candidate superset of the built engine's refittable weights: the builder may fold or
+     *  absorb some of them. Consumers replaying the records against an engine must skip
+     *  records whose trtName the engine's nvinfer1::IRefitter does not report in
+     *  getAllWeights, and rely on refitCudaEngine's missing-weights check for coverage.
+     * 
+     *  Records are only valid if the subsequent parse call returns true.
+     * 
+     *  May be called any time before parse / parseModelProto. Pass nullptr to detach. The
+     *  observer must outlive the parse call, or be detached before destruction. Ownership
+     *  remains with the caller.
+     * 
+     *  @see IRefitterObserver IParserRefitter::setRefitObserver
+     *  */
+    public native @NoException(true) void setRefitObserver(IRefitterObserver observer);
 }

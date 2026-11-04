@@ -38,13 +38,17 @@ import org.bytedeco.nvcodec.presets.*;
     inherit = nvcuvid.class,
     value = {
         @Platform(
-            value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
+            value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64", "windows-arm64"},
             include = "nvEncodeAPI.h",
             link = "nvidia-encode"
         ),
         @Platform(
             value = "windows-x86_64",
             link = "nvencodeapi"
+        ),
+        @Platform(
+            value = "windows-arm64",
+            link = {"nvcuvida64", "nvencodeapia64"}
         )
     },
     target = "org.bytedeco.nvcodec.nvencodeapi",

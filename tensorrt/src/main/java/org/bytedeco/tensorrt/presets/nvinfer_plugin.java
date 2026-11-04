@@ -40,7 +40,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "nvinfer_plugin@.11"
         ),
         @Platform(
-            value = "windows-x86_64",
+            value = {"windows-x86_64", "windows-arm64"},
             link = "nvinfer_plugin_11"
         )
     },

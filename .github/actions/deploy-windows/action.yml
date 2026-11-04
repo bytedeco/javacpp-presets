@@ -177,6 +177,21 @@ runs:
           bash -c "find 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/'"
         )
 
+        if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
+          echo Installing CUDA, cuDNN, etc
+          curl -LO https://developer.download.nvidia.com/compute/cuda/13.4.2/local_installers/cuda_13.4.2_windows_arm64.exe
+          curl -LO https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/windows-arm64/cudnn-windows-arm64-9.26.0.51_cuda13-archive.zip
+          cuda_13.4.2_windows_arm64.exe -s
+          unzip cudnn-windows-arm64-9.26.0.51_cuda13-archive.zip
+          move cudnn-windows-arm64-9.26.0.51_cuda13-archive\bin\arm64\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.4\bin\arm64"
+          move cudnn-windows-arm64-9.26.0.51_cuda13-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.4\include"
+          move cudnn-windows-arm64-9.26.0.51_cuda13-archive\lib\arm64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.4\lib\arm64"
+          bash -c "sed -i 's/cublas_v2.h/cublas_api.h/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/include/cublasXt.h' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/include/cusolverDn.h' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/include/cusolverSp.h'"
+          bash -c "sed -i 's/#if !defined(__cplusplus) || __cplusplus >= 201103L/#if 1/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/include/driver_types.h'"
+          bash -c "sed -i 's/__out/__cccl_out/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/include/cccl/cuda/__ptx/instructions/generated/tcgen05_ld.h'"
+          bash -c "find 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/'"
+        )
+
         if "%CI_DEPLOY_MODULE%"=="nvcodec" (
           echo Installing NVIDIA Video Codec SDK
           python -m gdown 1d_i_qrkS9rvDMgYUY7O5vQHCf_rj1Jjy
@@ -187,9 +202,14 @@ runs:
         if "%CI_DEPLOY_MODULE%"=="tensorrt" (
           echo Installing TensorRT
           rem python -m gdown 1GfmJ1BKbacLpUU-0i_mGu0sjrAS0Xzzi
-          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/11.3.0/zip/TensorRT-Enterprise-11.3.0.99-Windows-amd64-cuda-13.4-Release-external.zip
-          unzip TensorRT-Enterprise-11.3.0.99-Windows-amd64-cuda-13.4-Release-external.zip
-          move TensorRT-11.3.0.99 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
+          if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
+            curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/11.4.0/zip/TensorRT-Enterprise-11.4.0.106-Windows-arm64-cuda-13.4-Release-external.zip
+            unzip TensorRT-Enterprise-11.4.0.106-Windows-arm64-cuda-13.4-Release-external.zip
+          ) else (
+            curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/11.4.0/zip/TensorRT-Enterprise-11.4.0.106-Windows-amd64-cuda-13.4-Release-external.zip
+            unzip TensorRT-Enterprise-11.4.0.106-Windows-amd64-cuda-13.4-Release-external.zip
+          )
+          move TensorRT-11.* "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
         )
 
         if "%CI_DEPLOY_MODULE%"=="mkl" (

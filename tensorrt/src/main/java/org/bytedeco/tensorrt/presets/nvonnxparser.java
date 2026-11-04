@@ -41,7 +41,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             preload = "nvinfer_vc_plugin@.11"
         ),
         @Platform(
-            value = "windows-x86_64",
+            value = {"windows-x86_64", "windows-arm64"},
             link = "nvonnxparser_11",
             preload = "nvinfer_vc_plugin_11"
         )

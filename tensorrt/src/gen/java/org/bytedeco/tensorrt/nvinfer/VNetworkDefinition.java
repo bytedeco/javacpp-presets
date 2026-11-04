@@ -193,4 +193,5 @@ public class VNetworkDefinition extends VRoot {
             CausalMaskKind causalKind);
     public native @NoException(true) IAttention addAttentionV2(@ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, @Cast("nvinfer1::AttentionNormalizationOp") int normOp,
             @Cast("nvinfer1::CausalMaskKind") int causalKind);
+    public native @NoException(true) ISqueezeLayer addSqueezeV2(@ByRef ITensor input, ITensor axes);
 }

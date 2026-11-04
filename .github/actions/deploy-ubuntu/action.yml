@@ -237,8 +237,8 @@ runs:
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
           # python3 -m gdown 1LZRCv4ZAGiDQAu4pvADJIGntq4cGl5tU
-          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/11.3.0/tars/TensorRT-Enterprise-11.3.0.99-Linux-aarch64-cuda-13.4-Release-external.tar.zst
-          $SUDO tar -hxvf TensorRT-Enterprise-11.3.0.99-Linux-aarch64-cuda-13.4-Release-external.tar.zst -C /usr/local/
+          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/11.4.0/tars/TensorRT-Enterprise-11.4.0.106-Linux-aarch64-cuda-13.4-Release-external.tar.zst
+          $SUDO tar -hxvf TensorRT-Enterprise-11.4.0.106-Linux-aarch64-cuda-13.4-Release-external.tar.zst -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
           $SUDO patchelf --set-rpath '$ORIGIN' /usr/local/tensorrt/lib/libnvinfer.so
           # Remove downloaded archives and unused libraries to avoid running out of disk space
@@ -248,8 +248,8 @@ runs:
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
           # python3 -m gdown 1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
-          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/11.3.0/tars/TensorRT-Enterprise-11.3.0.99-Linux-x86_64-cuda-13.4-Release-external.tar.zst
-          $SUDO tar -hxvf TensorRT-Enterprise-11.3.0.99-Linux-x86_64-cuda-13.4-Release-external.tar.zst -C /usr/local/
+          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/11.4.0/tars/TensorRT-Enterprise-11.4.0.106-Linux-x86_64-cuda-13.4-Release-external.tar.zst
+          $SUDO tar -hxvf TensorRT-Enterprise-11.4.0.106-Linux-x86_64-cuda-13.4-Release-external.tar.zst -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
           $SUDO patchelf --set-rpath '$ORIGIN' /usr/local/tensorrt/lib/libnvinfer.so
           # Remove downloaded archives and unused libraries to avoid running out of disk space

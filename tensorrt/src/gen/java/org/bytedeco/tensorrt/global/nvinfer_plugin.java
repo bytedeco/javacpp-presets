@@ -104,19 +104,19 @@ public class nvinfer_plugin extends org.bytedeco.tensorrt.presets.nvinfer_plugin
  *  This is the API for the Nvidia provided TensorRT plugin utilities.
  *  It lists all the parameters utilized by the TensorRT plugins.
  *  */
-// Targeting ../nvinfer_plugin/PriorBoxParameters.java
+// Targeting ..\nvinfer_plugin\PriorBoxParameters.java
 
 
-// Targeting ../nvinfer_plugin/RPROIParams.java
+// Targeting ..\nvinfer_plugin\RPROIParams.java
 
 
-// Targeting ../nvinfer_plugin/GridAnchorParameters.java
+// Targeting ..\nvinfer_plugin\GridAnchorParameters.java
 
 
-// Targeting ../nvinfer_plugin/softmaxTree.java
+// Targeting ..\nvinfer_plugin\softmaxTree.java
 
 
-// Targeting ../nvinfer_plugin/RegionParameters.java
+// Targeting ..\nvinfer_plugin\RegionParameters.java
 
 
 

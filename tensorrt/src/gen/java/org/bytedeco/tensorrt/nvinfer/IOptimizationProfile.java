@@ -251,6 +251,54 @@ public class IOptimizationProfile extends INoCopy {
      * 
      *  \warning The string inputName must be null-terminated, and be at most 4096 bytes including the terminator.
      *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
     public native @Cast("const int64_t*") @NoException(true) LongPointer getShapeValuesV2(String inputName, OptProfileSelector select);
     public native @Cast("const int64_t*") @NoException(true) LongBuffer getShapeValuesV2(@Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select);
+
+    /**
+     *  \brief Set the CUDA stream that is used to profile this optimization profile.
+     * 
+     *  This stream overrides IBuilderConfig::setProfileStream() for this optimization profile. Passing nullptr clears
+     *  the override, and the optimization profile uses the stream from IBuilderConfig instead.
+     * 
+     *  If \p stream belongs to a CUDA green context, TensorRT automatically queries the context's SM count and
+     *  co-scheduled-SM alignment, profiles this optimization profile on that stream, and stores the resulting
+     *  execution-resource contract for this optimization profile in the engine.
+     * 
+     *  CUDA green context use requires both a TensorRT build based on CUDA Toolkit 13.0 or newer and a CUDA driver
+     *  compatible with CUDA 13.0 or newer. Ordinary profile streams remain supported with older CUDA Toolkit and
+     *  driver versions supported by TensorRT.
+     * 
+     *  The application must keep the stream and its CUDA green context alive until the build completes.
+     * 
+     *  @param stream The CUDA stream used to profile this optimization profile, or nullptr to use the stream from
+     *         IBuilderConfig.
+     * 
+     *  @see getProfileStream(), IBuilderConfig::setProfileStream()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) void setProfileStream(CUstream_st stream);
+
+    /**
+     *  \brief Get the CUDA stream set for this optimization profile.
+     * 
+     *  @return The stream set by setProfileStream(), or nullptr if no profile-specific stream is set.
+     * 
+     *  @see setProfileStream(), IBuilderConfig::getProfileStream()
+     *  */
+    public native @NoException(true) CUstream_st getProfileStream();
 }
