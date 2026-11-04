@@ -2416,7 +2416,7 @@ EOF
             # those options get stripped from the flags its Makefile adds for them
             autoreconf -iv
             sedinplace 's/ -mavx2//g; s/ -mavx //g; s/ -mavx$//g; s/ -mfma//g; s/ -mf16c//g' Makefile.in
-            ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-w64-windows-gnu
+            ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-w64-mingw32
         else
         autoreconf -iv
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32
