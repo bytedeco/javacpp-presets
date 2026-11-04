@@ -52,16 +52,19 @@ jobs:
       matrix:
         ext: [""]
     env:
-        BUILD_DIR: D:\build
+        BUILD_DIR: C:\build
         CI_DEPLOY_OPTIONS: -Djavacpp.parser.skip
-        TEMP: D:\temp
-        TMP: D:\temp
+        TEMP: C:\temp
+        TMP: C:\temp
     steps:
+      - name: Create temporary directory
+        shell: cmd
+        run: if not exist "%TEMP%" mkdir "%TEMP%"
       - uses: al-cheb/configure-pagefile-action@v1.3
         with:
           minimum-size: 32GB
           maximum-size: 64GB
-          disk-root: "D:"
+          disk-root: "C:"
       - uses: bytedeco/cache@always
         with:
           key: ${{ github.workflow }}-${{ github.job }}${{ matrix.ext }}@${{ github.run_id }}-${{ github.run_attempt }}
