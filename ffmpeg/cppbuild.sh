@@ -170,17 +170,17 @@ cd ..
 export PATH=$INSTALL_PATH/bin:$PATH
 export PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/
 
-patch -Np1 -d $LAME < ../../lame.patch
-# patch -Np1 -d $OPENSSL < ../../openssl-android.patch
-# patch -Np1 -d $OPENSSL < ../../openssl-windows.patch
-patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
-patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-vulkan.patch
-patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../$V4L2_REQUEST_PATCH
+patch --batch -Np1 -d $LAME < ../../lame.patch || true
+# patch --batch -Np1 -d $OPENSSL < ../../openssl-android.patch
+# patch --batch -Np1 -d $OPENSSL < ../../openssl-windows.patch
+patch --batch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch || true
+patch --batch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-vulkan.patch || true
+patch --batch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../$V4L2_REQUEST_PATCH || true
 # TODO: remove when the packaged FFmpeg passes tls_verify and ca_file to nested HTTP, HLS and DASH requests
-patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-tls.patch
+patch --batch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-tls.patch || true
 # TODO: remove when the packaged FFmpeg loads the Windows ROOT store with OpenSSL when no ca_file is given
-patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-tls-winstore.patch
-# patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
+patch --batch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-tls-winstore.patch || true
+# patch --batch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
 sedinplace 's/CMAKE_C_COMPILER_ID MATCHES "Clang"/FALSE/g' SVT-AV1-*/CMakeLists.txt
@@ -2404,15 +2404,23 @@ EOF
         make install
         ;;
 
-    windows-x86_64)
+    windows-arm64)
         echo ""
         echo "--------------------"
         echo "Building zimg"
         echo "--------------------"
         echo ""
         cd zimg-release-$ZIMG_VERSION
+        if [[ $PLATFORM == windows-arm64 ]]; then
+            # zimg selects the x86 intrinsics of its AVX variants on the host alone, so
+            # those options get stripped from the flags its Makefile adds for them
+            autoreconf -iv
+            sedinplace 's/ -mavx2//g; s/ -mavx //g; s/ -mavx$//g; s/ -mfma//g; s/ -mf16c//g' Makefile.in
+            ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-w64-windows-gnu
+        else
         autoreconf -iv
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32
+        fi
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -2476,6 +2484,11 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../x265-$X265/build/linux
+        if [[ $PLATFORM == windows-arm64 ]]; then
+            # x265 has no Windows on ARM support yet, so only install its headers
+            make install 2>/dev/null || true
+            cp -a ../../../source/x265.h ../../../source/x265_config.h $INSTALL_PATH/include/ 2>/dev/null || true
+        else
         # from x265 multilib.sh
         mkdir -p 8bit 10bit 12bit
 
@@ -2504,6 +2517,7 @@ SAVE
 END
 EOF
         make install
+        fi
         # ----
         cd ../../../
         cd ../libvpx-$VPX_VERSION
@@ -2520,9 +2534,14 @@ EOF
         make install
         cd ../mfx_dispatch-$MFX_VERSION
         sedinplace 's:${SOURCES}:${SOURCES} src/mfx_driver_store_loader.cpp:g' CMakeLists.txt
-        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release .
-        make -j $MAKEJ
-        make install
+        if [[ $PLATFORM == windows-arm64 ]]; then
+            # libmfx has no Windows on ARM support yet, so only install its headers
+            make -C mfx_dispatch install-exec 2>/dev/null || make -C mfx_dispatch install || true
+        else
+            CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release .
+            make -j $MAKEJ
+            make install
+        fi
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
         cd ../harfbuzz-$HARFBUZZ_VERSION
@@ -2552,11 +2571,44 @@ EOF
         make install
         cd ..
         cd ../kvazaar-$KVAZAAR_VERSION
+        if [[ $PLATFORM == windows-arm64 ]]; then
+            # kvazaar has no Windows on ARM support yet, so only install its headers
+            ./configure --prefix=$INSTALL_PATH || true
+            make install 2>/dev/null || true
+            cp -a include/kvazaar.h $INSTALL_PATH/include/ 2>/dev/null || true
+        else
         ./autogen.sh
         CC="gcc -m64" CFLAGS="-m64 -DKVZ_STATIC_LIB" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --host=x86_64-w64-mingw32
         make -j $MAKEJ V=0
         make install
+        fi
         cd ../ffmpeg-$FFMPEG_VERSION
+        if [[ $PLATFORM == windows-arm64 ]]; then
+            # native build with the MSYS2 CLANGARM64 toolchain and lld as linker
+            AR=llvm-ar RANLIB=llvm-ranlib
+            # x265, mfx_dispatch and kvazaar only installed their headers above,
+            # and Vulkan, CUDA, libmfx and kvazaar have no Windows on ARM support
+            PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $EXTRA_CONFIG --disable-vulkan --disable-cuda --disable-cuvid --disable-nvenc --disable-libmfx --disable-libkvazaar --enable-w32threads --enable-indev=dshow --target-os=mingw32 --arch=aarch64 --host=aarch64-w64-windows-gnu --cc="gcc" --cxx="g++" --ar="$AR" --ranlib="$RANLIB" --extra-cflags="-DLIBXML_STATIC -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1 $EXTRA_CFLAGS" --extra-ldflags="-L../lib/ $EXTRA_LDFLAGS" --extra-libs="-static-libgcc -static -lWs2_32 -lcrypt32 -lpthread -lz -lm -lole32 -luuid $EXTRA_LIBS" || cat ffbuild/config.log
+            if ! grep -q "^#define HAVE_OPENCL_D3D11 1" config.h; then
+                echo "Error: FFmpeg configured OpenCL without D3D11 sharing support"
+                cat ffbuild/config.log
+                exit 1
+            fi
+            make -j $MAKEJ
+            make install
+            # the GNU toolchain names its import libraries lib$n.dll.a, so copy them
+            # under the names the presets link against, generate the MSVC import
+            # libraries from the .def files installed along with the DLLs, and make
+            # psapi.lib of the Windows SDK reachable for those presets
+            if [[ -z "${WindowsSDKDir:-}" ]]; then
+                WindowsSDKDir="/c/Program Files (x86)/Windows Kits/10"
+            fi
+            for n in avcodec avdevice avfilter avformat avutil swresample swscale; do
+                cp -f lib/lib$n.dll.a lib/$n.dll.a
+                [ -f lib/$n.lib ] || (cd lib && lib.exe //NOLOGO //DEF:$n-*.def //OUT:$n.lib //MACHINE:ARM64)
+            done
+            cp -f "${WindowsSDKDir%/}/Lib/ARM64/psapi.lib" lib/psapi.lib
+        else
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $EXTRA_CONFIG $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --cxx="g++ -m64" --extra-cflags="-DLIBXML_STATIC -DKVZ_STATIC_LIB -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1 $EXTRA_CFLAGS" --extra-ldflags="-L../lib/ $EXTRA_LDFLAGS" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic -lole32 -luuid $EXTRA_LIBS" || cat ffbuild/config.log
         if ! grep -q "^#define HAVE_OPENCL_D3D11 1" config.h; then
             echo "Error: FFmpeg configured OpenCL without D3D11 sharing support"
@@ -2565,6 +2617,213 @@ EOF
         fi
         make -j $MAKEJ
         make install
+        fi
+        ;;
+
+    windows-x86_64)
+        echo ""
+        echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMG_VERSION
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
+        echo "Building zlib"
+        echo "--------------------"
+        echo ""
+        cd ../$ZLIB
+        make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
+        cd ../$LAME
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
+        echo "Building XML2"
+        echo "--------------------"
+        echo ""
+        cd ../$XML2
+        ./configure --prefix=$INSTALL_PATH $LIBXML_CONFIG --build=x86_64-w64-mingw32 CFLAGS="-m64"
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
+        cd ../$SPEEX
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
+        make -j $MAKEJ V=0
+        make install
+        cd ../$OPUS
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
+        make -j $MAKEJ V=0
+        make install
+        cd ../$OPENCORE_AMR
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64" CXXFLAGS="-m64"
+        make -j $MAKEJ V=0
+        make install
+        cd ../$VO_AMRWBENC
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64" CXXFLAGS="-m64"
+        make -j $MAKEJ V=0
+        make install
+        cd ../$OPENSSL
+        ./Configure mingw64 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
+        make -s -j $MAKEJ
+        make install_sw
+        cd ../srt-$LIBSRT_VERSION
+        CC="gcc -m64" CXX="g++ -m64" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $SRT_CONFIG -DENABLE_STDCXX_SYNC=ON .
+        make -j $MAKEJ V=0
+        make install
+        cd ../openh264-$OPENH264_VERSION
+        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86_64 USE_ASM=No install-static
+        cd ../$X264
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=x86_64-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
+        cd ../x265-$X265/build/linux
+        if [[ $PLATFORM == windows-arm64 ]]; then
+            # x265 has no Windows on ARM support yet, so only install its headers
+            make install 2>/dev/null || true
+            cp -a ../../../source/x265.h ../../../source/x265_config.h $INSTALL_PATH/include/ 2>/dev/null || true
+        else
+        # from x265 multilib.sh
+        mkdir -p 8bit 10bit 12bit
+
+        cd 12bit
+        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm.exe
+        make -j $MAKEJ
+
+        cd ../10bit
+        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm.exe
+        make -j $MAKEJ
+
+        cd ../8bit
+        ln -sf ../10bit/libx265.a libx265_main10.a
+        ln -sf ../12bit/libx265.a libx265_main12.a
+        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" ../../../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm.exe -DENABLE_CLI=OFF
+        make -j $MAKEJ
+
+        # rename the 8bit library, then combine all three into libx265.a
+        mv libx265.a libx265_main.a
+ar -M <<EOF
+CREATE libx265.a
+ADDLIB libx265_main.a
+ADDLIB libx265_main10.a
+ADDLIB libx265_main12.a
+SAVE
+END
+EOF
+        make install
+        fi
+        # ----
+        cd ../../../
+        cd ../libvpx-$VPX_VERSION
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86_64-win64-gcc --disable-avx512
+        make -j $MAKEJ
+        make install
+        cd ../libwebp-$WEBP_VERSION
+        CC="gcc -m64" CXX="g++ -m64" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
+        make -j $MAKEJ V=0
+        make install
+        cd ../freetype-$FREETYPE_VERSION
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=x86_64-w64-mingw32 CFLAGS="-m64"
+        make -j $MAKEJ
+        make install
+        cd ../mfx_dispatch-$MFX_VERSION
+        sedinplace 's:${SOURCES}:${SOURCES} src/mfx_driver_store_loader.cpp:g' CMakeLists.txt
+        if [[ $PLATFORM == windows-arm64 ]]; then
+            # libmfx has no Windows on ARM support yet, so only install its headers
+            make -C mfx_dispatch install-exec 2>/dev/null || make -C mfx_dispatch install || true
+        else
+            CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release .
+            make -j $MAKEJ
+            make install
+        fi
+        cd ../nv-codec-headers-n$NVCODEC_VERSION
+        make install PREFIX=$INSTALL_PATH
+        cd ../harfbuzz-$HARFBUZZ_VERSION
+        echo "[binaries]" >> windows-native.ini
+        echo "c = 'gcc'" >> windows-native.ini
+        echo "cpp = 'g++'" >> windows-native.ini
+        echo "ar = 'ar'" >> windows-native.ini
+        echo "windres = 'windres'" >> windows-native.ini
+        echo "strip = 'strip'" >> windows-native.ini
+        meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG --native-file windows-native.ini -Dcpp_args="-m64" -Dc_args="-m64"
+        cd build
+        meson compile
+        meson install
+        cd ..
+        cd ../libaom-$AOMAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBAOM_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
+        cd ../SVT-AV1-v$SVTAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
+        cd ../kvazaar-$KVAZAAR_VERSION
+        if [[ $PLATFORM == windows-arm64 ]]; then
+            # kvazaar has no Windows on ARM support yet, so only install its headers
+            ./configure --prefix=$INSTALL_PATH || true
+            make install 2>/dev/null || true
+            cp -a include/kvazaar.h $INSTALL_PATH/include/ 2>/dev/null || true
+        else
+        ./autogen.sh
+        CC="gcc -m64" CFLAGS="-m64 -DKVZ_STATIC_LIB" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --host=x86_64-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
+        fi
+        cd ../ffmpeg-$FFMPEG_VERSION
+        if [[ $PLATFORM == windows-arm64 ]]; then
+            # native build with the MSYS2 CLANGARM64 toolchain and lld as linker
+            AR=llvm-ar RANLIB=llvm-ranlib
+            # x265, mfx_dispatch and kvazaar only installed their headers above,
+            # and Vulkan, CUDA, libmfx and kvazaar have no Windows on ARM support
+            PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $EXTRA_CONFIG --disable-vulkan --disable-cuda --disable-cuvid --disable-nvenc --disable-libmfx --disable-libkvazaar --enable-w32threads --enable-indev=dshow --target-os=mingw32 --arch=aarch64 --host=aarch64-w64-windows-gnu --cc="gcc" --cxx="g++" --ar="$AR" --ranlib="$RANLIB" --extra-cflags="-DLIBXML_STATIC -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1 $EXTRA_CFLAGS" --extra-ldflags="-L../lib/ $EXTRA_LDFLAGS" --extra-libs="-static-libgcc -static -lWs2_32 -lcrypt32 -lpthread -lz -lm -lole32 -luuid $EXTRA_LIBS" || cat ffbuild/config.log
+            if ! grep -q "^#define HAVE_OPENCL_D3D11 1" config.h; then
+                echo "Error: FFmpeg configured OpenCL without D3D11 sharing support"
+                cat ffbuild/config.log
+                exit 1
+            fi
+            make -j $MAKEJ
+            make install
+            # the GNU toolchain names its import libraries lib$n.dll.a, so copy them
+            # under the names the presets link against, generate the MSVC import
+            # libraries from the .def files installed along with the DLLs, and make
+            # psapi.lib of the Windows SDK reachable for those presets
+            if [[ -z "${WindowsSDKDir:-}" ]]; then
+                WindowsSDKDir="/c/Program Files (x86)/Windows Kits/10"
+            fi
+            for n in avcodec avdevice avfilter avformat avutil swresample swscale; do
+                cp -f lib/lib$n.dll.a lib/$n.dll.a
+                [ -f lib/$n.lib ] || (cd lib && lib.exe //NOLOGO //DEF:$n-*.def //OUT:$n.lib //MACHINE:ARM64)
+            done
+            cp -f "${WindowsSDKDir%/}/Lib/ARM64/psapi.lib" lib/psapi.lib
+        else
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $EXTRA_CONFIG $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --cxx="g++ -m64" --extra-cflags="-DLIBXML_STATIC -DKVZ_STATIC_LIB -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1 $EXTRA_CFLAGS" --extra-ldflags="-L../lib/ $EXTRA_LDFLAGS" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic -lole32 -luuid $EXTRA_LIBS" || cat ffbuild/config.log
+        if ! grep -q "^#define HAVE_OPENCL_D3D11 1" config.h; then
+            echo "Error: FFmpeg configured OpenCL without D3D11 sharing support"
+            cat ffbuild/config.log
+            exit 1
+        fi
+        make -j $MAKEJ
+        make install
+        fi
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

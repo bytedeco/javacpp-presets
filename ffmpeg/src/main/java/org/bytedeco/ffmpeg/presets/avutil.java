@@ -69,6 +69,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                     preloadpath = {"/usr/local/lib/gcc/13/", "/usr/local/lib/gcc/12/", "/usr/local/lib/gcc/11/", "/usr/local/lib/gcc/10/", "/usr/local/lib/gcc/9/",
                                                    "/usr/local/lib/gcc/8/", "/usr/local/lib/gcc/7/", "/usr/local/lib/gcc/6/", "/usr/local/lib/gcc/5/"}),
         @Platform(value = "windows", includepath = {"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload = {"libwinpthread-1", "avutil-61"}),
+        @Platform(
+            value = "windows-arm64",
+            linkpath = {},
+            link = {"avutil.dll.a", "psapi.lib"}
+        ),
         @Platform(extension = "-gpl")
     }
 )

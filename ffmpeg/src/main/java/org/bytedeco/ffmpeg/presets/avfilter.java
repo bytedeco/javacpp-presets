@@ -38,7 +38,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     global = "org.bytedeco.ffmpeg.global.avfilter",
     value = {
         @Platform(cinclude = {"<libavfilter/avfilter.h>", "<libavfilter/buffersink.h>", "<libavfilter/buffersrc.h>", "<libavfilter/version_major.h>", "<libavfilter/version.h>"}, link = "avfilter@.12"),
-        @Platform(value = "windows", preload = "avfilter-12")
+        @Platform(value = "windows", preload = "avfilter-12"),
+        @Platform(
+            value = "windows-arm64",
+            linkpath = {},
+            link = {"avfilter.dll.a", "avformat.dll.a", "avcodec.dll.a", "swresample.dll.a", "swscale.dll.a", "avutil.dll.a", "psapi.lib"}
+        )
     }
 )
 public class avfilter implements InfoMapper {
