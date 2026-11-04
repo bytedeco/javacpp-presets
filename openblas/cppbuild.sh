@@ -234,19 +234,40 @@ S        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBL
         export NO_AVX512=1
         export TARGET=NEHALEM
         ;;
+    windows-arm64)
+        export CC="gcc"
+        export FC=
+        export LDFLAGS="-Wl,--allow-multiple-definition"
+        export BINARY=64
+        export NOFORTRAN=1
+        export TARGET=ARMV8
+        export NO_SVE=1
+        export NO_SME=1
+        ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
         return 0
         ;;
 esac
 
-make -s -j $MAKE_NB_JOBS libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN "FEXTRALIB=$FEXTRALIB" USE_OPENMP=0 NUM_THREADS=$NUM_THREADS NO_AVX512=$NO_AVX512
-make install "PREFIX=$INSTALL_PATH"
+if [[ $PLATFORM == windows-arm64 ]]; then
+    # Fortran not available (see NOFORTRAN above), and no CPU detection on this
+    # platform, so only the fixed TARGET above with a single architecture
+    make -s -j $MAKE_NB_JOBS libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= "LDFLAGS=$LDFLAGS" USE_OPENMP=0 NUM_THREADS=$NUM_THREADS NOFORTRAN=1 NO_SVE=1 NO_SME=1 TARGET=$TARGET
+    make install "PREFIX=$INSTALL_PATH"
 
-unset DYNAMIC_ARCH
-cd ../OpenBLAS-$OPENBLAS_VERSION-nolapack/
-make -s -j $MAKE_NB_JOBS libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN "FEXTRALIB=$FEXTRALIB" USE_OPENMP=0 NUM_THREADS=$NUM_THREADS NO_AVX512=$NO_AVX512 NO_LAPACK=1 LIBNAMESUFFIX=_nolapack
-make install "PREFIX=$INSTALL_PATH" NO_LAPACK=1 LIBNAMESUFFIX=_nolapack
+    cd ../OpenBLAS-$OPENBLAS_VERSION-nolapack/
+    make -s -j $MAKE_NB_JOBS libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= "LDFLAGS=$LDFLAGS" USE_OPENMP=0 NUM_THREADS=$NUM_THREADS NOFORTRAN=1 NO_SVE=1 NO_SME=1 TARGET=$TARGET NO_LAPACK=1 LIBNAMESUFFIX=_nolapack
+    make install "PREFIX=$INSTALL_PATH" NO_LAPACK=1 LIBNAMESUFFIX=_nolapack
+else
+    make -s -j $MAKE_NB_JOBS libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN "FEXTRALIB=$FEXTRALIB" USE_OPENMP=0 NUM_THREADS=$NUM_THREADS NO_AVX512=$NO_AVX512
+    make install "PREFIX=$INSTALL_PATH"
+
+    unset DYNAMIC_ARCH
+    cd ../OpenBLAS-$OPENBLAS_VERSION-nolapack/
+    make -s -j $MAKE_NB_JOBS libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN "FEXTRALIB=$FEXTRALIB" USE_OPENMP=0 NUM_THREADS=$NUM_THREADS NO_AVX512=$NO_AVX512 NO_LAPACK=1 LIBNAMESUFFIX=_nolapack
+    make install "PREFIX=$INSTALL_PATH" NO_LAPACK=1 LIBNAMESUFFIX=_nolapack
+fi
 
 unset CC
 unset FC
