@@ -36,14 +36,12 @@ import static org.bytedeco.pytorch.global.torch.*;
 public class DropoutImpl extends DropoutImplBase {
     static { Loader.load(); }
 
-  
-    public DropoutImpl(double p) { super((Pointer)null); allocate(p); }
-    private native void allocate(double p);
-  
-    public DropoutImpl(@Const @ByRef(nullValue = "torch::nn::DropoutOptions{}") DropoutOptions options_) { super((Pointer)null); allocate(options_); }
-    private native void allocate(@Const @ByRef(nullValue = "torch::nn::DropoutOptions{}") DropoutOptions options_);
-    public DropoutImpl() { super((Pointer)null); allocate(); }
-    private native void allocate();
+  public DropoutImpl(double p) { super((Pointer)null); allocate(p); }
+  @SharedPtr @Name("std::make_shared<torch::nn::DropoutImpl>") private native void allocate(double p);
+  public DropoutImpl(@Const @ByRef(nullValue = "torch::nn::DropoutOptions{}") DropoutOptions options_) { super((Pointer)null); allocate(options_); }
+  @SharedPtr @Name("std::make_shared<torch::nn::DropoutImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::DropoutOptions{}") DropoutOptions options_);
+  public DropoutImpl() { super((Pointer)null); allocate(); }
+  @SharedPtr @Name("std::make_shared<torch::nn::DropoutImpl>") private native void allocate();
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DropoutImpl(Pointer p) { super(p); }
 
