@@ -1,0 +1,28 @@
+--- a/libavutil/hwcontext_stub.c
++++ b/libavutil/hwcontext_stub.c
+@@ -26,6 +26,8 @@
+ typedef struct AVVkFrame AVVkFrame;
+ const VkFormat *av_vkfmt_from_pixfmt(enum AVPixelFormat p);
+ AVVkFrame *av_vk_frame_alloc(void);
++const char **av_vk_get_optional_instance_extensions(int *count);
++const char **av_vk_get_optional_device_extensions(int *count);
+ 
+ const VkFormat *av_vkfmt_from_pixfmt(enum AVPixelFormat p)
+ {
+@@ -36,4 +38,16 @@
+ {
+     return NULL;
+ }
++
++const char **av_vk_get_optional_instance_extensions(int *count)
++{
++    *count = 0;
++    return NULL;
++}
++
++const char **av_vk_get_optional_device_extensions(int *count)
++{
++    *count = 0;
++    return NULL;
++}
+ #endif /* CONFIG_VULKAN */
