@@ -35,7 +35,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = cudart.class, value = {
     @Platform(define = "CUSPARSE_ENABLE_EXPERIMENTAL_API", include = "<cusparse.h>", link = "cusparse@.12", preload = "nvJitLink@.13"),
-    @Platform(value = "windows-x86_64", preload = {"nvJitLink_130_0", "cusparse64_12"})},
+    @Platform(value = {"windows-arm64", "windows-x86_64"}, preload = {"nvJitLink_130_0", "cusparse64_12"})},
         target = "org.bytedeco.cuda.cusparse", global = "org.bytedeco.cuda.global.cusparse")
 @NoException
 public class cusparse implements InfoMapper {

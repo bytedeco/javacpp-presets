@@ -20,25 +20,29 @@ jobs:
   linux-arm64:
     runs-on: ubuntu-22.04-arm
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
+      - uses: devjeonghwan/javacpp-presets/.github/actions/deploy-ubuntu@windows-arm64-base
   linux-x86_64:
     runs-on: ubuntu-22.04
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
+      - uses: devjeonghwan/javacpp-presets/.github/actions/deploy-ubuntu@windows-arm64-base
   macosx-arm64:
     runs-on: macos-15
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
+      - uses: devjeonghwan/javacpp-presets/.github/actions/deploy-macosx@windows-arm64-base
   macosx-x86_64:
     runs-on: macos-15-intel
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
+      - uses: devjeonghwan/javacpp-presets/.github/actions/deploy-macosx@windows-arm64-base
+  windows-arm64:
+    runs-on: windows-11-arm
+    steps:
+      - uses: devjeonghwan/javacpp-presets/.github/actions/deploy-windows@windows-arm64-base
   windows-x86_64:
     runs-on: windows-2022
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
+      - uses: devjeonghwan/javacpp-presets/.github/actions/deploy-windows@windows-arm64-base
   platform:
-    needs: [linux-x86_64, macosx-arm64, macosx-x86_64, windows-x86_64]
+    needs: [linux-x86_64, macosx-arm64, macosx-x86_64, windows-arm64, windows-x86_64]
     runs-on: ubuntu-22.04
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/redeploy@actions
+      - uses: devjeonghwan/javacpp-presets/.github/actions/redeploy@windows-arm64-base

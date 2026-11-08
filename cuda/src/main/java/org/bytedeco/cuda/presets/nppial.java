@@ -35,7 +35,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = nppc.class, value = {
     @Platform(include = "<nppi_arithmetic_and_logical_operations.h>", link = "nppial@.13"),
-    @Platform(value = "windows-x86_64", preload = "nppial64_13")},
+    @Platform(value = {"windows-arm64", "windows-x86_64"}, preload = "nppial64_13")},
         global = "org.bytedeco.cuda.global.nppial")
 @NoException
 public class nppial implements InfoMapper {

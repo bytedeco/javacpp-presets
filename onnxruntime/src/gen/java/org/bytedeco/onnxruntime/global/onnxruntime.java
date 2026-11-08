@@ -839,7 +839,7 @@ public static native @Platform(extension="-gpu") OrtStatus OrtSessionOptionsAppe
  *
  * \param use_arena zero: false. non-zero: true.
  */
-public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( OrtSessionOptions options, int use_arena);
+public static native @Platform(not="windows-arm64") OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( OrtSessionOptions options, int use_arena);
 
 /*
  * This is the old way to add the TensorRT provider to the session, please use SessionOptionsAppendExecutionProvider_TensorRT_V2 above to access the latest functionality

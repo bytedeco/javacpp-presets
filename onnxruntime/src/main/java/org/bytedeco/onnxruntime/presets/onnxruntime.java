@@ -81,6 +81,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             extension = "-gpu",
             link = {"onnxruntime_providers_shared", "onnxruntime@.1", "onnxruntime_providers_dnnl", "onnxruntime_providers_openvino", "onnxruntime_providers_cuda"}
         ),
+        @Platform(
+            value = "windows-arm64",
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1"}
+        ),
     },
     target = "org.bytedeco.onnxruntime",
     global = "org.bytedeco.onnxruntime.global.onnxruntime"
@@ -102,6 +106,10 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
 
         // dnnl
         String[] dnnlLibs = {"gomp@.1", "iomp5", "omp", "tbb@.2", "dnnl@.3"};
+        if (platform.equals("windows-arm64")) {
+            // The Windows ARM64 build does not include the DNNL execution provider.
+            dnnlLibs = new String[0];
+        }
         for (String lib : dnnlLibs) {
             if (!preloads.contains(lib)) {
                 preloads.add(i++, lib);
@@ -374,6 +382,12 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::ProfilingEvent").cast().pointerTypes("ProfilingEvent").purify())
                .put(new Info("OrtSessionOptionsAppendExecutionProvider_MIGraphX", "OrtSessionOptionsAppendExecutionProvider_Tensorrt",
                              "OrtSessionOptionsAppendExecutionProvider_ROCM", "Ort::detail::OptionalTypeInfoImpl<OrtTypeInfo>::GetOptionalElementType").skip())
+               .put(new Info("OrtSessionOptionsAppendExecutionProvider_Dnnl").annotations("@Platform(not=\"windows-arm64\")").javaNames("OrtSessionOptionsAppendExecutionProvider_Dnnl"))
                .put(new Info("OrtSessionOptionsAppendExecutionProvider_CUDA").annotations("@Platform(extension=\"-gpu\")").javaNames("OrtSessionOptionsAppendExecutionProvider_CUDA"));
+        if (Loader.getPlatform().equals("windows-arm64")) {
+            // no DNNL or OpenVINO execution provider there, so don't try to link the
+            // libraries that the appenders of their factories reference
+            infoMap.put(new Info("USE_DNNL", "USE_OPENVINO").define(false));
+        }
     }
 }
