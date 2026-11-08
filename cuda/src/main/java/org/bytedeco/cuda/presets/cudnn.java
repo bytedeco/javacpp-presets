@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         link = {"cudnn@.9", "cudnn_ext@.9", "cudnn_graph@.9", "cudnn_engines_precompiled@.9", "cudnn_engines_runtime_compiled@.9",
                 "cudnn_engines_tensor_ir@.9", "cudnn_heuristic@.9", "cudnn_ops@.9", "cudnn_adv@.9", "cudnn_cnn@.9"}),
     @Platform(value = {"windows-arm64", "windows-x86_64"}, preload = {"zlibwapi", "cudnn64_9", "cudnn_ext64_9", "cudnn_graph64_9", "cudnn_engines_precompiled64_9", "cudnn_engines_runtime_compiled64_9",
-                                                   "cudnn_engines_tensor_ir64_9", "cudnn_heuristic64_9", "cudnn_ops64_9", "cudnn_adv64_9", "cudnn_cnn64_9"})},
+                                                                      "cudnn_engines_tensor_ir64_9", "cudnn_heuristic64_9", "cudnn_ops64_9", "cudnn_adv64_9", "cudnn_cnn64_9"})},
         target = "org.bytedeco.cuda.cudnn", global = "org.bytedeco.cuda.global.cudnn")
 @NoException
 public class cudnn implements InfoMapper {

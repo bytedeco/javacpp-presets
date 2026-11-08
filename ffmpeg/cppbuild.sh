@@ -2606,7 +2606,6 @@ EOF
         make install
         ;;
 
-
     windows-x86_64)
         echo ""
         echo "--------------------"
