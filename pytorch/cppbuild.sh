@@ -175,8 +175,7 @@ export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/"
 export PYTHONNOUSERSITE=1
 if [[ $PLATFORM == windows-arm64 ]]; then
     printf '%s\n' 'Cython==3.2.6' > cython-build-constraints.txt
-    PYTHONFAULTHANDLER=1 PIP_NO_BINARY=cython PIP_NO_CACHE_DIR=1 NO_CYTHON_COMPILE=true PIP_CONSTRAINT="$(cygpath -m "$PWD/cython-build-constraints.txt")" "$PYTHON_BIN_PATH" -m pip install --target="$PYTHON_LIB_PATH" setuptools==67.6.1 pyyaml==6.0.2 packaging==25.0 scikit-build-core==1.0.3 six==1.17.0 -v
-    "$PYTHON_BIN_PATH" -X faulthandler -c "import sys, yaml; print(sys.executable); print(yaml.__version__); print(yaml.__file__)"
+    PIP_NO_BINARY=cython PIP_NO_CACHE_DIR=1 NO_CYTHON_COMPILE=true PIP_CONSTRAINT="$(cygpath -m "$PWD/cython-build-constraints.txt")" "$PYTHON_BIN_PATH" -m pip install --target="$PYTHON_LIB_PATH" setuptools==67.6.1 pyyaml==6.0.2 packaging==25.0 scikit-build-core==1.0.3 six==1.17.0
 else
     $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 pyyaml==6.0.2 packaging==25.0 scikit-build-core==1.0.3 six==1.17.0
 fi
@@ -292,9 +291,6 @@ esac
 #sedinplace 's/,code=sm_.*)/,code=compute_60)/g' cmake/Modules_CUDA_fix/upstream/FindCUDA/select_compute_arch.cmake
 
 # work around issues with the build system
-if [[ $PLATFORM == windows-arm64 ]]; then
-    set -x
-fi
 sedinplace '/set(CMAKE_CXX_STANDARD/i\
     set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 ' CMakeLists.txt
@@ -359,10 +355,6 @@ if grep -q 'include(.*FindOpenMP[.]cmake)' cmake/Dependencies.cmake || ! grep -q
     exit 1
 fi
 rm -f cmake/Modules/FindOpenMP.cmake
-
-if [[ $PLATFORM == windows-arm64 ]]; then
-    set +x
-fi
 
 # delete broken CUDA kernels at least on Windows with CUDA 12.9
 #rm -f aten/src/ATen/native/cuda/SegmentReduce.cu

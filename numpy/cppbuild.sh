@@ -151,10 +151,8 @@ case $PLATFORM in
         ;;
     windows-arm64)
         export CC="cl.exe" CXX="cl.exe"
-        export PYTHONFAULTHANDLER=1
-        "$PYTHON_BIN_PATH" -c "import sys, importlib.util; print(sys.executable); print(sys.version); print('Cython before isolated build:', importlib.util.find_spec('Cython'))"
         sedinplace 's/Cython>=3.1.0/Cython==3.2.6/' pyproject.toml
-        ATLAS=None PIP_NO_BINARY=cython PIP_NO_CACHE_DIR=1 NO_CYTHON_COMPILE=true "$PYTHON_BIN_PATH" -m pip install -v . --prefix $INSTALL_PATH --config-settings=build-dir=build
+        ATLAS=None PIP_NO_BINARY=cython PIP_NO_CACHE_DIR=1 NO_CYTHON_COMPILE=true "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=build-dir=build
         ;;
     windows-x86)
         # sedinplace '/ccompiler._default_compilers = /,+2d' numpy/distutils/ccompiler.py # don't try to use GCC
