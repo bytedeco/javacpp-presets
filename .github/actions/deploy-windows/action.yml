@@ -6,8 +6,21 @@ runs:
       shell: cmd
       env:
         GITHUB_EVENT_HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        DEPLOY_WINDOWS_ACTION_PATH: ${{ github.action_path }}
       run: |
         cd /d %USERPROFILE%
+
+        if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
+          set "VISUAL_STUDIO_INSTALLATION_PATH="
+          for /f "usebackq tokens=*" %%V in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.ARM64 -property installationPath`) do (
+            set "VISUAL_STUDIO_INSTALLATION_PATH=%%V"
+            echo VISUAL_STUDIO_INSTALLATION_PATH=%%V>> "%GITHUB_ENV%"
+          )
+          if not defined VISUAL_STUDIO_INSTALLATION_PATH (
+            echo Visual Studio with ARM64 C++ tools was not found.
+            exit /b 1
+          )
+        )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
           echo Installing OpenJDK 11 for Windows on ARM
@@ -23,7 +36,7 @@ runs:
           msys2.exe -oC:\ -y
 
           C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
-          C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-clang-aarch64-nasm mingw-w64-clang-aarch64-clang mingw-w64-clang-aarch64-libtool mingw-w64-clang-aarch64-gcc-compat mingw-w64-clang-aarch64-libwinpthread mingw-w64-clang-aarch64-SDL2 mingw-w64-clang-aarch64-ragel mingw-w64-clang-aarch64-vulkan-headers mingw-w64-clang-aarch64-vulkan-loader"
+          C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-clang-aarch64-nasm mingw-w64-clang-aarch64-clang mingw-w64-clang-aarch64-libtool mingw-w64-clang-aarch64-pkgconf mingw-w64-clang-aarch64-gcc-compat mingw-w64-clang-aarch64-libwinpthread mingw-w64-clang-aarch64-SDL2 mingw-w64-clang-aarch64-ragel mingw-w64-clang-aarch64-vulkan-headers mingw-w64-clang-aarch64-vulkan-loader"
 
           set "JAVA_HOME=C:\Program Files\Microsoft\jdk-11.0.28.6-hotspot"
           set "PATH=C:\Program Files\Microsoft\jdk-11.0.28.6-hotspot\bin;C:\Program Files\Python311-arm64;C:\Program Files\Python311-arm64\Scripts;C:\msys64\usr\bin;%PATH%"
@@ -148,7 +161,8 @@ runs:
           echo Installing CUDA, cuDNN, etc
           curl -LO https://developer.download.nvidia.com/compute/cuda/13.4.2/local_installers/cuda_13.4.2_windows_arm64.exe
           curl -LO https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/windows-arm64/cudnn-windows-arm64-9.26.0.51_cuda13-archive.zip
-          cuda_13.4.2_windows_arm64.exe -s
+          pwsh -NoProfile -File "%DEPLOY_WINDOWS_ACTION_PATH%\install-cuda-arm64.ps1" -ArchivePath "%USERPROFILE%\cuda_13.4.2_windows_arm64.exe" -VisualStudioInstallationPath "%VISUAL_STUDIO_INSTALLATION_PATH%"
+          if errorlevel 1 exit /b 1
           unzip cudnn-windows-arm64-9.26.0.51_cuda13-archive.zip
           move cudnn-windows-arm64-9.26.0.51_cuda13-archive\bin\arm64\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.4\bin\arm64"
           move cudnn-windows-arm64-9.26.0.51_cuda13-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.4\include"
@@ -194,9 +208,9 @@ runs:
 
         if "%CI_DEPLOY_MODULE%"=="nvcodec" (
           echo Installing NVIDIA Video Codec SDK
-          python -m gdown 1d_i_qrkS9rvDMgYUY7O5vQHCf_rj1Jjy
-          unzip Video_Codec_SDK_13.1.15.zip
-          move Video_Codec_SDK_13.1.15 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\VideoCodecSDK"
+          python -m gdown 1wej84nLEQOGBvznpaLrRmkjCPfLr_WWm
+          unzip Video_Codec_SDK_13.1.24.zip
+          move Video_Codec_SDK_13.1.24 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\VideoCodecSDK"
         )
 
         if "%CI_DEPLOY_MODULE%"=="tensorrt" (
@@ -264,16 +278,12 @@ runs:
       shell: cmd
       run: |
         if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
-          set "VISUAL_STUDIO_INSTALLATION_PATH="
-          for /f "usebackq tokens=*" %%V in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.ARM64 -property installationPath`) do (
-            set "VISUAL_STUDIO_INSTALLATION_PATH=%%V"
-            call "%%V\VC\Auxiliary\Build\vcvarsall.bat" arm64
-            if errorlevel 1 exit /b 1
-          )
           if not defined VISUAL_STUDIO_INSTALLATION_PATH (
-            echo Visual Studio with ARM64 C++ tools was not found.
+            echo Visual Studio installation path was not set by Install environment.
             exit /b 1
           )
+          call "%VISUAL_STUDIO_INSTALLATION_PATH%\VC\Auxiliary\Build\vcvarsall.bat" arm64
+          if errorlevel 1 exit /b 1
           where cl > nul 2>&1
           if errorlevel 1 (
             echo MSVC compiler was not found after ARM64 environment initialization.
@@ -305,6 +315,10 @@ runs:
           set "CUDA_PATH_V13_4=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.4"
           set "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.4\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.4\libnvvp;%PATH%"
           echo CUDA Version 13.4.2>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.4\version.txt"
+        )
+
+        if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" if defined CUDA_PATH (
+          set "PATH=%CUDA_PATH%\bin\arm64;%PATH%"
         )
 
         set "CCACHE_DIR=%USERPROFILE%\ccache"

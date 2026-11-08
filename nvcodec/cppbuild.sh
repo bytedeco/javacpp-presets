@@ -31,6 +31,14 @@ case $PLATFORM in
             echo "Please install the Video Codec SDK in C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/"
             exit 1
         fi
+        if [[ $PLATFORM == windows-arm64 ]]; then
+            for library in nvcuvida64 nvencodeapia64; do
+                if [[ ! -f "C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/Lib/win/aarch64/$library.lib" ]]; then
+                    echo "Error: Video Codec SDK ARM64 library $library.lib is missing"
+                    exit 1
+                fi
+            done
+        fi
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

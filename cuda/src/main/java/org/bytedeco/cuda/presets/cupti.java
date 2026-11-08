@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024-2025 Hervé Guillemet, Samuel Audet
+ * Copyright (C) 2024-2025 HervÃ© Guillemet, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -31,14 +31,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 
 /**
  *
- * @author Hervé Guillemet
+ * @author HervÃ© Guillemet
  */
 @Properties(inherit = cudart.class, value = {
     @Platform(include = {"cupti_result.h", "cupti_version.h", "cupti_activity.h", "cupti_callbacks.h", "cupti_events.h", "cupti_metrics.h", "cupti_driver_cbid.h", "cupti_runtime_cbid.h", "cupti_nvtx_cbid.h"},
               link = "cupti@.13"),
-    @Platform(value = {"windows-arm64", "windows-x86_64"}, includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/extras/CUPTI/include/", linkpath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/extras/CUPTI/lib/arm64/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/extras/CUPTI/lib/x64/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/extras/CUPTI/lib64/"},
-              preload = "cupti64_2026.3.1",
-              preloadpath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/extras/CUPTI/lib/arm64/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/extras/CUPTI/lib/x64/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/lib64/"}),
+    @Platform(value = "windows-arm64", includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/extras/CUPTI/include/", linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/extras/CUPTI/lib/arm64/",
+              preload = "cupti64_2026.3.1", preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/extras/CUPTI/lib/arm64/"),
+    @Platform(value = "windows-x86_64", includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/extras/CUPTI/include/", linkpath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/extras/CUPTI/lib64/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/extras/CUPTI/lib/x64/"},
+              preload = "cupti64_2026.3.1", preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/lib64/"),
     @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"}, includepath = {"/usr/local/cuda-13.4/extras/CUPTI/include/", "/usr/local/cuda/extras/CUPTI/include/"}, linkpath = {"/usr/local/cuda-13.4/extras/CUPTI/lib64/", "/usr/local/cuda/extras/CUPTI/lib64/"}),
     @Platform(value = "macosx-x86_64", includepath = "/Developer/NVIDIA/CUDA-13.4/extras/CUPTI/include/", linkpath = "/Developer/NVIDIA/CUDA-13.4/extras/CUPTI/lib64/"),
 },

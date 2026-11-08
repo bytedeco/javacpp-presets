@@ -229,8 +229,8 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "nvcodec" ]]; then
           echo Installing NVIDIA Video Codec SDK
-          python3 -m gdown 1d_i_qrkS9rvDMgYUY7O5vQHCf_rj1Jjy
-          $SUDO unzip Video_Codec_SDK_13.1.15.zip -d /usr/local
+          python3 -m gdown 1wej84nLEQOGBvznpaLrRmkjCPfLr_WWm
+          $SUDO unzip Video_Codec_SDK_13.1.24.zip -d /usr/local
           $SUDO ln -sf /usr/local/Video_Codec_SDK_* /usr/local/videocodecsdk
         fi
 
