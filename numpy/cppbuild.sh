@@ -92,7 +92,8 @@ export PYTHONPATH="$PYTHON_INSTALL_PATH"
 mkdir -p "$PYTHON_INSTALL_PATH"
 
 TOOLS="setuptools==67.6.1 cython==3.2.6"
-if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH $TOOLS; then
+# Do not install build dependencies into the native ARM64 interpreter's standard library.
+if [[ $PLATFORM != windows-arm64 ]] && ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH $TOOLS; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.15"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
@@ -149,20 +150,11 @@ case $PLATFORM in
         for f in $(find ../ -iname *.so); do install_name_tool -add_rpath @loader_path/../../../ $f || true; done
         ;;
     windows-arm64)
-        MSVC_BIN=$(dirname "$(which cl.exe)")
-        MSVC_LINK=""
-        if [[ -n "${VCToolsInstallDir:-}" ]]; then
-            MSVC_LINK=$(find "$(cygpath -u "${VCToolsInstallDir%/}")/bin/HostARM64" -iname link.exe 2>/dev/null | head -1)
-        fi
-        for v in VCToolsInstallDir VCToolsRedirDir WindowsSDKDir VCINSTALLDIR VSINSTALLDIR; do
-            eval "val=\${$v:-}"
-            if [[ -n "$val" ]]; then
-                eval "export $v=\$(cygpath -m \"\${$v}\")"
-            fi
-        done
-        export PATH="$MSVC_BIN${MSVC_LINK:+:$MSVC_LINK}:/c/msys64/clangarm64/bin"
         export CC="cl.exe" CXX="cl.exe"
-        ATLAS=None "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=build-dir=build
+        export PYTHONFAULTHANDLER=1
+        "$PYTHON_BIN_PATH" -c "import sys, importlib.util; print(sys.executable); print(sys.version); print('Cython before isolated build:', importlib.util.find_spec('Cython'))"
+        sedinplace 's/Cython>=3.1.0/Cython==3.2.6/' pyproject.toml
+        ATLAS=None PIP_NO_BINARY=cython PIP_NO_CACHE_DIR=1 NO_CYTHON_COMPILE=true "$PYTHON_BIN_PATH" -m pip install -v . --prefix $INSTALL_PATH --config-settings=build-dir=build
         ;;
     windows-x86)
         # sedinplace '/ccompiler._default_compilers = /,+2d' numpy/distutils/ccompiler.py # don't try to use GCC

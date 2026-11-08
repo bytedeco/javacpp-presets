@@ -8,6 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 export BUILD_TEST=0
+export BUILD_PYTHON=OFF
 #export CUDAHOSTCC="clang"
 #export CUDAHOSTCXX="clang++"
 export CUDACXX="/usr/local/cuda/bin/nvcc"
@@ -172,7 +173,16 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/"
 export PYTHONNOUSERSITE=1
-$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 pyyaml==6.0.2 typing_extensions==4.8.0 packaging==25.0 scikit-build-core==1.0.3 six==1.17.0
+if [[ $PLATFORM == windows-arm64 ]]; then
+    printf '%s\n' 'Cython==3.2.6' > cython-build-constraints.txt
+    PYTHONFAULTHANDLER=1 PIP_NO_BINARY=cython PIP_NO_CACHE_DIR=1 NO_CYTHON_COMPILE=true PIP_CONSTRAINT="$(cygpath -m "$PWD/cython-build-constraints.txt")" "$PYTHON_BIN_PATH" -m pip install --target="$PYTHON_LIB_PATH" setuptools==67.6.1 pyyaml==6.0.2 packaging==25.0 scikit-build-core==1.0.3 six==1.17.0 -v
+    "$PYTHON_BIN_PATH" -X faulthandler -c "import sys, yaml; print(sys.executable); print(yaml.__version__); print(yaml.__file__)"
+else
+    $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 pyyaml==6.0.2 packaging==25.0 scikit-build-core==1.0.3 six==1.17.0
+fi
+
+"$PYTHON_BIN_PATH" -m pip install --upgrade --target="$PYTHON_LIB_PATH" typing_extensions==4.16.0
+"$PYTHON_BIN_PATH" -c "import importlib.metadata, typing_extensions; from typing_extensions import assert_never; print(importlib.metadata.version('typing_extensions')); print(typing_extensions.__file__)"
 
 case $PLATFORM in
     linux-x86)
@@ -205,7 +215,7 @@ case $PLATFORM in
         # link.EXE and a stray ccache.exe CMake otherwise picks over cl.exe and the real
         # linker, while the rest of PATH stays in the native form that vcvarsall set up
         CL_DIR=$(dirname "$(which cl.exe)")
-        WIN_KIT=$(find "$(cygpath -u "${WindowsSDKDir:-}/bin")" -maxdepth 1 -name "10.*" -type d 2>/dev/null | sort | tail -1)
+        WIN_KIT=$(find "$(cygpath -u "${WindowsSDKDir:-${WINDOWSSDKDIR:-}}/bin")" -maxdepth 1 -name "10.*" -type d 2>/dev/null | sort | tail -1)
         NEW_PATH=""
         PREVP="$PATH"
         PREVA=$IFS
@@ -222,7 +232,9 @@ case $PLATFORM in
         # keep only the MSVC directories in native form for CMake's environment detection
         CL_WIN=$(cygpath -w "$CL_DIR")
         SDK_WIN=""
-        [[ -n "$WIN_KIT" ]] && SDK_WIN=$(cygpath -w "$WIN_KIT/arm64")
+        WINDOWS_KIT_ARCHITECTURE=x64
+        [[ $PLATFORM == windows-arm64 ]] && WINDOWS_KIT_ARCHITECTURE=arm64
+        [[ -n "$WIN_KIT" ]] && SDK_WIN=$(cygpath -w "$WIN_KIT/$WINDOWS_KIT_ARCHITECTURE")
         export PATH="$CL_WIN${SDK_WIN:+:$SDK_WIN}:$NEW_PATH"
         # drop any directory that contains only a stray ccache.exe (no cl.exe next to it)
         CCACHE_PATH=$(command -v ccache.exe 2>/dev/null || true)
@@ -257,13 +269,19 @@ case $PLATFORM in
             export CUDNN_HOME="$CUDA_PATH"
         fi
         export USE_NCCL=0 # Not supported on Windows
-        ;;
-    windows-arm64)
-        export USE_MKLDNN=OFF # no Windows on ARM support in oneDNN
-        export USE_FBGEMM=OFF # no Windows on ARM support in FBGEMM
-        export USE_KINETO=OFF # no Windows on ARM support in Kineto
-        export USE_XNNPACK=OFF # no Windows on ARM support in XNNPACK
-        export USE_NUMPY=1 # numpy headers/libs built above against this CPython
+        if [[ $PLATFORM == windows-arm64 ]]; then
+            export USE_MKLDNN=OFF # no Windows on ARM support in oneDNN
+            export USE_FBGEMM=OFF # no Windows on ARM support in FBGEMM
+            export USE_KINETO=OFF # no Windows on ARM support in Kineto
+            export USE_XNNPACK=OFF # no Windows on ARM support in XNNPACK
+            export USE_NUMPY=1 # numpy headers/libs built above against this CPython
+            # SLEEF's SVE probe passes with MSVC, but helpersve.h requires __ARM_FEATURE_SVE.
+            sedinplace '/add_subdirectory(.*third_party\/sleef/i\
+    if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")\
+      set(SLEEF_DISABLE_SVE ON CACHE BOOL "Disable SVE for Windows ARM64 MSVC" FORCE)\
+    endif()\
+' aten/src/ATen/CMakeLists.txt
+        fi
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -274,6 +292,9 @@ esac
 #sedinplace 's/,code=sm_.*)/,code=compute_60)/g' cmake/Modules_CUDA_fix/upstream/FindCUDA/select_compute_arch.cmake
 
 # work around issues with the build system
+if [[ $PLATFORM == windows-arm64 ]]; then
+    set -x
+fi
 sedinplace '/set(CMAKE_CXX_STANDARD/i\
     set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 ' CMakeLists.txt
@@ -332,8 +353,16 @@ sedinplace 's/#include <stdexcept>/#include <stdexcept>\
 # and see if choosing experimental works. See Issue #1503.
 # On Linux, pytorch FindOpenMP.cmake picks llvm libomp over libgomp. See Issue #1504.
 # On MacOS CMake standard version works tooL
+sedinplace '/^[[:space:]]*include(.*FindOpenMP[.]cmake)/c\  find_package(OpenMP)' cmake/Dependencies.cmake
+if grep -q 'include(.*FindOpenMP[.]cmake)' cmake/Dependencies.cmake || ! grep -q 'find_package(OpenMP)' cmake/Dependencies.cmake; then
+    echo "Error: Failed to replace the PyTorch OpenMP module include"
+    exit 1
+fi
 rm -f cmake/Modules/FindOpenMP.cmake
-sedinplace 's/include(${CMAKE_CURRENT_LIST_DIR}\/Modules\/FindOpenMP.cmake)/find_package(OpenMP)/g' cmake/Dependencies.cmake
+
+if [[ $PLATFORM == windows-arm64 ]]; then
+    set +x
+fi
 
 # delete broken CUDA kernels at least on Windows with CUDA 12.9
 #rm -f aten/src/ATen/native/cuda/SegmentReduce.cu
