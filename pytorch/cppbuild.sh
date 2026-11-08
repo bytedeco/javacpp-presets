@@ -73,22 +73,9 @@ if [[ $PLATFORM == windows* ]]; then
 fi
 
 if [[ ! -d pytorch ]]; then
-    if [[ -f ../pytorch-$PYTORCH_VERSION.tar.gz ]]; then
-        # a pre-seeded tarball avoids cloning the whole repository; make it a git
-        # repository again so the checkout and submodule commands below work
-        echo "Using pre-seeded pytorch-$PYTORCH_VERSION.tar.gz..."
-        tar --totals -xzf ../pytorch-$PYTORCH_VERSION.tar.gz || true
-        mv pytorch-$PYTORCH_VERSION pytorch
-        cd pytorch
-        git init -q .
-        git remote add origin https://github.com/pytorch/pytorch
-        git fetch -q --depth 1 origin tag v$PYTORCH_VERSION
-        git reset -q --hard v$PYTORCH_VERSION
-        cd ..
-    else
-        git clone https://github.com/pytorch/pytorch
-    fi
+    git clone https://github.com/pytorch/pytorch
 fi
+
 cd pytorch
 git reset --hard
 git checkout v$PYTORCH_VERSION
@@ -181,7 +168,6 @@ else
 fi
 
 "$PYTHON_BIN_PATH" -m pip install --upgrade --target="$PYTHON_LIB_PATH" typing_extensions==4.16.0
-"$PYTHON_BIN_PATH" -c "import importlib.metadata, typing_extensions; from typing_extensions import assert_never; print(importlib.metadata.version('typing_extensions')); print(typing_extensions.__file__)"
 
 case $PLATFORM in
     linux-x86)

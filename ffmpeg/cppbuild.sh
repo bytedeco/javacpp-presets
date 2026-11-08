@@ -171,17 +171,17 @@ cd ..
 export PATH=$INSTALL_PATH/bin:$PATH
 export PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/
 
-patch --batch -Np1 -d $LAME < ../../lame.patch || true
-# patch --batch -Np1 -d $OPENSSL < ../../openssl-android.patch
-# patch --batch -Np1 -d $OPENSSL < ../../openssl-windows.patch
-patch --batch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch || true
-patch --batch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-vulkan.patch || true
-patch --batch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../$V4L2_REQUEST_PATCH || true
+patch -Np1 -d $LAME < ../../lame.patch
+# patch -Np1 -d $OPENSSL < ../../openssl-android.patch
+# patch -Np1 -d $OPENSSL < ../../openssl-windows.patch
+patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
+patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-vulkan.patch
+patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../$V4L2_REQUEST_PATCH
 # TODO: remove when the packaged FFmpeg passes tls_verify and ca_file to nested HTTP, HLS and DASH requests
-patch --batch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-tls.patch || true
+patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-tls.patch
 # TODO: remove when the packaged FFmpeg loads the Windows ROOT store with OpenSSL when no ca_file is given
-patch --batch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-tls-winstore.patch || true
-# patch --batch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
+patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-tls-winstore.patch
+# patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
 sedinplace 's/CMAKE_C_COMPILER_ID MATCHES "Clang"/FALSE/g' SVT-AV1-*/CMakeLists.txt
