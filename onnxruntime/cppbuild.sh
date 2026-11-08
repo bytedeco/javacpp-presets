@@ -139,7 +139,7 @@ sedinplace 's/MLAS_CPUIDINFO::GetCPUIDInfo().HasArmNeon_I8MM()/false/g' onnxrunt
 
 # work around toolchain issues on Mac and Windows
 patch -p1 < ../../../onnxruntime.patch
-tr -d '\r' < ../../../onnxruntime-openvino.patch | git apply --recount
+patch -p1 < ../../../onnxruntime-openvino.patch
 if [[ $PLATFORM == windows-arm64 ]]; then
     cp ../../../kleidiai-windows.patch cmake/patches/
     sedinplace '/onnxruntime_fetchcontent_declare(kleidiai /s@ EXCLUDE_FROM_ALL)@ PATCH_COMMAND ${Patch_EXECUTABLE} -p1 -i ${PROJECT_SOURCE_DIR}/patches/kleidiai-windows.patch EXCLUDE_FROM_ALL)@' cmake/external/onnxruntime_external_deps.cmake
