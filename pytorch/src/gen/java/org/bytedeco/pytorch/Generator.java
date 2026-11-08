@@ -75,8 +75,6 @@ public class Generator extends Pointer {
 
   public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Generator rhs);
 
-  public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef Generator rhs);
-
   public native @Cast("bool") boolean defined();
 
   public native GeneratorImpl unsafeGetGeneratorImpl();

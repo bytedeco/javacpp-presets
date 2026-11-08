@@ -104,9 +104,21 @@ public class Backend extends CustomClassHolder {
 
   public native @Cast("bool") boolean supportsSplitting();
 
+  // Most backends initialize their communication resources eagerly. Backends
+  // with lazy initialization must override this method so split() callers can
+  // verify that the parent communicator exists.
+  public native @Cast("bool") boolean isInitialized();
+
   public native @Cast("bool") boolean supportsCoalescing();
 
+  // Experimental collective time-estimation API. Backends that return true
+  // must simulate collectives issued between startTimeEstimate() and
+  // endTimeEstimate(), which returns the estimated duration in microseconds.
   public native @Cast("bool") boolean supportsTimeEstimation();
+
+  public native void startTimeEstimate();
+
+  public native float endTimeEstimate();
 
   public native @Cast("bool") boolean supportsShrinking();
 
@@ -161,10 +173,31 @@ public class Backend extends CustomClassHolder {
   //
   // Abort hooks are invoked before the backend aborts on a timeout or error,
   // letting users capture debug information. Hooks are keyed by an opaque
-  // hook_id so they can be individually unregistered.
+  // hook_id so they can be individually unregistered. Backends that implement
+  // them must advertise it via supportsAbortHooks, so a caller can tell "this
+  // backend has no abort hooks" from a registration that genuinely failed.
+  public native @Cast("bool") boolean supportsAbortHooks();
+
   public native void registerAbortHook(@Cast("int64_t") long arg0, @ByVal @Cast("c10d::AbortHook*") Func arg1);
 
   public native void unregisterAbortHook(@Cast("int64_t") long arg0);
+
+  // Completion Hook API
+  //
+  // Completion hooks are invoked when the backend establishes that an operation
+  // has completed, which a backend with a watchdog already does to garbage
+  // collect its work queue. Same hook_id keying and same capability query as
+  // the abort hooks above; see Hooks.hpp for what is reported and the threading
+  // contract. A backend without them leaves its consumers to poll, so
+  // supportsCompletionHooks is what lets a caller choose a fallback rather than
+  // catch a throw.
+  public native @Cast("bool") boolean supportsCompletionHooks();
+
+  public native void registerCompletionHook(
+        @Cast("int64_t") long arg0,
+        @ByVal CompletionHook arg1);
+
+  public native void unregisterCompletionHook(@Cast("int64_t") long arg0);
 
   public native void startCoalescing();
 
@@ -438,6 +471,9 @@ public class Backend extends CustomClassHolder {
 
   public native void enableCollectivesTiming();
 
+  // The caller namespaces each child's rendezvous keys, but the Store may use
+  // the parent's live connection. Implementations that block while holding or
+  // mutate connection-global state, such as the timeout, must clone it first.
   public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend split(
         @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store store,
         @StdVector IntPointer ranks,
@@ -451,6 +487,9 @@ public class Backend extends CustomClassHolder {
         @StdVector int[] ranks,
         @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options opts);
 
+  // Merge implementations receive a Store owned by their caller. They must
+  // retain or clone it as required by their initialization and connection-state
+  // semantics.
   public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend merge(
         @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store store,
         @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options opts,

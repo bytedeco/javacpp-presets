@@ -50,24 +50,24 @@ public class PrivateUse1HooksInterface extends AcceleratorHooksInterface {
   public native @Cast("bool") boolean isAvailable();
 
   public native @Const @ByRef Generator getDefaultGenerator(
-        @Cast("c10::DeviceIndex") byte device_index);
+        @Cast("c10::DeviceIndex") byte arg0);
 
   public native @ByVal Generator getNewGenerator(
         @Cast("c10::DeviceIndex") byte device_index/*=-1*/);
   public native @ByVal Generator getNewGenerator();
 
-  public native @ByVal Device getDeviceFromPtr(Pointer data);
+  public native @ByVal Device getDeviceFromPtr(Pointer arg0);
 
-  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer data);
+  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer arg0);
 
   public native Allocator getPinnedMemoryAllocator();
 
-  public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte device_index);
+  public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte arg0);
 
   public native void init();
   public native void resizePrivateUse1Bytes(
-        @Const @ByRef Storage storage,
-        @Cast("size_t") long newsize);
+        @Const @ByRef Storage arg0,
+        @Cast("size_t") long arg1);
 
 // #undef FAIL_PRIVATEUSE1HOOKS_FUNC
 }

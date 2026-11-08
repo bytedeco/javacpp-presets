@@ -27,12 +27,15 @@ public class TensorOptionalElementReference extends Pointer {
 
   public native @Name("operator std::conditional_t<std::is_reference_v<c10::detail::ivalue_to_const_ref_overload_return<std::optional<at::Tensor> >::type>,const std::optional<at::Tensor>&,std::optional<at::Tensor> >") @ByVal TensorOptional getTensorOptional();
 
+  // Const-qualified: std::indirectly_writable requires it.
+  // NOLINTBEGIN(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
   
 
   
 
   // assigning another ref to this assigns the underlying value
   
+  // NOLINTEND(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
 
   public native @Const @ByRef IValue get();
 
@@ -40,5 +43,6 @@ public class TensorOptionalElementReference extends Pointer {
   public void swap(TensorOptionalElementReference rhs) { swap(this, rhs); }
 
   
+  // Lvalue-only, so it does not compete with the const&& assignments above.
   
 }

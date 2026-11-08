@@ -42,7 +42,4 @@ public class GenericDictIterator extends Pointer {
 
   private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef GenericDictIterator lhs, @Const @ByRef GenericDictIterator rhs);
   public boolean equals(GenericDictIterator rhs) { return equals(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef GenericDictIterator lhs, @Const @ByRef GenericDictIterator rhs);
-  public boolean notEquals(GenericDictIterator rhs) { return notEquals(this, rhs); }
 }

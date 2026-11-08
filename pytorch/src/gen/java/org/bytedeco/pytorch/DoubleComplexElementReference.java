@@ -27,12 +27,15 @@ public class DoubleComplexElementReference extends Pointer {
 
   public native @Name("operator std::conditional_t<std::is_reference_v<c10::detail::ivalue_to_const_ref_overload_return<c10::complex<double> >::type>,const c10::complex<double>&,c10::complex<double> >") @ByVal DoubleComplex getDoubleComplex();
 
+  // Const-qualified: std::indirectly_writable requires it.
+  // NOLINTBEGIN(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
   
 
   
 
   // assigning another ref to this assigns the underlying value
   
+  // NOLINTEND(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
 
   public native @Const @ByRef IValue get();
 
@@ -40,5 +43,6 @@ public class DoubleComplexElementReference extends Pointer {
   public void swap(DoubleComplexElementReference rhs) { swap(this, rhs); }
 
   
+  // Lvalue-only, so it does not compete with the const&& assignments above.
   
 }

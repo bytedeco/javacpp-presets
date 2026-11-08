@@ -1046,6 +1046,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::tuple<std::vector<std::vector<size_t> >,std::vector<size_t> >").pointerTypes("T_SizeTVectorVectorSizeTVector_T").define())
             .put(new Info("std::tuple<std::shared_ptr<c10::impl::PyObject_TorchDispatchMode>,c10::impl::TorchDispatchModeKey>").pointerTypes("T_PyObject_TorchDispatchModeTorchDispatchModeKey_T").define())
             .put(new Info("std::tuple<size_t,std::optional<size_t>,std::vector<size_t> >").pointerTypes("T_SizeTSizeTOptionalSizeTVector_T").define())
+            .put(new Info("std::tuple<bool,at::Tensor>").pointerTypes("T_BoolTensor_T").define())
         ;
 
 
@@ -1054,7 +1055,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::type_index").pointerTypes("@Cast(\"std::type_index*\") Pointer"))
             .put(new Info("std::deque<torch::Tensor>").pointerTypes("TensorDeque").define())
             .put(new Info("std::bitset<64>", "std::bitset<at::kVmapNumLevels>", "std::bitset<dim_bitset_size>",
-                "std::bitset<at::kVmapMaxTensorDims>", "std::bitset<at::dim_bitset_size>").valueTypes("long"))
+                "std::bitset<at::kVmapMaxTensorDims>", "std::bitset<at::dim_bitset_size>").cast().pointerTypes("LongPointer"))
             .put(new Info("std::basic_string<char>").annotations("@StdString").valueTypes("BytePointer").pointerTypes("@Cast({\"char*\", \"std::string\"}) BytePointer"))
         ;
 
@@ -2886,6 +2887,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::function<void(std::shared_ptr<c10d::WorkInfo>)>", "std::function<void(c10d::WorkInfo*)").pointerTypes("WorkInfoConsumer"))
             .put(new Info("std::function<bool(torch::Tensor&)>", "torch::distributed::autograd::DistAutogradContext::GradCallback").pointerTypes("GradCallback"))
             .put(new Info("std::function<std::shared_ptr<const c10::LazyValue<std::string> >()>", "std::function<c10::Backtrace()>").pointerTypes("StackTraceFetcher"))
+            .put(new Info("std::function<void(const c10d::CompletionHookArgs&)>", "std::function<void(const CompletionHookArgs&)>").pointerTypes("CompletionHook"))
 
             //// std::function passed as generic pointer because are returned by some methods.
             .put(new Info("std::function<PyObject*(void*)>", "torch::jit::BackendMetaPtr", "std::function<void(const at::Tensor&, std::unordered_map<std::string, bool>&)>")
@@ -3084,12 +3086,14 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
 
         void mapList(InfoMap infoMap) {
             String t = elementTypes[0];
-            infoMap.put(new Info(template("c10::List", t)).pointerTypes(baseJavaName + "List"))
+            infoMap.put(new Info(template("c10::List", t), template("torch::List", t)).pointerTypes(baseJavaName + "List"))
                    .put(new Info(
                        template("c10::impl::ListElementReference", t, "typename c10::detail::ListImpl::list_type::iterator"),
                        template("c10::impl::ListElementReference", t, "c10::detail::ListImpl::list_type::iterator"),
                        template("c10::impl::ListElementReference", t, template("std::vector", t) + "::iterator"))
                        .pointerTypes(baseJavaName + "ElementReference"))
+                   .put(new Info(
+                       template("c10::impl::ListElementReference", t, "c10::detail::ListImpl::list_type::iterator") + "::operator =").skip())
                    .put(new Info(template("c10::impl::ListIterator", t, "typename c10::detail::ListImpl::list_type::iterator"),
                        template("c10::impl::ListIterator", t, "c10::detail::ListImpl::list_type::iterator"))
                        .pointerTypes(baseJavaName + "ListIterator"))
@@ -3106,7 +3110,10 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             infoMap.put(new Info(template("c10::List", t) + "::operator []").skip()) // Returns an internal_reference_type by value, which is a ListElementReference, whose copy constructor is disabled.
                    .put(new Info(
                        template("c10::impl::ListIterator", t, "c10::detail::ListImpl::list_type::iterator") + "::operator []",
-                       template("c10::impl::ListIterator", t, "c10::detail::ListImpl::list_type::iterator") + "::operator *")
+                       template("c10::impl::ListIterator", t, "c10::detail::ListImpl::list_type::iterator") + "::operator *",
+                       template("c10::impl::ListIterator", t, "c10::detail::ListImpl::list_type::iterator") + "::iter_move",
+                       template("c10::impl::ListIterator", t, "c10::detail::ListImpl::list_type::iterator") + "::iter_swap",
+                       template("c10::impl::ListIterator", t, "c10::detail::ListImpl::list_type::iterator") + "::operator <=>")
                        .skip()) // Returns ListElementReference by value, and ListElementReference has copy constructor disabled.
                    .put(listElementRefInfo)
                    .put(new Info(template("c10::impl::swap", t, "typename c10::detail::ListImpl::list_type::iterator")).javaNames("swap"))

@@ -59,7 +59,7 @@ public class LayerNormImpl extends LayerNormImplCloneable {
    *  the paper {@code Layer Normalization}_ .
    * 
    *  The mean and standard-deviation are calculated separately over the last
-   *  certain number dimensions which have to be of the shape specified by
+   *  certain number of dimensions which have to be of the shape specified by
    *  input {@code normalized_shape}.
    * 
    *  {@code Layer Normalization}: https://arxiv.org/abs/1607.06450 */

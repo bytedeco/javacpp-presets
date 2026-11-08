@@ -56,7 +56,7 @@ public class DispatchKeyExtractor extends Pointer {
 
   public native @ByVal DispatchKeySet getDispatchKeySetBoxed(@Const IValueVector stack);
 
-  public native @Const @ByRef bitset dispatchArgIndicesReverse();
+  public native @Cast("const c10::utils::bitset*") @ByRef LongPointer dispatchArgIndicesReverse();
 
   public native void setOperatorHasFallthroughForKey(DispatchKey k, @Cast("bool") boolean has_fallthrough);
   public native void setOperatorHasFallthroughForKey(@Cast("c10::DispatchKey") short k, @Cast("bool") boolean has_fallthrough);

@@ -43,7 +43,7 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-PYTORCH_VERSION=2.14.0
+PYTORCH_VERSION=2.15.0
 
 export PYTORCH_BUILD_VERSION="$PYTORCH_VERSION"
 export PYTORCH_BUILD_NUMBER=1
@@ -135,14 +135,14 @@ if [[ -z "${CPYTHON_HOST_PATH:-}" ]]; then
 fi
 
 CPYTHON_PATH="$CPYTHON_HOST_PATH"
-if [[ -f "$CPYTHON_PATH/include/python3.14/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.15/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.14"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.14/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.14/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.14/site-packages/"
-    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.14/site-packages/pip/_vendor/certifi/cacert.pem"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.15"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.15/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.15/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.15/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.15/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -287,7 +287,7 @@ sedinplace 's/    build_deps()/    build_deps(); sys.exit()/g' setup.py
 sedinplace 's/AND NOT DEFINED ENV{CUDAHOSTCXX}//g' cmake/public/cuda.cmake
 sedinplace 's/CMAKE_CUDA_FLAGS "/CMAKE_CUDA_FLAGS " --use-local-env /g' CMakeLists.txt
 sedinplace 's/-Xcompiler  \/Zc:__cplusplus/-Xcompiler  \/Zc:__cplusplus -Xcompiler \/Zc:preprocessor/g' CMakeLists.txt
-sedinplace 's/FMT_USE_CMAKE_MODULES TRUE/FMT_USE_CMAKE_MODULES FALSE/g' third_party/fmt/CMakeLists.txt third_party/kineto/libkineto/third_party/fmt/CMakeLists.txt
+sedinplace 's/FMT_USE_CMAKE_MODULES TRUE/FMT_USE_CMAKE_MODULES FALSE/g' third_party/fmt/CMakeLists.txt #third_party/kineto/libkineto/third_party/fmt/CMakeLists.txt
 
 #sedinplace '/pycore_opcode.h/d' torch/csrc/dynamo/cpython_defs.c functorch/csrc/dim/dim*
 sedinplace 's/using ExpandingArrayDouble/public: using ExpandingArrayDouble/g' ./torch/csrc/api/include/torch/nn/options/pooling.h

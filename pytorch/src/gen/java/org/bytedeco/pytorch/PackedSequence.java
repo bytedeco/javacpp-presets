@@ -27,7 +27,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *      Instances of this class should never be created manually. They are meant
  *      to be instantiated by functions like {@code pack_padded_sequence}.
  * 
- *      Batch sizes represent the number elements at each sequence step in
+ *      Batch sizes represent the number of elements at each sequence step in
  *      the batch, not the varying sequence lengths passed to
  *      {@code pack_padded_sequence}.  For instance, given data {@code }abc{@code } and {@code }x{@code }
  *      the :class:{@code PackedSequence} would contain data {@code }axbc{@code } with

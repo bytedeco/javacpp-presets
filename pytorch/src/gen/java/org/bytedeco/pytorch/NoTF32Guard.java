@@ -19,11 +19,12 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-// When the global flag `allow_tf32` is set to true, cuBLAS handles are
-// automatically configured to use math mode CUBLAS_TF32_TENSOR_OP_MATH.
-// For some operators, such as addmv, TF32 offers no performance improvement
-// but causes precision loss. To help this case, this class implements
-// a RAII guard that can be used to quickly disable TF32 within its scope.
+// When CUDA FP32 matmul precision is set to a reduced-precision mode, cuBLAS
+// may use reduced precision internally. For some operators, such as addmv,
+// reduced precision offers no performance improvement but causes precision
+// loss. To help this case, this class implements a RAII guard that can be used
+// to quickly disable reduced-precision FP32 arithmetic and force IEEE within
+// its scope. Its name predates the fp32_precision API.
 //
 // Usage:
 //     NoTF32Guard disable_tf32;
@@ -48,5 +49,7 @@ public class NoTF32Guard extends Pointer {
   
   
   
+  public static native @Cast("bool") boolean should_disable_fp32_reduced_precision();
+  // Compatibility alias for the original TF32-specific name.
   public static native @Cast("bool") boolean should_disable_tf32();
 }

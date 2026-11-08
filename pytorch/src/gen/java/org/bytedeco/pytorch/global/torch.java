@@ -354,6 +354,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../T_SizeTSizeTOptionalSizeTVector_T.java
 
 
+// Targeting ../T_BoolTensor_T.java
+
+
 // Targeting ../NodeNodeCallMap.java
 
 
@@ -1214,11 +1217,37 @@ public static final int C10_WARP_SIZE_UPPER_BOUND = 32;
 //     abort();
 //   }
 // #else
+// #if defined(USE_ROCM) && defined(__HIP_DEVICE_COMPILE__)
+// Compile-time string fragment for CUDA_KERNEL_ASSERT message pieces.
+
+// OCKL is_last=1 treats the append as printf format; escape '%'. Size the
+// buffer as Out + NumPercent.
+
+// __host__ __device__: hipcc's device pass still type-checks host-only call
+// sites (e.g. MemoryAccess.cuh LoadWithCast ctors). Host runtime uses #else
+// __assert_fail; this body is not emitted for host codegen.
+ // namespace torch::headeronly::detail
+
+// #define ROCM_ASSERT_LIT(s) ::torch::headeronly::detail::RoCmAssertLit(s)
+
+// #define CUDA_KERNEL_ASSERT(cond)
+//   if C10_UNLIKELY (!(cond)) {
+//     static constexpr auto _rocm_assert_msg =
+//         ::torch::headeronly::detail::rocm_assert_concat<
+//             ROCM_ASSERT_LIT(__FILE__ ":" C10_STRINGIZE(__LINE__) ": "),
+//             ROCM_ASSERT_LIT(__func__),
+//             ROCM_ASSERT_LIT(": Device-side assertion `" #cond
+//                             "' failed.\n")>();
+//     ::torch::headeronly::detail::rocm_assert_one_shot(
+//         _rocm_assert_msg.data, _rocm_assert_msg.ength);
+//   }
+// #else
 // #define CUDA_KERNEL_ASSERT(cond)
 //   if (C10_UNLIKELY(!(cond))) {
 //     __assert_fail(
 //         #cond, __FILE__, static_cast<unsigned int>(__LINE__), __func__);
 //   }
+// #endif // defined(USE_ROCM) && defined(__HIP_DEVICE_COMPILE__)
 // #define CUDA_KERNEL_ASSERT_MSG(cond, msg)
 //   if (C10_UNLIKELY(!(cond))) {
 //     __assert_fail(
@@ -1229,7 +1258,7 @@ public static final int C10_WARP_SIZE_UPPER_BOUND = 32;
 //     printf(
 //         "[CUDA_KERNEL_ASSERT] " __FILE__ ":" C10_STRINGIZE(
 //             __LINE__) ": %s: block: [%d,%d,%d], thread: [%d,%d,%d]: "
-//             "Assertion failed: `" #cond "`: " msg "\n",
+//             "Assertion failed: `%s`: " msg "\n",
 //         __func__,
 //         blockIdx.x,
 //         blockIdx.y,
@@ -1237,6 +1266,7 @@ public static final int C10_WARP_SIZE_UPPER_BOUND = 32;
 //         threadIdx.x,
 //         threadIdx.y,
 //         threadIdx.z,
+//         #cond,
 //         ##__VA_ARGS__);
 //     __assert_fail(
 //         #cond, __FILE__, static_cast<unsigned int>(__LINE__), __func__);
@@ -3759,7 +3789,6 @@ public static final int C10_X86_F16 = 1;
 
 // Parsed from c10/util/Exception.h
 
-// @allow-raw-throw
 // #ifndef C10_UTIL_EXCEPTION_H_
 // #define C10_UTIL_EXCEPTION_H_
 
@@ -3900,6 +3929,7 @@ public static final int C10_X86_F16 = 1;
 // is used inside a lambda the __func__ macro expands to operator(), which isn't
 // very useful, but hard to fix in a macro so suppressing the warning.
 // #define C10_THROW_ERROR(err_type, msg)
+//   /* @allow-raw-throw: this macro is the c10 throw itself */
 //   throw ::c10::err_type(
 //       {__func__, __FILE__, static_cast<uint32_t>(__LINE__)}, msg)
 
@@ -4084,6 +4114,7 @@ public static final int C10_X86_F16 = 1;
 // #ifdef STRIP_ERROR_MESSAGES
 // #define TORCH_CHECK(cond, ...)
 //   if (C10_UNLIKELY_OR_CONST(!(cond))) {
+//     /* @allow-raw-throw: this macro is the check itself */
 //     throw std::runtime_error(TORCH_CHECK_MSG(
 //         cond,
 //         "",
@@ -4098,6 +4129,7 @@ public static final int C10_X86_F16 = 1;
 // #else
 // #define TORCH_CHECK(cond, ...)
 //   if (C10_UNLIKELY_OR_CONST(!(cond))) {
+//     /* @allow-raw-throw: this macro is the check itself */
 //     throw std::runtime_error(TORCH_CHECK_MSG(
 //         cond,
 //         "",
@@ -5380,8 +5412,8 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 // #include <c10/util/Exception.h>
 // #include <c10/util/Metaprogramming.h>
 // #include <c10/util/TypeList.h>
-// #include <c10/util/llvmMathExtras.h>
 // #include <array>
+// #include <bit>
 // #include <cstddef>
 // #include <cstdint>
 // #include <initializer_list>
@@ -6540,7 +6572,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
 @Namespace("c10") public static native @Cast("bool") boolean isBitsType(ScalarType t);
 
-@Namespace("c10") public static native @Cast("bool") boolean isBarebonesUnsignedType(ScalarType t);
+@Namespace("c10") public static native @Cast("const bool") boolean isBarebonesUnsignedType(ScalarType t);
 
 @Namespace("c10") public static native ScalarType toQIntType(ScalarType t);
 
@@ -6953,43 +6985,9 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 // #include <c10/util/overflows.h>
 // #include <c10/util/safe_conv.h>
 
+// #include <torch/headeronly/util/TypeCast.h>
+
 // #include <type_traits>
-
-// #if C10_CLANG_HAS_WARNING("-Wimplicit-float-conversion")
-// #endif
-// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
-// #endif
-
-// Float -> integer is UB on out-of-range/NaN values; we keep the
-// platform-defined result for NumPy compatibility and suppress UBSan only
-// here, so the dispatching template below stays UBSan-clean.
-
-// Partial template specialization for casting to bool.
-// Need to handle complex types separately, as we don't
-// simply want to cast the real part to bool.
-
-// Route float -> uint8 via int64 to get consistent results across CPU/GPU
-// compilers; float -> unsigned directly is UB and platform-divergent.
-
-// TODO(#146647): Can we make all these template specialization happen
-// based off our apply macros?
-
-// TODO(#146647): Can we make all these template specialization happen
-// based off our apply macros?
-
-// Define separately to avoid being inlined and prevent code-size bloat
-@Namespace("c10") public static native void report_overflow(@Cast("const char*") BytePointer name);
-@Namespace("c10") public static native void report_overflow(String name);
-
-// Range-checked conversion that PERMITS signed->unsigned two's-complement
-// wraparound (via overflows() with its default strict_unsigned=false). Retained
-// only to preserve the historical behavior of the few call sites that relied on
-// the wrap. DO NOT use in new code: use c10::safe_conv (strict integer
-// narrowing, c10/util/safe_conv.h) or c10::checked_convert (general, above).
-
- // namespace c10
-
-// Trigger tests for D25440771. TODO: Remove this line any time you want.
 
 
 // Parsed from c10/core/Scalar.h
@@ -7194,28 +7192,9 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
 // Parsed from c10/util/irange.h
 
-// Copyright 2004-present Facebook. All Rights Reserved.
-
 // #pragma once
 
-// #include <c10/util/TypeSafeSignMath.h>
-
-// #include <algorithm>
-// #include <cstddef>
-// #include <iterator>
-// #include <type_traits>
-
- // namespace detail
-
-/** Creates an integer range for the half-open interval [begin, end)
- *  If end<=begin, then the range is empty.
- *  The range has the type of the {@code end} integer; {@code begin} integer is
- *  cast to this type. */
-
-/** Creates an integer range for the half-open interval [0, end)
- *  If end<=begin, then the range is empty */
-
- // namespace c10
+// #include <torch/headeronly/util/irange.h>
 
 
 // Parsed from c10/util/typeid.h
@@ -7952,13 +7931,13 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 // #include <functional>
 // #include <memory>
 // #include <mutex>
-// #include <stdexcept>
 // #include <string>
 // #include <unordered_map>
 // #include <vector>
 
 // #include <c10/macros/Export.h>
 // #include <c10/macros/Macros.h>
+// #include <c10/util/Exception.h>
 // #include <c10/util/Type.h>
 
 @Namespace("c10") public enum RegistryPriority {
@@ -8445,6 +8424,18 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 // #include <c10/util/irange.h>
 // #include <cstdint>
 // #include <optional>
+// #include <string>
+
+@Namespace("c10") public static native @StdString BytePointer formatSymIntArrayRefToIntArrayRefError(
+    @ByVal SymIntArrayRef ar,
+    @Const @ByRef SymInt problem,
+    @Cast("const char*") BytePointer file,
+    @Cast("int64_t") long line);
+@Namespace("c10") public static native @StdString String formatSymIntArrayRefToIntArrayRefError(
+    @ByVal SymIntArrayRef ar,
+    @Const @ByRef SymInt problem,
+    String file,
+    @Cast("int64_t") long line);
 
 @Namespace("c10") public static native @ByVal LongArrayRef asIntArrayRefUnchecked(@ByVal SymIntArrayRef ar);
 
@@ -9222,8 +9213,8 @@ public static final long CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // GCC has __builtin_mul_overflow from before it supported __has_builtin
 // #ifdef _MSC_VER
 // #define C10_HAS_BUILTIN_OVERFLOW() (0)
-// #include <c10/util/llvmMathExtras.h>
 // #include <intrin.h>
+// #include <bit>
 // #else
 // #define C10_HAS_BUILTIN_OVERFLOW() (1)
 // #endif
@@ -9283,6 +9274,7 @@ public static final long CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // #include <memory>
 // #include <string>
 // #include <type_traits>
+// #include <unordered_map>
 // #include <utility>
 // #include <vector>
 
@@ -9918,6 +9910,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #include <ATen/ops/_nested_tensor_strides_ops.h>
 // #include <ATen/ops/_nnz_ops.h>
 // #include <ATen/ops/_philox_normal_ops.h>
+// #include <ATen/ops/_philox_randint_ops.h>
 // #include <ATen/ops/_philox_uniform_ops.h>
 // #include <ATen/ops/_reshape_alias_ops.h>
 // #include <ATen/ops/_sparse_mask_projection_ops.h>
@@ -11723,6 +11716,9 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::_philox_uniform_(Tensor(a!) self, Tensor key, float low=0, float high=1) -> Tensor(a!)
 
 
+// aten::_philox_randint_(Tensor(a!) self, Tensor key, int? low=None, int? high=None) -> Tensor(a!)
+
+
 // aten::norm.ScalarOpt_dtype(Tensor self, Scalar? p, *, ScalarType dtype) -> Tensor
 
 
@@ -12958,7 +12954,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // and to un-register itself from this same level if that tangent is removed via
 // ForwardGrad::reset. The ForwardADLevel is created when a new level is entered
 // via ForwardADLevel::get_next_idx. A reference to the new ForwardADLevel is
-// stored into a global (for the whole process) vector that ensure it can be
+// stored into a global (for the whole process) vector that ensures it can be
 // accessed via ForwardADLevel::get_by_idx. This reference is deleted when the
 // index is released by the user when calling ForwardADLevel::release_idx. When
 // it is destructed, the ForwardADLevel is responsible for clearing all the
@@ -13670,12 +13666,22 @@ public static final byte min_lookups = min_lookups();
 
 // #pragma once
 
+// #include <algorithm>
+// #include <type_traits>
+// #include <utility>
 // #include <vector>
+
 // #include <c10/util/ArrayRef.h>
 
-// The passed in function must take T by value (T), or by
-// const reference (const T&); taking T by non-const reference
-// will result in an error like:
+// Prefer consuming an owned element when the callable accepts an rvalue.
+// This covers callables taking T, T&&, or const T&. Fall back to T& for
+// callables that can only operate on an lvalue.
+
+ // namespace detail
+
+// For non-consuming inputs, the passed function must take T by value (T), or by
+// const reference (const T&); taking T by non-const reference will result in an
+// error like:
 //
 //    error: no type named 'type' in 'class std::invoke_result<foobar::__lambda, T>'
 //
@@ -13683,8 +13689,18 @@ public static final byte min_lookups = min_lookups();
 
 // Overload for explicit function and ArrayRef
 
+// Consuming overload for an owned vector. Prefer passing elements as rvalues
+// when the callable supports it. If the map produces the same element type by
+// value, transform in place so the result can reuse the vector's allocation.
+
 // C++ forbids taking an address of a constructor, so here's a workaround...
 // Overload for constructor (R) application
+
+// Consuming overload for constructor application. Move from each element when
+// R can be constructed from T&&; otherwise preserve the existing lvalue path.
+
+// TODO: Constrain this overload to move-assignable T with concepts once all
+// supported compilers handle C++20 constraints reliably.
 
  // namespace c10
 
@@ -14432,12 +14448,27 @@ public static final byte min_lookups = min_lookups();
 
 // #pragma once
 
+// #include <algorithm>
+// #include <array>
+// #include <atomic>
 // #include <condition_variable>
+// #include <cstddef>
+// #include <exception>
+// #include <functional>
+// #include <initializer_list>
+// #include <iterator>
 // #include <memory>
+// #include <mutex>
 // #include <optional>
+// #include <ostream>
+// #include <sstream>
+// #include <string>
+// #include <string_view>
 // #include <tuple>
 // #include <type_traits>
+// #include <unordered_map>
 // #include <utility>
+// #include <vector>
 
 // #include <ATen/core/Dict.h>
 // #include <ATen/core/List.h>
@@ -14553,117 +14584,7 @@ public static final byte min_lookups = min_lookups();
 
 // #undef TORCH_FORALL_TAGS
 
- // namespace detail
 
-
-
-// note: when adding a DEFINE_TO case here you should also add a
-// toX method to IValue. These named methods are much more discoverable
-// than the to templated function.
-
-// #define DEFINE_TO(T, method_name)
-//   template <>
-//   inline T IValue::to<T>()&& {
-//     return static_cast<T>(std::move(*this).method_name());
-//   }
-//   template <>
-//   inline c10::detail::ivalue_to_const_ref_overload_return<T>::type IValue::to<T>() const& {
-//     typedef c10::detail::ivalue_to_const_ref_overload_return<T>::type return_type;
-//     return static_cast<return_type>(this->method_name());
-//   }
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
 
 // generic_to<T> converts an IValue from a generic list or generic dict
 // to a concrete list/dict type likelike List<T>, Dict<...> or std::optional<T>.
@@ -14680,12 +14601,67 @@ public static final byte min_lookups = min_lookups();
  // namespace detail
  // namespace detail
 
+// NOTE: when adding a case here you should also add a toX method to IValue.
+// These named methods are much more discoverable than the templated function.
+//
+// NOTE: the implementation is sensitive to the order of this list. If multiple
+// entries refer to the same type, only the first entry prevails. For example,
+// on platforms where `unsigned long` == `uint64_t`, we will silently ignore the
+// entry corresponding to `unsigned long`.
 
+// #define TORCH_FORALL_CONVERSIONS(_)
+//   _(at::Tensor, toTensor)
+//   _(at::Storage, toStorage)
+//   _(c10::Stream, toStream)
+//   _(float, toDouble)
+//   _(double, toDouble)
+//   _(c10::complex<double>, toComplexDouble)
+//   _(unsigned char, toInt)
+//   _(signed char, toInt)
+//   _(unsigned short, toInt)
+//   _(short, toInt)
+//   _(int, toInt)
+//   _(uint32_t, toInt)
+//   _(uint64_t, toInt)
+//   _(unsigned long, toInt)
+//   _(int64_t, toInt)
+//   _(bool, toBool)
+//   _(c10::intrusive_ptr<caffe2::Blob>, toBlob)
+//   _(c10::intrusive_ptr<ivalue::ConstantString>, toString)
+//   _(c10::intrusive_ptr<ivalue::Object>, toObject)
+//   _(at::Scalar, toScalar)
+//   _(c10::List<int64_t>, toIntList)
+//   _(at::DimVector, toDimVector)
+//   _(c10::List<c10::SymInt>, toSymIntList)
+//   _(c10::List<double>, toDoubleList)
+//   _(c10::List<c10::complex<double>>, toComplexDoubleList)
+//   _(c10::List<bool>, toBoolList)
+//   _(c10::List<at::Tensor>, toTensorList)
+//   _(c10::impl::GenericList, toList)
+//   _(c10::impl::GenericDict, toGenericDict)
+//   _(c10::intrusive_ptr<ivalue::Tuple>, toTuple)
+//   _(std::string, toStringRef)
+//   _(std::string_view, toStringView)
+//   _(c10::intrusive_ptr<ivalue::Future>, toFuture)
+//   _(c10::intrusive_ptr<ivalue::Await>, toAwait)
+//   _(c10::intrusive_ptr<c10::RRefInterface>, toRRef)
+//   _(c10::intrusive_ptr<at::Quantizer>, toQuantizer)
+//   _(IValue, toIValue)
+//   _(c10::Device, toDevice)
+//   _(at::ScalarType, toScalarType)
+//   _(at::Layout, toLayout)
+//   _(at::MemoryFormat, toMemoryFormat)
+//   _(at::QScheme, toQScheme)
+//   _(at::Generator, toGenerator)
+//   _(c10::SymInt, toSymInt)
+//   _(c10::SymFloat, toSymFloat)
+//   _(c10::SymBool, toSymBool)
 
 
 
 
 
+// #undef TORCH_FORALL_CONVERSIONS
 
 
 
@@ -14786,7 +14762,7 @@ public static final byte min_lookups = min_lookups();
 
 
 
- // namespace detail
+
 
  // namespace ivalue
 
@@ -14812,6 +14788,7 @@ public static final byte min_lookups = min_lookups();
 // #include <c10/macros/Export.h>
 // #include <c10/util/MaybeOwned.h>
 // #include <c10/util/intrusive_ptr.h>
+// #include <functional>
 // #include <limits>
 // #include <type_traits>
 // #include <unordered_map>
@@ -14943,6 +14920,7 @@ public static final byte min_lookups = min_lookups();
 
 
 
+  // to<IValue>() has no rvalue overload and would copy; steal instead.
 
 
 
@@ -15050,7 +15028,10 @@ public static final byte min_lookups = min_lookups();
 // #include <c10/util/TypeList.h>
 // #include <c10/util/intrusive_ptr.h>
 // #include <c10/util/ArrayRef.h>
+// #include <compare>
+// #include <iterator>
 // #include <optional>
+// #include <type_traits>
 // #include <vector>
 
 
@@ -15111,7 +15092,14 @@ public static final byte min_lookups = min_lookups();
 
 
 
+ // namespace impl
+ // namespace c10
 
+// MSVC's STL, unlike libstdc++/libc++, needs this to satisfy
+// indirectly_readable's common_reference_with check (#196002, #196245).
+ // namespace std
+
+ // namespace c10::impl
 // Targeting ../DoubleComplexList.java
 
 
@@ -16299,8 +16287,6 @@ public static final byte min_lookups = min_lookups();
 // be kept in sync.
 
 
-// NOTE: this could probably be simplified with C++17 fold expressions.
-
 @Namespace("c10::impl") public static native void boxToStack(
     @ByPtrRef IValue dest,
     @ByVal TensorOptions options);
@@ -16817,14 +16803,9 @@ public static final byte min_lookups = min_lookups();
 
 // #pragma once
 
+// #include <bit>
+// #include <bitset>
 // #include <cstddef>
-// #if defined(_MSC_VER)
-// #endif
-// Targeting ../bitset.java
-
-
-
-@Namespace("c10::utils") public static native @Cast("bool") @Name("operator !=") @NoException(true) boolean notEquals(@ByVal bitset lhs, @ByVal bitset rhs);
 
  // namespace c10::utils
 
@@ -17376,6 +17357,7 @@ public static final byte min_lookups = min_lookups();
 // #include <c10/macros/Macros.h>
 // #include <c10/util/Metaprogramming.h>
 // #include <c10/util/Type.h>
+// #include <cstring>
 // #include <typeindex>
 // Targeting ../CppSignature.java
 
@@ -18241,12 +18223,14 @@ public static final byte min_lookups = min_lookups();
 // values in-place (adding an input twice will accumulate the result).
 // This behaviour is needed and used only in backward graphs.
 
+// #include <memory>
+// #include <optional>
+// #include <thread>
 // #include <utility>
 // #include <vector>
 
 // #include <c10/core/Stream.h>
 // #include <torch/csrc/autograd/variable.h>
-// #include <optional>
 
 // Detect and handle stale non-capturing stream references during CUDA graph
 // capture. Autograd nodes snapshot the current stream at construction time.
@@ -18309,6 +18293,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("torch::autograd") public static native @Cast("bool") boolean get_current_graph_task_keep_graph();
 @Namespace("torch::autograd") public static native @Cast("torch::autograd::Node**") @StdVector PointerPointer get_current_graph_task_execution_order();
 @Namespace("torch::autograd") public static native int get_current_graph_task_id();
+@Namespace("torch::autograd") public static native @ByVal TensorVector get_current_input_grad_buffers(Node node);
 
 
  // namespace torch::autograd
@@ -18352,7 +18337,12 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @Override public String toString() { return intern().name(); }
 }
 
-@Namespace("at::blas") public enum SwizzleType { NO_SWIZZLE((byte)(0)), SWIZZLE_32_4_4((byte)(1));
+// Memory layout of a blockwise scale tensor. NO_SWIZZLE is the backend's
+// default layout for the recipe.
+@Namespace("at::blas") public enum SwizzleType {
+  NO_SWIZZLE((byte)(0)),
+  SWIZZLE_32_4_4((byte)(1)), // cuBLAS 128x4-tiled block scales
+  SWIZZLE_32_8((byte)(2));// hipBLASLt BLK32_UE8M0_32_8
 
     public final byte value;
     private SwizzleType(byte v) { this.value = v; }
@@ -18434,7 +18424,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
  // namespace at
-
 
 
 // Parsed from ATen/detail/MTIAHooksInterface.h
@@ -18837,7 +18826,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
  // namespace at
 
 
-
 // Parsed from ATen/detail/XPUHooksInterface.h
 
 // #pragma once
@@ -19001,6 +18989,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <map>
 // #include <mutex>
 // #include <unordered_map>
+@Namespace("at::native::xnnpack::internal") public static native void register_backend();
+ // namespace native::xnnpack::internal
 
 @Namespace("at") public enum Float32MatmulPrecision { HIGHEST(0), HIGH(1), MEDIUM(2);
 
@@ -19040,8 +19030,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 }
 // DEFAULT is an internal-only sentinel meaning "use legacy backend default
 // unless a parent setting overrides it". NONE means "explicitly set to
-// inherit/no-op".
-@Namespace("at") public enum Float32Precision { NONE(0), IEEE(1), TF32(2), BF16(3), DEFAULT(4);
+// inherit/no-op". Append new values because Dynamo guards serialize this enum.
+@Namespace("at") public enum Float32Precision {
+  NONE(0),
+  IEEE(1),
+  TF32(2),
+  BF16(3),
+  DEFAULT(4),
+  BF16X9(5);
 
     public final int value;
     private Float32Precision(int v) { this.value = v; }
@@ -59001,6 +58997,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_ctc_loss_backward.h>
 // #include <ATen/ops/_cudnn_attention_backward.h>
 // #include <ATen/ops/_cudnn_attention_forward.h>
+// #include <ATen/ops/_cudnn_attention_forward_no_dropout_inplace.h>
 // #include <ATen/ops/_cudnn_ctc_loss.h>
 // #include <ATen/ops/_cudnn_init_dropout_state.h>
 // #include <ATen/ops/_cudnn_rnn.h>
@@ -59197,6 +59194,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_philox_key_fold_in.h>
 // #include <ATen/ops/_philox_key_split.h>
 // #include <ATen/ops/_philox_normal.h>
+// #include <ATen/ops/_philox_randint.h>
 // #include <ATen/ops/_philox_uniform.h>
 // #include <ATen/ops/_pin_memory.h>
 // #include <ATen/ops/_prelu_kernel.h>
@@ -59213,6 +59211,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_safe_softmax.h>
 // #include <ATen/ops/_sample_dirichlet.h>
 // #include <ATen/ops/_saturate_weight_to_fp16.h>
+// #include <ATen/ops/_scaled_addmm.h>
 // #include <ATen/ops/_scaled_dot_product_attention_math.h>
 // #include <ATen/ops/_scaled_dot_product_attention_math_for_mps.h>
 // #include <ATen/ops/_scaled_dot_product_cudnn_attention.h>
@@ -60720,20 +60719,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <utility>
 
 //===----------------------------------------------------------------------===//
-//                std::index_sequence shim for C++11
-//===----------------------------------------------------------------------===//
-
-// A container of type-template parameter indices.
-
-// Decrements the index N, adds N-1 to the list of indices and forwards
-// whatever we already have.
-
-// Partial specialization that forms our base case. When N is zero, we stop
-// and define a typedef that will be visible to earlier classes due to
-// inheritance. The typedef we define is an index list containing the numbers
-// 0 through N-1.
-
-//===----------------------------------------------------------------------===//
 //                                 Utilities
 //===----------------------------------------------------------------------===//
 
@@ -60812,6 +60797,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #pragma once
 // #include <ATen/TensorGeometry.h>
+// #include <ATen/core/functional.h>
 // #include <ATen/core/ivalue.h>
 // #include <c10/core/impl/TorchDispatchModeTLS.h>
 // #include <c10/util/flat_hash_map.h>
@@ -60917,6 +60903,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #pragma once
 
+// #include <ATen/core/functional.h>
 // #include <ATen/core/ivalue.h>
 // #include <c10/core/SymInt.h>
 // #include <c10/util/flat_hash_map.h>
@@ -61990,12 +61977,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // Parsed from c10/util/Load.h
 
 // #pragma once
-// #include <c10/macros/Macros.h>
-// #include <cstring>
 
- // namespace detail
-
- // namespace c10
+// #include <torch/headeronly/util/Load.h>
 
 
 // Parsed from c10/core/DynamicCast.h
@@ -62455,6 +62438,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_ctc_loss_backward_native.h>
 // #include <ATen/ops/_cudnn_attention_backward_native.h>
 // #include <ATen/ops/_cudnn_attention_forward_native.h>
+// #include <ATen/ops/_cudnn_attention_forward_no_dropout_inplace_native.h>
 // #include <ATen/ops/_cudnn_ctc_loss_native.h>
 // #include <ATen/ops/_cudnn_init_dropout_state_native.h>
 // #include <ATen/ops/_cudnn_rnn_native.h>
@@ -62651,6 +62635,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_philox_key_fold_in_native.h>
 // #include <ATen/ops/_philox_key_split_native.h>
 // #include <ATen/ops/_philox_normal_native.h>
+// #include <ATen/ops/_philox_randint_native.h>
 // #include <ATen/ops/_philox_uniform_native.h>
 // #include <ATen/ops/_pin_memory_native.h>
 // #include <ATen/ops/_prelu_kernel_native.h>
@@ -62667,6 +62652,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_safe_softmax_native.h>
 // #include <ATen/ops/_sample_dirichlet_native.h>
 // #include <ATen/ops/_saturate_weight_to_fp16_native.h>
+// #include <ATen/ops/_scaled_addmm_native.h>
 // #include <ATen/ops/_scaled_dot_product_attention_math_native.h>
 // #include <ATen/ops/_scaled_dot_product_attention_math_for_mps_native.h>
 // #include <ATen/ops/_scaled_dot_product_cudnn_attention_native.h>
@@ -63851,6 +63837,19 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @Const @ByRef Tensor arg0,
     @ByVal TensorVector indices);
 
+@Namespace("at::indexing::impl") public static native @ByVal T_BoolTensor_T canDispatchToMaskedFill(
+    @Const @ByRef Tensor self,
+    @Const @ByRef TensorOptionalList indices);
+
+@Namespace("at::indexing::impl") public static native @Cast("bool") boolean allowsScalarIndexOnDevice(@Const @ByRef Scalar value, @Const @ByRef Tensor self);
+
+@Namespace("at::indexing::impl") public static native @Cast("bool") boolean allowsScalarIndexOnDevice(@Const @ByRef Tensor value, @Const @ByRef Tensor self);
+
+// Setitem can leave an eligible scalar index on CUDA instead of calling item().
+@Namespace("at::indexing::impl") public static native @Cast("bool") boolean canKeepScalarIndexOnDevice(
+    @Const @ByRef Tensor index,
+    @Const @ByRef Tensor self);
+
 // NOTE: Why do we mirror instead of replace the `count_specified_dimensions`
 // function in torch/csrc/autograd/python_variable_indexing.cpp? It's because
 // `count_specified_dimensions` is on the hot path of Python tensor multi-dim
@@ -63886,15 +63885,31 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @Const @ByRef TensorOptions options,
     @Const @ByRef Device self_device);
 
+@Namespace("at::indexing") public static native @ByVal Tensor asTensor(@Const @ByRef Tensor value, @Const @ByRef Tensor target);
+@Namespace("at::indexing") public static native @ByVal Tensor asTensor(@Const @ByRef Scalar value, @Const @ByRef Tensor target);
+
 // To match numpy semantics:
 // As a special case for backwards compatibility,
 // strip away unit dimensions from the left of 'src'
 @Namespace("at::indexing") public static native @ByVal SymIntArrayRef slicePrefix1sSize(@Const @ByRef SymIntArrayRef sizes);
 
+@Namespace("at::indexing") public static native void copy_to(@Const @ByRef Tensor dst, @Const @ByRef Scalar src);
 @Namespace("at::indexing") public static native void copy_to(@Const @ByRef Tensor dst, @Const @ByRef Tensor src);
 
 // See NOTE [ Setting `disable_slice_optimization` when calling C++ tensor
 // indexing functions from Python ]
+@Namespace("at::indexing") public static native @ByVal Tensor handleDimInMultiDimIndexing(
+    @Const @ByRef Tensor prev_dim_result,
+    @Const @ByRef Tensor original_tensor,
+    @Const @ByRef TensorIndex index,
+    @Cast("int64_t*") LongPointer dim_ptr,
+    @Cast("int64_t*") LongPointer specified_dims_ptr,
+    @Cast("int64_t") long real_dim,
+    @ByRef TensorVector outIndices,
+    @Cast("bool") boolean disable_slice_optimization,
+    @Const @ByRef Device original_tensor_device,
+    @Const @ByRef SymIntArrayRefOptional prev_dim_result_sizes,
+    @Cast("bool") boolean allow_device_index_for_setitem/*=false*/);
 @Namespace("at::indexing") public static native @ByVal Tensor handleDimInMultiDimIndexing(
     @Const @ByRef Tensor prev_dim_result,
     @Const @ByRef Tensor original_tensor,
@@ -63916,7 +63931,31 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @ByRef TensorVector outIndices,
     @Cast("bool") boolean disable_slice_optimization,
     @Const @ByRef Device original_tensor_device,
+    @Const @ByRef SymIntArrayRefOptional prev_dim_result_sizes,
+    @Cast("bool") boolean allow_device_index_for_setitem/*=false*/);
+@Namespace("at::indexing") public static native @ByVal Tensor handleDimInMultiDimIndexing(
+    @Const @ByRef Tensor prev_dim_result,
+    @Const @ByRef Tensor original_tensor,
+    @Const @ByRef TensorIndex index,
+    @Cast("int64_t*") LongBuffer dim_ptr,
+    @Cast("int64_t*") LongBuffer specified_dims_ptr,
+    @Cast("int64_t") long real_dim,
+    @ByRef TensorVector outIndices,
+    @Cast("bool") boolean disable_slice_optimization,
+    @Const @ByRef Device original_tensor_device,
     @Const @ByRef SymIntArrayRefOptional prev_dim_result_sizes);
+@Namespace("at::indexing") public static native @ByVal Tensor handleDimInMultiDimIndexing(
+    @Const @ByRef Tensor prev_dim_result,
+    @Const @ByRef Tensor original_tensor,
+    @Const @ByRef TensorIndex index,
+    @Cast("int64_t*") long[] dim_ptr,
+    @Cast("int64_t*") long[] specified_dims_ptr,
+    @Cast("int64_t") long real_dim,
+    @ByRef TensorVector outIndices,
+    @Cast("bool") boolean disable_slice_optimization,
+    @Const @ByRef Device original_tensor_device,
+    @Const @ByRef SymIntArrayRefOptional prev_dim_result_sizes,
+    @Cast("bool") boolean allow_device_index_for_setitem/*=false*/);
 @Namespace("at::indexing") public static native @ByVal Tensor handleDimInMultiDimIndexing(
     @Const @ByRef Tensor prev_dim_result,
     @Const @ByRef Tensor original_tensor,
@@ -63936,7 +63975,23 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @ByRef TensorVector outIndices,
     @Cast("bool") boolean disable_slice_optimization,
     @Const @ByRef Device self_device,
+    @Const @ByRef SymIntArrayRefOptional self_sizes,
+    @Cast("bool") boolean allow_device_index_for_setitem/*=false*/);
+@Namespace("at::indexing::impl") public static native @ByVal Tensor applySlicing(
+    @Const @ByRef Tensor self,
+    @Const @ByRef TensorIndexArrayRef indices,
+    @ByRef TensorVector outIndices,
+    @Cast("bool") boolean disable_slice_optimization,
+    @Const @ByRef Device self_device,
     @Const @ByRef SymIntArrayRefOptional self_sizes);
+@Namespace("at::indexing::impl") public static native @ByVal Tensor applySlicing(
+    @Const @ByRef Tensor self,
+    @Const @ByRef TensorIndexVector indices,
+    @ByRef TensorVector outIndices,
+    @Cast("bool") boolean disable_slice_optimization,
+    @Const @ByRef Device self_device,
+    @Const @ByRef SymIntArrayRefOptional self_sizes,
+    @Cast("bool") boolean allow_device_index_for_setitem/*=false*/);
 @Namespace("at::indexing::impl") public static native @ByVal Tensor applySlicing(
     @Const @ByRef Tensor self,
     @Const @ByRef TensorIndexVector indices,
@@ -63952,6 +64007,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @ByRef Tensor self,
     @ByVal TensorVector indices,
     @Const @ByRef Tensor value);
+
+@Namespace("at::indexing") public static native @Cast("bool") boolean try_dispatch_masked_fill_(
+    @ByRef Tensor self,
+    @ByVal TensorVector indices,
+    @Const @ByRef Scalar value);
+
+@Namespace("at::indexing") public static native @Cast("bool") boolean try_dispatch_index_fill_(
+    @ByRef Tensor self,
+    @Const @ByRef TensorVector indices,
+    @Const @ByRef Scalar value);
 
 // NOTE [ Setting `disable_slice_optimization` when calling C++ tensor indexing
 // functions from Python ]
@@ -64006,24 +64071,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // torch/csrc/autograd/python_variable_indexing.cpp for "the assigned value is a
 // Tensor" case See NOTE [ Setting `disable_slice_optimization` when calling C++
 // tensor indexing functions from Python ]
-@Namespace("at::indexing") public static native void set_item(
-    @Const @ByRef Tensor self,
-    @Const @ByRef TensorIndexArrayRef indices,
-    @Const @ByRef Tensor value,
-    @Cast("bool") boolean disable_slice_optimization/*=false*/);
-@Namespace("at::indexing") public static native void set_item(
-    @Const @ByRef Tensor self,
-    @Const @ByRef TensorIndexArrayRef indices,
-    @Const @ByRef Tensor value);
-@Namespace("at::indexing") public static native void set_item(
-    @Const @ByRef Tensor self,
-    @Const @ByRef TensorIndexVector indices,
-    @Const @ByRef Tensor value,
-    @Cast("bool") boolean disable_slice_optimization/*=false*/);
-@Namespace("at::indexing") public static native void set_item(
-    @Const @ByRef Tensor self,
-    @Const @ByRef TensorIndexVector indices,
-    @Const @ByRef Tensor value);
 
  // namespace at::indexing
 
@@ -64154,7 +64201,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #pragma once
 
-// #if !defined(_MSC_VER) && __cplusplus < 202002L
+// MSVC keeps __cplusplus at 199711L unless /Zc:__cplusplus is passed, so check
+// _MSVC_LANG there. nvcc on Windows preprocesses with cl and forwards its -std
+// to it, so this also covers .cu files.
+// #if (defined(_MSVC_LANG) && _MSVC_LANG < 202002L) ||
+//     (!defined(_MSVC_LANG) && __cplusplus < 202002L)
 // #error C++20 or later compatible compiler is required to use ATen.
 // #endif
 
@@ -66331,7 +66382,7 @@ public static final int kPrevDirection = kPrevDirection();
     @ByRef Graph g,
     @Const @ByRef IValue val);
 
-// note: prefer g.insertConsant(val, loc) which does exactly the same thing
+// note: prefer g.insertConstant(val, loc) which does exactly the same thing
 // this function is only declared/defined here because its implementation is
 // closely related to the implementation of prim::Constant that is also in
 // constants.cpp.
@@ -66703,6 +66754,7 @@ public static final int kPrevDirection = kPrevDirection();
 
 // #include <ATen/core/jit_type.h>
 // #include <ATen/core/stack.h>
+// #include <c10/util/bit_cast.h>
 // #include <c10/util/hash.h>
 // #include <c10/util/irange.h>
 // #include <torch/csrc/Export.h>
@@ -67202,7 +67254,7 @@ In both cases, we also recompile on new striding behavior, device, or dtype.
 
 Behavior - fallback functions & depth:
     When an input doesn't match the format required by the specialized compiled op, it will run
-    a fallback function. Fallback functions are recursively be compiled and specialized based
+    a fallback function. Fallback functions are recursively compiled and specialized based
     on the observed tensor shapes. Since compilation can be slow, the "depth" parameter is provided to
     limit the number of specializations that can be compiled, before giving up on recompiling and
     falling back to a completely un-fused, un-specialized implementation.
@@ -67627,7 +67679,7 @@ apis for specific fusers.
 
 
 /** Constructs a new {@code SharedBatchDataset} by creating a
- *  {@code shared_ptr<UnderlyingDatase>}. All arguments are forwarded to
+ *  {@code shared_ptr<UnderlyingDataset>}. All arguments are forwarded to
  *  {@code make_shared<UnderlyingDataset>}. */
  // namespace torch::data::datasets
 
@@ -69002,6 +69054,7 @@ public static final int AT_PARALLEL_NATIVE = 0;
 // #pragma once
 // #include <ATen/Config.h>
 // #include <c10/macros/Macros.h>
+// #include <c10/util/safe_numerics.h>
 // #include <functional>
 // #include <string>
 
@@ -69486,6 +69539,11 @@ body of your function, only data pointers.
 @Namespace("torch::autograd::profiler") public static native void prepareProfiler(
     @Const @ByRef ProfilerConfig config,
     @Const @ByRef ActivityTypeSet activities);
+@Namespace("torch::autograd::profiler") public static native void prepareProfiler(
+    @Const @ByRef ProfilerConfig config,
+    @Const @ByRef ActivityTypeSet activities,
+    @Cast("const torch::autograd::profiler::ActivityFilter*") @ByRef HashAliasedIValueMap activity_filter,
+    @Cast("const torch::autograd::profiler::ProfilerExtensionMap*") @ByRef ExtraFilesMap profiler_extensions);
 
 @Namespace("torch::autograd::profiler") public static native void toggleCollectionDynamic(
     @Cast("const bool") boolean enable,
@@ -74766,6 +74824,7 @@ body of your function, only data pointers.
 // #include <torch/types.h>
 
 // #include <c10/util/Exception.h>
+// #include <c10/util/irange.h>
 
 // #include <cstdint>
 // #include <memory>
@@ -79519,9 +79578,23 @@ in Python API, we skip std::nullopt values when serializing the param state. */
     @Cast("std::istream*") @ByRef Pointer in,
     @ByRef ExtraFilesMap extra_files);
 
+// Equivalent to ObjLoaderFuncWithVersion with an unknown archive version, i.e.
+// container type tags are always re-derived. Kept with this exact signature so
+// it continues to convert to ObjLoader.
 @Namespace("torch::jit") public static native @IntrusivePtr("c10::ivalue::Object") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>&"}) Obj ObjLoaderFunc(
     @Const @ByRef StrongTypePtr type,
     @ByVal IValue input);
+
+// `archive_version` is the file-format version of the archive being read, as
+// reported by PyTorchStreamReader::version(). See [type tag serialization] in
+// unpickler.h: for version >= 3 the archive carries container type strings and
+// the unpickler applies them as each container is built, so re-deriving them
+// here is unnecessary and can cost tens of seconds on a large model. Pass 0 if
+// the version is unknown, which conservatively keeps the historical behaviour.
+@Namespace("torch::jit") public static native @IntrusivePtr("c10::ivalue::Object") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>&"}) Obj ObjLoaderFuncWithVersion(
+    @Const @ByRef StrongTypePtr type,
+    @ByVal IValue input,
+    @Cast("uint64_t") long archive_version);
 
  // namespace torch::jit
 
@@ -80152,14 +80225,56 @@ in Python API, we skip std::nullopt values when serializing the param state. */
  // namespace torch::jit
 
 
+// Parsed from torch/csrc/inductor/aoti_runner/model_container_observer.h
+
+// #pragma once
+
+// #include <cstddef>
+
+// Lifecycle events an AOTInductor model container reports to an observer.
+@Namespace("torch::inductor") public enum AOTIContainerEvent {
+  kLoadConstants(0), // constants blob loaded into the container
+  kUpdateConstantBuffer(1), // in-place constants/weights update
+  // Same operation as kUpdateConstantBuffer, but the source tensors live on the
+  // host so it also pays a host-to-device copy of every constant. Separate
+  // because the two have very different cost profiles.
+  kUpdateConstantBufferFromCpu(2),
+  kSwapConstantBuffer(3), // active <-> inactive constants-buffer swap
+  kRunConstantFolding(4), // constant-folding pass
+  // run() / boxed_run(); warmup is inference too. Single-threaded mode is a
+  // construction-time flag that swaps run_func_ inside these, not a separate
+  // entry point.
+  kInference(5),
+  kFreeInactiveBuffer(6);// release of the inactive constants buffer
+
+    public final int value;
+    private AOTIContainerEvent(int v) { this.value = v; }
+    private AOTIContainerEvent(AOTIContainerEvent e) { this.value = e.value; }
+    public AOTIContainerEvent intern() { for (AOTIContainerEvent e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+// Targeting ../AOTIObserverContext.java
+
+
+// Targeting ../AOTIModelContainerObserver.java
+
+
+
+ // namespace torch::inductor
+
+
 // Parsed from torch/csrc/inductor/aoti_runner/model_container_runner.h
 
 // #if !defined(C10_MOBILE) && !defined(ANDROID)
 // #pragma once
 
 // #include <ATen/Tensor.h>
+// #include <torch/csrc/inductor/aoti_runner/model_container_observer.h>
 // #include <torch/csrc/inductor/aoti_runtime/interface.h>
 // #include <torch/csrc/inductor/aoti_torch/proxy_executor.h>
+
+// #include <atomic>
+// #include <memory>
 // Targeting ../DynamicLibrary.java
 
 
@@ -80715,7 +80830,7 @@ public static final int C10D_ENV_NOT_SET = -2;
 @Namespace("c10d") public static native @StdString BytePointer opTypeToString(OpType opType);
 @Namespace("c10d") public static native @StdString String opTypeToString(@Cast("c10d::OpType") byte opType);
 
-// Whether or not an OP is an p2p op (SEND, RECV, RECVANYSOURCE)
+// Whether or not an OP is a p2p op (SEND, RECV, RECVANYSOURCE)
 @Namespace("c10d") public static native @Cast("bool") boolean isP2POp(OpType opType, @Cast("bool") boolean batchP2P/*=false*/);
 @Namespace("c10d") public static native @Cast("bool") boolean isP2POp(OpType opType);
 @Namespace("c10d") public static native @Cast("bool") boolean isP2POp(@Cast("c10d::OpType") byte opType, @Cast("bool") boolean batchP2P/*=false*/);
@@ -80740,6 +80855,7 @@ public static final int C10D_ENV_NOT_SET = -2;
 
 // #include <cstdint>
 // #include <functional>
+// #include <optional>
 // #include <vector>
 
 // #include <ATen/core/Tensor.h>
@@ -80747,7 +80863,13 @@ public static final int C10D_ENV_NOT_SET = -2;
 
 // #include <torch/csrc/distributed/c10d/Work.hpp>
 
-// Identifies the operation a pre/post hook is firing for.
+// Identifies the operation a pre/post hook is firing for. One value per
+// dispatcher op rather than per collective family: the flight recorder writes
+// the name into the trace and the analyzer keys its size rules off it, so
+// folding e.g. every allgather variant into ALLGATHER would report an
+// _allgather_base as a plain all_gather and apply the wrong check to it.
+// Consumers that only care about the family (NanCheckHook) can ignore the
+// extra values.
 @Namespace("c10d") public enum HookOpName {
   SEND((byte)(0)),
   RECV((byte)(1)),
@@ -80762,7 +80884,14 @@ public static final int C10D_ENV_NOT_SET = -2;
   GATHER((byte)(10)),
   SPLIT((byte)(11)),
   NEW_WINDOW((byte)(12)),
-  UNKNOWN((byte)(13));
+  ALLREDUCE_COALESCED((byte)(13)),
+  ALLGATHER_BASE((byte)(14)),
+  ALLGATHER_COALESCED((byte)(15)),
+  ALLGATHER_INTO_TENSOR_COALESCED((byte)(16)),
+  REDUCE_SCATTER_BASE((byte)(17)),
+  REDUCE_SCATTER_TENSOR_COALESCED((byte)(18)),
+  ALLTOALL_BASE((byte)(19)),
+  UNKNOWN((byte)(20));
 
     public final byte value;
     private HookOpName(byte v) { this.value = v; }
@@ -80779,6 +80908,30 @@ public static final int C10D_ENV_NOT_SET = -2;
 
 // Abort hook - called before aborting when a collective times out or fails.
 // This allows users to capture debug information before the abort.
+//
+// A single failure may invoke the hook more than once: it is observed by the
+// backend's watchdog and again by the next collective, and a backend may run
+// its hooks both where the failure is detected and where it tears down. Make
+// the hook idempotent. Deduplicating at the call site instead is unsafe -- the
+// thread that terminates the process is not the thread that detects the
+// failure, so a hook that returned early on "already ran" would let the process
+// die mid-capture. The hook's own one-shot has to block, not skip.
+// Targeting ../CompletionHookArgs.java
+
+
+
+// Completion hook - called by a backend when it establishes that an operation
+// completed *successfully*. A backend already learns this to garbage collect
+// its work queue, so pushing it out saves every consumer from re-deriving the
+// same fact by polling Work::isCompleted() on everything it has issued.
+//
+// Failed and timed-out work deliberately fires nothing. Work::isCompleted() is
+// true for those too, and a consumer that took them for completed would erase
+// the one fact a post-mortem needs: that the collective never finished.
+//
+// Fires once per Work. May run on the backend's watchdog thread and with
+// backend locks held, so the hook must be short, must not take the GIL, and
+// must not call back into the backend.
 
  // namespace c10d
 
@@ -80946,6 +81099,7 @@ public static final int C10D_BACKEND_HAS_HOOKS = 1;
 // #include <torch/csrc/distributed/c10d/Hooks.hpp>
 // #include <torch/csrc/distributed/c10d/Work.hpp>
 // #include <atomic>
+// #include <map>
 // #include <memory>
 // #include <unordered_map>
 // #include <utility>
@@ -80973,13 +81127,17 @@ public static final int C10D_BACKEND_HAS_HOOKS = 1;
 
 @Namespace("c10d") public static native @ByVal Tensor wait_tensor(@Const @ByRef Tensor tensor);
 
+@Namespace("c10d") public static native @ByVal TensorVector wait_tensors(@ByVal TensorArrayRef tensors);
+@Namespace("c10d") public static native @ByVal TensorVector wait_tensors(@ByVal TensorVector tensors);
+
 // We only call `unregister_work()` in one case:
 // 1. If the work object is created from a non-functional collective call within
 //    the `with allow_inflight_collective_as_graph_input_ctx()` context manager.
 //
 // Q: What about the functional collective case?
 // A: The unregistration of work object for functional collective is done in
-//    the required user-side explicit call to `wait_tensor()`.
+//    the required user-side explicit call to `wait_tensor()` or
+//    `wait_tensors()`.
 @Namespace("c10d") public static native void unregister_work(@IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work work);
 
 @Namespace("c10d") public static native @Cast("size_t") long get_work_registry_size();

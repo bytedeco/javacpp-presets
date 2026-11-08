@@ -64,5 +64,5 @@ public class DeviceAllocator extends Allocator {
 
   // Return the free memory size and total memory size in bytes for the
   // specified device.
-  public native @ByVal SizeTPair getMemoryInfo(byte device);
+  public native @ByVal SizeTPair getMemoryInfo(byte arg0);
 }

@@ -53,19 +53,19 @@ public class AcceleratorHooksInterface extends Pointer {
 
   public native @Cast("c10::DeviceIndex") byte deviceCount();
 
-  public native void setCurrentDevice(@Cast("c10::DeviceIndex") byte device);
+  public native void setCurrentDevice(@Cast("c10::DeviceIndex") byte arg0);
 
   public native @Cast("c10::DeviceIndex") byte getCurrentDevice();
 
-  public native @Cast("c10::DeviceIndex") byte exchangeDevice(@Cast("c10::DeviceIndex") byte device);
+  public native @Cast("c10::DeviceIndex") byte exchangeDevice(@Cast("c10::DeviceIndex") byte arg0);
 
-  public native @Cast("c10::DeviceIndex") byte maybeExchangeDevice(@Cast("c10::DeviceIndex") byte device);
+  public native @Cast("c10::DeviceIndex") byte maybeExchangeDevice(@Cast("c10::DeviceIndex") byte arg0);
 
-  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer data);
+  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer arg0);
 
   public native Allocator getPinnedMemoryAllocator();
 
-  public native @ByVal Device getDeviceFromPtr(Pointer data);
+  public native @ByVal Device getDeviceFromPtr(Pointer arg0);
 
   public native @Const @ByRef Generator getDefaultGenerator(
         @Cast("c10::DeviceIndex") byte device_index/*=-1*/);

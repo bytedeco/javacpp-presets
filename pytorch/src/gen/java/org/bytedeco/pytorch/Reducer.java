@@ -43,7 +43,8 @@ public class Reducer extends Pointer {
         @Cast("bool") boolean skip_all_reduce_unused_params,
         @Cast("bool") boolean use_python_reducer,
         @ByVal @Cast("std::vector<int64_t>*") LongVector bucket_bytes_cap_list,
-        @Cast("bool") boolean batched_grad_copy/*=false*/) { super((Pointer)null); allocate(params, bucket_indices, process_group, expect_sparse_gradients, bucket_bytes_cap, find_unused_parameters, gradient_as_bucket_view, param_names, first_bucket_bytes_cap, skip_all_reduce_unused_params, use_python_reducer, bucket_bytes_cap_list, batched_grad_copy); }
+        @Cast("bool") boolean batched_grad_copy/*=false*/,
+        @Cast("bool") boolean lazy_bucket_allocation/*=false*/) { super((Pointer)null); allocate(params, bucket_indices, process_group, expect_sparse_gradients, bucket_bytes_cap, find_unused_parameters, gradient_as_bucket_view, param_names, first_bucket_bytes_cap, skip_all_reduce_unused_params, use_python_reducer, bucket_bytes_cap_list, batched_grad_copy, lazy_bucket_allocation); }
   private native void allocate(
         @ByVal TensorVector params,
         @ByVal SizeTVectorVector bucket_indices,
@@ -57,7 +58,8 @@ public class Reducer extends Pointer {
         @Cast("bool") boolean skip_all_reduce_unused_params,
         @Cast("bool") boolean use_python_reducer,
         @ByVal @Cast("std::vector<int64_t>*") LongVector bucket_bytes_cap_list,
-        @Cast("bool") boolean batched_grad_copy/*=false*/);
+        @Cast("bool") boolean batched_grad_copy/*=false*/,
+        @Cast("bool") boolean lazy_bucket_allocation/*=false*/);
   public Reducer(
         @ByVal TensorVector params,
         @ByVal SizeTVectorVector bucket_indices,
@@ -216,4 +218,17 @@ public class Reducer extends Pointer {
 
   // Resets reducer state.
   public native void reset_state();
+
+  // Requires the caller to manually finalize backward after all buckets are
+  // ready. Cannot be changed after forward while backward is expected or in
+  // progress.
+  public native void set_manual_finalization_required(@Cast("bool") boolean required);
+
+  // Returns whether the current backward must complete before the caller can
+  // manually finalize it.
+  public native @Cast("bool") boolean should_finalize_after_backward();
+
+  // Validates that manual backward finalization is required and all buckets
+  // are ready, then prepares and finalizes backward.
+  public native void finalize_backward_manual();
 }

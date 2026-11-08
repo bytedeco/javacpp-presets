@@ -33,7 +33,10 @@ public class BooleanListIterator extends Pointer {
         return new BooleanListIterator((Pointer)this).offsetAddress(i);
     }
 
-   // C++17 friendly std::iterator implementation
+  // C++17 forbids a proxy iterator from being forward or better, so the legacy
+  // tag says input and the real category goes in iterator_concept. Spelled out
+  // explicitly rather than left to iterator_traits synthesis: GCC 11 (an actual
+  // CI toolchain) synthesizes something std::reverse's dispatch can't match.
 
   public BooleanListIterator() { super((Pointer)null); allocate(); }
   private native void allocate();
@@ -50,13 +53,14 @@ public class BooleanListIterator extends Pointer {
 
   public native @ByVal @Name("operator --") BooleanListIterator decrement(int arg0);
 
-  public native @ByRef @Name("operator +=") BooleanListIterator addPut(long offset);
+  public native @ByRef @Name("operator +=") BooleanListIterator addPut(@Cast("c10::impl::ListIterator<bool,c10::detail::ListImpl::list_type::iterator>::difference_type") long offset);
 
-  public native @ByRef @Name("operator -=") BooleanListIterator subtractPut(long offset);
+  public native @ByRef @Name("operator -=") BooleanListIterator subtractPut(@Cast("c10::impl::ListIterator<bool,c10::detail::ListImpl::list_type::iterator>::difference_type") long offset);
 
-  public native @ByVal @Name("operator +") BooleanListIterator add(long offset);
+  public native @ByVal @Name("operator -") BooleanListIterator subtract(@Cast("c10::impl::ListIterator<bool,c10::detail::ListImpl::list_type::iterator>::difference_type") long offset);
 
-  public native @ByVal @Name("operator -") BooleanListIterator subtract(long offset);
+  private static native @Namespace @ByVal @Name("operator +") BooleanListIterator add(@Cast("c10::impl::ListIterator<bool,c10::detail::ListImpl::list_type::iterator>::difference_type") long offset, @Const @ByRef BooleanListIterator rhs);
+  public BooleanListIterator add(long offset) { return add(offset, this); }
 
   private static native @Namespace @Cast("c10::impl::ListIterator<bool,c10::detail::ListImpl::list_type::iterator>::difference_type") @Name("operator -") long subtract(@Const @ByRef BooleanListIterator lhs, @Const @ByRef BooleanListIterator rhs);
   public long subtract(BooleanListIterator rhs) { return subtract(this, rhs); }
@@ -65,21 +69,10 @@ public class BooleanListIterator extends Pointer {
 
   
 
-  private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef BooleanListIterator lhs, @Const @ByRef BooleanListIterator rhs);
-  public boolean equals(BooleanListIterator rhs) { return equals(this, rhs); }
+  // ranges finds these by ADL; defined in List_inl.h (need a complete IValue).
+  
 
-  private static native @Namespace @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef BooleanListIterator lhs, @Const @ByRef BooleanListIterator rhs);
-  public boolean notEquals(BooleanListIterator rhs) { return notEquals(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef BooleanListIterator lhs, @Const @ByRef BooleanListIterator rhs);
-  public boolean lessThan(BooleanListIterator rhs) { return lessThan(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator <=") boolean lessThanEquals(@Const @ByRef BooleanListIterator lhs, @Const @ByRef BooleanListIterator rhs);
-  public boolean lessThanEquals(BooleanListIterator rhs) { return lessThanEquals(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator >") boolean greaterThan(@Const @ByRef BooleanListIterator lhs, @Const @ByRef BooleanListIterator rhs);
-  public boolean greaterThan(BooleanListIterator rhs) { return greaterThan(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@Const @ByRef BooleanListIterator lhs, @Const @ByRef BooleanListIterator rhs);
-  public boolean greaterThanEquals(BooleanListIterator rhs) { return greaterThanEquals(this, rhs); }
+  
+  private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef BooleanListIterator arg0, @Const @ByRef BooleanListIterator arg1);
+  public boolean equals(BooleanListIterator arg1) { return equals(this, arg1); }
 }

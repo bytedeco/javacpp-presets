@@ -527,9 +527,15 @@ public class TensorImpl extends Pointer {
   // use when the device might lack an index ("cuda" vs "cuda:0").
   public native void set_and_normalize_fake_device(@ByVal Device fake_device);
 
+  // the fake device recorded for this tensor, or nullopt if none
+  public native @ByVal DeviceOptional fake_device();
+
   public native void set_fake_tensor_mode(@SharedPtr FakeTensorMode mode);
 
   public native @SharedPtr FakeTensorMode fake_tensor_mode();
+
+  // the ExtraMeta backing this tensor, or nullptr if none; does not allocate.
+  // Used as the identity key for FakeTensorMode constant tracking.
 
   /**
    * Set whether or not to take the conjugate of the tensor (flip the imaginary

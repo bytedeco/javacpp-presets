@@ -35,8 +35,6 @@ public class ExperimentalConfig extends Pointer {
     }
 
   public ExperimentalConfig(
-        @ByVal(nullValue = "std::vector<std::string>{}") StringVector profiler_metrics,
-        @Cast("bool") boolean profiler_measure_per_kernel/*=false*/,
         @Cast("bool") boolean verbose/*=false*/,
         @ByVal(nullValue = "std::vector<std::string>{}") StringVector performance_events,
         @Cast("bool") boolean enable_cuda_sync_events/*=false*/,
@@ -48,10 +46,8 @@ public class ExperimentalConfig extends Pointer {
         @Cast("bool") boolean expose_kineto_event_metadata/*=false*/,
         @StdString BytePointer custom_profiler_config/*=""*/,
         @Cast("bool") boolean adjust_timestamps/*=false*/,
-        @Cast("bool") boolean trace_only/*=false*/) { super((Pointer)null); allocate(profiler_metrics, profiler_measure_per_kernel, verbose, performance_events, enable_cuda_sync_events, adjust_profiler_step, disable_external_correlation, profile_all_threads, capture_overload_names, record_python_gc_info, expose_kineto_event_metadata, custom_profiler_config, adjust_timestamps, trace_only); }
+        @Cast("bool") boolean trace_only/*=false*/) { super((Pointer)null); allocate(verbose, performance_events, enable_cuda_sync_events, adjust_profiler_step, disable_external_correlation, profile_all_threads, capture_overload_names, record_python_gc_info, expose_kineto_event_metadata, custom_profiler_config, adjust_timestamps, trace_only); }
   private native void allocate(
-        @ByVal(nullValue = "std::vector<std::string>{}") StringVector profiler_metrics,
-        @Cast("bool") boolean profiler_measure_per_kernel/*=false*/,
         @Cast("bool") boolean verbose/*=false*/,
         @ByVal(nullValue = "std::vector<std::string>{}") StringVector performance_events,
         @Cast("bool") boolean enable_cuda_sync_events/*=false*/,
@@ -67,8 +63,6 @@ public class ExperimentalConfig extends Pointer {
   public ExperimentalConfig() { super((Pointer)null); allocate(); }
   private native void allocate();
   public ExperimentalConfig(
-        @ByVal(nullValue = "std::vector<std::string>{}") StringVector profiler_metrics,
-        @Cast("bool") boolean profiler_measure_per_kernel/*=false*/,
         @Cast("bool") boolean verbose/*=false*/,
         @ByVal(nullValue = "std::vector<std::string>{}") StringVector performance_events,
         @Cast("bool") boolean enable_cuda_sync_events/*=false*/,
@@ -80,10 +74,8 @@ public class ExperimentalConfig extends Pointer {
         @Cast("bool") boolean expose_kineto_event_metadata/*=false*/,
         @StdString String custom_profiler_config/*=""*/,
         @Cast("bool") boolean adjust_timestamps/*=false*/,
-        @Cast("bool") boolean trace_only/*=false*/) { super((Pointer)null); allocate(profiler_metrics, profiler_measure_per_kernel, verbose, performance_events, enable_cuda_sync_events, adjust_profiler_step, disable_external_correlation, profile_all_threads, capture_overload_names, record_python_gc_info, expose_kineto_event_metadata, custom_profiler_config, adjust_timestamps, trace_only); }
+        @Cast("bool") boolean trace_only/*=false*/) { super((Pointer)null); allocate(verbose, performance_events, enable_cuda_sync_events, adjust_profiler_step, disable_external_correlation, profile_all_threads, capture_overload_names, record_python_gc_info, expose_kineto_event_metadata, custom_profiler_config, adjust_timestamps, trace_only); }
   private native void allocate(
-        @ByVal(nullValue = "std::vector<std::string>{}") StringVector profiler_metrics,
-        @Cast("bool") boolean profiler_measure_per_kernel/*=false*/,
         @Cast("bool") boolean verbose/*=false*/,
         @ByVal(nullValue = "std::vector<std::string>{}") StringVector performance_events,
         @Cast("bool") boolean enable_cuda_sync_events/*=false*/,
@@ -97,8 +89,6 @@ public class ExperimentalConfig extends Pointer {
         @Cast("bool") boolean adjust_timestamps/*=false*/,
         @Cast("bool") boolean trace_only/*=false*/);
 
-  public native @ByRef StringVector profiler_metrics(); public native ExperimentalConfig profiler_metrics(StringVector setter);
-  public native @Cast("bool") boolean profiler_measure_per_kernel(); public native ExperimentalConfig profiler_measure_per_kernel(boolean setter);
   public native @Cast("bool") boolean verbose(); public native ExperimentalConfig verbose(boolean setter);
   /*
    * List of performance events to be profiled.
@@ -112,9 +102,10 @@ public class ExperimentalConfig extends Pointer {
    */
   public native @Cast("bool") boolean enable_cuda_sync_events(); public native ExperimentalConfig enable_cuda_sync_events(boolean setter);
   /*
-   * Controls whether or not timestamp adjustment for ProfilerStep and parent
-   * Python events occurs after profiling. This occurs at an O(n) cost and
-   * affects only the start of profiler step events.
+   * Deprecated no-op. Used to align ProfilerStep annotations with their parent
+   * Python event; removed because the alignment made downstream tools
+   * misreport step durations. Retained so the Python layer can detect it and
+   * warn, and so the constructor's argument order stays stable.
    */
   public native @Cast("bool") boolean adjust_profiler_step(); public native ExperimentalConfig adjust_profiler_step(boolean setter);
   /*

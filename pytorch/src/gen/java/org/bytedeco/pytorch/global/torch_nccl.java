@@ -105,6 +105,15 @@ public class torch_nccl extends org.bytedeco.pytorch.presets.torch_nccl {
 // #define NCCL_HAS_MAX_P2P_PEERS
 // #endif
 
+// `ncclConfig_t::hostCftMode` asks NCCL to create the communicator's CFT
+// (Compute Fabric Transport) logical endpoints during the first
+// `ncclCommWindowRegister`, which is what makes the host-side LE queries
+// (`ncclGetPeerDeviceLeInfo` and friends) usable without first building a
+// `ncclDevComm`. See NCCLSymmetricMemory::get_peer_cft_handle.
+// #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 31, 2)
+// #define NCCL_HAS_HOST_CFT_MODE
+// #endif
+
 // Macro to throw on a non-successful NCCL return value.
 // #define C10D_NCCL_CHECK(cmd, failureReason)
 //   do {
@@ -353,6 +362,10 @@ public class torch_nccl extends org.bytedeco.pytorch.presets.torch_nccl {
 // Whether to rethrow CUDA Errors in the watchdog (default true)
 @Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_RETHROW_CUDA_ERRORS(); public static native void TORCH_NCCL_RETHROW_CUDA_ERRORS(StringVector setter);
 
+// Whether a NCCL timeout tears the process down even when
+// TORCH_NCCL_RETHROW_CUDA_ERRORS is off (default false)
+@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_TEARDOWN_ON_TIMEOUT(); public static native void TORCH_NCCL_TEARDOWN_ON_TIMEOUT(StringVector setter);
+
 // The maximum number of events we store in the flight recorder's ring buffer.
 // (One event could be the start or end of a collective, for example).
 @Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_TRACE_BUFFER_SIZE(); public static native void TORCH_NCCL_TRACE_BUFFER_SIZE(StringVector setter);
@@ -411,14 +424,6 @@ public static final int
 // #define PRINT_COLLECTIVE_HASH_SIGNATURE(phase, opType, numel, hashValue)
 //   LOG(WARNING) << logPrefix() << "Hash of " << phase << " to NCCL " << opType
 //                << " with size " << numel << " is " << hashValue;
-
-// If set, ProcessGroupNCCL doesn't use recordStream calls to ensure
-// caching allocator safety for tensors used on both user-facing and
-// internal comm streams.
-// Instead, it stashes live references to those tensors until after
-// user-facing streams are synced with comm streams.
-// See stashed_for_allocator_safety_ below.
-@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_AVOID_RECORD_STREAMS(); public static native void TORCH_NCCL_AVOID_RECORD_STREAMS(StringVector setter);
 
 // If set, ProcessGroupNCCL registers postAlloc and preFree hooks to cuda cache
 // allocator so that whenever a tensor is allocated or freed, ProcessGroupNCCL

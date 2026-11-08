@@ -39,7 +39,4 @@ public class StringGenericListDictIterator extends Pointer {
 
   private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef StringGenericListDictIterator lhs, @Const @ByRef StringGenericListDictIterator rhs);
   public boolean equals(StringGenericListDictIterator rhs) { return equals(this, rhs); }
-
-  private static native @Namespace @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef StringGenericListDictIterator lhs, @Const @ByRef StringGenericListDictIterator rhs);
-  public boolean notEquals(StringGenericListDictIterator rhs) { return notEquals(this, rhs); }
 }

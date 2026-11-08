@@ -29,13 +29,15 @@ public class AOTIModelPackageLoader extends Pointer {
         @StdString BytePointer model_name/*="model"*/,
         @Cast("const bool") boolean run_single_threaded/*=false*/,
         @Cast("const size_t") long num_runners/*=1*/,
-        @Cast("const c10::DeviceIndex") byte device_index/*=-1*/) { super((Pointer)null); allocate(model_package_path, model_name, run_single_threaded, num_runners, device_index); }
+        @Cast("const c10::DeviceIndex") byte device_index/*=-1*/,
+        @Cast("const bool") boolean use_stream_affinity/*=false*/) { super((Pointer)null); allocate(model_package_path, model_name, run_single_threaded, num_runners, device_index, use_stream_affinity); }
   private native void allocate(
         @StdString BytePointer model_package_path,
         @StdString BytePointer model_name/*="model"*/,
         @Cast("const bool") boolean run_single_threaded/*=false*/,
         @Cast("const size_t") long num_runners/*=1*/,
-        @Cast("const c10::DeviceIndex") byte device_index/*=-1*/);
+        @Cast("const c10::DeviceIndex") byte device_index/*=-1*/,
+        @Cast("const bool") boolean use_stream_affinity/*=false*/);
   public AOTIModelPackageLoader(
         @StdString BytePointer model_package_path) { super((Pointer)null); allocate(model_package_path); }
   private native void allocate(
@@ -45,13 +47,15 @@ public class AOTIModelPackageLoader extends Pointer {
         @StdString String model_name/*="model"*/,
         @Cast("const bool") boolean run_single_threaded/*=false*/,
         @Cast("const size_t") long num_runners/*=1*/,
-        @Cast("const c10::DeviceIndex") byte device_index/*=-1*/) { super((Pointer)null); allocate(model_package_path, model_name, run_single_threaded, num_runners, device_index); }
+        @Cast("const c10::DeviceIndex") byte device_index/*=-1*/,
+        @Cast("const bool") boolean use_stream_affinity/*=false*/) { super((Pointer)null); allocate(model_package_path, model_name, run_single_threaded, num_runners, device_index, use_stream_affinity); }
   private native void allocate(
         @StdString String model_package_path,
         @StdString String model_name/*="model"*/,
         @Cast("const bool") boolean run_single_threaded/*=false*/,
         @Cast("const size_t") long num_runners/*=1*/,
-        @Cast("const c10::DeviceIndex") byte device_index/*=-1*/);
+        @Cast("const c10::DeviceIndex") byte device_index/*=-1*/,
+        @Cast("const bool") boolean use_stream_affinity/*=false*/);
   public AOTIModelPackageLoader(
         @StdString String model_package_path) { super((Pointer)null); allocate(model_package_path); }
   private native void allocate(

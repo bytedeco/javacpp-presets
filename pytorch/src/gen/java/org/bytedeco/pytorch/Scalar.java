@@ -95,24 +95,24 @@ public class Scalar extends Pointer {
 // #define DEFINE_ACCESSOR(type, name)
 //   type to##name() const {
 //     if (Tag::HAS_d == tag) {
-//       return checked_convert<type, double>(v.d, #type);
+//       return c10::checked_convert<type, double>(v.d, #type);
 //     } else if (Tag::HAS_z == tag) {
-//       return checked_convert<type, c10::complex<double>>(v.z, #type);
+//       return c10::checked_convert<type, c10::complex<double>>(v.z, #type);
 //     } else if (Tag::HAS_sd == tag) {
-//       return checked_convert<type, double>(
+//       return c10::checked_convert<type, double>(
 //           toSymFloat().guard_float(__FILE__, __LINE__), #type);
 //     }
 //     if (Tag::HAS_b == tag) {
-//       return checked_convert<type, bool>(v.i, #type);
+//       return c10::checked_convert<type, bool>(v.i, #type);
 //     } else if (Tag::HAS_i == tag) {
-//       return checked_convert<type, int64_t>(v.i, #type);
+//       return c10::checked_convert<type, int64_t>(v.i, #type);
 //     } else if (Tag::HAS_u == tag) {
-//       return checked_convert<type, uint64_t>(v., #type);
+//       return c10::checked_convert<type, uint64_t>(v., #type);
 //     } else if (Tag::HAS_si == tag) {
-//       return checked_convert<type, int64_t>(
+//       return c10::checked_convert<type, int64_t>(
 //           toSymInt().guard_int(__FILE__, __LINE__), #type);
 //     } else if (Tag::HAS_sb == tag) {
-//       return checked_convert<type, int64_t>(
+//       return c10::checked_convert<type, int64_t>(
 //           toSymBool().guard_bool(__FILE__, __LINE__), #type);
 //     }
 //     TORCH_CHECK(false)

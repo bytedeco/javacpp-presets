@@ -84,6 +84,8 @@ public class AOTIModelContainerRunner extends Pointer {
   public native void update_constant_buffer_from_blob(@StdString BytePointer weights_path);
   public native void update_constant_buffer_from_blob(@StdString String weights_path);
   public native @Cast("bool") boolean did_call_load_constants();
+  public native void set_use_stream_affinity(@Cast("bool") boolean use_stream_affinity);
+  public native @Cast("int64_t") long get_stream_affinity_model_index_for_testing(Pointer stream_handle);
 
   public native @ByVal StringVector get_call_spec();
 
@@ -93,4 +95,18 @@ public class AOTIModelContainerRunner extends Pointer {
   // its state will affect subsequent run() invocations. Returns empty when
   // the model has no torchbind constants.
   public native @ByVal StringIValueMap get_custom_objs();
+
+  // Attach an observer to receive begin/end callbacks bracketing container
+  // lifecycle events (constants load, constant-buffer update/swap/fold/free,
+  // inference). Optional; a null observer is zero overhead.
+  //
+  // Attach-once, and detaching is NOT supported: the hot path reads the
+  // observer through an atomic raw pointer, and because the owning shared_ptr
+  // is never replaced that pointer stays valid for the lifetime of the runner.
+  // Allowing a swap or a detach would race with -- and could free the observer
+  // out from under -- an in-flight run(). The slot is claimed with a
+  // compare-exchange rather than a plain check so a second concurrent caller
+  // reliably throws instead of racing on observer_owner_; only the winner
+  // assigns it. Passing nullptr is always an unconditional no-op.
+  public native void set_observer(@SharedPtr AOTIModelContainerObserver observer);
 }

@@ -124,6 +124,11 @@ public class Work extends CustomClassHolder {
 
   public native @ByVal Milliseconds getTimeout();
 
+  // Opaque identity used to correlate a Work with backend completion. A
+  // backend whose completion can outlive the Work must override this with a
+  // non-reused key.
+  public native @Cast("uint64_t") long getCompletionKey();
+
   public native OpType retrieveOpType();
 
   public static native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work create_from_future(

@@ -20,7 +20,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 
 // GraphExecutor creates specializations of Graphs for different
-// dimensionalitities and types of inputs.
+// dimensionalities and types of inputs.
 
 @Namespace("torch::jit") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ArgumentInfo extends Pointer {

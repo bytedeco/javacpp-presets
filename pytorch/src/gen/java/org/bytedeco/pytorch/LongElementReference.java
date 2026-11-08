@@ -27,12 +27,15 @@ public class LongElementReference extends Pointer {
 
   public native @Name("operator std::conditional_t<std::is_reference_v<c10::detail::ivalue_to_const_ref_overload_return<int64_t>::type>,const int64_t&,int64_t>") long getLong();
 
+  // Const-qualified: std::indirectly_writable requires it.
+  // NOLINTBEGIN(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
   
 
   
 
   // assigning another ref to this assigns the underlying value
   
+  // NOLINTEND(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
 
   public native @Const @ByRef IValue get();
 
@@ -40,5 +43,6 @@ public class LongElementReference extends Pointer {
   public void swap(LongElementReference rhs) { swap(this, rhs); }
 
   
+  // Lvalue-only, so it does not compete with the const&& assignments above.
   
 }

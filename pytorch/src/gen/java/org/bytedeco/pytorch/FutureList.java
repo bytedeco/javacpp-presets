@@ -217,8 +217,6 @@ public class FutureList extends Pointer {
    */
   
 
-  
-
   /**
    * Identity comparison. Returns true if and only if {@code rhs} represents the same
    * List object as {@code this}.
@@ -231,7 +229,6 @@ public class FutureList extends Pointer {
    * Returns the number of Lists currently pointing to this same list.
    * If this is the only instance pointing to this list, returns 1.
    */
-  // TODO Test use_count
   public native @Cast("size_t") long use_count();
 
   public native @ByVal Type.TypePtr elementType();

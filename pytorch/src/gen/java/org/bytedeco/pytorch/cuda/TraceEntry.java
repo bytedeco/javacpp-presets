@@ -149,4 +149,8 @@ public class TraceEntry extends Pointer {
   public native @ByRef trace_time_ time_(); public native TraceEntry time_(trace_time_ setter);
   public native @StdString BytePointer compile_context_(); public native TraceEntry compile_context_(BytePointer setter);
   public native @StdString BytePointer user_metadata_(); public native TraceEntry user_metadata_(BytePointer setter);
+  // Tag attached by allocator internals (e.g. "mallocWithAddress" on the
+  // synthetic prefix-block malloc/free pair), kept separate so
+  // user_metadata_ stays verbatim what the user set.
+  public native @StdString BytePointer internal_metadata_(); public native TraceEntry internal_metadata_(BytePointer setter);
 }
