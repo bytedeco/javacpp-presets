@@ -107,9 +107,8 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
         // dnnl
         String[] dnnlLibs = {"gomp@.1", "iomp5", "omp", "tbb@.2", "dnnl@.3"};
         if (platform.equals("windows-arm64")) {
-            // built natively without a DNNL execution provider there, so preload instead
-            // the import library names that the GNU toolchain gives the shared provider
-            dnnlLibs = new String[] {"libonnxruntime_providers_shared", "libonnxruntime", "onnxruntime@.1=onnxruntime"};
+            // The Windows ARM64 build does not include the DNNL execution provider.
+            dnnlLibs = new String[0];
         }
         for (String lib : dnnlLibs) {
             if (!preloads.contains(lib)) {
@@ -383,6 +382,7 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::ProfilingEvent").cast().pointerTypes("ProfilingEvent").purify())
                .put(new Info("OrtSessionOptionsAppendExecutionProvider_MIGraphX", "OrtSessionOptionsAppendExecutionProvider_Tensorrt",
                              "OrtSessionOptionsAppendExecutionProvider_ROCM", "Ort::detail::OptionalTypeInfoImpl<OrtTypeInfo>::GetOptionalElementType").skip())
+               .put(new Info("OrtSessionOptionsAppendExecutionProvider_Dnnl").annotations("@Platform(not=\"windows-arm64\")").javaNames("OrtSessionOptionsAppendExecutionProvider_Dnnl"))
                .put(new Info("OrtSessionOptionsAppendExecutionProvider_CUDA").annotations("@Platform(extension=\"-gpu\")").javaNames("OrtSessionOptionsAppendExecutionProvider_CUDA"));
         if (Loader.getPlatform().equals("windows-arm64")) {
             // no DNNL or OpenVINO execution provider there, so don't try to link the

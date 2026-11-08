@@ -44,6 +44,18 @@ git checkout v$ONNXRUNTIME
 git submodule update --init --recursive
 git submodule foreach --recursive 'git reset --hard'
 
+if [[ $PLATFORM == windows-* ]]; then
+    if [[ -n "${CUDA_PATH:-}" ]]; then
+        export CUDACXX="$CUDA_PATH/bin/nvcc.exe"
+        export CUDA_HOME="$CUDA_PATH"
+        export CUDNN_HOME="$CUDA_PATH"
+    fi
+    export CC="cl.exe"
+    export CXX="cl.exe"
+    export ARCH_FLAGS="--cmake_generator Ninja"
+    export PYTHON_BIN_PATH=$(which python.exe)
+fi
+
 case $PLATFORM in
     linux-arm64)
         export CC="aarch64-linux-gnu-gcc"
@@ -62,24 +74,9 @@ case $PLATFORM in
     windows-arm64)
         # native build, so skip the cross-compilation checks that --arm64 triggers
         sedinplace 's/if args.arm or args.arm64:/if False:/g' tools/ci_build/build.py
-        export DNNL_FLAGS="--disable_dnnl" # no Windows on ARM support in oneDNN
-        # the zlib headers of MSYS2 need unistd.h that only its own toolchain provides
-        ZLIB_SAFE=$INSTALL_PATH/zlib-include-safe
-        rm -Rf $ZLIB_SAFE && mkdir -p $ZLIB_SAFE
-        cp /c/msys64/clangarm64/include/zlib.h /c/msys64/clangarm64/include/zconf.h $ZLIB_SAFE/
+        export DNNL_FLAGS= # no Windows on ARM support in oneDNN
         # recent CMake needs the policy version of the vendored projects declared
-        CMAKE_EXTRA_DEFINES="CMAKE_BUILD_TYPE=Release CMAKE_POLICY_VERSION_MINIMUM=3.5 ZLIB_INCLUDE_DIR=$ZLIB_SAFE ZLIB_LIBRARY_RELEASE=/c/msys64/clangarm64/lib/libz.a ZLIB_LIBRARY_DEBUG=/c/msys64/clangarm64/lib/libz.a onnxruntime_ENABLE_LTO=OFF onnxruntime_BUILD_UNIT_TESTS=OFF"
-        ;;
-    windows-*)
-        if [[ -n "${CUDA_PATH:-}" ]]; then
-            export CUDACXX="$CUDA_PATH/bin/nvcc.exe"
-            export CUDA_HOME="$CUDA_PATH"
-            export CUDNN_HOME="$CUDA_PATH"
-        fi
-        export CC="cl.exe"
-        export CXX="cl.exe"
-        export ARCH_FLAGS="--cmake_generator Ninja"
-        export PYTHON_BIN_PATH=$(which python.exe)
+        CMAKE_EXTRA_DEFINES="CMAKE_BUILD_TYPE=Release CMAKE_POLICY_VERSION_MINIMUM=3.5 protobuf_WITH_ZLIB=OFF onnxruntime_ENABLE_LTO=OFF onnxruntime_BUILD_UNIT_TESTS=OFF"
         ;;
 esac
 
@@ -126,13 +123,19 @@ sedinplace 's/if args.arm or args.arm64:/if False:/g' tools/ci_build/build.py
 sedinplace 's/is_linux() and platform.machine() == "x86_64"/False/g' tools/ci_build/build.py
 sedinplace 's/onnxruntime_target_platform STREQUAL "aarch64"/FALSE/g' cmake/CMakeLists.txt
 sedinplace 's/if (NOT APPLE)/if (FALSE)/g' cmake/onnxruntime_mlas.cmake
-sedinplace 's/!defined(__APPLE__)/0/g' onnxruntime/core/mlas/inc/mlas.h
+if [[ $PLATFORM != windows-arm64 ]]; then
+    sedinplace 's/!defined(__APPLE__)/0/g' onnxruntime/core/mlas/inc/mlas.h
+fi
 sedinplace 's/defined(__aarch64__) && defined(__linux__)/0/g' `find . -name *.cpp -o -name *.cc -o -name *.h`
 sedinplace 's/MLAS_CPUIDINFO::GetCPUIDInfo().HasArmNeon_I8MM()/false/g' onnxruntime/core/mlas/lib/platform.cpp
 
 # work around toolchain issues on Mac and Windows
 patch -p1 < ../../../onnxruntime.patch
 git apply --recount ../../../onnxruntime-openvino.patch
+if [[ $PLATFORM == windows-arm64 ]]; then
+    cp ../../../kleidiai-windows.patch cmake/patches/
+    sedinplace '/onnxruntime_fetchcontent_declare(kleidiai /s@ EXCLUDE_FROM_ALL)@ PATCH_COMMAND ${Patch_EXECUTABLE} --binary -p1 -i ${PROJECT_SOURCE_DIR}/patches/kleidiai-windows.patch EXCLUDE_FROM_ALL)@' cmake/external/onnxruntime_external_deps.cmake
+fi
 #patch -p1 < ../../../onnxruntime-cuda.patch # https://github.com/microsoft/onnxruntime/pull/22316
 #patch -p1 < ../../../onnxruntime-windows.patch # https://github.com/microsoft/onnxruntime/pull/7883
 sedinplace '/--Werror/d' cmake/CMakeLists.txt
