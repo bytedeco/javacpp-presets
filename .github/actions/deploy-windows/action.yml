@@ -6,7 +6,6 @@ runs:
       shell: cmd
       env:
         GITHUB_EVENT_HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-        DEPLOY_WINDOWS_ACTION_PATH: ${{ github.action_path }}
       run: |
         cd /d %USERPROFILE%
 
@@ -158,19 +157,33 @@ runs:
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
+          setlocal enabledelayedexpansion
+          set "CUDA_VERSION=13.4.2"
+          set CUDA_COMPONENTS=^
+            nvcc crt cudart thrust nvvm nvptxcompiler nvjitlink nvfatbin tileiras ^
+            cublas cublas_dev cufft cufft_dev curand curand_dev ^
+            cusolver cusolver_dev cusparse cusparse_dev npp npp_dev ^
+            nvjpeg nvjpeg_dev nvrtc nvrtc_dev cupti cuda_profiler_api ^
+            nvml_dev nvtx visual_studio_integration
+
+          for /f "tokens=1,2 delims=." %%V in ("!CUDA_VERSION!") do set "CUDA_TOOLKIT_VERSION=%%V.%%W"
+          set "CUDA_INSTALL_COMPONENTS="
+          for %%C in (!CUDA_COMPONENTS!) do set "CUDA_INSTALL_COMPONENTS=!CUDA_INSTALL_COMPONENTS! %%C_!CUDA_TOOLKIT_VERSION!"
+
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/13.4.2/local_installers/cuda_13.4.2_windows_arm64.exe
+          curl -LO https://developer.download.nvidia.com/compute/cuda/!CUDA_VERSION!/local_installers/cuda_!CUDA_VERSION!_windows_arm64.exe
           curl -LO https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/windows-arm64/cudnn-windows-arm64-9.26.0.51_cuda13-archive.zip
-          pwsh -NoProfile -File "%DEPLOY_WINDOWS_ACTION_PATH%\install-cuda-arm64.ps1" -ArchivePath "%USERPROFILE%\cuda_13.4.2_windows_arm64.exe" -VisualStudioInstallationPath "%VISUAL_STUDIO_INSTALLATION_PATH%"
-          if errorlevel 1 exit /b 1
+          cuda_!CUDA_VERSION!_windows_arm64.exe -s !CUDA_INSTALL_COMPONENTS!
+          if not "!ERRORLEVEL!"=="0" exit /b 1
           unzip cudnn-windows-arm64-9.26.0.51_cuda13-archive.zip
-          move cudnn-windows-arm64-9.26.0.51_cuda13-archive\bin\arm64\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.4\bin\arm64"
-          move cudnn-windows-arm64-9.26.0.51_cuda13-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.4\include"
-          move cudnn-windows-arm64-9.26.0.51_cuda13-archive\lib\arm64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.4\lib\arm64"
-          bash -c "sed -i 's/cublas_v2.h/cublas_api.h/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/include/cublasXt.h' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/include/cusolverDn.h' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/include/cusolverSp.h'"
-          bash -c "sed -i 's/#if !defined(__cplusplus) || __cplusplus >= 201103L/#if 1/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/include/driver_types.h'"
-          bash -c "sed -i 's/__out/__cccl_out/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/include/cccl/cuda/__ptx/instructions/generated/tcgen05_ld.h'"
-          bash -c "find 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.4/'"
+          move cudnn-windows-arm64-9.26.0.51_cuda13-archive\bin\arm64\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v!CUDA_TOOLKIT_VERSION!\bin\arm64"
+          move cudnn-windows-arm64-9.26.0.51_cuda13-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v!CUDA_TOOLKIT_VERSION!\include"
+          move cudnn-windows-arm64-9.26.0.51_cuda13-archive\lib\arm64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v!CUDA_TOOLKIT_VERSION!\lib\arm64"
+          bash -c "sed -i 's/cublas_v2.h/cublas_api.h/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v!CUDA_TOOLKIT_VERSION!/include/cublasXt.h' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v!CUDA_TOOLKIT_VERSION!/include/cusolverDn.h' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v!CUDA_TOOLKIT_VERSION!/include/cusolverSp.h'"
+          bash -c "sed -i 's/#if ^!defined(__cplusplus) || __cplusplus >= 201103L/#if 1/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v!CUDA_TOOLKIT_VERSION!/include/driver_types.h'"
+          bash -c "sed -i 's/__out/__cccl_out/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v!CUDA_TOOLKIT_VERSION!/include/cccl/cuda/__ptx/instructions/generated/tcgen05_ld.h'"
+          bash -c "find 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v!CUDA_TOOLKIT_VERSION!/'"
+          endlocal
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
