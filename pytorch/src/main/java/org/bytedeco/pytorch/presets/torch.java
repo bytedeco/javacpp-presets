@@ -1806,6 +1806,19 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         mapModule(infoMap, "AlphaDropout", "torch::nn::detail::_DropoutNd<torch::nn::AlphaDropoutImpl>");
         mapModule(infoMap, "FeatureAlphaDropout", "torch::nn::detail::_DropoutNd<torch::nn::FeatureAlphaDropoutImpl>");
 
+        // Inherited constructors are copied verbatim by Parser, bypassing mapModule's annotations.
+        // Supply the concrete declarations for the using statement, while keeping the base
+        // constructors on their ordinary, signature-specific mappings.
+        String dropoutConstructor = "torch::nn::detail::_DropoutNd<torch::nn::DropoutImpl>::_DropoutNd";
+        infoMap.put(new Info(dropoutConstructor + "(double)", dropoutConstructor + "(const torch::nn::DropoutOptions&)"))
+               .put(new Info(dropoutConstructor).javaText(
+                    "public DropoutImpl(double p) { super((Pointer)null); allocate(p); }\n" +
+                    "@SharedPtr @Name(\"std::make_shared<torch::nn::DropoutImpl>\") private native void allocate(double p);\n" +
+                    "public DropoutImpl(@Const @ByRef(nullValue = \"torch::nn::DropoutOptions{}\") DropoutOptions options_) { super((Pointer)null); allocate(options_); }\n" +
+                    "@SharedPtr @Name(\"std::make_shared<torch::nn::DropoutImpl>\") private native void allocate(@Const @ByRef(nullValue = \"torch::nn::DropoutOptions{}\") DropoutOptions options_);\n" +
+                    "public DropoutImpl() { super((Pointer)null); allocate(); }\n" +
+                    "@SharedPtr @Name(\"std::make_shared<torch::nn::DropoutImpl>\") private native void allocate();\n"));
+
         mapModule(infoMap, "CosineSimilarity");
         mapModule(infoMap, "PairwiseDistance");
 
