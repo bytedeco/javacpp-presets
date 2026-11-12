@@ -43,7 +43,7 @@ import org.bytedeco.cuda.presets.cudart;
     inherit = cudart.class,
     value = {
         @Platform(
-            value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
+            value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-arm64", "windows-x86_64"},
             include = {"cuviddec.h", "nvcuvid.h"},
             link = "nvcuvid"
         ),
@@ -61,6 +61,12 @@ import org.bytedeco.cuda.presets.cudart;
             value = "linux-x86_64",
             includepath = {"/usr/include/x86_64-linux-gnu/", "/usr/local/videocodecsdk/Interface/"},
             linkpath = {"/usr/lib/x86_64-linux-gnu/", "/usr/local/videocodecsdk/Lib/linux/stubs/x86_64/"}
+        ),
+        @Platform(
+            value = "windows-arm64",
+            includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/Interface/",
+            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/Lib/win/aarch64/",
+            link = "nvcuvida64"
         ),
         @Platform(
             value = "windows-x86_64",

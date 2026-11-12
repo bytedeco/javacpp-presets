@@ -323,14 +323,47 @@ public class IBuilderConfig extends INoCopy {
     //!
     //!
     //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
     public native @NoException(true) void reset();
 
     /**
      *  \brief Set the CUDA stream that is used to profile this network.
      * 
+     *  This is the default engine-level profile stream. A stream set through
+     *  IOptimizationProfile::setProfileStream() overrides it for that optimization profile.
+     * 
+     *  If \p stream belongs to a CUDA green context, TensorRT automatically queries the context's SM count and
+     *  co-scheduled-SM alignment, profiles each optimization profile that inherits this stream on it, and stores the
+     *  resulting execution-resource contract for each such profile in the engine. The contract conservatively limits
+     *  CGA size to the number of SMs guaranteed to be co-scheduled. If an optimization profile's effective stream is
+     *  not associated with a CUDA green context, that profile is built without a CUDA green context execution
+     *  contract.
+     * 
+     *  Using a CUDA green context requires both a TensorRT build based on CUDA Toolkit 13.0 or newer and a CUDA driver
+     *  compatible with CUDA 13.0 or newer. Ordinary profile streams remain supported with older CUDA Toolkit and
+     *  driver versions supported by TensorRT. TensorRT uses the provided stream for tactic profiling and creates
+     *  auxiliary profiling streams in the same CUDA green context.
+     * 
+     *  At runtime, TensorRT compares a CUDA green context stream's resources with the active optimization profile's
+     *  stored execution contract. If the stream has fewer SMs or a smaller CGA size, TensorRT emits a warning and
+     *  continues the enqueue. Enqueuing a profile built without CUDA green context constraints on a CUDA green context
+     *  stream also emits a warning. In either case, the configuration may cause enqueue crashes or other undefined
+     *  behavior.
+     * 
+     *  TensorRT does not inspect, redirect, or constrain CUDA streams, library handles, or kernel tactics created by
+     *  user plugins; each plugin is responsible for keeping its own CUDA work within the intended CUDA green context
+     *  and its resource limits.
+     * 
+     *  The application must keep the stream and its CUDA green context alive until the build completes.
+     * 
      *  @param stream The CUDA stream used for profiling by the builder.
      * 
-     *  @see getProfileStream()
+     *  @see getProfileStream(), IOptimizationProfile::setProfileStream()
      *  */
     
     
@@ -341,11 +374,11 @@ public class IBuilderConfig extends INoCopy {
     public native @NoException(true) void setProfileStream(CUstream_st stream);
 
     /**
-     *  \brief Get the CUDA stream that is used to profile this network.
+     *  \brief Get the default engine-level CUDA stream used to profile this network.
      * 
-     *  @return The CUDA stream set by setProfileStream, nullptr if setProfileStream has not been called.
+     *  @return The CUDA stream set by setProfileStream, or nullptr if setProfileStream has not been called.
      * 
-     *  @see setProfileStream()
+     *  @see setProfileStream(), IOptimizationProfile::getProfileStream()
      *  */
     
     

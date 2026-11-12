@@ -1630,11 +1630,15 @@
         </property>
       </activation>
       <modules>
+        <module>ffmpeg</module>
         <module>openblas</module>
         <module>cpython</module>
+        <module>numpy</module>
         <module>llvm</module>
         <module>cuda</module>
+        <module>nvcodec</module>
         <module>opencl</module>
+        <module>tensorrt</module>
         <module>onnx</module>
         <module>onnxruntime</module>
         <module>systems</module>

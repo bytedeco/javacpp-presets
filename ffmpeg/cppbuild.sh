@@ -92,7 +92,7 @@ mkdir -p $PLATFORM$EXTENSION
 cd $PLATFORM$EXTENSION
 INSTALL_PATH=`pwd`
 case $PLATFORM in
-    linux-arm64 | linux-x86_64 | macosx-arm64 | macosx-x86_64 | windows-x86_64)
+    linux-arm64 | linux-x86_64 | macosx-arm64 | macosx-x86_64 | windows-arm64 | windows-x86_64)
         OPENCL_PATH="${BUILD_PATH:-$TOP_PATH/opencl/cppbuild/$PLATFORM}"
         if [[ "$PLATFORM" == windows-* ]]; then
             OPENCL_PATH="$(cygpath -u "$OPENCL_PATH")"
@@ -146,6 +146,7 @@ tar --totals -xzf ../zimg-release-$ZIMG_VERSION.tar.gz
 tar --totals -xzf ../mpp-$MPP_VERSION.tar.gz
 tar --totals -xzf ../kvazaar-$KVAZAAR_VERSION.tar.gz
 tar --totals -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
+patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-vulkan-stubs.patch
 
 if [[ $PLATFORM == android-* ]]; then
     # the Vulkan headers of the NDK (1.3.275 as of r29) are older than the 1.3.277 that FFmpeg requires,
@@ -2246,6 +2247,140 @@ EOF
         make install
         ;;
 
+    windows-arm64)
+        echo ""
+        echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMG_VERSION
+        # zimg selects the x86 intrinsics of its AVX variants on the host alone, so
+        # those options get stripped from the flags its Makefile adds for them
+        autoreconf -iv
+        sedinplace 's/ -mavx2//g; s/ -mavx //g; s/ -mavx$//g; s/ -mfma//g; s/ -mf16c//g' Makefile.in
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
+        echo "Building zlib"
+        echo "--------------------"
+        echo ""
+        cd ../$ZLIB
+        make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
+        cd ../$LAME
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --build=aarch64-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
+        echo "Building XML2"
+        echo "--------------------"
+        echo ""
+        cd ../$XML2
+        ./configure --prefix=$INSTALL_PATH $LIBXML_CONFIG --build=aarch64-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
+        cd ../$SPEEX
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=aarch64-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
+        cd ../$OPUS
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=aarch64-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
+        cd ../$OPENCORE_AMR
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=aarch64-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
+        cd ../$VO_AMRWBENC
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=aarch64-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
+        cd ../$OPENSSL
+        patch -Np1 < ../../../openssl-mingwarm64.patch
+        ./Configure mingwarm64 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
+        make -s -j $MAKEJ
+        make install_sw
+        cd ../srt-$LIBSRT_VERSION
+        CC="gcc" CXX="g++" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $SRT_CONFIG -DENABLE_STDCXX_SYNC=ON .
+        make -j $MAKEJ V=0
+        make install
+        cd ../openh264-$OPENH264_VERSION
+        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar OS=mingw_nt ARCH=arm64 USE_ASM=No install-static
+        cd ../$X264
+        AR=llvm-ar RANLIB=llvm-ranlib NM=llvm-nm ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=aarch64-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
+        cd "$INSTALL_PATH/libvpx-$VPX_VERSION"
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=arm64-win64-gcc
+        make -j $MAKEJ
+        make install
+        cd ../libwebp-$WEBP_VERSION
+        CC="gcc" CXX="g++" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
+        make -j $MAKEJ V=0
+        make install
+        cd ../freetype-$FREETYPE_VERSION
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=aarch64-w64-mingw32
+        make -j $MAKEJ
+        make install
+        cd ../nv-codec-headers-n$NVCODEC_VERSION
+        make install PREFIX=$INSTALL_PATH
+        cd ../harfbuzz-$HARFBUZZ_VERSION
+        echo "[binaries]" >> windows-native.ini
+        echo "c = 'gcc'" >> windows-native.ini
+        echo "cpp = 'g++'" >> windows-native.ini
+        echo "ar = 'ar'" >> windows-native.ini
+        echo "windres = 'windres'" >> windows-native.ini
+        echo "strip = 'strip'" >> windows-native.ini
+        echo "pkg-config = '$(cygpath -m /c/msys64/clangarm64/bin/pkg-config.exe)'" >> windows-native.ini
+        meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG --native-file windows-native.ini --pkg-config-path="$(cygpath -m "$INSTALL_PATH/lib/pkgconfig")"
+        cd build
+        meson compile
+        meson install
+        cd ..
+        cd ../libaom-$AOMAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        CC="gcc" CXX="g++" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBAOM_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
+        cd ../SVT-AV1-v$SVTAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        CC="gcc" CXX="g++" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
+        cd ../ffmpeg-$FFMPEG_VERSION
+        # Avoid shadowing libc++'s <version> on case-insensitive filesystems.
+        if [[ -f VERSION ]]; then
+            mv VERSION RELEASE_VERSION
+        fi
+        sedinplace 's/cat VERSION /cat RELEASE_VERSION /' ffbuild/version.sh
+        sedinplace 's/"VERSION"/"RELEASE_VERSION"/g' doc/doxy-wrapper.sh
+        # native build with the MSYS2 CLANGARM64 toolchain and lld as linker
+        AR=llvm-ar RANLIB=llvm-ranlib
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $EXTRA_CONFIG --disable-vulkan --disable-cuda --disable-cuvid --disable-nvenc --disable-libmfx --disable-libkvazaar --disable-libx265 --enable-w32threads --enable-indev=dshow --target-os=mingw32 --arch=aarch64 --cc="gcc" --cxx="g++" --ld="g++" --ar="$AR" --ranlib="$RANLIB" --extra-cflags="-DLIBXML_STATIC -I../include/ -I../include/libxml2 -I../include/svt-av1 $EXTRA_CFLAGS" --extra-ldflags="-L../lib/ $EXTRA_LDFLAGS" --extra-libs="-static-libgcc -static -lWs2_32 -lcrypt32 -lpthread -lz -lm -lole32 -luuid $EXTRA_LIBS" || cat ffbuild/config.log
+        if ! grep -q "^#define HAVE_OPENCL_D3D11 1" config.h; then
+            echo "Error: FFmpeg configured OpenCL without D3D11 sharing support"
+            cat ffbuild/config.log
+            exit 1
+        fi
+        make -j $MAKEJ
+        make install
+        ;;
     windows-x86)
         echo ""
         echo "--------------------"

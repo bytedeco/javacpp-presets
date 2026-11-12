@@ -2202,6 +2202,31 @@ public class INetworkDefinition extends INoCopy {
     public native @NoException(true) ISqueezeLayer addSqueeze(@ByRef ITensor input, @ByRef ITensor axes);
 
     /**
+     *  \brief Add a squeeze layer to the network, with axes given by a tensor or a nullptr.
+     * 
+     *  @param input The input tensor to the layer.
+     *  @param axes The axes to remove unit dimensions on, or nullptr to remove every dimension that is
+     *  statically 1 in the network definition.
+     * 
+     *  @see ISqueezeLayer
+     * 
+     *  When axes is non-null, the behavior is identical to addSqueeze(ITensor&, ITensor&): axes must
+     *  be resolvable to a constant Int32 or Int64 1D shape tensor, values in axes must be unique and
+     *  in the range of [-r, r-1] where r is the rank of the input tensor, and for each axis value the
+     *  corresponding dimension in the input tensor must be one.
+     * 
+     *  When axes is nullptr, removes every dimension of the input tensor whose size is statically 1 in
+     *  the network definition. The set of removed dimensions, and hence the output rank, is decided
+     *  when the layer is added or its input is replaced; it does not depend on the optimization
+     *  profile. Dynamic dimensions are retained and must not be 1, because removing one would change
+     *  the output rank. That requirement is validated at build time when the optimization profile
+     *  decides it, and otherwise at runtime. To squeeze a dynamic dimension, provide an explicit axes
+     *  tensor. Zero-sized dimensions are retained, so empty tensors are supported.
+     * 
+     *  @return The new Squeeze layer, or nullptr if it could not be created.
+     *  */
+
+    /**
      *  \brief Add an unsqueeze layer to the network.
      * 
      *  @param input The input tensor to the layer.

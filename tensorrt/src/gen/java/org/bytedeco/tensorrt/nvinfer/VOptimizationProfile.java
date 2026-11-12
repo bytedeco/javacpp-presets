@@ -51,4 +51,7 @@ public class VOptimizationProfile extends VRoot {
             String inputName, OptProfileSelector select);
     public native @Cast("const int64_t*") @NoException(true) LongBuffer getShapeValuesV2(
             @Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select);
+    // Added in TensorRT 11.4
+    public native @NoException(true) void setProfileStream(CUstream_st stream);
+    public native @NoException(true) CUstream_st getProfileStream();
 }

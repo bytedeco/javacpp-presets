@@ -26,7 +26,7 @@ case $PLATFORM in
             exit 1
         fi
         ;;
-    windows-x86_64)
+    windows-arm64 | windows-x86_64)
         if [[ ! -d "C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/" ]]; then
             echo "Please install the Video Codec SDK in C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/"
             exit 1

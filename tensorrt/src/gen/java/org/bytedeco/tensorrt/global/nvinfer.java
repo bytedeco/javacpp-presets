@@ -49,9 +49,9 @@ public class nvinfer extends org.bytedeco.tensorrt.presets.nvinfer {
 // #define NV_INFER_VERSION_H
 
 public static final int TRT_MAJOR_ENTERPRISE = 11;
-public static final int TRT_MINOR_ENTERPRISE = 3;
+public static final int TRT_MINOR_ENTERPRISE = 4;
 public static final int TRT_PATCH_ENTERPRISE = 0;
-public static final int TRT_BUILD_ENTERPRISE = 99;
+public static final int TRT_BUILD_ENTERPRISE = 106;
 /** TensorRT major version. */
 public static final int NV_TENSORRT_MAJOR = TRT_MAJOR_ENTERPRISE;
 /** TensorRT minor version. */
@@ -172,10 +172,10 @@ public static final int NV_TENSORRT_RELEASE_TYPE = NV_TENSORRT_RELEASE_TYPE_GENE
 // #endif
 
 /** Forward declare some CUDA types to avoid an include dependency. */
-// Targeting ../nvinfer/cublasContext.java
+// Targeting ..\nvinfer\cublasContext.java
 
 
-// Targeting ../nvinfer/cudnnContext.java
+// Targeting ..\nvinfer\cudnnContext.java
 
 
 
@@ -276,7 +276,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION();
 }
 /** One greater than the maximum value of DataType enum. @see DataType */
 
-// Targeting ../nvinfer/Dims64.java
+// Targeting ..\nvinfer\Dims64.java
 
 
 
@@ -289,7 +289,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION();
 //!
 //!
 //!
-// Targeting ../nvinfer/InterfaceInfo.java
+// Targeting ..\nvinfer\InterfaceInfo.java
 
 
 
@@ -310,7 +310,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION();
 }
 /** One greater than the maximum value of APILanguage enum. @see APILanguage */
 
-// Targeting ../nvinfer/IVersionedInterface.java
+// Targeting ..\nvinfer\IVersionedInterface.java
 
 
 
@@ -456,7 +456,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION();
 }
 /** One greater than the maximum value of ErrorCode enum. @see ErrorCode */
 
-// Targeting ../nvinfer/IErrorRecorder.java
+// Targeting ..\nvinfer\IErrorRecorder.java
 
  // class IErrorRecorder
  // namespace v_1_0
@@ -572,7 +572,7 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 // #include "NvInferPluginBase.h"
 // #undef NV_INFER_INTERNAL_INCLUDE
 // #include "NvInferRuntimePlugin.h"
-// Targeting ../nvinfer/IPluginRegistry.java
+// Targeting ..\nvinfer\IPluginRegistry.java
 
 
 
@@ -628,16 +628,16 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
  * 
  *  \brief The TensorRT API version 1 namespace.
  *  */
-// Targeting ../nvinfer/Dims2.java
+// Targeting ..\nvinfer\Dims2.java
 
 
-// Targeting ../nvinfer/DimsHW.java
+// Targeting ..\nvinfer\DimsHW.java
 
 
-// Targeting ../nvinfer/Dims3.java
+// Targeting ..\nvinfer\Dims3.java
 
 
-// Targeting ../nvinfer/Dims4.java
+// Targeting ..\nvinfer\Dims4.java
 
 
 
@@ -683,10 +683,10 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 // #include "NvInferPluginBase.h" // IWYU pragma: export
 // #undef NV_INFER_INTERNAL_INCLUDE
 // #include "NvInferRuntimeCommon.h"
-// Targeting ../nvinfer/IPluginFactory.java
+// Targeting ..\nvinfer\IPluginFactory.java
 
 
-// Targeting ../nvinfer/INoCopy.java
+// Targeting ..\nvinfer\INoCopy.java
 
 
 
@@ -742,10 +742,10 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 }
 
 /** Maximum number of elements in EngineCapability enum. @see EngineCapability */
-// Targeting ../nvinfer/Weights.java
+// Targeting ..\nvinfer\Weights.java
 
 
-// Targeting ../nvinfer/IHostMemory.java
+// Targeting ..\nvinfer\IHostMemory.java
 
 
 
@@ -809,29 +809,29 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 }
 
 /** Maximum number of elements in TensorLocation enum. @see TensorLocation */
-// Targeting ../nvinfer/IDimensionExpr.java
+// Targeting ..\nvinfer\IDimensionExpr.java
 
 
 
 
-// Targeting ../nvinfer/IExprBuilder.java
+// Targeting ..\nvinfer\IExprBuilder.java
 
 
 
 
-// Targeting ../nvinfer/DimsExprs.java
+// Targeting ..\nvinfer\DimsExprs.java
 
 
-// Targeting ../nvinfer/DynamicPluginTensorDesc.java
+// Targeting ..\nvinfer\DynamicPluginTensorDesc.java
 
 
-// Targeting ../nvinfer/IPluginV2DynamicExt.java
+// Targeting ..\nvinfer\IPluginV2DynamicExt.java
 
 
-// Targeting ../nvinfer/IStreamReader.java
+// Targeting ..\nvinfer\IStreamReader.java
 
 
-// Targeting ../nvinfer/IStreamWriter.java
+// Targeting ..\nvinfer\IStreamWriter.java
 
 
  // namespace v_1_0
@@ -886,7 +886,7 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
     public SeekPosition intern() { for (SeekPosition e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-// Targeting ../nvinfer/IStreamReaderV2.java
+// Targeting ..\nvinfer\IStreamReaderV2.java
 
 
  // namespace v_1_0
@@ -908,18 +908,18 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 //!
 //!
 //!
-// Targeting ../nvinfer/IPluginResourceContext.java
+// Targeting ..\nvinfer\IPluginResourceContext.java
 
 
 
 
-// Targeting ../nvinfer/IPluginV3OneCore.java
+// Targeting ..\nvinfer\IPluginV3OneCore.java
 
 
-// Targeting ../nvinfer/IPluginV3OneBuild.java
+// Targeting ..\nvinfer\IPluginV3OneBuild.java
 
 
-// Targeting ../nvinfer/IPluginV3OneRuntime.java
+// Targeting ..\nvinfer\IPluginV3OneRuntime.java
 
 
  // namespace v_1_0
@@ -983,7 +983,7 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
  * 
  *  @see IPluginV3OneBuild
  *  */
-// Targeting ../nvinfer/IProfiler.java
+// Targeting ..\nvinfer\IProfiler.java
 
 
  // namespace v_1_0
@@ -1333,12 +1333,12 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 
 /** DO NOT REFER TO namespace v_1_0 IN CODE. ALWAYS USE nvinfer1 INSTEAD.
  *  The name v_1_0 may change in future versions of TensorRT. */
-// Targeting ../nvinfer/ILogger.java
+// Targeting ..\nvinfer\ILogger.java
 
 
 
  // namespace v_1_0
-// Targeting ../nvinfer/IGpuAllocator.java
+// Targeting ..\nvinfer\IGpuAllocator.java
 
 
 
@@ -1371,12 +1371,12 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 //!
 //!
 //!
-// Targeting ../nvinfer/IRuntime.java
+// Targeting ..\nvinfer\IRuntime.java
 
 
 
 
-// Targeting ../nvinfer/IRefitter.java
+// Targeting ..\nvinfer\IRefitter.java
 
 
 
@@ -1408,7 +1408,7 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 }
 
 /** Number of different values of OptProfileSelector enum. @see OptProfileSelector */
-// Targeting ../nvinfer/IOptimizationProfile.java
+// Targeting ..\nvinfer\IOptimizationProfile.java
 
 
 
@@ -1515,7 +1515,7 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 }
 
 /** Maximum number of serialization flags in SerializationFlag enum. @see SerializationFlag */
-// Targeting ../nvinfer/ISerializationConfig.java
+// Targeting ..\nvinfer\ISerializationConfig.java
 
 
 
@@ -1549,9 +1549,10 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 
 /** Maximum number of memory allocation strategies in ExecutionContextAllocationStrategy enum. @see
  *  ExecutionContextAllocationStrategy */
-// Targeting ../nvinfer/IRuntimeConfig.java
+// Targeting ..\nvinfer\IRuntimeConfig.java
 
  // class IRuntimeConfig
+
 
 
 
@@ -1578,12 +1579,12 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 }
 
 /** Maximum number of engine statistic kinds in EngineStat enum. @see EngineStat */
-// Targeting ../nvinfer/ICudaEngine.java
+// Targeting ..\nvinfer\ICudaEngine.java
 
 
 
 
-// Targeting ../nvinfer/IOutputAllocator.java
+// Targeting ..\nvinfer\IOutputAllocator.java
 
 
  // namespace v_1_0
@@ -1595,7 +1596,7 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
  * 
  *  @see IExecutionContext::enqueueV3()
  *  */
-// Targeting ../nvinfer/IDebugListener.java
+// Targeting ..\nvinfer\IDebugListener.java
 
 
  // namespace v_1_0
@@ -1611,7 +1612,7 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 //!
 //!
 //!
-// Targeting ../nvinfer/IExecutionContext.java
+// Targeting ..\nvinfer\IExecutionContext.java
 
  // class IExecutionContext
 
@@ -1638,7 +1639,7 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 }
 
 /** Maximum number of layer information formats in LayerInformationFormat enum. @see LayerInformationFormat */
-// Targeting ../nvinfer/IEngineInspector.java
+// Targeting ..\nvinfer\IEngineInspector.java
 
  // class IEngineInspector
 
@@ -1721,15 +1722,15 @@ public static native @NoException(true) ILogger getLogger();
 //     static nvinfer1::PluginRegistrar<name> pluginRegistrar##name {}
 /** DO NOT REFER TO namespace v_1_0 IN CODE. ALWAYS USE nvinfer1 INSTEAD.
  *  The name v_1_0 may change in future versions of TensorRT. */
-// Targeting ../nvinfer/ILoggerFinder.java
+// Targeting ..\nvinfer\ILoggerFinder.java
 
 
 
  // namespace v_1_0
-// Targeting ../nvinfer/IGpuAsyncAllocator.java
+// Targeting ..\nvinfer\IGpuAsyncAllocator.java
 
 
-// Targeting ../nvinfer/IPluginCreatorV3One.java
+// Targeting ..\nvinfer\IPluginCreatorV3One.java
 
 
 
@@ -2054,12 +2055,12 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see ActivationType
  *  */
-// Targeting ../nvinfer/ITensor.java
+// Targeting ..\nvinfer\ITensor.java
 
 
 
 
-// Targeting ../nvinfer/ILayer.java
+// Targeting ..\nvinfer\ILayer.java
 
 
 
@@ -2243,12 +2244,12 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see PaddingMode
  *  */
-// Targeting ../nvinfer/IConvolutionLayer.java
+// Targeting ..\nvinfer\IConvolutionLayer.java
 
 
 
 
-// Targeting ../nvinfer/IActivationLayer.java
+// Targeting ..\nvinfer\IActivationLayer.java
 
 
 
@@ -2279,12 +2280,12 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see PoolingType
  *  */
-// Targeting ../nvinfer/IPoolingLayer.java
+// Targeting ..\nvinfer\IPoolingLayer.java
 
 
 
 
-// Targeting ../nvinfer/ILRNLayer.java
+// Targeting ..\nvinfer\ILRNLayer.java
 
 
 
@@ -2315,22 +2316,22 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see ScaleMode
  *  */
-// Targeting ../nvinfer/IScaleLayer.java
+// Targeting ..\nvinfer\IScaleLayer.java
 
 
 
 
-// Targeting ../nvinfer/ISoftMaxLayer.java
+// Targeting ..\nvinfer\ISoftMaxLayer.java
 
 
 
 
-// Targeting ../nvinfer/IConcatenationLayer.java
+// Targeting ..\nvinfer\IConcatenationLayer.java
 
 
 
 
-// Targeting ../nvinfer/IDeconvolutionLayer.java
+// Targeting ..\nvinfer\IDeconvolutionLayer.java
 
 
 
@@ -2390,7 +2391,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see ElementWiseOperation
  *  */
-// Targeting ../nvinfer/IElementWiseLayer.java
+// Targeting ..\nvinfer\IElementWiseLayer.java
 
 
 
@@ -2421,17 +2422,17 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see GatherMode
  *  */
-// Targeting ../nvinfer/IGatherLayer.java
+// Targeting ..\nvinfer\IGatherLayer.java
 
 
 
 
-// Targeting ../nvinfer/IPluginV2Layer.java
+// Targeting ..\nvinfer\IPluginV2Layer.java
 
 
 
 
-// Targeting ../nvinfer/IPluginV3Layer.java
+// Targeting ..\nvinfer\IPluginV3Layer.java
 
 
 
@@ -2517,7 +2518,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see UnaryOperation
  *  */
-// Targeting ../nvinfer/IUnaryLayer.java
+// Targeting ..\nvinfer\IUnaryLayer.java
 
 
 
@@ -2610,20 +2611,20 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see CollectiveOperation
  *  */
-// Targeting ../nvinfer/IReduceLayer.java
+// Targeting ..\nvinfer\IReduceLayer.java
 
 
 
 
-// Targeting ../nvinfer/IPaddingLayer.java
+// Targeting ..\nvinfer\IPaddingLayer.java
 
 
 
 
-// Targeting ../nvinfer/Permutation.java
+// Targeting ..\nvinfer\Permutation.java
 
 
-// Targeting ../nvinfer/IShuffleLayer.java
+// Targeting ..\nvinfer\IShuffleLayer.java
 
 
 
@@ -2660,12 +2661,12 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see SampleMode
  *  */
-// Targeting ../nvinfer/ISliceLayer.java
+// Targeting ..\nvinfer\ISliceLayer.java
 
 
 
 
-// Targeting ../nvinfer/IShapeLayer.java
+// Targeting ..\nvinfer\IShapeLayer.java
 
 
 
@@ -2694,7 +2695,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see TopKOperation
  *  */
-// Targeting ../nvinfer/ITopKLayer.java
+// Targeting ..\nvinfer\ITopKLayer.java
 
 
 
@@ -2742,37 +2743,37 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see DataType
  *  */
-// Targeting ../nvinfer/IMatrixMultiplyLayer.java
+// Targeting ..\nvinfer\IMatrixMultiplyLayer.java
 
 
 
 
-// Targeting ../nvinfer/INonZeroLayer.java
+// Targeting ..\nvinfer\INonZeroLayer.java
 
 
 
 
-// Targeting ../nvinfer/IRaggedSoftMaxLayer.java
+// Targeting ..\nvinfer\IRaggedSoftMaxLayer.java
 
 
 
 
-// Targeting ../nvinfer/IIdentityLayer.java
+// Targeting ..\nvinfer\IIdentityLayer.java
 
 
 
 
-// Targeting ../nvinfer/ICastLayer.java
+// Targeting ..\nvinfer\ICastLayer.java
 
 
 
 
-// Targeting ../nvinfer/IConstantLayer.java
+// Targeting ..\nvinfer\IConstantLayer.java
 
 
 
 
-// Targeting ../nvinfer/IParametricReLULayer.java
+// Targeting ..\nvinfer\IParametricReLULayer.java
 
 
 
@@ -2920,7 +2921,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see ResizeRoundMode
  *  */
-// Targeting ../nvinfer/IResizeLayer.java
+// Targeting ..\nvinfer\IResizeLayer.java
 
 
 
@@ -2978,67 +2979,67 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see DataType
  *  */
-// Targeting ../nvinfer/ILoopBoundaryLayer.java
+// Targeting ..\nvinfer\ILoopBoundaryLayer.java
 
 
 
 
-// Targeting ../nvinfer/IIfConditionalBoundaryLayer.java
+// Targeting ..\nvinfer\IIfConditionalBoundaryLayer.java
 
 
 
 
-// Targeting ../nvinfer/IConditionLayer.java
+// Targeting ..\nvinfer\IConditionLayer.java
 
 
 
 
-// Targeting ../nvinfer/IIfConditionalOutputLayer.java
+// Targeting ..\nvinfer\IIfConditionalOutputLayer.java
 
 
 
 
-// Targeting ../nvinfer/IIfConditionalInputLayer.java
+// Targeting ..\nvinfer\IIfConditionalInputLayer.java
 
 
 
 
-// Targeting ../nvinfer/IIfConditional.java
+// Targeting ..\nvinfer\IIfConditional.java
 
 
 
 
-// Targeting ../nvinfer/IRecurrenceLayer.java
+// Targeting ..\nvinfer\IRecurrenceLayer.java
 
 
 
 
-// Targeting ../nvinfer/ILoopOutputLayer.java
+// Targeting ..\nvinfer\ILoopOutputLayer.java
 
 
 
 
-// Targeting ../nvinfer/ITripLimitLayer.java
+// Targeting ..\nvinfer\ITripLimitLayer.java
 
 
 
 
-// Targeting ../nvinfer/IIteratorLayer.java
+// Targeting ..\nvinfer\IIteratorLayer.java
 
 
 
 
-// Targeting ../nvinfer/ILoop.java
+// Targeting ..\nvinfer\ILoop.java
 
 
 
 
-// Targeting ../nvinfer/ISelectLayer.java
+// Targeting ..\nvinfer\ISelectLayer.java
 
 
 
 
-// Targeting ../nvinfer/IAssertionLayer.java
+// Targeting ..\nvinfer\IAssertionLayer.java
 
 
 
@@ -3090,27 +3091,27 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see FillOperation
  *  */
-// Targeting ../nvinfer/IFillLayer.java
+// Targeting ..\nvinfer\IFillLayer.java
 
 
 
 
-// Targeting ../nvinfer/IQuantizeLayer.java
+// Targeting ..\nvinfer\IQuantizeLayer.java
 
 
 
 
-// Targeting ../nvinfer/IDequantizeLayer.java
+// Targeting ..\nvinfer\IDequantizeLayer.java
 
 
 
 
-// Targeting ../nvinfer/IDynamicQuantizeLayer.java
+// Targeting ..\nvinfer\IDynamicQuantizeLayer.java
 
 
 
 
-// Targeting ../nvinfer/IEinsumLayer.java
+// Targeting ..\nvinfer\IEinsumLayer.java
 
 
 
@@ -3141,17 +3142,17 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see ScatterMode
  *  */
-// Targeting ../nvinfer/IScatterLayer.java
+// Targeting ..\nvinfer\IScatterLayer.java
 
  // class IScatterLayer
 
 
-// Targeting ../nvinfer/IOneHotLayer.java
+// Targeting ..\nvinfer\IOneHotLayer.java
 
 
 
 
-// Targeting ../nvinfer/IGridSampleLayer.java
+// Targeting ..\nvinfer\IGridSampleLayer.java
 
  // class IGridSampleLayer
 
@@ -3182,27 +3183,27 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see BoundingBoxFormat
  *  */
-// Targeting ../nvinfer/INMSLayer.java
+// Targeting ..\nvinfer\INMSLayer.java
 
  // class INMSLayer
 
 
-// Targeting ../nvinfer/IReverseSequenceLayer.java
+// Targeting ..\nvinfer\IReverseSequenceLayer.java
 
  // class IReverseSequenceLayer
 
 
-// Targeting ../nvinfer/INormalizationLayer.java
+// Targeting ..\nvinfer\INormalizationLayer.java
 
 
 
 
-// Targeting ../nvinfer/ISqueezeLayer.java
+// Targeting ..\nvinfer\ISqueezeLayer.java
 
 
 
 
-// Targeting ../nvinfer/IUnsqueezeLayer.java
+// Targeting ..\nvinfer\IUnsqueezeLayer.java
 
 
 
@@ -3235,7 +3236,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see CumulativeOperation
  *  */
-// Targeting ../nvinfer/ICumulativeLayer.java
+// Targeting ..\nvinfer\ICumulativeLayer.java
 
 
 
@@ -3328,27 +3329,27 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see AttentionIOForm
  *  */
-// Targeting ../nvinfer/IAttentionBoundaryLayer.java
+// Targeting ..\nvinfer\IAttentionBoundaryLayer.java
 
 
 
 
-// Targeting ../nvinfer/IAttentionInputLayer.java
+// Targeting ..\nvinfer\IAttentionInputLayer.java
 
 
 
 
-// Targeting ../nvinfer/IAttentionOutputLayer.java
+// Targeting ..\nvinfer\IAttentionOutputLayer.java
 
 
 
 
-// Targeting ../nvinfer/IAttention.java
+// Targeting ..\nvinfer\IAttention.java
 
 
 
 
-// Targeting ../nvinfer/IRotaryEmbeddingLayer.java
+// Targeting ..\nvinfer\IRotaryEmbeddingLayer.java
 
 
 
@@ -3375,7 +3376,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see KVCacheMode
  *  */
-// Targeting ../nvinfer/IKVCacheUpdateLayer.java
+// Targeting ..\nvinfer\IKVCacheUpdateLayer.java
 
 
 
@@ -3402,17 +3403,17 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see MoEActType
  *  */
-// Targeting ../nvinfer/IMoELayer.java
+// Targeting ..\nvinfer\IMoELayer.java
 
 
 
 
-// Targeting ../nvinfer/IDistCollectiveLayer.java
+// Targeting ..\nvinfer\IDistCollectiveLayer.java
 
  // class IDistCollectiveLayer
 
 
-// Targeting ../nvinfer/INetworkDefinition.java
+// Targeting ..\nvinfer\INetworkDefinition.java
 
 
 
@@ -3653,14 +3654,14 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see BuilderFlag
  *  */
-// Targeting ../nvinfer/TimingCacheKey.java
+// Targeting ..\nvinfer\TimingCacheKey.java
 
 
-// Targeting ../nvinfer/TimingCacheValue.java
+// Targeting ..\nvinfer\TimingCacheValue.java
 
 
 
-// Targeting ../nvinfer/ITimingCache.java
+// Targeting ..\nvinfer\ITimingCache.java
 
 
 
@@ -3690,6 +3691,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
      *  The size of this pool must be at least 4 KiB and must be a power of 2.
      *  This defaults to 1 MiB.
      *  Orin has capacity of 1 MiB per core.
+     *  Each loadable is given the whole pool.
      *  */
     
 
@@ -3701,6 +3703,8 @@ public static native @NoException(true) int getInferLibBuildVersion();
      *  kDLA_LOCAL_DRAM is host RAM used by DLA to share intermediate tensor data across operations.
      *  The size of this pool must be at least 4 KiB and must be a power of 2.
      *  This defaults to 1 GiB.
+     *  \note the compiled loadable may require less than this amount; at runtime, TensorRT will
+     *  allocate only as much as is required.
      *  */
     
 
@@ -3712,6 +3716,8 @@ public static native @NoException(true) int getInferLibBuildVersion();
      *  kDLA_GLOBAL_DRAM is host RAM used by DLA to store weights and metadata for execution.
      *  The size of this pool must be at least 4 KiB and must be a power of 2.
      *  This defaults to 512 MiB.
+     *  \note the compiled loadable may require less than this amount; at runtime, TensorRT will
+     *  allocate only as much as is required.
      *  */
     
 
@@ -3831,6 +3837,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
 //!
 //!
 //!
+//!
     kAMPERE_PLUS(1),
 
     /** Require that the engine is compatible with GPUs that have the same Compute Capability
@@ -3840,6 +3847,9 @@ public static native @NoException(true) int getInferLibBuildVersion();
      *  This option will disable cuDNN, cuBLAS, and cuBLASLt as tactic sources.
      * 
      *  This option is only supported for engines built on NVIDIA Turing and later GPUs.
+     * 
+     *  \warning CUDA green context profile streams are not supported with this option. The build will continue, but
+     *  the resulting engine may cause crashes or other undefined behavior during execution.
      *  */
     kSAME_COMPUTE_CAPABILITY(2);
 
@@ -3885,7 +3895,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
     public TilingOptimizationLevel intern() { for (TilingOptimizationLevel e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-// Targeting ../nvinfer/IProgressMonitor.java
+// Targeting ..\nvinfer\IProgressMonitor.java
 
  // class IProgressMonitor
  // namespace v_1_0
@@ -3915,7 +3925,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
 //!
 //!
 //!
-// Targeting ../nvinfer/IBuilderConfig.java
+// Targeting ..\nvinfer\IBuilderConfig.java
 
 
 
@@ -3974,7 +3984,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see NetworkDefinitionCreationFlag
  *  */
-// Targeting ../nvinfer/IBuilder.java
+// Targeting ..\nvinfer\IBuilder.java
 
 
 
@@ -4032,7 +4042,7 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
  *  */
 @Namespace("nvinfer1") public static native @Cast("bool") @NoException(true) boolean setInternalLibraryPath(String path);
 @Namespace("nvinfer1") public static native @Cast("bool") @NoException(true) boolean setInternalLibraryPath(@Cast("const char*") BytePointer path);
-// Targeting ../nvinfer/SafeIPluginRegistry.java
+// Targeting ..\nvinfer\SafeIPluginRegistry.java
 
 
  // namespace safe
@@ -4084,19 +4094,19 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
  // namespace v_1_0
  // namespace v_1_0
  // namespace v_1_0
-// Targeting ../nvinfer/IPlugin.java
+// Targeting ..\nvinfer\IPlugin.java
 
 
-// Targeting ../nvinfer/IPluginExt.java
+// Targeting ..\nvinfer\IPluginExt.java
 
 
-// Targeting ../nvinfer/IPluginLayer.java
+// Targeting ..\nvinfer\IPluginLayer.java
 
 
  // namespace v_1_0
  // namespace v_1_0
  // namespace v_1_0
-// Targeting ../nvinfer/ISafeSerializedNetworkArtifacts.java
+// Targeting ..\nvinfer\ISafeSerializedNetworkArtifacts.java
 
 
  // namespace v_1_0
@@ -4204,247 +4214,247 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
 //!
 //!
 //!
-// Targeting ../nvinfer/VRoot.java
+// Targeting ..\nvinfer\VRoot.java
 
 
-// Targeting ../nvinfer/VHostMemory.java
+// Targeting ..\nvinfer\VHostMemory.java
 
 
-// Targeting ../nvinfer/VDimensionExpr.java
+// Targeting ..\nvinfer\VDimensionExpr.java
 
 
-// Targeting ../nvinfer/VExprBuilder.java
+// Targeting ..\nvinfer\VExprBuilder.java
 
 
-// Targeting ../nvinfer/VRuntime.java
+// Targeting ..\nvinfer\VRuntime.java
 
 
-// Targeting ../nvinfer/VRefitter.java
+// Targeting ..\nvinfer\VRefitter.java
 
 
-// Targeting ../nvinfer/VOptimizationProfile.java
+// Targeting ..\nvinfer\VOptimizationProfile.java
 
 
-// Targeting ../nvinfer/VCudaEngine.java
+// Targeting ..\nvinfer\VCudaEngine.java
 
 
-// Targeting ../nvinfer/VExecutionContext.java
+// Targeting ..\nvinfer\VExecutionContext.java
 
 
-// Targeting ../nvinfer/VEngineInspector.java
+// Targeting ..\nvinfer\VEngineInspector.java
 
 
-// Targeting ../nvinfer/VTensor.java
+// Targeting ..\nvinfer\VTensor.java
 
 
-// Targeting ../nvinfer/VLayer.java
+// Targeting ..\nvinfer\VLayer.java
 
 
-// Targeting ../nvinfer/VConvolutionLayer.java
+// Targeting ..\nvinfer\VConvolutionLayer.java
 
 
-// Targeting ../nvinfer/VActivationLayer.java
+// Targeting ..\nvinfer\VActivationLayer.java
 
 
-// Targeting ../nvinfer/VPoolingLayer.java
+// Targeting ..\nvinfer\VPoolingLayer.java
 
 
-// Targeting ../nvinfer/VLRNLayer.java
+// Targeting ..\nvinfer\VLRNLayer.java
 
 
-// Targeting ../nvinfer/VScaleLayer.java
+// Targeting ..\nvinfer\VScaleLayer.java
 
 
-// Targeting ../nvinfer/VSoftMaxLayer.java
+// Targeting ..\nvinfer\VSoftMaxLayer.java
 
 
-// Targeting ../nvinfer/VConcatenationLayer.java
+// Targeting ..\nvinfer\VConcatenationLayer.java
 
 
-// Targeting ../nvinfer/VDeconvolutionLayer.java
+// Targeting ..\nvinfer\VDeconvolutionLayer.java
 
 
-// Targeting ../nvinfer/VElementWiseLayer.java
+// Targeting ..\nvinfer\VElementWiseLayer.java
 
 
-// Targeting ../nvinfer/VGatherLayer.java
+// Targeting ..\nvinfer\VGatherLayer.java
 
 
-// Targeting ../nvinfer/VPluginLayer.java
+// Targeting ..\nvinfer\VPluginLayer.java
 
 
-// Targeting ../nvinfer/VPluginV2Layer.java
+// Targeting ..\nvinfer\VPluginV2Layer.java
 
 
-// Targeting ../nvinfer/VPluginV3Layer.java
+// Targeting ..\nvinfer\VPluginV3Layer.java
 
 
-// Targeting ../nvinfer/VUnaryLayer.java
+// Targeting ..\nvinfer\VUnaryLayer.java
 
 
-// Targeting ../nvinfer/VReduceLayer.java
+// Targeting ..\nvinfer\VReduceLayer.java
 
 
-// Targeting ../nvinfer/VPaddingLayer.java
+// Targeting ..\nvinfer\VPaddingLayer.java
 
 
-// Targeting ../nvinfer/VShuffleLayer.java
+// Targeting ..\nvinfer\VShuffleLayer.java
 
 
-// Targeting ../nvinfer/VSliceLayer.java
+// Targeting ..\nvinfer\VSliceLayer.java
 
 
-// Targeting ../nvinfer/VShapeLayer.java
+// Targeting ..\nvinfer\VShapeLayer.java
 
 
-// Targeting ../nvinfer/VTopKLayer.java
+// Targeting ..\nvinfer\VTopKLayer.java
 
 
-// Targeting ../nvinfer/VMatrixMultiplyLayer.java
+// Targeting ..\nvinfer\VMatrixMultiplyLayer.java
 
 
-// Targeting ../nvinfer/VNonZeroLayer.java
+// Targeting ..\nvinfer\VNonZeroLayer.java
 
 
-// Targeting ../nvinfer/VRaggedSoftMaxLayer.java
+// Targeting ..\nvinfer\VRaggedSoftMaxLayer.java
 
 
-// Targeting ../nvinfer/VIdentityLayer.java
+// Targeting ..\nvinfer\VIdentityLayer.java
 
 
-// Targeting ../nvinfer/VCastLayer.java
+// Targeting ..\nvinfer\VCastLayer.java
 
 
-// Targeting ../nvinfer/VConstantLayer.java
+// Targeting ..\nvinfer\VConstantLayer.java
 
 
-// Targeting ../nvinfer/VParametricReLULayer.java
+// Targeting ..\nvinfer\VParametricReLULayer.java
 
 
-// Targeting ../nvinfer/VResizeLayer.java
+// Targeting ..\nvinfer\VResizeLayer.java
 
 
-// Targeting ../nvinfer/VLoopBoundaryLayer.java
+// Targeting ..\nvinfer\VLoopBoundaryLayer.java
 
 
-// Targeting ../nvinfer/VRecurrenceLayer.java
+// Targeting ..\nvinfer\VRecurrenceLayer.java
 
 
-// Targeting ../nvinfer/VLoopOutputLayer.java
+// Targeting ..\nvinfer\VLoopOutputLayer.java
 
 
-// Targeting ../nvinfer/VTripLimitLayer.java
+// Targeting ..\nvinfer\VTripLimitLayer.java
 
 
-// Targeting ../nvinfer/VIteratorLayer.java
+// Targeting ..\nvinfer\VIteratorLayer.java
 
 
-// Targeting ../nvinfer/VLoop.java
+// Targeting ..\nvinfer\VLoop.java
 
 
-// Targeting ../nvinfer/VConditionalBoundaryLayer.java
+// Targeting ..\nvinfer\VConditionalBoundaryLayer.java
 
 
-// Targeting ../nvinfer/VConditionLayer.java
+// Targeting ..\nvinfer\VConditionLayer.java
 
 
-// Targeting ../nvinfer/VConditionalInputLayer.java
+// Targeting ..\nvinfer\VConditionalInputLayer.java
 
 
-// Targeting ../nvinfer/VConditionalOutputLayer.java
+// Targeting ..\nvinfer\VConditionalOutputLayer.java
 
 
-// Targeting ../nvinfer/VIfConditional.java
+// Targeting ..\nvinfer\VIfConditional.java
 
 
-// Targeting ../nvinfer/VAttentionBoundaryLayer.java
+// Targeting ..\nvinfer\VAttentionBoundaryLayer.java
 
 
-// Targeting ../nvinfer/VAttentionInputLayer.java
+// Targeting ..\nvinfer\VAttentionInputLayer.java
 
 
-// Targeting ../nvinfer/VAttentionOutputLayer.java
+// Targeting ..\nvinfer\VAttentionOutputLayer.java
 
 
-// Targeting ../nvinfer/VAttention.java
+// Targeting ..\nvinfer\VAttention.java
 
 
-// Targeting ../nvinfer/VSelectLayer.java
+// Targeting ..\nvinfer\VSelectLayer.java
 
 
-// Targeting ../nvinfer/VAssertionLayer.java
+// Targeting ..\nvinfer\VAssertionLayer.java
 
 
-// Targeting ../nvinfer/VFillLayer.java
+// Targeting ..\nvinfer\VFillLayer.java
 
 
-// Targeting ../nvinfer/VQuantizeLayer.java
+// Targeting ..\nvinfer\VQuantizeLayer.java
 
 
-// Targeting ../nvinfer/VDequantizeLayer.java
+// Targeting ..\nvinfer\VDequantizeLayer.java
 
 
-// Targeting ../nvinfer/VDynamicQuantizeLayer.java
+// Targeting ..\nvinfer\VDynamicQuantizeLayer.java
 
 
-// Targeting ../nvinfer/VScatterLayer.java
+// Targeting ..\nvinfer\VScatterLayer.java
 
 
-// Targeting ../nvinfer/VEinsumLayer.java
+// Targeting ..\nvinfer\VEinsumLayer.java
 
 
-// Targeting ../nvinfer/VOneHotLayer.java
+// Targeting ..\nvinfer\VOneHotLayer.java
 
 
-// Targeting ../nvinfer/VGridSampleLayer.java
+// Targeting ..\nvinfer\VGridSampleLayer.java
 
 
-// Targeting ../nvinfer/VNMSLayer.java
+// Targeting ..\nvinfer\VNMSLayer.java
 
 
-// Targeting ../nvinfer/VReverseSequenceLayer.java
+// Targeting ..\nvinfer\VReverseSequenceLayer.java
 
 
-// Targeting ../nvinfer/VNormalizationLayer.java
+// Targeting ..\nvinfer\VNormalizationLayer.java
 
 
-// Targeting ../nvinfer/VSqueezeLayer.java
+// Targeting ..\nvinfer\VSqueezeLayer.java
 
 
-// Targeting ../nvinfer/VUnsqueezeLayer.java
+// Targeting ..\nvinfer\VUnsqueezeLayer.java
 
 
-// Targeting ../nvinfer/VCumulativeLayer.java
+// Targeting ..\nvinfer\VCumulativeLayer.java
 
 
-// Targeting ../nvinfer/VRotaryEmbeddingLayer.java
+// Targeting ..\nvinfer\VRotaryEmbeddingLayer.java
 
 
-// Targeting ../nvinfer/VKVCacheUpdateLayer.java
+// Targeting ..\nvinfer\VKVCacheUpdateLayer.java
 
 
-// Targeting ../nvinfer/VMoELayer.java
+// Targeting ..\nvinfer\VMoELayer.java
 
 
-// Targeting ../nvinfer/VNetworkDefinition.java
+// Targeting ..\nvinfer\VNetworkDefinition.java
 
 
-// Targeting ../nvinfer/VTimingCache.java
+// Targeting ..\nvinfer\VTimingCache.java
 
 
-// Targeting ../nvinfer/VBuilderConfig.java
+// Targeting ..\nvinfer\VBuilderConfig.java
 
 
-// Targeting ../nvinfer/VSerializationConfig.java
+// Targeting ..\nvinfer\VSerializationConfig.java
 
 
-// Targeting ../nvinfer/VBuilder.java
+// Targeting ..\nvinfer\VBuilder.java
 
 
-// Targeting ../nvinfer/VRuntimeConfig.java
+// Targeting ..\nvinfer\VRuntimeConfig.java
 
 
-// Targeting ../nvinfer/VDistCollectiveLayer.java
+// Targeting ..\nvinfer\VDistCollectiveLayer.java
 
  // VDistCollectiveLayer
 
@@ -4524,10 +4534,10 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
     public PluginFieldType intern() { for (PluginFieldType e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-// Targeting ../nvinfer/PluginField.java
+// Targeting ..\nvinfer\PluginField.java
 
 
-// Targeting ../nvinfer/PluginFieldCollection.java
+// Targeting ..\nvinfer\PluginFieldCollection.java
 
 
 
@@ -4568,16 +4578,16 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
     public PluginCapabilityType intern() { for (PluginCapabilityType e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-// Targeting ../nvinfer/IPluginCapability.java
+// Targeting ..\nvinfer\IPluginCapability.java
 
 
-// Targeting ../nvinfer/IPluginResource.java
+// Targeting ..\nvinfer\IPluginResource.java
 
 
-// Targeting ../nvinfer/IPluginCreatorInterface.java
+// Targeting ..\nvinfer\IPluginCreatorInterface.java
 
 
-// Targeting ../nvinfer/IPluginV3.java
+// Targeting ..\nvinfer\IPluginV3.java
 
 
  // namespace v_1_0
@@ -4730,7 +4740,7 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
 //!
 @Namespace("nvinfer1") @MemberGetter public static native int kPLUGIN_VERSION_PYTHON_BIT();
 public static final int kPLUGIN_VERSION_PYTHON_BIT = kPLUGIN_VERSION_PYTHON_BIT();
-// Targeting ../nvinfer/PluginTensorDesc.java
+// Targeting ..\nvinfer\PluginTensorDesc.java
 
 
 
@@ -4783,16 +4793,16 @@ public static final int kPLUGIN_VERSION_PYTHON_BIT = kPLUGIN_VERSION_PYTHON_BIT(
     public PluginCreatorVersion intern() { for (PluginCreatorVersion e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-// Targeting ../nvinfer/IPluginV2.java
+// Targeting ..\nvinfer\IPluginV2.java
 
 
-// Targeting ../nvinfer/IPluginV2Ext.java
+// Targeting ..\nvinfer\IPluginV2Ext.java
 
 
-// Targeting ../nvinfer/IPluginV2IOExt.java
+// Targeting ..\nvinfer\IPluginV2IOExt.java
 
 
-// Targeting ../nvinfer/IPluginCreator.java
+// Targeting ..\nvinfer\IPluginCreator.java
 
 
  // namespace v_1_0
