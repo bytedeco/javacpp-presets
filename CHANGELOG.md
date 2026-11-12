@@ -1,4 +1,5 @@
 
+ * Add `windows-arm64` builds for OpenBLAS, CPython, CUDA, OpenCL, ONNX, ONNX Runtime ([pull #1826](https://github.com/bytedeco/javacpp-presets/pull/1826))
  * Fix missing `std::make_shared<torch::nn::DropoutImpl>` allocators in presets for PyTorch ([pull #1824](https://github.com/bytedeco/javacpp-presets/pull/1824))
  * Bundle the HDF5 filter plugins and `HDF5Plugins` helper class in presets for HDF5 ([pull #1821](https://github.com/bytedeco/javacpp-presets/pull/1821))
  * Build FFmpeg with Kvazaar encoding support ([pull #1820](https://github.com/bytedeco/javacpp-presets/pull/1820))
