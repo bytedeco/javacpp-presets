@@ -1630,7 +1630,13 @@
         </property>
       </activation>
       <modules>
+        <module>openblas</module>
+        <module>cpython</module>
         <module>llvm</module>
+        <module>cuda</module>
+        <module>opencl</module>
+        <module>onnx</module>
+        <module>onnxruntime</module>
         <module>systems</module>
       </modules>
       <properties>

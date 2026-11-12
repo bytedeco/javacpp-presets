@@ -81,7 +81,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install/strip
         ;;
-    windows-x86_64)
+    windows-arm64 | windows-x86_64)
         export CC="cl.exe"
         export CXX="cl.exe"
         cd OpenCL-Headers-$OPENCL_VERSION

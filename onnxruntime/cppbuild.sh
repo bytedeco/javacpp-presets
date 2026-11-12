@@ -59,6 +59,22 @@ case $PLATFORM in
         export ARCH_FLAGS=
         export COREML_FLAGS="--use_coreml"
         ;;
+    windows-arm64)
+        if [[ -n "${CUDA_PATH:-}" ]]; then
+            export CUDACXX="$CUDA_PATH/bin/nvcc.exe"
+            export CUDA_HOME="$CUDA_PATH"
+            export CUDNN_HOME="$CUDA_PATH"
+        fi
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        export ARCH_FLAGS="--cmake_generator Ninja"
+        export PYTHON_BIN_PATH=$(which python.exe)
+
+        # native build, so skip the cross-compilation checks that --arm64 triggers
+        sedinplace 's/if args.arm or args.arm64:/if False:/g' tools/ci_build/build.py
+        export DNNL_FLAGS= # no Windows on ARM support in oneDNN
+        CMAKE_EXTRA_DEFINES="CMAKE_BUILD_TYPE=Release CMAKE_POLICY_VERSION_MINIMUM=3.5 protobuf_WITH_ZLIB=OFF onnxruntime_ENABLE_LTO=OFF onnxruntime_BUILD_UNIT_TESTS=OFF"
+        ;;
     windows-*)
         if [[ -n "${CUDA_PATH:-}" ]]; then
             export CUDACXX="$CUDA_PATH/bin/nvcc.exe"
@@ -115,13 +131,19 @@ sedinplace 's/if args.arm or args.arm64:/if False:/g' tools/ci_build/build.py
 sedinplace 's/is_linux() and platform.machine() == "x86_64"/False/g' tools/ci_build/build.py
 sedinplace 's/onnxruntime_target_platform STREQUAL "aarch64"/FALSE/g' cmake/CMakeLists.txt
 sedinplace 's/if (NOT APPLE)/if (FALSE)/g' cmake/onnxruntime_mlas.cmake
-sedinplace 's/!defined(__APPLE__)/0/g' onnxruntime/core/mlas/inc/mlas.h
+if [[ $PLATFORM != windows-arm64 ]]; then
+    sedinplace 's/!defined(__APPLE__)/0/g' onnxruntime/core/mlas/inc/mlas.h
+fi
 sedinplace 's/defined(__aarch64__) && defined(__linux__)/0/g' `find . -name *.cpp -o -name *.cc -o -name *.h`
 sedinplace 's/MLAS_CPUIDINFO::GetCPUIDInfo().HasArmNeon_I8MM()/false/g' onnxruntime/core/mlas/lib/platform.cpp
 
 # work around toolchain issues on Mac and Windows
 patch -p1 < ../../../onnxruntime.patch
-git apply --recount ../../../onnxruntime-openvino.patch
+patch -p1 < ../../../onnxruntime-openvino.patch
+if [[ $PLATFORM == windows-arm64 ]]; then
+    cp ../../../kleidiai-windows.patch cmake/patches/
+    sedinplace '/onnxruntime_fetchcontent_declare(kleidiai /s@ EXCLUDE_FROM_ALL)@ PATCH_COMMAND ${Patch_EXECUTABLE} -p1 -i ${PROJECT_SOURCE_DIR}/patches/kleidiai-windows.patch EXCLUDE_FROM_ALL)@' cmake/external/onnxruntime_external_deps.cmake
+fi
 #patch -p1 < ../../../onnxruntime-cuda.patch # https://github.com/microsoft/onnxruntime/pull/22316
 #patch -p1 < ../../../onnxruntime-windows.patch # https://github.com/microsoft/onnxruntime/pull/7883
 sedinplace '/--Werror/d' cmake/CMakeLists.txt
@@ -234,7 +256,7 @@ sedinplace 's/SoftMaxComputeHelper<T, T, true>(ctx->GetComputeStream()/SoftMaxCo
 sedinplace 's/PrepareCompute<TIndex>(context->GetComputeStream()/PrepareCompute<TIndex>(context->GetComputeStream()->GetHandle(), (CUstream_st*)context->GetComputeStream()->GetHandle()/g' orttraining/orttraining/training_ops/cuda/tensor/gather_nd_grad.cc
 
 which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
-"$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --parallel $MAKEJ --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib $ARCH_FLAGS $DNNL_FLAGS $COREML_FLAGS $OPENVINO_FLAGS $OPENMP_FLAGS $TRAINING_FLAGS $GPU_FLAGS
+"$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --parallel $MAKEJ --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib $ARCH_FLAGS $DNNL_FLAGS $COREML_FLAGS $OPENVINO_FLAGS $OPENMP_FLAGS $TRAINING_FLAGS $GPU_FLAGS ${CMAKE_EXTRA_DEFINES:+--cmake_extra_defines $CMAKE_EXTRA_DEFINES}
 
 # install headers and libraries in standard directories
 cp -r include/* ../include

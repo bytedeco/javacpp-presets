@@ -35,7 +35,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = nppc.class, value = {
     @Platform(include = "<nppi_morphological_operations.h>", link = "nppim@.13"),
-    @Platform(value = "windows-x86_64", preload = "nppim64_13")},
+    @Platform(value = {"windows-arm64", "windows-x86_64"}, preload = "nppim64_13")},
         global = "org.bytedeco.cuda.global.nppim")
 @NoException
 public class nppim implements InfoMapper {
