@@ -221,17 +221,22 @@ runs:
 
         if "%CI_DEPLOY_MODULE%"=="nvcodec" (
           echo Installing NVIDIA Video Codec SDK
-          python -m gdown 1d_i_qrkS9rvDMgYUY7O5vQHCf_rj1Jjy
-          unzip Video_Codec_SDK_13.1.15.zip
-          move Video_Codec_SDK_13.1.15 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\VideoCodecSDK"
+          python -m gdown 1wej84nLEQOGBvznpaLrRmkjCPfLr_WWm
+          unzip Video_Codec_SDK_13.1.24.zip
+          move Video_Codec_SDK_13.1.24 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\VideoCodecSDK"
         )
 
         if "%CI_DEPLOY_MODULE%"=="tensorrt" (
           echo Installing TensorRT
           rem python -m gdown 1GfmJ1BKbacLpUU-0i_mGu0sjrAS0Xzzi
-          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/11.3.0/zip/TensorRT-Enterprise-11.3.0.99-Windows-amd64-cuda-13.4-Release-external.zip
-          unzip TensorRT-Enterprise-11.3.0.99-Windows-amd64-cuda-13.4-Release-external.zip
-          move TensorRT-11.3.0.99 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
+          if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
+            curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/11.4.0/zip/TensorRT-Enterprise-11.4.0.106-Windows-arm64-cuda-13.4-Release-external.zip
+            unzip TensorRT-Enterprise-11.4.0.106-Windows-arm64-cuda-13.4-Release-external.zip
+          ) else (
+            curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/11.4.0/zip/TensorRT-Enterprise-11.4.0.106-Windows-amd64-cuda-13.4-Release-external.zip
+            unzip TensorRT-Enterprise-11.4.0.106-Windows-amd64-cuda-13.4-Release-external.zip
+          )
+          move TensorRT-11.4.0.106 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
         )
 
         if "%CI_DEPLOY_MODULE%"=="mkl" (

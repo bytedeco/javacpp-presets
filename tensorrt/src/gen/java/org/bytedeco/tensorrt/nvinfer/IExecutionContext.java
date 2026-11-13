@@ -878,6 +878,8 @@ public class IExecutionContext extends INoCopy {
     //!
     //!
     //!
+    //!
+    //!
     public native @NoException(true) IGpuAllocator getTemporaryStorageAllocator();
 
     /**
@@ -898,6 +900,19 @@ public class IExecutionContext extends INoCopy {
      * 
      *  \warning If the Engine is streaming weights, enqueueV3 will become synchronous, and
      *           the graph will not be capturable.
+     * 
+     *  \note When \p stream belongs to a CUDA green context, TensorRT compares its resources with the active
+     *        optimization profile's stored execution contract. TensorRT emits a warning if the stream has fewer SMs or
+     *        a smaller CGA size, or if the profile was built without CUDA green context constraints, and continues the
+     *        enqueue. This configuration may cause enqueue crashes or other undefined behavior. CUDA green context
+     *        execution requires both a TensorRT runtime built with CUDA Toolkit 13.0 or newer and a CUDA driver
+     *        compatible with CUDA 13.0 or newer.
+     * 
+     *  \warning When capturing this call in a CUDA graph, capture on a stream in the target CUDA green context and
+     *           execute the graph in that same context. The application must keep the green context alive until each
+     *           captured graph and every graph executable instantiated from it has been destroyed; another context with
+     *           identical resources is not interchangeable. A graph captured on an ordinary stream does not acquire
+     *           resource isolation when launched on a CUDA green context stream.
      *  */
     
     
@@ -987,6 +1002,9 @@ public class IExecutionContext extends INoCopy {
     //!
     //!
     //!
+    //!
+    //!
+    //!
     public native @NoException(true) ProfilingVerbosity getNvtxVerbosity();
 
     /**
@@ -1012,6 +1030,23 @@ public class IExecutionContext extends INoCopy {
      * 
      *  \note The provided auxiliary streams must not be the default stream and must all be different to avoid
      *        deadlocks.
+     * 
+     *  \note If any provided auxiliary stream used by TensorRT or the main stream passed to enqueueV3() is associated
+     *        with a CUDA green context, all provided auxiliary streams used by TensorRT and the main stream must belong
+     *        to the same CUDA green context. Otherwise, enqueueV3() reports an invalid-argument error and returns
+     *        false. When the main stream belongs to a CUDA green context, TensorRT creates any remaining auxiliary
+     *        streams in that same context.
+     * 
+     *  CUDA green context use requires both a TensorRT runtime built with CUDA Toolkit 13.0 or newer and a CUDA driver
+     *  compatible with CUDA 13.0 or newer. Ordinary auxiliary streams remain supported with older CUDA Toolkit and
+     *  driver versions supported by TensorRT.
+     * 
+     *  \warning TensorRT does not take ownership of the provided auxiliary streams. The application must keep each
+     *           provided auxiliary stream used by TensorRT, and any CUDA green context to which it belongs, alive while
+     *           the stream is configured for use by enqueueV3() and until all work enqueued on it has completed. If
+     *           TensorRT creates auxiliary streams in a CUDA green context, the application must keep that CUDA green
+     *           context alive while the execution context retains those streams and until all work enqueued on them
+     *           has completed.
      * 
      *  @see enqueueV3(), IBuilderConfig::setMaxAuxStreams(), ICudaEngine::getNbAuxStreams()
      *  */

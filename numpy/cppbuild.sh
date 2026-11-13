@@ -23,7 +23,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$BUILD_PATH_SEPARATOR"
     for P in $BUILD_PATH; do
         if [[ $(find "$P" -name Python.h) ]]; then
-            if [[ "$(basename $P)" == "$PLATFORM_HOST" ]]; then
+            if [[ "$(basename "$P")" == "${PLATFORM_HOST:-$PLATFORM}" ]]; then
                 CPYTHON_HOST_PATH="$P"
             fi
             if [[ "$(basename $P)" == "$PLATFORM" ]]; then
@@ -86,7 +86,8 @@ export PYTHONPATH="$PYTHON_INSTALL_PATH"
 mkdir -p "$PYTHON_INSTALL_PATH"
 
 TOOLS="setuptools==67.6.1 cython==3.2.6"
-if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH $TOOLS; then
+# Do not install build dependencies into the native ARM64 interpreter's standard library.
+if [[ $PLATFORM != windows-arm64 ]] && ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH $TOOLS; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.15"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
@@ -141,6 +142,11 @@ case $PLATFORM in
         ATLAS=None "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=build-dir=build
         # need to add RPATH so it can find MKL in cache
         for f in $(find ../ -iname *.so); do install_name_tool -add_rpath @loader_path/../../../ $f || true; done
+        ;;
+    windows-arm64)
+        export CC="cl.exe" CXX="cl.exe"
+        sedinplace 's/Cython>=3.1.0/Cython==3.2.6/' pyproject.toml
+        ATLAS=None PIP_NO_BINARY=cython NO_CYTHON_COMPILE=true "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=build-dir=build
         ;;
     windows-x86)
         # sedinplace '/ccompiler._default_compilers = /,+2d' numpy/distutils/ccompiler.py # don't try to use GCC

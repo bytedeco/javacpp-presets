@@ -435,6 +435,7 @@ public class IRefitter extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @Cast("bool") @NoException(true) boolean getWeightsValidation();
 
     /**
@@ -459,6 +460,9 @@ public class IRefitter extends INoCopy {
      *  IExecutionContexts associated with the engine remain valid for use afterwards. There is no need to set the same
      *  weights repeatedly for multiple refit calls as the weights memory can be updated directly instead. The weights
      *  updating task should use the same stream as the one used for the refit call.
+     * 
+     *  \warning CUDA green context streams are not supported. Passing one may cause crashes or other undefined
+     *  behavior. Use an ordinary CUDA stream instead.
      *  */
     
     
@@ -483,6 +487,23 @@ public class IRefitter extends INoCopy {
      * 
      *  \warning The string weightsName must be null-terminated, and be at most 4096 bytes including the terminator.
      *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
     public native @ByVal @NoException(true) Weights getWeightsPrototype(String weightsName);
     public native @ByVal @NoException(true) Weights getWeightsPrototype(@Cast("const char*") BytePointer weightsName);
+
+    /**
+     *  \brief Release resources cached for the engine associated with this refitter.
+     * 
+     *  @return True on success, false otherwise.
+     * 
+     *  A later refit recreates the resources as needed. The application must ensure that all previously enqueued
+     *  asynchronous refit work from every refitter sharing the same engine has completed and that no such refitter
+     *  executes a refit operation concurrently with this call.
+     *  */
+    public native @Cast("bool") @NoException(true) boolean releaseRefitResources();
 }

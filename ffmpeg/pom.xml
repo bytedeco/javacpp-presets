@@ -134,6 +134,32 @@
     </profile>
 
     <profile>
+      <id>windows-arm64-mingw</id>
+      <activation>
+        <property>
+          <name>javacpp.platform</name>
+          <value>windows-arm64</value>
+        </property>
+        <os><family>windows</family></os>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacpp</artifactId>
+            <configuration>
+              <propertyFile>${basedir}/src/main/resources/org/bytedeco/javacpp/properties/windows-arm64-mingw.properties</propertyFile>
+              <compilerOptions>
+                <compilerOption>-static-libgcc</compilerOption>
+                <compilerOption>-static-libstdc++</compilerOption>
+              </compilerOptions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
       <id>ffmpeg-gpl</id>
       <activation>
         <property>

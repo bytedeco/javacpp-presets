@@ -26,6 +26,9 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  \brief Layer that represents a squeeze operation, removing unit dimensions of the first input tensor
  *  on a set of axes specified by the second input tensor.
  * 
+ *  When the axes input is a nullptr, all dimensions of the first input whose size is statically 1 in
+ *  the network definition are removed.
+ * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
@@ -45,5 +48,8 @@ public class ISqueezeLayer extends ILayer {
      * 
      *  - 0: Input data tensor.
      *  - 1: The axes to remove. Must resolve to a constant Int32 or Int64 1D shape tensor.
+     * 
+     *  When the axes input is set to a nullptr, all dimensions of the first input whose size is statically 1 in
+     *  the network definition are removed.
      *  */
 }

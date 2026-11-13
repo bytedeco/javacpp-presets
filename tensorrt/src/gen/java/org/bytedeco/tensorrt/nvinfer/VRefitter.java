@@ -19,6 +19,7 @@ import static org.bytedeco.cuda.global.nvrtc.*;
 import static org.bytedeco.tensorrt.global.nvinfer.*;
 
 
+
 @Namespace("nvinfer1::apiv") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class VRefitter extends VRoot {
     static { Loader.load(); }
@@ -65,4 +66,6 @@ public class VRefitter extends VRoot {
     public native @Cast("bool") @NoException(true) boolean refitCudaEngineAsync(CUstream_st stream);
     public native @ByVal @NoException(true) Weights getWeightsPrototype(String weightsName);
     public native @ByVal @NoException(true) Weights getWeightsPrototype(@Cast("const char*") BytePointer weightsName);
+    // Added in TensorRT 11.4
+    public native @Cast("bool") @NoException(true) boolean releaseRefitResources();
 }

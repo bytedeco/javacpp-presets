@@ -1,5 +1,5 @@
 
- * Add `windows-arm64` builds for OpenBLAS, CPython, CUDA, OpenCL, ONNX, ONNX Runtime ([pull #1826](https://github.com/bytedeco/javacpp-presets/pull/1826))
+ * Add `windows-arm64` builds for FFmpeg, OpenBLAS, CPython, NumPy, CUDA, NVIDIA Video Codec SDK, OpenCL, TensorRT, ONNX, ONNX Runtime ([pull #1826](https://github.com/bytedeco/javacpp-presets/pull/1826), [pull #1827](https://github.com/bytedeco/javacpp-presets/pull/1827))
  * Fix missing `std::make_shared<torch::nn::DropoutImpl>` allocators in presets for PyTorch ([pull #1824](https://github.com/bytedeco/javacpp-presets/pull/1824))
  * Bundle the HDF5 filter plugins and `HDF5Plugins` helper class in presets for HDF5 ([pull #1821](https://github.com/bytedeco/javacpp-presets/pull/1821))
  * Build FFmpeg with Kvazaar encoding support ([pull #1820](https://github.com/bytedeco/javacpp-presets/pull/1820))
@@ -11,7 +11,7 @@
  * Make ONNX Runtime’s DNNL and OpenVINO dependencies optional ([pull #1802](https://github.com/bytedeco/javacpp-presets/pull/1802))
  * Map full C API of OpenVINO ([pull #1801](https://github.com/bytedeco/javacpp-presets/pull/1801))
  * Enable OpenCL acceleration for FFmpeg ([issue #1800](https://github.com/bytedeco/javacpp-presets/pull/1800))
- * Upgrade presets for FFmpeg 9.0.2, HDF5 2.2.0, CPython 3.15.2, NumPy 2.5.4, SciPy 1.18.1, PyTorch 2.15.0, CUDA 13.4.2, cuDNN 9.26.0.51, NCCL 2.31.2, TensorRT 11.3.0.99
+ * Upgrade presets for FFmpeg 9.0.2, HDF5 2.2.0, CPython 3.15.2, NumPy 2.5.4, SciPy 1.18.1, PyTorch 2.15.0, CUDA 13.4.2, cuDNN 9.26.0.51, NCCL 2.31.2, NVIDIA Video Codec SDK 13.1.24, TensorRT 11.4.0.106
 
 ### August 10, 2026 version 1.5.14
  * Include missing `refcount.h` header file in presets for CPython ([issue #1798](https://github.com/bytedeco/javacpp-presets/issues/1798))
