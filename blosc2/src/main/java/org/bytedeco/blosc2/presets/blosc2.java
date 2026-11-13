@@ -42,7 +42,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = javacpp.class, value = {
     @Platform(include = {"blosc2.h", "blosc2/blosc2-stdio.h", "b2nd.h"},
               link = "blosc2@.10"),
-    @Platform(value = "windows", link = "libblosc2")},
+    // the import library is blosc2.lib, but the DLL is named libblosc2.dll
+    @Platform(value = "windows", link = "blosc2", preload = "libblosc2")},
     target = "org.bytedeco.blosc2", global = "org.bytedeco.blosc2.global.blosc2")
 public class blosc2 implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "blosc2"); }
