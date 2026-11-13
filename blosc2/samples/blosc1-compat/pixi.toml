@@ -1,0 +1,8 @@
+[workspace]
+name = "blosc1-compat"
+channels = ["conda-forge"]
+platforms = ["osx-arm64", "osx-64", "linux-64", "linux-aarch64"]
+
+[dependencies]
+# conda-forge's name for C-Blosc 1.x
+blosc = "1.21.*"

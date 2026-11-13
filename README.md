@@ -20,6 +20,7 @@ JavaCPP Presets
 [![hdf5](https://github.com/bytedeco/javacpp-presets/workflows/hdf5/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Ahdf5)
 [![hyperscan](https://github.com/bytedeco/javacpp-presets/workflows/hyperscan/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Ahyperscan)
 [![lz4](https://github.com/bytedeco/javacpp-presets/workflows/lz4/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alz4)
+[![blosc2](https://github.com/bytedeco/javacpp-presets/workflows/blosc2/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Ablosc2)
 [![mkl](https://github.com/bytedeco/javacpp-presets/workflows/mkl/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amkl)
 [![mkl-dnn](https://github.com/bytedeco/javacpp-presets/workflows/mkl-dnn/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amkl-dnn)
 [![dnnl](https://github.com/bytedeco/javacpp-presets/workflows/dnnl/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Adnnl)
@@ -198,6 +199,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * HDF5 2.2.x  https://www.hdfgroup.org/downloads/
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
  * LZ4 1.9.x  https://github.com/lz4/lz4
+ * Blosc2 3.6.x  https://github.com/Blosc/c-blosc2
  * MKL 2026.1.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
  * DNNL 3.13.x  https://github.com/oneapi-src/oneDNN
