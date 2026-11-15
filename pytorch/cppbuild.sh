@@ -99,7 +99,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$BUILD_PATH_SEPARATOR"
     for P in $BUILD_PATH; do
         if [[ $(find "$P" -name Python.h) ]]; then
-            if [[ "$(basename $P)" == "${PLATFORM_HOST:-$PLATFORM}" ]]; then
+            if [[ "$(basename $P)" == "$PLATFORM_HOST" ]]; then
                 CPYTHON_HOST_PATH="$P"
             fi
             if [[ "$(basename $P)" == "$PLATFORM" ]]; then
@@ -147,11 +147,7 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/"
 export PYTHONNOUSERSITE=1
-if [[ $PLATFORM == windows-arm64 ]]; then
-    PIP_NO_BINARY=cython NO_CYTHON_COMPILE=true $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 pyyaml==6.0.2 typing_extensions==4.16.0 packaging==25.0 scikit-build-core==1.0.3 six==1.17.0
-else
-    $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 pyyaml==6.0.2 typing_extensions==4.16.0 packaging==25.0 scikit-build-core==1.0.3 six==1.17.0
-fi
+PIP_NO_BINARY=cython NO_CYTHON_COMPILE=true $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 pyyaml==6.0.2 typing_extensions==4.16.0 packaging==25.0 scikit-build-core==1.0.3 six==1.17.0
 
 case $PLATFORM in
     linux-x86)

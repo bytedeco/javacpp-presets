@@ -23,7 +23,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$BUILD_PATH_SEPARATOR"
     for P in $BUILD_PATH; do
         if [[ $(find "$P" -name Python.h) ]]; then
-            if [[ "$(basename "$P")" == "${PLATFORM_HOST:-$PLATFORM}" ]]; then
+            if [[ "$(basename "$P")" == "$PLATFORM_HOST" ]]; then
                 CPYTHON_HOST_PATH="$P"
             fi
             if [[ "$(basename $P)" == "$PLATFORM" ]]; then
