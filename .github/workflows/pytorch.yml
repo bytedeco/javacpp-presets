@@ -76,6 +76,9 @@ jobs:
           taskkill /IM cmake.exe /F /T
           taskkill /IM ninja.exe /F /T
           taskkill /IM ccache.exe /F /T
+          taskkill /IM nvcc.exe /F /T
+          taskkill /IM ptxas.exe /F /T
+          taskkill /IM cicc.exe /F /T
           taskkill /IM cl.exe /F /T
           sleep 60
         if: always()
@@ -90,6 +93,9 @@ jobs:
         TEMP: D:\temp
         TMP: D:\temp
     steps:
+      - name: Create temporary directory
+        shell: cmd
+        run: if not exist "%TEMP%" mkdir "%TEMP%"
       - uses: al-cheb/configure-pagefile-action@v1.3
         with:
           minimum-size: 32GB
