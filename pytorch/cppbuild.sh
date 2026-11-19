@@ -176,14 +176,14 @@ case $PLATFORM in
         # export PATH=$(brew --prefix llvm@18)/bin:$PATH # Use brew LLVM instead of Xcode LLVM 14
         ;;
     windows-arm64 | windows-x86_64)
+        export CC="cl.exe"
+        export CXX="cl.exe"
+#        export CUDAHOSTCC="cl.exe"
+#        export CUDAHOSTCXX="cl.exe"
         if which ccache.exe; then
-            export CC="ccache.exe cl.exe"
-            export CXX="ccache.exe cl.exe"
-#            export CUDAHOSTCC="cl.exe"
-#            export CUDAHOSTCXX="cl.exe"
-        else
-            export CC="cl.exe"
-            export CXX="cl.exe"
+            export CMAKE_C_COMPILER_LAUNCHER=ccache.exe
+            export CMAKE_CXX_COMPILER_LAUNCHER=ccache.exe
+            export CMAKE_CUDA_COMPILER_LAUNCHER=ccache.exe
         fi
         if [[ -n "${CUDA_PATH:-}" ]]; then
             export CUDACXX="$CUDA_PATH/bin/nvcc"
