@@ -62,7 +62,7 @@ if [[ $PLATFORM == windows* ]]; then
         cd build
         export CC="cl.exe"
         export CXX="cl.exe"
-        cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../libuv-v1.39.0 -DBUILD_TESTING=OFF
+        cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ../libuv-v1.39.0 -DBUILD_TESTING=OFF
         cmake --build . --config Release
         cmake --install . --config Release --prefix ../dist
         cd ../..
@@ -147,7 +147,7 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/"
 export PYTHONNOUSERSITE=1
-$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 pyyaml==6.0.2 typing_extensions==4.16.0 packaging==25.0 scikit-build-core==1.0.3 six==1.17.0
+PIP_NO_BINARY=cython NO_CYTHON_COMPILE=true $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 pyyaml==6.0.2 typing_extensions==4.16.0 packaging==25.0 scikit-build-core==1.0.3 six==1.17.0
 
 case $PLATFORM in
     linux-x86)
@@ -175,15 +175,15 @@ case $PLATFORM in
         sedinplace '/CHECK_FUNCTION_EXISTS(posix_fallocate HAVE_POSIX_FALLOCATE)/d' cmake/Dependencies.cmake aten/src/ATen/CMakeLists.txt
         # export PATH=$(brew --prefix llvm@18)/bin:$PATH # Use brew LLVM instead of Xcode LLVM 14
         ;;
-    windows-x86_64)
+    windows-arm64 | windows-x86_64)
+        export CC="cl.exe"
+        export CXX="cl.exe"
+#        export CUDAHOSTCC="cl.exe"
+#        export CUDAHOSTCXX="cl.exe"
         if which ccache.exe; then
-            export CC="ccache.exe cl.exe"
-            export CXX="ccache.exe cl.exe"
-#            export CUDAHOSTCC="cl.exe"
-#            export CUDAHOSTCXX="cl.exe"
-        else
-            export CC="cl.exe"
-            export CXX="cl.exe"
+            export CMAKE_C_COMPILER_LAUNCHER=ccache.exe
+            export CMAKE_CXX_COMPILER_LAUNCHER=ccache.exe
+            export CMAKE_CUDA_COMPILER_LAUNCHER=ccache.exe
         fi
         if [[ -n "${CUDA_PATH:-}" ]]; then
             export CUDACXX="$CUDA_PATH/bin/nvcc"
