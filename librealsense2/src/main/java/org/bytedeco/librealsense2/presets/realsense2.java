@@ -58,7 +58,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             },
             link = "realsense2@.2.53"
         ),
-        @Platform(value = "macosx", preload = "usb-1.0@.0", preloadpath = "/usr/local/lib/")
+        @Platform(value = "macosx", preload = "usb-1.0@.0", preloadpath = "/usr/local/lib/"),
+        @Platform(value = {"linux-arm64", "linux-x86_64", "windows-x86_64"},
+            extension = "-gpu"
+        )
     },
     target = "org.bytedeco.librealsense2",
     global = "org.bytedeco.librealsense2.global.realsense2"

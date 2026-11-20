@@ -38,8 +38,8 @@
         <configuration>
           <encoding>ISO-8859-1</encoding>
           <linkPaths>
-            <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
-            <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib64/</linkPath>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib64/</linkPath>
           </linkPaths>
         </configuration>
       </plugin>
