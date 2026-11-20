@@ -236,7 +236,8 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
 
     @Override
     public void init(Logger logger, java.util.Properties properties, String encoding) {
-        arm64 = properties.getProperty("platform").contains("arm64");
+        arm64 = properties.getProperty("platform").contains("arm64")
+                && !properties.getProperty("platform").startsWith("windows");
     }
 
     public void mapModule(InfoMap infoMap, String name) {
