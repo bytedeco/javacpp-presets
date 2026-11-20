@@ -1,5 +1,5 @@
 JavaCPP Presets for Blosc2
-=======================
+==========================
 
 [![Gitter](https://badges.gitter.im/bytedeco/javacpp.svg)](https://gitter.im/bytedeco/javacpp) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/blosc2/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/blosc2) [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.bytedeco/blosc2.svg)](http://bytedeco.org/builds/)  
 <sup>Build status for all platforms:</sup> [![blosc2](https://github.com/bytedeco/javacpp-presets/workflows/blosc2/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Ablosc2)  <sup>Commercial support:</sup> [![xscode](https://img.shields.io/badge/Available%20on-xs%3Acode-blue?style=?style=plastic&logo=appveyor&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAZQTFRF////////VXz1bAAAAAJ0Uk5T/wDltzBKAAAAlUlEQVR42uzXSwqAMAwE0Mn9L+3Ggtgkk35QwcnSJo9S+yGwM9DCooCbgn4YrJ4CIPUcQF7/XSBbx2TEz4sAZ2q1RAECBAiYBlCtvwN+KiYAlG7UDGj59MViT9hOwEqAhYCtAsUZvL6I6W8c2wcbd+LIWSCHSTeSAAECngN4xxIDSK9f4B9t377Wd7H5Nt7/Xz8eAgwAvesLRjYYPuUAAAAASUVORK5CYII=)](https://xscode.com/bytedeco/javacpp-presets)
@@ -38,17 +38,17 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.blosc2</groupId>
     <artifactId>blosc2-round-trip-example</artifactId>
-    <version>1.5.7</version>
+    <version>1.5.15-SNAPSHOT</version>
     <properties>
         <exec.mainClass>BloscRoundTripExample</exec.mainClass>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>blosc2-platform</artifactId>
-            <version>3.6.2-1.5.7</version>
+            <version>3.6.2-1.5.15-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
@@ -128,5 +128,5 @@ public class BloscRoundTripExample {
 
 
 ---
-Copyright (C) 2022 Mark Kittisopikul
+Copyright (C) 2026 Mark Kittisopikul
 Project Info: https://github.com/bytedeco/javacpp-presets/tree/master/blosc2

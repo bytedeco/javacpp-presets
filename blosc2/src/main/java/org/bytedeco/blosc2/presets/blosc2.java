@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Mark Kittisopikul
+ * Copyright (C) 2026 Mark Kittisopikul
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
