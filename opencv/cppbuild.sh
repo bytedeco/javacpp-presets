@@ -11,6 +11,13 @@ OPENCV_VERSION=4.14.0
 download https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 download https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz
 
+if [[ "$PLATFORM" == macosx-x86_64 ]]; then
+    AOM_VERSION=3.12.1
+    AVIF_VERSION=1.1.1
+    download https://storage.googleapis.com/aom-releases/libaom-$AOM_VERSION.tar.gz libaom-$AOM_VERSION.tar.gz
+    download https://github.com/AOMediaCodec/libavif/archive/v$AVIF_VERSION.tar.gz libavif-$AVIF_VERSION.tar.gz
+fi
+
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
 INSTALL_PATH=`pwd`
@@ -398,16 +405,155 @@ case $PLATFORM in
         sedinplace "s/.${OPENCV_VERSION%-*}.dylib/.dylib/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     macosx-x86_64)
+        AVIF_PREFIX="$INSTALL_PATH/avif"
+        MAC_TARGET=(-DCMAKE_OSX_ARCHITECTURES=x86_64 "-DCMAKE_OSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET:-}")
+        (
+            # Downloaded archives are untrusted input. Cap compressed size, inflated
+            # bytes, entry count, path length, and directory depth, and reject links
+            # or members outside the pinned source root before tar extracts anything.
+            extract_bounded_archive() {
+                local archive="$1"
+                local root="$2"
+                local max_compressed=$((32 * 1024 * 1024))
+                local max_bytes=$((64 * 1024 * 1024))
+                local max_entries=5000
+                local max_path=256
+                local max_depth=16
+                local name_cap=$((max_entries * (max_path + 1)))
+                local verbose_cap=$((max_entries * (max_path + 160)))
+                local comp_size raw raw_size names verbose
+                local count depth line path component rest list_size verbose_count
+
+                raw=""
+                names=""
+                verbose=""
+                archive_reject() {
+                    echo "$1" >&2
+                    rm -f -- "$raw" "$names" "$verbose"
+                    exit 1
+                }
+
+                case "$root" in
+                    *[!A-Za-z0-9._-]*|""|.*) archive_reject "Unsafe archive root" ;;
+                esac
+                [[ -f "$archive" ]] || archive_reject "Missing archive $archive"
+                comp_size=$(wc -c < "$archive" | tr -d '[:space:]')
+                if [[ "$comp_size" -eq 0 || "$comp_size" -gt "$max_compressed" ]]; then
+                    archive_reject "Archive $archive exceeds the compressed size bound"
+                fi
+
+                raw=$(mktemp)
+                names=$(mktemp)
+                verbose=$(mktemp)
+                trap "rm -f -- '$raw' '$names' '$verbose'" EXIT
+                # Stop a gzip bomb before tar allocates from member headers.
+                gzip -dc "$archive" | head -c $((max_bytes + 1)) > "$raw"
+                raw_size=$(wc -c < "$raw" | tr -d '[:space:]')
+                if [[ "$raw_size" -eq 0 || "$raw_size" -gt "$max_bytes" ]]; then
+                    archive_reject "Archive $archive exceeds the uncompressed size bound"
+                fi
+
+                if ! (set -o pipefail; tar -tf "$raw" | head -c $((name_cap + 1)) > "$names"); then
+                    list_size=$(wc -c < "$names" | tr -d '[:space:]')
+                    if [[ "$list_size" -le "$name_cap" ]]; then
+                        archive_reject "Archive $archive could not be listed"
+                    fi
+                fi
+                list_size=$(wc -c < "$names" | tr -d '[:space:]')
+                if [[ "$list_size" -eq 0 || "$list_size" -gt "$name_cap" ]]; then
+                    archive_reject "Archive $archive member list exceeds its bound"
+                fi
+
+                count=0
+                while IFS= read -r line || [[ -n "$line" ]]; do
+                    count=$((count + 1))
+                    if [[ "$count" -gt "$max_entries" || "${#line}" -gt "$max_path" ]]; then
+                        archive_reject "Archive $archive exceeds entry or path bounds"
+                    fi
+                    path=${line%/}
+                    while [[ "$path" == ./* ]]; do
+                        path=${path#./}
+                    done
+                    case "$path" in
+                        "$root"|"$root"/*) ;;
+                        *) archive_reject "Archive $archive contains an unexpected member" ;;
+                    esac
+                    rest=$path
+                    depth=0
+                    while [[ -n "$rest" ]]; do
+                        component=${rest%%/*}
+                        if [[ -z "$component" || "$component" == ".." ]]; then
+                            archive_reject "Archive $archive contains an unsafe path"
+                        fi
+                        depth=$((depth + 1))
+                        if [[ "$depth" -gt "$max_depth" ]]; then
+                            archive_reject "Archive $archive exceeds path depth"
+                        fi
+                        if [[ "$rest" == */* ]]; then
+                            rest=${rest#*/}
+                        else
+                            break
+                        fi
+                    done
+                done < "$names"
+
+                if ! (set -o pipefail; tar -tvf "$raw" | head -c $((verbose_cap + 1)) > "$verbose"); then
+                    list_size=$(wc -c < "$verbose" | tr -d '[:space:]')
+                    if [[ "$list_size" -le "$verbose_cap" ]]; then
+                        archive_reject "Archive $archive could not be inspected"
+                    fi
+                fi
+                list_size=$(wc -c < "$verbose" | tr -d '[:space:]')
+                if [[ "$list_size" -gt "$verbose_cap" ]]; then
+                    archive_reject "Archive $archive metadata listing exceeds its bound"
+                fi
+                verbose_count=0
+                while IFS= read -r line || [[ -n "$line" ]]; do
+                    verbose_count=$((verbose_count + 1))
+                    case "$line" in
+                        [-d]*) ;;
+                        *) archive_reject "Archive $archive contains a non-regular member" ;;
+                    esac
+                done < "$verbose"
+                if [[ "$verbose_count" -ne "$count" ]]; then
+                    archive_reject "Archive $archive listing is inconsistent"
+                fi
+
+                tar -xf "$raw"
+                [[ -d "$root" ]] || archive_reject "Archive $archive did not contain $root"
+                rm -f -- "$raw" "$names" "$verbose"
+                trap - EXIT
+            }
+            cd "$INSTALL_PATH"
+            extract_bounded_archive "../libaom-$AOM_VERSION.tar.gz" "libaom-$AOM_VERSION"
+            extract_bounded_archive "../libavif-$AVIF_VERSION.tar.gz" "libavif-$AVIF_VERSION"
+            STATIC_FLAGS=("${MAC_TARGET[@]}" "-DCMAKE_INSTALL_PREFIX=$AVIF_PREFIX" -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF)
+            $CMAKE -S libaom-$AOM_VERSION -B libaom-$AOM_VERSION/build "${STATIC_FLAGS[@]}" \
+                -DAOM_TARGET_CPU=generic -DENABLE_TESTS=OFF -DENABLE_EXAMPLES=OFF -DENABLE_TOOLS=OFF -DENABLE_DOCS=OFF
+            $CMAKE --build libaom-$AOM_VERSION/build --target install -j "$MAKEJ"
+            $CMAKE -S libavif-$AVIF_VERSION -B libavif-$AVIF_VERSION/build "${STATIC_FLAGS[@]}" \
+                -DAVIF_CODEC_AOM=SYSTEM -DAOM_INCLUDE_DIR="$AVIF_PREFIX/include" -DAOM_LIBRARY="$AVIF_PREFIX/lib/libaom.a" \
+                -DAVIF_LIBYUV=OFF -DAVIF_LIBSHARPYUV=OFF
+            $CMAKE --build libavif-$AVIF_VERSION/build --target install -j "$MAKEJ"
+        )
         # also use pthreads on Mac for increased usability and more consistent behavior with Linux
         sedinplace '/IF HAVE_GCD/d' CMakeLists.txt
-        CC="clang -arch x86_64" CXX="clang++ -arch x86_64" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
+        CC="clang -arch x86_64" CXX="clang++ -arch x86_64" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" "${MAC_TARGET[@]}" \
+            -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
+            -DAVIF_LIBRARY:STRING="$AVIF_PREFIX/lib/libavif.a;$AVIF_PREFIX/lib/libaom.a" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
             $CMAKE .
         fi
+        grep -Eq '^#define HAVE_AVIF([[:space:]]|$)' cvconfig.h || { echo "OpenCV AVIF support is missing" >&2; exit 1; }
         make -j $MAKEJ
         make install/strip
+        IMGCODECS_DEPS=$(otool -L "$INSTALL_PATH/lib/libopencv_imgcodecs.dylib")
+        if echo "$IMGCODECS_DEPS" | grep -Eq '/lib(avif|aom)([.][^/]*)?[.]dylib'; then
+            echo "Unexpected shared AVIF dependency in libopencv_imgcodecs" >&2
+            exit 1
+        fi
         cp ../share/java/opencv4/libopencv_java.dylib ../lib
         sedinplace "s/.${OPENCV_VERSION%-*}.dylib/.dylib/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
