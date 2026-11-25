@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = opencv_imgproc.class,
     value = {
         @Platform(include = {/*"<opencv2/imgcodecs/imgcodecs_c.h>",*/ "<opencv2/imgcodecs.hpp>"}, link = "opencv_imgcodecs@.414"),
-        @Platform(value = "ios", preload = "libopencv_imgcodecs"),
+        @Platform(value = "ios", preload = {"libopencv_imgcodecs", "libavif", "libaom"}),
         @Platform(value = "windows", link = "opencv_imgcodecs4140")},
     global = "org.bytedeco.opencv.global.opencv_imgcodecs",
     helper = "org.bytedeco.opencv.helper.opencv_imgcodecs"

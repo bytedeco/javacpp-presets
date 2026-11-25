@@ -11,16 +11,39 @@ OPENCV_VERSION=4.14.0
 download https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 download https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz
 
-if [[ "$PLATFORM" == macosx-x86_64 ]]; then
-    AOM_VERSION=3.12.1
-    AVIF_VERSION=1.1.1
-    download https://storage.googleapis.com/aom-releases/libaom-$AOM_VERSION.tar.gz libaom-$AOM_VERSION.tar.gz
-    download https://github.com/AOMediaCodec/libavif/archive/v$AVIF_VERSION.tar.gz libavif-$AVIF_VERSION.tar.gz
-fi
+AOM_VERSION=3.12.1
+AVIF_VERSION=1.1.1
+download https://storage.googleapis.com/aom-releases/libaom-$AOM_VERSION.tar.gz libaom-$AOM_VERSION.tar.gz
+download https://github.com/AOMediaCodec/libavif/archive/v$AVIF_VERSION.tar.gz libavif-$AVIF_VERSION.tar.gz
+
+build_avif() {
+    local AVIF_PREFIX="${AVIF_PREFIX:-$INSTALL_PATH/avif}"
+    local AOM_LIB="$AVIF_PREFIX/lib/libaom.a"
+    if [[ "$PLATFORM" == windows* ]]; then
+        AOM_LIB="$AVIF_PREFIX/lib/aom.lib"
+    fi
+    (
+        cd "$INSTALL_PATH"
+        tar --totals -xzf ../libaom-$AOM_VERSION.tar.gz
+        tar --totals -xzf ../libavif-$AVIF_VERSION.tar.gz
+        STATIC_FLAGS=("-DCMAKE_INSTALL_PREFIX=$AVIF_PREFIX" -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON)
+        if [[ $# -gt 0 ]]; then
+            STATIC_FLAGS=("$@" "${STATIC_FLAGS[@]}")
+        fi
+        "$CMAKE" -S libaom-$AOM_VERSION -B libaom-$AOM_VERSION/build "${STATIC_FLAGS[@]}" \
+            -DAOM_TARGET_CPU=generic -DENABLE_TESTS=OFF -DENABLE_EXAMPLES=OFF -DENABLE_TOOLS=OFF -DENABLE_DOCS=OFF
+        "$CMAKE" --build libaom-$AOM_VERSION/build --target install -j "$MAKEJ"
+        "$CMAKE" -S libavif-$AVIF_VERSION -B libavif-$AVIF_VERSION/build "${STATIC_FLAGS[@]}" \
+            -DAVIF_CODEC_AOM=SYSTEM -DAOM_INCLUDE_DIR="$AVIF_PREFIX/include" -DAOM_LIBRARY="$AOM_LIB" \
+            -DAVIF_LIBYUV=OFF -DAVIF_LIBSHARPYUV=OFF
+        "$CMAKE" --build libavif-$AVIF_VERSION/build --target install -j "$MAKEJ"
+    )
+}
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
 INSTALL_PATH=`pwd`
+AVIF_PREFIX="$INSTALL_PATH/avif"
 
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
@@ -219,7 +242,10 @@ fi
 
 case $PLATFORM in
     android-arm)
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X .
+        build_avif -DCMAKE_TOOLCHAIN_FILE="${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake" -DANDROID_ABI=armeabi-v7a -DANDROID_NATIVE_API_LEVEL=24
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X \
+            -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
+            -DAVIF_LIBRARY:STRING="$AVIF_PREFIX/lib/libavif.a;$AVIF_PREFIX/lib/libaom.a" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -234,7 +260,10 @@ case $PLATFORM in
         sedinplace 's:/sdk/native/libs/armeabi-v7a/libopencv_:/lib/libopencv_:g' ../sdk/native/jni/abi-armeabi-v7a/OpenCVModules-release.cmake
         ;;
     android-arm64)
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X .
+        build_avif -DCMAKE_TOOLCHAIN_FILE="${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake" -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=24
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X \
+            -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
+            -DAVIF_LIBRARY:STRING="$AVIF_PREFIX/lib/libavif.a;$AVIF_PREFIX/lib/libaom.a" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -249,7 +278,10 @@ case $PLATFORM in
         sedinplace 's:/sdk/native/libs/arm64-v8a/libopencv_:/lib/libopencv_:g' ../sdk/native/jni/abi-arm64-v8a/OpenCVModules-release.cmake
         ;;
     android-x86)
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X .
+        build_avif -DCMAKE_TOOLCHAIN_FILE="${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake" -DANDROID_ABI=x86 -DANDROID_NATIVE_API_LEVEL=24
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X \
+            -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
+            -DAVIF_LIBRARY:STRING="$AVIF_PREFIX/lib/libavif.a;$AVIF_PREFIX/lib/libaom.a" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -264,7 +296,10 @@ case $PLATFORM in
         sedinplace 's:/sdk/native/libs/x86/libopencv_:/lib/libopencv_:g' ../sdk/native/jni/abi-x86/OpenCVModules-release.cmake
         ;;
     android-x86_64)
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86_64 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X .
+        build_avif -DCMAKE_TOOLCHAIN_FILE="${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake" -DANDROID_ABI=x86_64 -DANDROID_NATIVE_API_LEVEL=24
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86_64 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X \
+            -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
+            -DAVIF_LIBRARY:STRING="$AVIF_PREFIX/lib/libavif.a;$AVIF_PREFIX/lib/libaom.a" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -279,7 +314,10 @@ case $PLATFORM in
         sedinplace 's:/sdk/native/libs/x86_64/libopencv_:/lib/libopencv_:g' ../sdk/native/jni/abi-x86_64/OpenCVModules-release.cmake
         ;;
     ios-arm64)
-        IPHONEOS_DEPLOYMENT_TARGET=8.0 $CMAKE -GXcode -DCMAKE_TOOLCHAIN_FILE=platforms/ios/cmake/Toolchains/Toolchain-iPhoneOS_Xcode.cmake -DIPHONEOS_DEPLOYMENT_TARGET=8.0 -DIOS_ARCH=arm64 -DAPPLE_FRAMEWORK=ON -DCMAKE_MACOSX_BUNDLE=ON -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO -DCMAKE_XCODE_ATTRIBUTE_BITCODE_GENERATION_MODE=NO -DBUILD_opencv_world=OFF -DBUILD_SHARED_LIBS=OFF $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENCL=OFF $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-I/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/ -I$(/usr/libexec/java_home)/include -I$(/usr/libexec/java_home)/include/darwin" .
+        build_avif -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphoneos -DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_OSX_DEPLOYMENT_TARGET=8.0 -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY
+        IPHONEOS_DEPLOYMENT_TARGET=8.0 $CMAKE -GXcode -DCMAKE_TOOLCHAIN_FILE=platforms/ios/cmake/Toolchains/Toolchain-iPhoneOS_Xcode.cmake -DIPHONEOS_DEPLOYMENT_TARGET=8.0 -DIOS_ARCH=arm64 -DAPPLE_FRAMEWORK=ON -DCMAKE_MACOSX_BUNDLE=ON -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO -DCMAKE_XCODE_ATTRIBUTE_BITCODE_GENERATION_MODE=NO -DBUILD_opencv_world=OFF -DBUILD_SHARED_LIBS=OFF $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENCL=OFF $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-I/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/ -I$(/usr/libexec/java_home)/include -I$(/usr/libexec/java_home)/include/darwin" \
+            -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
+            -DAVIF_LIBRARY:STRING="$AVIF_PREFIX/lib/libavif.a;$AVIF_PREFIX/lib/libaom.a" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -288,9 +326,13 @@ case $PLATFORM in
         xcodebuild -arch arm64 -sdk iphoneos -configuration Release -parallelizeTargets -jobs $MAKEJ ONLY_ACTIVE_ARCH=NO -target ALL_BUILD build > /dev/null
         $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -P cmake_install.cmake .
         cp ../share/java/opencv4/libopencv_java.a ../lib
+        cp "$AVIF_PREFIX/lib/libavif.a" "$AVIF_PREFIX/lib/libaom.a" ../lib
         ;;
     ios-x86_64)
-        IPHONEOS_DEPLOYMENT_TARGET=8.0 $CMAKE -GXcode -DCMAKE_TOOLCHAIN_FILE=platforms/ios/cmake/Toolchains/Toolchain-iPhoneSimulator_Xcode.cmake -DIPHONEOS_DEPLOYMENT_TARGET=8.0 -DIOS_ARCH=x86_64 -DAPPLE_FRAMEWORK=ON -DCMAKE_MACOSX_BUNDLE=ON -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO -DCMAKE_XCODE_ATTRIBUTE_BITCODE_GENERATION_MODE=NO -DBUILD_opencv_world=OFF -DBUILD_SHARED_LIBS=OFF $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENCL=OFF $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-I/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/ -I$(/usr/libexec/java_home)/include -I$(/usr/libexec/java_home)/include/darwin" .
+        build_avif -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphonesimulator -DCMAKE_OSX_ARCHITECTURES=x86_64 -DCMAKE_OSX_DEPLOYMENT_TARGET=8.0 -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY
+        IPHONEOS_DEPLOYMENT_TARGET=8.0 $CMAKE -GXcode -DCMAKE_TOOLCHAIN_FILE=platforms/ios/cmake/Toolchains/Toolchain-iPhoneSimulator_Xcode.cmake -DIPHONEOS_DEPLOYMENT_TARGET=8.0 -DIOS_ARCH=x86_64 -DAPPLE_FRAMEWORK=ON -DCMAKE_MACOSX_BUNDLE=ON -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO -DCMAKE_XCODE_ATTRIBUTE_BITCODE_GENERATION_MODE=NO -DBUILD_opencv_world=OFF -DBUILD_SHARED_LIBS=OFF $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENCL=OFF $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-I/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/ -I$(/usr/libexec/java_home)/include -I$(/usr/libexec/java_home)/include/darwin" \
+            -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
+            -DAVIF_LIBRARY:STRING="$AVIF_PREFIX/lib/libavif.a;$AVIF_PREFIX/lib/libaom.a" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -299,9 +341,13 @@ case $PLATFORM in
         xcodebuild -arch x86_64 -sdk iphonesimulator -configuration Release -parallelizeTargets -jobs $MAKEJ ONLY_ACTIVE_ARCH=NO -target ALL_BUILD build > /dev/null
         $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -P cmake_install.cmake .
         cp ../share/java/opencv4/libopencv_java.a ../lib
+        cp "$AVIF_PREFIX/lib/libavif.a" "$AVIF_PREFIX/lib/libaom.a" ../lib
         ;;
     linux-x86)
-        PKG_CONFIG_PATH=/usr/lib/pkgconfig/ CC="gcc -m32" CXX="g++ -std=c++11 -m32 -I/usr/lib/glib-2.0/include/" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DENABLE_SSE3=OFF $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which g++)" $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
+        CC="gcc -m32" CXX="g++ -std=c++11 -m32" build_avif
+        PKG_CONFIG_PATH=/usr/lib/pkgconfig/ CC="gcc -m32" CXX="g++ -std=c++11 -m32 -I/usr/lib/glib-2.0/include/" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DENABLE_SSE3=OFF $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which g++)" $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" \
+            -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
+            -DAVIF_LIBRARY:STRING="$AVIF_PREFIX/lib/libavif.a;$AVIF_PREFIX/lib/libaom.a" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -313,7 +359,10 @@ case $PLATFORM in
         sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-x86_64)
-        PKG_CONFIG_PATH=/usr/lib64/pkgconfig/ CC="gcc -m64" CXX="g++ -std=c++11 -m64" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which g++)" $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
+        CC="gcc -m64" CXX="g++ -std=c++11 -m64" build_avif
+        PKG_CONFIG_PATH=/usr/lib64/pkgconfig/ CC="gcc -m64" CXX="g++ -std=c++11 -m64" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which g++)" $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" \
+            -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
+            -DAVIF_LIBRARY:STRING="$AVIF_PREFIX/lib/libavif.a;$AVIF_PREFIX/lib/libaom.a" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -325,7 +374,10 @@ case $PLATFORM in
         sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-arm)
-        CC="arm-linux-gnueabi-gcc" CXX="arm-linux-gnueabi-g++ -std=c++11" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which arm-linux-gnueabi-g++)" $BUILD_CONTRIB_X .
+        CC="arm-linux-gnueabi-gcc" CXX="arm-linux-gnueabi-g++ -std=c++11" build_avif
+        CC="arm-linux-gnueabi-gcc" CXX="arm-linux-gnueabi-g++ -std=c++11" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which arm-linux-gnueabi-g++)" $BUILD_CONTRIB_X \
+            -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
+            -DAVIF_LIBRARY:STRING="$AVIF_PREFIX/lib/libavif.a;$AVIF_PREFIX/lib/libaom.a" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -337,7 +389,10 @@ case $PLATFORM in
         sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-armhf)
-        PKG_CONFIG_PATH=/usr/lib/arm-linux-gnueabihf/pkgconfig/ CC="arm-linux-gnueabihf-gcc -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CXX="arm-linux-gnueabihf-g++ -std=c++11 -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_SYSTEM_PROCESSOR=armv6 -DBUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="" -DCMAKE_C_FLAGS="" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which arm-linux-gnueabihf-g++)" $BUILD_CONTRIB_X .
+        CC="arm-linux-gnueabihf-gcc" CXX="arm-linux-gnueabihf-g++ -std=c++11" build_avif -DCMAKE_SYSTEM_PROCESSOR=armv6
+        PKG_CONFIG_PATH=/usr/lib/arm-linux-gnueabihf/pkgconfig/ CC="arm-linux-gnueabihf-gcc -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CXX="arm-linux-gnueabihf-g++ -std=c++11 -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_SYSTEM_PROCESSOR=armv6 -DBUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="" -DCMAKE_C_FLAGS="" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which arm-linux-gnueabihf-g++)" $BUILD_CONTRIB_X \
+            -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
+            -DAVIF_LIBRARY:STRING="$AVIF_PREFIX/lib/libavif.a;$AVIF_PREFIX/lib/libaom.a" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -349,7 +404,10 @@ case $PLATFORM in
         sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-arm64)
-        PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig/ CC="aarch64-linux-gnu-gcc -DITT_ARCH=4 -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CXX="aarch64-linux-gnu-g++ -std=c++11 -DITT_ARCH=4 -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DAARCH64=ON -DENABLE_NEON=ON -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DBUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="" -DCMAKE_C_FLAGS="" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which aarch64-linux-gnu-g++)" $BUILD_CONTRIB_X .
+        CC="aarch64-linux-gnu-gcc" CXX="aarch64-linux-gnu-g++ -std=c++11" build_avif -DCMAKE_SYSTEM_PROCESSOR=aarch64
+        PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig/ CC="aarch64-linux-gnu-gcc -DITT_ARCH=4 -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CXX="aarch64-linux-gnu-g++ -std=c++11 -DITT_ARCH=4 -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DAARCH64=ON -DENABLE_NEON=ON -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DBUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="" -DCMAKE_C_FLAGS="" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which aarch64-linux-gnu-g++)" $BUILD_CONTRIB_X \
+            -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
+            -DAVIF_LIBRARY:STRING="$AVIF_PREFIX/lib/libavif.a;$AVIF_PREFIX/lib/libaom.a" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -363,10 +421,16 @@ case $PLATFORM in
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          CC="gcc -m64 -mpower8-vector -DCV_CPU_COMPILE_VSX -I$JAVA_HOME/include/" CXX="g++ -std=c++11 -m64 -mpower8-vector -DCV_CPU_COMPILE_VSX -I$JAVA_HOME/include/" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which g++)" $BUILD_CONTRIB_X .
+          CC="gcc -m64" CXX="g++ -std=c++11 -m64" build_avif
+          CC="gcc -m64 -mpower8-vector -DCV_CPU_COMPILE_VSX -I$JAVA_HOME/include/" CXX="g++ -std=c++11 -m64 -mpower8-vector -DCV_CPU_COMPILE_VSX -I$JAVA_HOME/include/" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which g++)" $BUILD_CONTRIB_X \
+              -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
+              -DAVIF_LIBRARY:STRING="$AVIF_PREFIX/lib/libavif.a;$AVIF_PREFIX/lib/libaom.a" .
         else
           echo "Not native ppc so assume cross compiling"
-          PKG_CONFIG_PATH=/usr/lib/powerpc64le-linux-gnu/pkgconfig/ CC="powerpc64le-linux-gnu-gcc -m64 -mpower8-vector -DCV_CPU_COMPILE_VSX -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CXX="powerpc64le-linux-gnu-g++ -std=c++11 -m64 -mpower8-vector -DCV_CPU_COMPILE_VSX -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X .
+          CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -std=c++11 -m64" build_avif
+          PKG_CONFIG_PATH=/usr/lib/powerpc64le-linux-gnu/pkgconfig/ CC="powerpc64le-linux-gnu-gcc -m64 -mpower8-vector -DCV_CPU_COMPILE_VSX -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CXX="powerpc64le-linux-gnu-g++ -std=c++11 -m64 -mpower8-vector -DCV_CPU_COMPILE_VSX -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X \
+              -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
+              -DAVIF_LIBRARY:STRING="$AVIF_PREFIX/lib/libavif.a;$AVIF_PREFIX/lib/libaom.a" .
         fi
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
@@ -379,7 +443,10 @@ case $PLATFORM in
         sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-mips64el)
-        CC="gcc -mabi=64" CXX="g++ -std=c++11 -mabi=64" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which g++)" $BUILD_CONTRIB_X .
+        CC="gcc -mabi=64" CXX="g++ -std=c++11 -mabi=64" build_avif
+        CC="gcc -mabi=64" CXX="g++ -std=c++11 -mabi=64" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which g++)" $BUILD_CONTRIB_X \
+            -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
+            -DAVIF_LIBRARY:STRING="$AVIF_PREFIX/lib/libavif.a;$AVIF_PREFIX/lib/libaom.a" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -391,9 +458,13 @@ case $PLATFORM in
         sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     macosx-arm64)
+        MAC_TARGET=(-DCMAKE_OSX_ARCHITECTURES=arm64 "-DCMAKE_OSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET:-}")
+        build_avif "${MAC_TARGET[@]}"
         # also use pthreads on Mac for increased usability and more consistent behavior with Linux
         sedinplace '/IF HAVE_GCD/d' CMakeLists.txt
-        CC="clang -arch arm64" CXX="clang++ -arch arm64" $CMAKE -DAARCH64=ON -DENABLE_NEON=ON -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
+        CC="clang -arch arm64" CXX="clang++ -arch arm64" $CMAKE -DAARCH64=ON -DENABLE_NEON=ON -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" "${MAC_TARGET[@]}" \
+            -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
+            -DAVIF_LIBRARY:STRING="$AVIF_PREFIX/lib/libavif.a;$AVIF_PREFIX/lib/libaom.a" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -405,21 +476,8 @@ case $PLATFORM in
         sedinplace "s/.${OPENCV_VERSION%-*}.dylib/.dylib/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     macosx-x86_64)
-        AVIF_PREFIX="$INSTALL_PATH/avif"
         MAC_TARGET=(-DCMAKE_OSX_ARCHITECTURES=x86_64 "-DCMAKE_OSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET:-}")
-        (
-            cd "$INSTALL_PATH"
-            tar --totals -xzf ../libaom-$AOM_VERSION.tar.gz
-            tar --totals -xzf ../libavif-$AVIF_VERSION.tar.gz
-            STATIC_FLAGS=("${MAC_TARGET[@]}" "-DCMAKE_INSTALL_PREFIX=$AVIF_PREFIX" -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF)
-            $CMAKE -S libaom-$AOM_VERSION -B libaom-$AOM_VERSION/build "${STATIC_FLAGS[@]}" \
-                -DAOM_TARGET_CPU=generic -DENABLE_TESTS=OFF -DENABLE_EXAMPLES=OFF -DENABLE_TOOLS=OFF -DENABLE_DOCS=OFF
-            $CMAKE --build libaom-$AOM_VERSION/build --target install -j "$MAKEJ"
-            $CMAKE -S libavif-$AVIF_VERSION -B libavif-$AVIF_VERSION/build "${STATIC_FLAGS[@]}" \
-                -DAVIF_CODEC_AOM=SYSTEM -DAOM_INCLUDE_DIR="$AVIF_PREFIX/include" -DAOM_LIBRARY="$AVIF_PREFIX/lib/libaom.a" \
-                -DAVIF_LIBYUV=OFF -DAVIF_LIBSHARPYUV=OFF
-            $CMAKE --build libavif-$AVIF_VERSION/build --target install -j "$MAKEJ"
-        )
+        build_avif "${MAC_TARGET[@]}"
         # also use pthreads on Mac for increased usability and more consistent behavior with Linux
         sedinplace '/IF HAVE_GCD/d' CMakeLists.txt
         CC="clang -arch x86_64" CXX="clang++ -arch x86_64" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" "${MAC_TARGET[@]}" \
@@ -444,7 +502,10 @@ case $PLATFORM in
     windows-x86)
         export CC="cl.exe"
         export CXX="cl.exe"
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=ON $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DPYTHON_EXECUTABLE="$(where python.exe | head -1)" .
+        build_avif -G "Ninja"
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=ON $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DPYTHON_EXECUTABLE="$(where python.exe | head -1)" \
+            -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
+            -DAVIF_LIBRARY:STRING="$AVIF_PREFIX/lib/avif.lib;$AVIF_PREFIX/lib/aom.lib" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -462,7 +523,10 @@ case $PLATFORM in
     windows-x86_64)
         export CC="cl.exe"
         export CXX="cl.exe"
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=ON $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DPYTHON_EXECUTABLE="$(where python.exe | head -1)" .
+        build_avif -G "Ninja"
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=ON $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DPYTHON_EXECUTABLE="$(where python.exe | head -1)" \
+            -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
+            -DAVIF_LIBRARY:STRING="$AVIF_PREFIX/lib/avif.lib;$AVIF_PREFIX/lib/aom.lib" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
