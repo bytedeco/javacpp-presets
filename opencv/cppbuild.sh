@@ -502,6 +502,7 @@ case $PLATFORM in
     windows-x86)
         export CC="cl.exe"
         export CXX="cl.exe"
+        AVIF_PREFIX="$(cygpath -m "$INSTALL_PATH/avif")"
         build_avif -G "Ninja"
         "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=ON $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DPYTHON_EXECUTABLE="$(where python.exe | head -1)" \
             -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
@@ -523,6 +524,7 @@ case $PLATFORM in
     windows-x86_64)
         export CC="cl.exe"
         export CXX="cl.exe"
+        AVIF_PREFIX="$(cygpath -m "$INSTALL_PATH/avif")"
         build_avif -G "Ninja"
         "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=ON $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DPYTHON_EXECUTABLE="$(where python.exe | head -1)" \
             -DWITH_AVIF=ON -DCMAKE_DISABLE_FIND_PACKAGE_libavif=ON -DAVIF_INCLUDE_DIR:PATH="$AVIF_PREFIX/include" \
