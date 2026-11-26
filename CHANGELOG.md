@@ -1,5 +1,5 @@
 
- * Enable AVIF support in presets for OpenCV ([pull #1830](https://github.com/bytedeco/javacpp-presets/issues/1830))
+ * Enable AVIF support in presets for OpenCV ([pull #1830](https://github.com/bytedeco/javacpp-presets/pull/1830))
  * Add presets for the Blosc2 3.6.2 compression library, including Blosc1 chunk format support for N5 and Zarr ([pull #1828](https://github.com/bytedeco/javacpp-presets/pull/1828))
  * Add `windows-arm64` builds for FFmpeg, OpenBLAS, CPython, NumPy, CUDA, NVIDIA Video Codec SDK, OpenCL, PyTorch, TensorRT, ONNX, ONNX Runtime ([pull #1826](https://github.com/bytedeco/javacpp-presets/pull/1826), [pull #1827](https://github.com/bytedeco/javacpp-presets/pull/1827), [pull #1829](https://github.com/bytedeco/javacpp-presets/pull/1829))
  * Fix missing `std::make_shared<torch::nn::DropoutImpl>` allocators in presets for PyTorch ([pull #1824](https://github.com/bytedeco/javacpp-presets/pull/1824))
